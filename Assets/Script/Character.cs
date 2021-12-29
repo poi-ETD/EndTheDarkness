@@ -19,6 +19,9 @@ public class Character : MonoBehaviour
     public Text board;
     public int DMG;
     public int cost;
+    public bool isSet;
+    public bool isTurnStart;
+    public bool isTurnEnd;
     // Start is called before the first frame update
     private void Update()
     {

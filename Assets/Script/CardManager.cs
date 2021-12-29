@@ -8,9 +8,9 @@ public class CardManager : MonoBehaviour
     public List<GameObject> Grave = new List<GameObject>();
     public List<GameObject> field = new List<GameObject>();
     [SerializeField] int deckSize;
-    GameObject[] fieldcard;
     public Text graveT;
     public Text deckT;
+    GameObject[] fieldCard=new GameObject[100];
     private void Update()
     {
 
@@ -19,59 +19,50 @@ public class CardManager : MonoBehaviour
     }
     private void Awake()
     {
-        fieldcard = new GameObject[5];
+        
     }
-    public void Suffle()
+    void Rebatch()
     {
-        for (int i = 0; i < Deck.Count; i++)
+        for (int i = 0; i < fieldCard.Length; i++)
+            Destroy(fieldCard[i]);
+        for(int i = 0; i < field.Count; i++)
         {
-            int rand = Random.Range(i, Deck.Count);
-            GameObject imsi = Deck[rand];
-            Deck[rand] = Deck[i];
-            Deck[i] = imsi;
+            fieldCard[i]=Instantiate(field[i],
+            new Vector3(-3 + 1.5f * i, -3.5f,-5+i),transform.rotation);
         }
-        for (int i = 0; i < 5; i++)
+    }
+    public void CardToField()
+    {
+        if (Deck.Count > 0)
         {
-            if(i<Deck.Count)
-            fieldcard[i] = Instantiate(Deck[i], new Vector2(-4 + 2 * i, -3), gameObject.transform.rotation);
-        }    
+            int rand = Random.Range(0, Deck.Count);
+            field.Add(Deck[rand]);
+            Deck.RemoveAt(rand);
+            Rebatch();
+        }            
     }
     public void UseCard(GameObject usingCard)
     {
-       for(int i = 0; i < 5; i++)
+        for (int i = field.Count - 1; i >= 0; i--)
         {
-            if (fieldcard[i] == usingCard)
+            if (usingCard == fieldCard[i])
             {
-               
-                if (Deck.Count > 5)
-                {
-                    Destroy(fieldcard[i]);
-                    Grave.Add(Deck[i]);
-                    Deck.RemoveAt(i);
-                }
-                else
-                {
-                    int count = 0;
-                    int fcount = 0;
-                    while (fieldcard[fcount] != fieldcard[i])
-                    {
-                        if (fieldcard[fcount] != null) count++;
-                        fcount++;
-                    }
-                    Grave.Add(Deck[count]);
-                    Deck.RemoveAt(count);
-                    Destroy(fieldcard[i]);
-                }
+                Destroy(fieldCard[i]);
+                Grave.Add(field[i]);
+                field.RemoveAt(i);
                 break;
             }
         }
+        Rebatch();
     }
     public void FieldOff()
-    {
-        for(int i = 0; i < 5; i++)
-        {
-            if (fieldcard[i] != null)
-                Destroy(fieldcard[i]);
+    {  
+        for(int i = field.Count-1; i >=0; i--)
+        {            
+            Destroy(fieldCard[i]);
+            Deck.Add(field[i]);
+            field.RemoveAt(i);
+          
         }
     }
 }

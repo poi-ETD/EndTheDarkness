@@ -24,6 +24,7 @@ public class TurnManager : MonoBehaviour
  
     public void PlayerTurnEnd()
     {
+     
         PlayerTurn = false;
         enemy.EnemyStartTurn();
         EndButton.SetActive(false);
@@ -39,6 +40,7 @@ public class TurnManager : MonoBehaviour
         t++;
         BM.cancleCard();
         BM.CharacterCancle();
+        BM.TurnEnd();
         turnText.text = "현재 턴 : " + t;
     }
     public void PlayerTurnStart()
@@ -50,8 +52,8 @@ public class TurnManager : MonoBehaviour
         for(int i = 0; i < 4; i++)
         {
             BM.characters[i].Act = 1;
-        }
-        CM.Suffle();
-       
+        }      
+        BM.TurnStart();
     }
+
 }

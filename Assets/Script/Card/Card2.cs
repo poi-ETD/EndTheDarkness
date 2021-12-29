@@ -1,13 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class Card2 : MonoBehaviour
 {
     public BattleManager BM;
     public TurnManager TM;
     [SerializeField] int cardcost;
     public CardManager CM;
+    [SerializeField] Text costT;
     private void Awake()
     {
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
@@ -16,6 +17,7 @@ public class Card2 : MonoBehaviour
     }
     private void Update()
     {
+        costT.text = cardcost+"";
         if (Input.GetMouseButtonDown(0))
         {
             Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);

@@ -5,7 +5,7 @@ using UnityEngine;
 public class Poly : MonoBehaviour
 {
     public TurnManager TM;
-    int curTurn;
+   public int curTurn;
     public Enemy myEnemy;
     int phase1;
     public BattleManager BM;
