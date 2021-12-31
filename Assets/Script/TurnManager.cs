@@ -10,7 +10,7 @@ public class TurnManager : MonoBehaviour
     public GameObject EndButton;
     public BattleManager BM;
     public Text turnText;
-
+    public int turnCard;
     public CardManager CM;
     private void Awake()
     {
@@ -24,13 +24,12 @@ public class TurnManager : MonoBehaviour
  
     public void PlayerTurnEnd()
     {
-     
+        turnCard = 0;
         PlayerTurn = false;
         enemy.EnemyStartTurn();
         EndButton.SetActive(false);
         BM.CharacterSelectMode = false;
-        BM.EnemySelectMode = false;
-        CM.FieldOff();
+        BM.EnemySelectMode = false; 
         for(int i = 0; i < 4; i++)
         {
             BM.characters[i].onDamage(BM.characters[i].DMG);
@@ -38,11 +37,13 @@ public class TurnManager : MonoBehaviour
             BM.characters[i].board.text = "";           
         }
         t++;
+        BM.TurnEnd();
         BM.cancleCard();
         BM.CharacterCancle();
-        BM.TurnEnd();
+        BM.enemy = null;
+        CM.FieldOff();
         turnText.text = "현재 턴 : " + t;
-    }
+    }   
     public void PlayerTurnStart()
     {
         BM.cost = BM.startCost;

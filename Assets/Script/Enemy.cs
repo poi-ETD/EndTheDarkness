@@ -62,10 +62,15 @@ public class Enemy : MonoBehaviour
     }
     public void EnemyEndTurn()
     {
+        Invoke("TurnStart", 0.5f);
+    }
+    void TurnStart()
+    {
         TM.PlayerTurnStart();
     }
     public void onHit(int dmg)
     {
+        BM.Setting();
         if (Armor > 0)
         {
             Armor -= dmg;

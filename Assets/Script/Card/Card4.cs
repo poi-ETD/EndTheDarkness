@@ -9,6 +9,7 @@ public class Card4 : MonoBehaviour
     [SerializeField] int cardcost;
     public CardManager CM;
     [SerializeField] Text costT;
+    [SerializeField] Card myCard;
     private void Awake()
     {
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
@@ -37,8 +38,9 @@ public class Card4 : MonoBehaviour
                             BM.enemy = null;
                             BM.card = null;
                             BM.CharacterCancle();
-                            CM.UseCard(gameObject);
-                            CM.CardToField(); CM.CardToField();
+                            myCard.isUsed = true;
+                            CM.SpecialCardToField(); CM.SpecialCardToField();
+                            BM.Setting();
                         }
                         else
                         {

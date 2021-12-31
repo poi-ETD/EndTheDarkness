@@ -19,6 +19,7 @@ public class BattleManager : MonoBehaviour
     public int CardCount;
     [SerializeField] CardManager CM;
     float nowZ;
+    public int StartCost;
     private void Awake()
     {
         nowZ = 1;
@@ -72,15 +73,17 @@ public class BattleManager : MonoBehaviour
                 );
         }
     }
+
     public void TurnStart()
     {
         Setting();
-        for(int i=0;i<CardCount;i++)
-        CM.CardToField();
-        for(int i = 0; i < 4; i++)
+        for (int i = 0; i < CardCount; i++)
+            CM.CardToField();
+        for (int i = 0; i < 4; i++)
         {
             characters[i].isTurnStart = true;
         }
+
     }
     public void Setting()
     {

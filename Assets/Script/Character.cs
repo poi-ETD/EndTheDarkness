@@ -74,6 +74,7 @@ public class Character : MonoBehaviour
     }
     public void onDamage(int dmg)
     {
+        BM.Setting();
         if (Armor > 0)
         {
             Armor -= dmg;

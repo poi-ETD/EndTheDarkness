@@ -422,6 +422,7 @@ GameObject:
   - component: {fileID: 5316045520229717214}
   - component: {fileID: 986164015147336607}
   - component: {fileID: 2234932774859053854}
+  - component: {fileID: 1633876593604788031}
   m_Layer: 0
   m_Name: Card1
   m_TagString: Card
@@ -537,3 +538,19 @@ MonoBehaviour:
   cardcost: 1
   CM: {fileID: 0}
   costT: {fileID: 2877390412778978909}
+  myCard: {fileID: 1633876593604788031}
+--- !u!114 &1633876593604788031
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7613526996074847177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f71fb66b7b0fe546a62998699afd6c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isUsed: 0
+  isDestroy: 0
+  Content: {fileID: 6531348392748165869}

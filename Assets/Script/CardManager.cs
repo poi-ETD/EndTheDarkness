@@ -7,28 +7,39 @@ public class CardManager : MonoBehaviour
     public List<GameObject> Deck = new List<GameObject>();
     public List<GameObject> Grave = new List<GameObject>();
     public List<GameObject> field = new List<GameObject>();
-    [SerializeField] int deckSize;
     public Text graveT;
     public Text deckT;
-    GameObject[] fieldCard=new GameObject[100];
+    [SerializeField] TurnManager TM; 
+    public int FiledCardCount;
+    public int specialDrow;
+    public int[] CardCount = new int[100];
+    public GameObject[] startCard = new GameObject[100];
+    public int cardKind;
     private void Update()
     {
-
         graveT.text = "" + Grave.Count;
         deckT.text = "" + Deck.Count;
     }
     private void Awake()
     {
-        
+        for (int i = 0; i < cardKind; i++) {
+            for (int j = 0; j < CardCount[i]; j++) {
+                GameObject newCard = Instantiate(startCard[i], new Vector3(100, 100, 0), transform.rotation);
+                Deck.Add(newCard);    
+            }
+      }
+        for(int i = 0; i < Deck.Count; i++)
+        {
+            Deck[i].SetActive(false);
+        }
     }
     void Rebatch()
-    {
-        for (int i = 0; i < fieldCard.Length; i++)
-            Destroy(fieldCard[i]);
+    {    
         for(int i = 0; i < field.Count; i++)
         {
-            fieldCard[i]=Instantiate(field[i],
-            new Vector3(-3 + 1.5f * i, -3.5f,-5+i),transform.rotation);
+
+            field[i].transform.position = new Vector3(-3 + 1.5f * i, -3.5f, -5 + i);
+        field[i].SetActive(true);
         }
     }
     public void CardToField()
@@ -41,28 +52,45 @@ public class CardManager : MonoBehaviour
             Rebatch();
         }            
     }
+    public void SpecialCardToField()
+    {
+        if (Deck.Count > 0)
+        {
+            specialDrow++;
+            int rand = Random.Range(0, Deck.Count);
+            field.Add(Deck[rand]);          
+            Deck.RemoveAt(rand);
+            Rebatch();            
+        }
+    }
     public void UseCard(GameObject usingCard)
     {
         for (int i = field.Count - 1; i >= 0; i--)
         {
-            if (usingCard == fieldCard[i])
+            if (usingCard == field[i])
             {
-                Destroy(fieldCard[i]);
+
+                field[i].transform.position = new Vector3(100, 100, 0);
+                field[i].SetActive(false);
                 Grave.Add(field[i]);
                 field.RemoveAt(i);
                 break;
             }
         }
+        TM.BM.enemy = null;    
+        TM.turnCard++;
         Rebatch();
     }
     public void FieldOff()
-    {  
+    {
+        FiledCardCount = field.Count;
         for(int i = field.Count-1; i >=0; i--)
-        {            
-            Destroy(fieldCard[i]);
+        {
+            field[i].transform.position = new Vector3(100, 100, 0);
+            field[i].SetActive(false);
             Deck.Add(field[i]);
-            field.RemoveAt(i);
-          
+            field.RemoveAt(i);        
         }
+        Rebatch();
     }
 }
