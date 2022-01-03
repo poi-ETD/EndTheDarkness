@@ -12,6 +12,7 @@ public class TurnManager : MonoBehaviour
     public Text turnText;
     public int turnCard;
     public CardManager CM;
+    public int leftCost;
     private void Awake()
     {
      
@@ -24,36 +25,59 @@ public class TurnManager : MonoBehaviour
  
     public void PlayerTurnEnd()
     {
+        leftCost = BM.cost;
+        for (int i = 0; i < 4; i++)
+        {
+            if (!BM.characters[i].isDie&&BM.characters[i].card8)
+            {
+                BM.characters[i].card8 = false;
+                BM.characters[i].Armor += leftCost * BM.characters[i].card8point;
+            }
+        }
         turnCard = 0;
         PlayerTurn = false;
         enemy.EnemyStartTurn();
         EndButton.SetActive(false);
         BM.CharacterSelectMode = false;
-        BM.EnemySelectMode = false; 
+        BM.EnemySelectMode = false;
+        enemy.Armor += enemy.nextTurnArmor;
+        enemy.nextTurnArmor = 0;
         for(int i = 0; i < 4; i++)
-        {
-            BM.characters[i].onDamage(BM.characters[i].DMG);
-            BM.characters[i].DMG = 0;
-            BM.characters[i].board.text = "";           
+        {if (!BM.characters[i].isDie)
+            {
+                for (int j = 0; j < BM.characters[i].DMG.Count; j++)
+                    BM.characters[i].onDamage(BM.characters[i].DMG[j]);
+                BM.characters[i].DMG.Clear();
+                BM.characters[i].board.text = "";
+            } 
         }
         t++;
         BM.TurnEnd();
         BM.cancleCard();
-        BM.CharacterCancle();
-        BM.enemy = null;
+        BM.CancleCharacter();
+        BM.CancleEnemy();    
         CM.FieldOff();
         turnText.text = "현재 턴 : " + t;
     }   
     public void PlayerTurnStart()
     {
-        BM.cost = BM.startCost;
+        BM.cost = BM.startCost+BM.nextTurnStartCost;
+        BM.nextTurnStartCost = 0;
         PlayerTurn =true;
         BM.CharacterSelectMode = true;
         EndButton.SetActive(true);
         for(int i = 0; i < 4; i++)
         {
-            BM.characters[i].Act = 1;
-        }      
+            if (!BM.characters[i].isDie)
+            {
+                BM.characters[i].Act = 1 - BM.characters[i].NextTurnMinusAct;
+                BM.characters[i].NextTurnMinusAct = 0;
+                BM.characters[i].turnAtk = BM.characters[i].Atk;
+                BM.characters[i].Armor += BM.characters[i].nextarmor;
+                BM.characters[i].nextarmor = 0;      
+            }
+        }
+  
         BM.TurnStart();
     }
 

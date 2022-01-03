@@ -14,12 +14,19 @@ public class Enemy : MonoBehaviour
     [SerializeField] Text HpT;
     [SerializeField] Text Board;
     [SerializeField] Text ArmorT;
+    public int hitStack;
+    public int dmgStack;
+    public int nextTurnArmor;
+    public bool isDie;
+    public bool noDie;
+    public bool power;
     private void Awake()
     {
         Hp = maxHp;
     }
     private void Update()
     {
+     
         HpT.text = Hp + "/" + maxHp;
         ArmorT.text = "Armor:" + Armor;
         if (Input.GetMouseButtonDown(0))
@@ -30,23 +37,10 @@ public class Enemy : MonoBehaviour
             {
                 if (hit.collider.gameObject == gameObject)
                 {
-                    if (BM.EnemySelectMode)
-                    {
+                    if (BM.enemy != hit.collider.GetComponent<Enemy>())
                         BM.EnemySelect(hit.collider.gameObject);
-                    }
-                    else if (!BM.EnemySelectMode)
-                    {
-                        if (BM.enemy == hit.collider.GetComponent<Enemy>())
-                        {
-
-                            BM.EnemySelectMode = true;
-                            BM.enemy = null;
-                        }
-                        else
-                        {
-                            BM.EnemySelect(hit.collider.gameObject);
-                        }
-                    }
+                    else
+                        BM.CancleEnemy();                 
                 }
             }
 
@@ -58,10 +52,12 @@ public class Enemy : MonoBehaviour
 
     public void EnemyStartTurn()
     {
+        power = false;
         Board.text = "";
     }
     public void EnemyEndTurn()
     {
+      
         Invoke("TurnStart", 0.5f);
     }
     void TurnStart()
@@ -70,7 +66,9 @@ public class Enemy : MonoBehaviour
     }
     public void onHit(int dmg)
     {
+     
         BM.Setting();
+       dmgStack++;
         if (Armor > 0)
         {
             Armor -= dmg;
@@ -82,16 +80,25 @@ public class Enemy : MonoBehaviour
         }
         else
         {
-            Hp -= dmg;
+            if (!power)
+            {
+                hitStack++;
+                Hp -= dmg;
+            }
         }
         if (Hp <= 0)
         {
-            Debug.Log("폴리가 쓰러졌습니다.");
+            isDie = true;
+            if (noDie)
+            {
+                Hp += dmg;
+                power = true;
+            }
         }
     }
     public void GetArmor(int arm)
     {
-        Armor += arm;
+        nextTurnArmor += arm;
         Board.text += "Armor + " + arm + "\n";
     }
 }

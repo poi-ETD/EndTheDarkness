@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class BlackWhite : MonoBehaviour
 {
     public int BlackWhiteStack=1;
-    Card myCard;
+    [SerializeField]Card myCard;
     GameObject[] enemys;
     public Enemy[] enemyScript;
     public Text newText;
@@ -28,16 +28,17 @@ public class BlackWhite : MonoBehaviour
         myCard = GetComponent<Card>();
         myCard.Content.text += "\n흑백(" + 1 + ")";
     }
-    
+    public string content;
     public void PlusStack()
-    {           
-        myCard.Content.text.Replace("흑백(" + BlackWhiteStack + ")", "흑백(" + BlackWhiteStack+1 + ")");
+    {
         BlackWhiteStack++;
-    }
+        myCard.Content.text += "\n흑백(" + BlackWhiteStack + ")";
+       
+    }   
     public void onDamage()
     {
         Debug.Log("온댐");
-        for (int i = 0; i < enemys.Length; i++)
+        for (int i = 0; i < enemyScript.Length; i++)
         {            
             enemyScript[i].onHit(BlackWhiteStack);
         }

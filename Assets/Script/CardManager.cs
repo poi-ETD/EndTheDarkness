@@ -9,7 +9,7 @@ public class CardManager : MonoBehaviour
     public List<GameObject> field = new List<GameObject>();
     public Text graveT;
     public Text deckT;
-    [SerializeField] TurnManager TM; 
+    public TurnManager TM; 
     public int FiledCardCount;
     public int specialDrow;
     public int[] CardCount = new int[100];
@@ -38,7 +38,7 @@ public class CardManager : MonoBehaviour
         for(int i = 0; i < field.Count; i++)
         {
 
-            field[i].transform.position = new Vector3(-3 + 1.5f * i, -3.5f, -5 + i);
+            field[i].transform.position = new Vector3(-3 + 2f * i, -3f, -5 + i);
         field[i].SetActive(true);
         }
     }
@@ -54,6 +54,7 @@ public class CardManager : MonoBehaviour
     }
     public void SpecialCardToField()
     {
+   
         if (Deck.Count > 0)
         {
             specialDrow++;
@@ -69,7 +70,7 @@ public class CardManager : MonoBehaviour
         {
             if (usingCard == field[i])
             {
-
+                TM.BM.cancleCard();
                 field[i].transform.position = new Vector3(100, 100, 0);
                 field[i].SetActive(false);
                 Grave.Add(field[i]);
@@ -77,7 +78,7 @@ public class CardManager : MonoBehaviour
                 break;
             }
         }
-        TM.BM.enemy = null;    
+        TM.BM.allClear();  
         TM.turnCard++;
         Rebatch();
     }

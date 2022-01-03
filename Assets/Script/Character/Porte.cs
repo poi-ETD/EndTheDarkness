@@ -5,13 +5,13 @@ using UnityEngine;
 public class Porte : MonoBehaviour
 {
     [SerializeField] Character myCharacter;
-    public int passive;
+    public bool[] passive;
     TurnManager TM;
     BattleManager BM;
-    bool passive1;
+    bool Passive1;
     CardManager CM;
     int specialDrow;
-    bool passive2;
+    bool Passive2;
     private void Awake()
     {
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
@@ -19,43 +19,46 @@ public class Porte : MonoBehaviour
         CM = GameObject.Find("CardManager").GetComponent<CardManager>();
         // Update is called once per frame
     }
+    public void passive1()
+    {
+        if (CM.FiledCardCount > 0)
+        {
+
+            BM.TurnCardCount++;
+        }
+    }
+    public void passive2()
+    {
+        if (CM.specialDrow > specialDrow)
+        {
+            specialDrow++;
+            if (!Passive2)
+            {
+                Passive2 = true;
+                BM.cost++;
+                myCharacter.Act++;
+            }
+        }
+    }
     void Update()
     {
-       
-        if (passive==1)
+        if (!myCharacter.isDie)
         {
-            if (myCharacter.isTurnStart)
+            passive2();
+            if (myCharacter.isSet)
             {
-                myCharacter.isTurnStart = false;
-                if (passive1)
-                {
-                    passive1 = false;
-                    BM.CardCount--; 
-                }
+
+                myCharacter.isSet = false;
             }
             if (myCharacter.isTurnEnd)
             {
-                if (CM.FiledCardCount > 0)
-                {
-                    myCharacter.isTurnEnd = false;
-                    BM.CardCount++;                              
-                    passive1 = true;
-                }
+                passive1();
+                myCharacter.isTurnEnd = false;
             }
-        }
-        if (passive == 2)
-        {
             if (myCharacter.isTurnStart)
             {
-                specialDrow = CM.specialDrow;
-                passive2 = false;
+              Passive2 =  false;
                 myCharacter.isTurnStart = false;
-            }
-            if (specialDrow != CM.specialDrow&&!passive2)
-            {
-                passive2 = true;         
-                BM.cost += 1;
-                myCharacter.Act++;
             }
         }
     }

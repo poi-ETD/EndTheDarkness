@@ -7,13 +7,14 @@ public class Q : MonoBehaviour
     [SerializeField] Text ghostT;
     public int Ghost;
     [SerializeField] Character myCharacter;
-    public int passive;
+    public bool[] passive;
     TurnManager TM;
     BattleManager BM;
     bool passive1;
     CardManager CM;
     int specialDrow;
     int turnStartGhost;
+    int GhostPlus;
     private void Awake()
     {
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
@@ -21,46 +22,58 @@ public class Q : MonoBehaviour
         CM = GameObject.Find("CardManager").GetComponent<CardManager>();
         // Update is called once per frame
     }
+    void passive2()
+    {
+        if (turnStartGhost < Ghost)
+        {
 
+            GhostPlus++;
+            turnStartGhost++;
+            if (GhostPlus % 3 == 0 && GhostPlus > 0) myCharacter.Act++;
+        }
+    }
+    void passive3()
+    {
+        if (specialDrow < CM.specialDrow)
+        {
+            int gap;
+            gap = CM.specialDrow - specialDrow;
+            GameObject newCard = CM.field[CM.field.Count - gap];
+            if (newCard.GetComponent<BlackWhite>() == null)
+            {
+                newCard.AddComponent<BlackWhite>();
+                newCard.GetComponent<BlackWhite>().birth();
+            }
+            else
+            {
+                newCard.GetComponent<BlackWhite>().PlusStack();
+            }
+            specialDrow++;
+        }
+    }
     // Update is called once per frame
     void Update()
     {
-        ghostT.text = "망자:" + Ghost;
-        if (passive==2)
+        if (!myCharacter.isDie)
         {
+            if (passive[3]) passive3();
+            if (passive[2]) passive2();
+           // ghostT.text = "망자:" + Ghost;
+            if (myCharacter.isSet)
+            {
+
+                myCharacter.isSet = false;
+            }
+            if (myCharacter.isTurnEnd)
+            {
+
+                myCharacter.isTurnEnd = false;
+            }
             if (myCharacter.isTurnStart)
             {
                 turnStartGhost = Ghost;
+                GhostPlus = 0;
                 myCharacter.isTurnStart = false;
-                passive1 = false;
-            }
-            if ((Ghost - turnStartGhost) % 3 == 0 && Ghost - turnStartGhost != 0&&!passive1)
-            {
-                myCharacter.Act++;
-                passive1 = true;
-            }
-            else if((Ghost - turnStartGhost) % 3 != 0)
-            {
-                passive1 = false;
-            }
-        }
-        if (passive == 3)
-        {
-            if (specialDrow != CM.specialDrow)
-            {
-                int gap = CM.specialDrow - specialDrow;
-                specialDrow++;
-       
-                GameObject specialCard = CM.field[CM.field.Count - gap];
-                if (specialCard.GetComponent<BlackWhite>() == null)
-                {
-                    specialCard.AddComponent<BlackWhite>();
-                    specialCard.GetComponent<BlackWhite>().birth();
-                }
-                else
-                {
-                    specialCard.GetComponent<BlackWhite>().PlusStack();
-                }
             }
         }
     }

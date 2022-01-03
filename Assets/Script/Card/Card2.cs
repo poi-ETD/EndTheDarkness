@@ -6,57 +6,50 @@ public class Card2 : MonoBehaviour
 {
     public BattleManager BM;
     public TurnManager TM;
-    [SerializeField] int cardcost;
     public CardManager CM;
-    [SerializeField] Text costT;
+    public Text Content;
+    public int armor;
+    public int contentarmor;
     [SerializeField] Card myCard;
+       
+    private void Update()
+    {
+
+        if (myCard.use)
+        {
+
+            if (BM.character != null)
+            {
+                if (BM.cost >= myCard.cardcost)
+                {
+                    BM.character.Act--;
+                    BM.getArmor(armor);
+                    myCard.isUsed = true;
+                    BM.cost -= myCard.cardcost;
+
+                }
+                else
+                {
+                    myCard.use = false;
+                    BM.costOver();
+                }
+            }
+            else
+            {
+                myCard.use = false;
+                BM.TargetOn();
+            }
+
+        }
+
+    }
     private void Awake()
     {
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         CM = GameObject.Find("CardManager").GetComponent<CardManager>();
+        Content.text = "자신에게 방어도:" + armor;
+        contentarmor = armor;
     }
-    private void Update()
-    {
-        costT.text = cardcost+"";
-        if (Input.GetMouseButtonDown(0))
-        {
-            Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero, 0f);
-            if (hit.collider != null)
-            {
-                if (hit.collider.gameObject == gameObject)
-                {
-                    if (BM.character != null)
-                    {
-                        if (BM.cost >= cardcost)
-                        {
-                            BM.character.Armor += 7;
-                            BM.character.Act--;
-                            BM.cost -= cardcost;
-                            BM.character = null;
-                            BM.enemy = null;
-                            BM.card = null;
-                            BM.CharacterCancle();
-                            myCard.isUsed = true;
-                            BM.Setting();
-                        }
-                        else
-                        {
-                            Debug.Log("코스트가 부족합니다.");
-                            BM.cancleCard();
-                        }
-                    }
-                    else
-                    {
-                        Debug.Log("카드 설명");
-                     
-                    }
-                }
-            }
 
-        }
-
-
-    }
 }

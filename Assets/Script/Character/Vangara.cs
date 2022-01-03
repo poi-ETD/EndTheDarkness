@@ -5,13 +5,14 @@ using UnityEngine;
 public class Vangara : MonoBehaviour
 {
     [SerializeField] Character myCharacter;
-    public int passive;
-    [SerializeField] int[] TeamPlayerHP=new int[3];
+    public bool[] passive;
+    [SerializeField] int[] TeamStack=new int[3];
     GameObject[] enemys;
     Enemy[] enemyScript;
+    [SerializeField] int[] EnemyStack;
     BattleManager BM;
     Character[] TeamCharacter = new Character[3];
-    [SerializeField] int[] EnemyHp;
+  
     private void Start()
     {
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
@@ -21,59 +22,76 @@ public class Vangara : MonoBehaviour
             if (BM.characters[i] != myCharacter)
             {
                 TeamCharacter[count] = BM.characters[i];
-                TeamPlayerHP[count] = TeamCharacter[count].Hp;
+                
                 count++;
             }
         }
         enemys = GameObject.FindGameObjectsWithTag("Enemy");
         enemyScript = new Enemy[enemys.Length];
-        EnemyHp = new int[enemys.Length];
+        EnemyStack = new int[enemys.Length];
         for (int i = 0; i < enemys.Length; i++)
         {
             enemyScript[i] = enemys[i].GetComponent<Enemy>();
-            EnemyHp[i] = enemyScript[i].Hp;
+           
         }
      
     }
-    private void Update()
+    void passive1()
     {
-        if (myCharacter.isSet)
+        for (int i = 0; i < 3; i++)
         {
-           myCharacter.isSet = false;
-            if (passive == 1) { 
-            for(int i = 0; i < 3; i++)
+            if (TeamStack[i] != TeamCharacter[i].dmgStack)
             {
-                if (TeamPlayerHP[i] != TeamCharacter[i].Hp)
+                while (TeamStack[i] != TeamCharacter[i].dmgStack)
                 {
-                    if (TeamPlayerHP[i] >TeamCharacter[i].Hp)
-                    {
-                            myCharacter.Armor += 2;
-                    }
-                    TeamPlayerHP[i] = TeamCharacter[i].Hp;
-                }
-            }
-                for (int i = 0; i < enemys.Length; i++)
-                {
-                    if (EnemyHp[i] != enemyScript[i].Hp)
-                    {
-                        if (EnemyHp[i] > enemyScript[i].Hp)
-                        {
-                            myCharacter.Armor += 2;
-                        }
-                        EnemyHp[i] = enemyScript[i].Hp;
-                    }
+
+                    TeamStack[i]++;
+                    myCharacter.Armor += 2;
                 }
             }
         }
-        if (myCharacter.isTurnStart && passive == 2)
+        for(int i = 0; i < enemys.Length; i++)
         {
-            myCharacter.isTurnStart = false;
-            if (myCharacter.Armor > 0) BM.cost += 1;
-            else
+            if (EnemyStack[i] != enemyScript[i].dmgStack)
             {
-                myCharacter.Armor = 3;
+                while (EnemyStack[i] != enemyScript[i].dmgStack)
+                {
+                    EnemyStack[i]++;
+                    myCharacter.Armor += 2;
+                }
             }
+        }
+    }
+    void passive2()
+    {
+        if (myCharacter.Armor > 0)
+            BM.cost++;
+        else
+        {
+            myCharacter.Armor += 3;
+        }
+    }
+    private void Update()
+    {
+        if (!myCharacter.isDie) { 
+        if (myCharacter.isSet)
+        {
+            if (passive[1])
+            {
+                passive1();
+            }
+            myCharacter.isSet = false;
+        }
+        if (myCharacter.isTurnEnd)
+        {
+            myCharacter.isTurnEnd = false;
+        }
+        if (myCharacter.isTurnStart)
+        {
+            if (passive[2])
+                passive2();
+            myCharacter.isTurnStart = false;
         }
 
     }
-}
+}}
