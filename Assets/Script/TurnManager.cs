@@ -45,10 +45,7 @@ public class TurnManager : MonoBehaviour
         for(int i = 0; i < 4; i++)
         {if (!BM.characters[i].isDie)
             {
-                for (int j = 0; j < BM.characters[i].DMG.Count; j++)
-                    BM.characters[i].onDamage(BM.characters[i].DMG[j]);
-                BM.characters[i].DMG.Clear();
-                BM.characters[i].board.text = "";
+               
             } 
         }
         t++;

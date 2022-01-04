@@ -19,7 +19,28 @@ public class Character : MonoBehaviour
     public TextMeshProUGUI armorT;
     public TextMeshProUGUI actT;
     public TextMeshProUGUI board;
-    public List<int> DMG=new List<int>();
+ 
+    public List<DMGboard> DMGboards=new List<DMGboard>();
+    public class DMGboard
+    {
+      
+       public int dmg;
+       public string name;
+       public int count;
+        public void countup()
+        {
+            count++;
+        }
+        public void setDmg(int dmg)
+        {
+            this.dmg = dmg;
+        }
+        public void setName(string name)
+        {
+            this.name = name;
+        }
+
+    }
     public int cost;
     public bool isSet;
     public bool isTurnStart;
@@ -31,7 +52,7 @@ public class Character : MonoBehaviour
     public int nextarmor;
     public bool card8;
     public int card8point;
-    public string name;
+    public string Name;
     // Start is called before the first frame update
     private void Update()
     {
@@ -66,12 +87,40 @@ public class Character : MonoBehaviour
         Act = 1;
         Hp = maxHp;
     }
-    public void onHit(int dmg)
-    {
-        DMG.Add(dmg);
-        board.text += "\ndmg:" + dmg;
+    public void onHit(int dmg,string enemyname)
+    {        
+        bool isThere = false;
+        
+        for(int i = 0; i < DMGboards.Count; i++)
+        {
+          
+            if (DMGboards[i].dmg == dmg && DMGboards[i].name == enemyname)
+            {            
+                isThere = true;
+                DMGboards[i].countup();
+                break;
+            }
+        }
+        if (!isThere)
+        {
+            DMGboard newBoard=new DMGboard();
+            newBoard.setDmg(dmg);
+            newBoard.setName(enemyname);
+            DMGboards.Add(newBoard);
+            board.text += "<sprite name="+enemyname+">"+"+"+dmg+"\n";
+        }
+        else
+        {
+
+            string newboard = board.text;
+            Debug.Log(newboard);
+            newboard.Replace("s", "b");
+            Debug.Log(newboard);
+            board.text = newboard;
+           
+        }
     }
-    public void onDamage(int dmg)
+    public void onDamage(int dmg,string name)
     {
 
         BM.Setting();

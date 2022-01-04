@@ -20,7 +20,7 @@ public class Enemy : MonoBehaviour
     public bool isDie;
     public bool noDie;
     public bool power;
-    public string name;
+    public string Name;
     private void Awake()
     {
         Hp = maxHp;
