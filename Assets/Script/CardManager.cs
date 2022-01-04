@@ -15,6 +15,7 @@ public class CardManager : MonoBehaviour
     public int[] CardCount = new int[100];
     public GameObject[] startCard = new GameObject[100];
     public int cardKind;
+    [SerializeField] GameObject CardCanvas;
     private void Update()
     {
         graveT.text = "" + Grave.Count;
@@ -24,7 +25,7 @@ public class CardManager : MonoBehaviour
     {
         for (int i = 0; i < cardKind; i++) {
             for (int j = 0; j < CardCount[i]; j++) {
-                GameObject newCard = Instantiate(startCard[i], new Vector3(100, 100, 0), transform.rotation);
+                GameObject newCard = Instantiate(startCard[i], new Vector3(100, 100, 0), transform.rotation,CardCanvas.transform);
                 Deck.Add(newCard);    
             }
       }
@@ -33,12 +34,12 @@ public class CardManager : MonoBehaviour
             Deck[i].SetActive(false);
         }
     }
-    void Rebatch()
-    {    
+   public void Rebatch()
+    {          
         for(int i = 0; i < field.Count; i++)
         {
-
-            field[i].transform.position = new Vector3(-3 + 2f * i, -3f, -5 + i);
+            field[i].GetComponent<RectTransform>().anchoredPosition=new Vector3(-300 + 150f * i, -520, 0);
+                //transform.position = new Vector3(-300 + 150f * i, -520, 0);
         field[i].SetActive(true);
         }
     }

@@ -7,9 +7,7 @@ public class Card4 : MonoBehaviour
     public BattleManager BM;
     public TurnManager TM;
     public CardManager CM;
-    public Text Content;
     public int drowCount;
-    public int contentdorw;
     [SerializeField] Card myCard;
 
     private void Update()
@@ -49,8 +47,7 @@ public class Card4 : MonoBehaviour
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         CM = GameObject.Find("CardManager").GetComponent<CardManager>();
-        Content.text = "드로우:" + drowCount;
-        contentdorw=drowCount;
+
     }
 
 }

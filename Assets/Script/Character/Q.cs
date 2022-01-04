@@ -20,6 +20,7 @@ public class Q : MonoBehaviour
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         CM = GameObject.Find("CardManager").GetComponent<CardManager>();
+        myCharacter.name = "큐";
         // Update is called once per frame
     }
     void passive2()
@@ -29,7 +30,9 @@ public class Q : MonoBehaviour
 
             GhostPlus++;
             turnStartGhost++;
-            if (GhostPlus % 3 == 0 && GhostPlus > 0) myCharacter.Act++;
+            if (GhostPlus % 4 == 0 && GhostPlus > 0) {
+                BM.log.logContent.text += "\n군단!큐의 행동력이 증가합니다.";
+              myCharacter.Act++; }
         }
     }
     void passive3()
@@ -48,7 +51,9 @@ public class Q : MonoBehaviour
             {
                 newCard.GetComponent<BlackWhite>().PlusStack();
             }
-            specialDrow++;
+            BM.log.logContent.text += "\n" + newCard.GetComponent<Card>().Name.text;
+            BM.log.logContent.text += "에 흑백 효과가 추가됩니다";
+          specialDrow++;
         }
     }
     // Update is called once per frame

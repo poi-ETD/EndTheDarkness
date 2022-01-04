@@ -1,16 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 public class Card1 : MonoBehaviour
 {
     public BattleManager BM;
     public TurnManager TM;
     public CardManager CM;
-    public Text Content;
     public int dmg;
-    public int contentdmg;
     [SerializeField] Card myCard;
+
     private void Update()
     {
       
@@ -47,8 +46,6 @@ public class Card1 : MonoBehaviour
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         CM = GameObject.Find("CardManager").GetComponent<CardManager>();
-        Content.text = "적 한명에게 데미지:" + dmg;
-        contentdmg = dmg;
     }
 
 }

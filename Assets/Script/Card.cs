@@ -1,19 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 public class Card : MonoBehaviour
 {
     CardManager CM;
     public bool isUsed;
     public bool isDestroy;
-    public Text Content;
+    public TextMeshProUGUI Content;
     public bool use;
     BattleManager BM;
     public int cardcost;
-    [SerializeField] Text costT;
-  
-    
+    [SerializeField] TextMeshProUGUI costT;
+    public TextMeshProUGUI Name;
+
     public void useCard()
     {       
         use = true;
@@ -23,10 +23,11 @@ public class Card : MonoBehaviour
        
         CM = GameObject.Find("CardManager").GetComponent<CardManager>();
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
+        
     }
     private void Update()
     {
-       
+      
         costT.text = cardcost + "";
         if (Input.GetMouseButtonDown(0))
         {

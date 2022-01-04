@@ -25,6 +25,7 @@ public class Reply : MonoBehaviour
             enemyScript[i] = enemys[i].GetComponent<Enemy>();
             
         }
+        myCharacter.name = "스파키";
     }
     // Update is called once per frame
     void passive1()
@@ -33,6 +34,7 @@ public class Reply : MonoBehaviour
         {
             Passive1 = true;
             myCharacter.Act++;
+            BM.log.logContent.text += "\n지치지 않는 폭주!리플리의 현재 행동력이 추가됩니다.";
         }
         else if (TM.turnCard % 3 != 0 || TM.turnCard == 0)
         {
@@ -49,6 +51,7 @@ public class Reply : MonoBehaviour
                 enemyScript[i].onHit(myCharacter.turnAtk);
                 EnemyStack[i]++;
                 EnemyStack[i]++;
+                BM.log.logContent.text += "\n독단적인 팀플레이!"+enemyScript[i].name+"에게 "+ myCharacter.turnAtk+"의 데미지가 주어집니다.";
             }
         }
     }

@@ -34,6 +34,7 @@ public class Vangara : MonoBehaviour
             enemyScript[i] = enemys[i].GetComponent<Enemy>();
            
         }
+        myCharacter.name = "반가라";
      
     }
     void passive1()
@@ -46,7 +47,8 @@ public class Vangara : MonoBehaviour
                 {
 
                     TeamStack[i]++;
-                    myCharacter.Armor += 2;
+                    myCharacter.Armor ++;
+                    BM.log.logContent.text += "\n굳건한 위치!반가라의 방어력이 증가합니다.";
                 }
             }
         }
@@ -57,7 +59,8 @@ public class Vangara : MonoBehaviour
                 while (EnemyStack[i] != enemyScript[i].dmgStack)
                 {
                     EnemyStack[i]++;
-                    myCharacter.Armor += 2;
+                    myCharacter.Armor ++;
+                    BM.log.logContent.text += "\n굳건한 위치!반가라의 방어력이 증가합니다.";
                 }
             }
         }
@@ -65,10 +68,13 @@ public class Vangara : MonoBehaviour
     void passive2()
     {
         if (myCharacter.Armor > 0)
-            BM.cost++;
+        { BM.cost++;
+            BM.log.logContent.text += "\n선봉의 호령!코스트가 1 증가합니다.";
+        }
         else
         {
             myCharacter.Armor += 3;
+            BM.log.logContent.text += "\n선봉의 호령!반가라의 방어도가 3증가합니다.";
         }
     }
     private void Update()

@@ -31,6 +31,7 @@ public class Character : MonoBehaviour
     public int nextarmor;
     public bool card8;
     public int card8point;
+    public string name;
     // Start is called before the first frame update
     private void Update()
     {

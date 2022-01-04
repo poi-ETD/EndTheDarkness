@@ -7,12 +7,8 @@ public class Card11 : MonoBehaviour
     public BattleManager BM;
     public TurnManager TM;
     public CardManager CM;
-    public Text Content;
-
     public int dmg;
-    public int contentdmg;
     public int atk;
-    public int contentatk;
     [SerializeField] Card myCard;
     bool decrease;
 
@@ -32,7 +28,7 @@ public class Card11 : MonoBehaviour
                 {
                     BM.character.Act--;
                     BM.OnDmgOneTarget(dmg);
-                    BM.AtkUp(atk);
+                    BM.TurnAtkUp(atk);
                     myCard.isUsed = true;
                     BM.cost -= myCard.cardcost;
                     if (decrease)
@@ -61,9 +57,7 @@ public class Card11 : MonoBehaviour
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         CM = GameObject.Find("CardManager").GetComponent<CardManager>();
-        Content.text = "이번 턴 카드를 4장 이상 사용 했을 시 이 카드의 코스트 2감소\n자신에게 공격력+" + atk + "\n적 한명에게 데미지:" + dmg;
-        contentatk = atk;
-        contentdmg = dmg;
+
     }
 
 }

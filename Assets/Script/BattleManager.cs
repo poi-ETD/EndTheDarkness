@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using TMPro;
 public class BattleManager : MonoBehaviour
 {
     public Character[] characters;
@@ -32,6 +32,10 @@ public class BattleManager : MonoBehaviour
     public int nextTurnStartCost;
     [SerializeField] GameObject completeButton;
     bool card12On;
+    [SerializeField] GameObject[] RedLine;
+    int curCharacterNumber;
+    public bool otherCanvasOn;
+    public Log log;
     private void Awake()
     {
         TurnCardCount = CardCount;
@@ -81,50 +85,73 @@ public class BattleManager : MonoBehaviour
     }
     public void CancleCharacter()
     {
-        if(tra1!=null)
-        tra1.localScale = new Vector2(1, 1);
-        character = null;
+        if (!otherCanvasOn)
+        {
+            if (tra1 != null)
+                tra1.localScale = new Vector2(1, 1);
+            RedLine[curCharacterNumber].SetActive(false);
+            character = null;
+        }
     }
     public void CharacterSelect(GameObject c)
     {
-        CancleCharacter();
-        tra1 = c.GetComponent<Transform>();
-        tra1.localScale = new Vector2(1.2f, 1.2f);
-        character = c.GetComponent<Character>();
-       
+        if (!otherCanvasOn)
+        {
+            CancleCharacter();
+            for (int i = 0; i < 4; i++)
+            {
+                if (c.GetComponent<Character>() == characters[i])
+                    curCharacterNumber = i;
+            }
+            RedLine[curCharacterNumber].SetActive(true);
+            tra1 = c.GetComponent<Transform>();
+            tra1.localScale = new Vector2(1.2f, 1.2f);
+
+            character = c.GetComponent<Character>();
+        }
     }
     public void EnemySelect(GameObject e)
     {
-        CancleEnemy();       
-        enemy = e.GetComponent<Enemy>();
-        tra3 = e.GetComponent<Transform>();
-        tra3.localScale = new Vector2(1.2f, 1.2f);
+        if (!otherCanvasOn)
+        {
+            CancleEnemy();
+            enemy = e.GetComponent<Enemy>();
+            tra3 = e.GetComponent<Transform>();
+            tra3.localScale = new Vector2(1.2f, 1.2f);
+        }
     }
     public void CancleEnemy()
     {
-        if (tra3 != null)
-            tra3.localScale = new Vector2(1, 1);
-        enemy= null;
+        if (!otherCanvasOn)
+        {
+            if (tra3 != null)
+                tra3.localScale = new Vector2(1, 1);
+            enemy = null;
+        }
     }
     public void SetCard(GameObject c)
     {
-        cancleCard();
-        tra2 = c.GetComponent<Transform>();
-        tra2.localScale = new Vector2(1.2f, 1.2f);
-        card = c;
-        nowZ = tra2.transform.position.z;
-        tra2.transform.position = new Vector3(tra2.position.x, tra2.position.y, -6
-          );
+        if (!otherCanvasOn)
+        {
+            cancleCard();
+            tra2 = c.GetComponent<Transform>();
+            tra2.localScale = new Vector2(1.5f, 1.5f);
+            card = c;
+            c.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, -230, 0);
+        }
     }
     public void cancleCard()
     {
-        EnemySelectMode = false;
-        card = null;
-        if (tra2 != null)
+        if (!otherCanvasOn)
         {
-            tra2.localScale = new Vector2(1, 1);
-            tra2.transform.position = new Vector3(tra2.position.x, tra2.position.y, nowZ
-                );
+            EnemySelectMode = false;
+            card = null;
+            if (tra2 != null)
+            {
+                tra2.localScale = new Vector2(1, 1);
+
+            }
+            CM.Rebatch();
         }
     }
 
@@ -252,6 +279,10 @@ public class BattleManager : MonoBehaviour
                 characters[i].turnAtk += atk;
             }
         }
+    }
+    public void TurnAtkUp(int atk)
+    {
+        character.turnAtk += atk;
     }
     public void AtkUp(int atk)
     {

@@ -7,10 +7,10 @@ public class Card9 : MonoBehaviour
     public BattleManager BM;
     public TurnManager TM;
     public CardManager CM;
-    public Text Content;
+
  
     public int nextarmor;
-    public int contentnextarmor;
+
     [SerializeField] Card myCard;
 
     private void Update()
@@ -50,9 +50,7 @@ public class Card9 : MonoBehaviour
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         CM = GameObject.Find("CardManager").GetComponent<CardManager>();
-        Content.text = "다음 턴 시작시에 자신에게 방어도:" + nextarmor;
-        
-        contentnextarmor = nextarmor;
+
     }
 
 }

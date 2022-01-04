@@ -10,8 +10,7 @@ public class Card3 : MonoBehaviour
     public Text Content;
     public int dmg;
     public int drowCount;
-    public int contentdmg;
-    public int contentdorw;
+
     [SerializeField] Card myCard;
     private void Update()
     {
@@ -50,9 +49,7 @@ public class Card3 : MonoBehaviour
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         CM = GameObject.Find("CardManager").GetComponent<CardManager>();
-        Content.text = "적 한명에게 데미지:" + dmg+"\n드로우:"+drowCount;
-        contentdmg = dmg;
-        contentdorw = drowCount;
+    
     }
 
 }

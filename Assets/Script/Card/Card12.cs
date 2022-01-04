@@ -7,7 +7,6 @@ public class Card12 : MonoBehaviour
     public BattleManager BM;
     public TurnManager TM;
     public CardManager CM;
-    public Text Content;
     [SerializeField] Card myCard;
 
     private void Update()
@@ -45,9 +44,7 @@ public class Card12 : MonoBehaviour
     {
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
-        CM = GameObject.Find("CardManager").GetComponent<CardManager>();
-        Content.text = "패에 있는 카드를 덱에 넣는다.\n드로우:덱에 넣은 카드 장 수";
-       
+        CM = GameObject.Find("CardManager").GetComponent<CardManager>();      
     }
 
 }

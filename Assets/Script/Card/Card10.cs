@@ -7,11 +7,10 @@ public class Card10 : MonoBehaviour
     public BattleManager BM;
     public TurnManager TM;
     public CardManager CM;
-    public Text Content;
+
 
     public int atk;
-    public int contentatk;
-    [SerializeField] Card myCard;
+   [SerializeField] Card myCard;
 
     private void Update()
     {
@@ -50,9 +49,7 @@ public class Card10 : MonoBehaviour
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         CM = GameObject.Find("CardManager").GetComponent<CardManager>();
-        Content.text = "이번 턴 모든 아군의 공격력 +" + atk;
 
-        contentatk = atk;
     }
 
 }

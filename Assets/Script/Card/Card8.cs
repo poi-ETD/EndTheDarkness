@@ -7,11 +7,11 @@ public class Card8 : MonoBehaviour
     public BattleManager BM;
     public TurnManager TM;
     public CardManager CM;
-    public Text Content;
+
     public int armor;
-    public int contentarmor;
+
     public int nextarmor;
-    public int contentnextarmor;
+
     [SerializeField] Card myCard;
 
     private void Update()
@@ -51,9 +51,7 @@ public class Card8 : MonoBehaviour
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         CM = GameObject.Find("CardManager").GetComponent<CardManager>();
-        Content.text = "자신에게 방어도:" + armor + "\n이번턴 종료시 남은 코스트 1당 자신에게 방어도:" + nextarmor;
-        contentarmor = armor;
-        contentnextarmor = nextarmor;
+
     }
 
 }

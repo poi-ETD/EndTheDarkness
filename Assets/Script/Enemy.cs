@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 
 public class Enemy : MonoBehaviour
 {
@@ -11,15 +11,16 @@ public class Enemy : MonoBehaviour
     public int Atk;
     public TurnManager TM;
     public BattleManager BM;
-    [SerializeField] Text HpT;
-    [SerializeField] Text Board;
-    [SerializeField] Text ArmorT;
+    [SerializeField] TextMeshProUGUI HpT;
+    [SerializeField] TextMeshProUGUI Board;
+    [SerializeField] TextMeshProUGUI ArmorT;
     public int hitStack;
     public int dmgStack;
     public int nextTurnArmor;
     public bool isDie;
     public bool noDie;
     public bool power;
+    public string name;
     private void Awake()
     {
         Hp = maxHp;
