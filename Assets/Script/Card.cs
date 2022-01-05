@@ -13,6 +13,8 @@ public class Card : MonoBehaviour
     public int cardcost;
     [SerializeField] TextMeshProUGUI costT;
     public TextMeshProUGUI Name;
+    public bool isGrave;
+    int realcost;
 
     public void useCard()
     {       
@@ -20,14 +22,13 @@ public class Card : MonoBehaviour
     }
     private void Awake()
     {
-       
+        realcost = cardcost;
         CM = GameObject.Find("CardManager").GetComponent<CardManager>();
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         
     }
     private void Update()
-    {
-      
+    {      
         costT.text = cardcost + "";
         if (Input.GetMouseButtonDown(0))
         {
@@ -37,18 +38,31 @@ public class Card : MonoBehaviour
             {
                 if (hit.collider.gameObject == gameObject)
                 {
-                    if (BM.card != gameObject)
+                    if (!isGrave)
                     {
-                        BM.SetCard(gameObject);
+                        if (BM.card != gameObject)
+                        {
+                            BM.SetCard(gameObject);
+                        }
+                        else
+                        {
+                            BM.cancleCard();
+                        }
                     }
-                    else
+                    else if (BM.ReviveCount > 0)
                     {
-                        BM.cancleCard();
+                        CM.GraveToField(gameObject);
+                        BM.ReviveCount--;
+                        if (BM.card7mode)
+                        {
+                            cardcost = 0;
+                        }
                     }
                 }
+              
             }
         }
-        if (isUsed)
+        if (isUsed&&!isGrave)
         {           
             CM.UseCard(gameObject);
             if (GetComponent<BlackWhite>()!= null)
@@ -56,6 +70,8 @@ public class Card : MonoBehaviour
                 GetComponent<BlackWhite>().onDamage();
             }
             use = false;
+        
+            cardcost = realcost;
         }
     }
     

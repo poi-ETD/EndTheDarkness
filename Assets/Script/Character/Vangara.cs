@@ -34,7 +34,7 @@ public class Vangara : MonoBehaviour
             enemyScript[i] = enemys[i].GetComponent<Enemy>();
            
         }
-        myCharacter.name = "반가라";
+        myCharacter.Name = "반가라";
      
     }
     void passive1()

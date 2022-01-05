@@ -36,6 +36,9 @@ public class BattleManager : MonoBehaviour
     int curCharacterNumber;
     public bool otherCanvasOn;
     public Log log;
+    [SerializeField] GameObject graveView;
+  public  int ReviveCount;
+    public bool card7mode;
     private void Awake()
     {
         TurnCardCount = CardCount;
@@ -297,4 +300,27 @@ public class BattleManager : MonoBehaviour
         completeButton.SetActive(true);
         
     }
+    public void GraveOn()
+    {
+        otherCanvasOn = true;
+        CM.GraveOn();
+        graveView.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
+    }
+    public void GraveOff()
+    {
+        card7mode = false;
+        CM.GraveOff();
+        ReviveCount = 0;
+        otherCanvasOn = false;
+        cancleCard();
+        CancleCharacter();
+        CancleEnemy();
+        graveView.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 1000, 0);
+    }
+    public void ReviveToField(int r)
+    {
+        GraveOn(); 
+        ReviveCount += r;
+    }
+ 
 }

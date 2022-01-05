@@ -89,11 +89,9 @@ public class Character : MonoBehaviour
     }
     public void onHit(int dmg,string enemyname)
     {        
-        bool isThere = false;
-        
+        bool isThere = false;       
         for(int i = 0; i < DMGboards.Count; i++)
-        {
-          
+        {         
             if (DMGboards[i].dmg == dmg && DMGboards[i].name == enemyname)
             {            
                 isThere = true;
@@ -106,25 +104,21 @@ public class Character : MonoBehaviour
             DMGboard newBoard=new DMGboard();
             newBoard.setDmg(dmg);
             newBoard.setName(enemyname);
-            DMGboards.Add(newBoard);
-            board.text += "<sprite name="+enemyname+">"+"+"+dmg+"\n";
+            DMGboards.Add(newBoard);          
         }
-        else
+        board.text = "";
+        for(int i = 0; i < DMGboards.Count; i++)
         {
-
-            string newboard = board.text;
-            Debug.Log(newboard);
-            newboard.Replace("s", "b");
-            Debug.Log(newboard);
-            board.text = newboard;
-           
+            string newstring = "<sprite name=" + DMGboards[i].name + ">+" + DMGboards[i].dmg;
+            if (DMGboards[i].count > 0) newstring += " x" + (DMGboards[i].count+1);
+            newstring += "\n";
+            board.text += newstring;
         }
     }
-    public void onDamage(int dmg,string name)
+    public void onDamage(int dmg,string enemyname)
     {
-
-        BM.Setting();
-       
+        BM.log.logContent.text += "\n"+Name + "(가)이 " + enemyname + "에게 " + dmg + "의 피해를 입었다!";
+        BM.Setting();      
         if (Armor > 0)
         {
             dmgStack++;

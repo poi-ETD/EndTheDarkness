@@ -72,16 +72,33 @@ public class CardManager : MonoBehaviour
             if (usingCard == field[i])
             {
                 TM.BM.cancleCard();
-                field[i].transform.position = new Vector3(100, 100, 0);
+                field[i].GetComponent<Card>().isGrave = true;
                 field[i].SetActive(false);
                 Grave.Add(field[i]);
-                field.RemoveAt(i);
+                field[i].transform.parent = GameObject.Find("GraveContent").transform;
+                field.RemoveAt(i);              
                 break;
             }
         }
         TM.BM.allClear();  
         TM.turnCard++;
         Rebatch();
+    }
+
+    public void GraveOn() {
+        for (int i = 0; i < Grave.Count; i++)
+        {
+          
+            Grave[i].SetActive(true);
+        }
+    }
+    public void GraveOff()
+    {
+        for (int i = 0; i < Grave.Count; i++)
+        {
+            
+            Grave[i].SetActive(false);
+        }
     }
     public void FieldOff()
     {
@@ -94,5 +111,25 @@ public class CardManager : MonoBehaviour
             field.RemoveAt(i);        
         }
         Rebatch();
+    }
+    public void GraveToField(GameObject Gcard)
+    {
+        for(int i = 0; i < Grave.Count; i++)
+        {
+            if (Gcard == Grave[i])
+            {
+                field.Add(Grave[i]);
+                Grave[i].SetActive(true);
+                Grave[i].GetComponent<Card>().isGrave = false;
+                Grave[i].GetComponent<Card>().isUsed = false;
+                Grave[i].transform.parent = CardCanvas.transform;
+                Grave[i].GetComponent<RectTransform>().anchorMin = new Vector2(0.5f,0.5f);
+                Grave[i].GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0.5f);
+                Grave.RemoveAt(i);
+                break;
+            }
+        }
+        Rebatch();
+    
     }
 }
