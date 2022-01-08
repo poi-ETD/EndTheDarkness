@@ -18,7 +18,8 @@ public class Poly : MonoBehaviour
     [SerializeField] Text t;
     private void Start()
     {
-      
+        TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
+        BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         myEnemy.Name = "폴리";
         StartPattern();
     }

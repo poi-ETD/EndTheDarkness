@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.IO;
 public class CardManager : MonoBehaviour
 {
     public List<GameObject> Deck = new List<GameObject>();
@@ -16,6 +17,7 @@ public class CardManager : MonoBehaviour
     public GameObject[] startCard = new GameObject[100];
     public int cardKind;
     [SerializeField] GameObject CardCanvas;
+    CardData CD;
     private void Update()
     {
         graveT.text = "" + Grave.Count;
@@ -23,6 +25,18 @@ public class CardManager : MonoBehaviour
     }
     private void Awake()
     {
+        string path = Path.Combine(Application.dataPath, "CardData.json");
+        if (File.Exists(path))
+        {
+            string cardData = File.ReadAllText(path);
+            CD = JsonUtility.FromJson<CardData>(cardData);
+            for (int i = 0; i < 13; i++)
+            {
+             
+                CardCount[i] = CD.CardCount[i];
+               
+            }
+        }
         for (int i = 0; i < cardKind; i++) {
             for (int j = 0; j < CardCount[i]; j++) {
                 GameObject newCard = Instantiate(startCard[i], new Vector3(100, 100, 0), transform.rotation,CardCanvas.transform);
@@ -114,7 +128,7 @@ public class CardManager : MonoBehaviour
     }
     public void GraveToField(GameObject Gcard)
     {
-        TM.BM.log.logContent.text += "\n" + Gcard.GetComponent<Card>().Name + "이(가) 묘지에서 패로 이동합니다.";
+        TM.BM.log.logContent.text += "\n" + Gcard.GetComponent<Card>().Name.text + "이(가) 묘지에서 패로 이동합니다.";
         for(int i = 0; i < Grave.Count; i++)
         {
             if (Gcard == Grave[i])

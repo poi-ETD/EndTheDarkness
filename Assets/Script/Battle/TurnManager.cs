@@ -23,6 +23,7 @@ public class TurnManager : MonoBehaviour
     }
     private void Start()
     {
+        enemy = GameObject.FindWithTag("Enemy").GetComponent<Enemy>();
         enemy.EnemyStartTurn();
     }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.IO;
 public class BattleManager : MonoBehaviour
 {
     public Character[] characters;
@@ -37,10 +38,16 @@ public class BattleManager : MonoBehaviour
     public bool otherCanvasOn;
     public Log log;
     [SerializeField] GameObject graveView;
-  public  int ReviveCount;
+    public  int ReviveCount;
     public bool card7mode;
+    [SerializeField] GameObject[] Enemys;
+    public BattleData bd;
     private void Awake()
     {
+        string path = Path.Combine(Application.dataPath, "battleData.json");
+        string battleData = File.ReadAllText(path);
+        bd = JsonUtility.FromJson<BattleData>(battleData);
+        GameObject EnemySummon = Instantiate(Enemys[bd.battleNo], new Vector2(0, 6.5f), transform.rotation, GameObject.Find("CharacterCanvas").transform);      
         TurnCardCount = CardCount;
         nowZ = 1;
         for (int i = 0; i < 4; i++)
@@ -53,7 +60,7 @@ public class BattleManager : MonoBehaviour
         {
             back.Add(characters[i]);
         }
-        Debug.Log("ba");
+
     }
     private void Update()
     {
@@ -225,7 +232,7 @@ public class BattleManager : MonoBehaviour
     }
     public void OnDmgOneTarget(int dmg)
     {       
-        log.logContent.text += "\n"+enemy.Name+"에게 "+dmg + character.turnAtk+"의 데미지!";
+        log.logContent.text += "\n"+enemy.Name+"에게 "+(dmg + character.turnAtk)+"의 데미지!";
         enemy.onHit(dmg + character.turnAtk);
     }
     public void getArmor(int armor)

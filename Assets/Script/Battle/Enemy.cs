@@ -23,6 +23,8 @@ public class Enemy : MonoBehaviour
     public string Name;
     private void Awake()
     {
+        TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
+        BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         Hp = maxHp;
     }
     private void Update()
