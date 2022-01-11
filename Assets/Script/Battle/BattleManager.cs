@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.IO;
+using UnityEngine.SceneManagement;
 public class BattleManager : MonoBehaviour
 {
     public Character[] characters;
@@ -42,12 +43,40 @@ public class BattleManager : MonoBehaviour
     public bool card7mode;
     [SerializeField] GameObject[] Enemys;
     public BattleData bd;
+    public CharacterData CD;
+    [SerializeField] GameObject victory;
+    [SerializeField] GameObject defeated;
+    public bool SelectMode;
+    [SerializeField] Character[] passiveCharacters;
+    public void toMain()
+    {
+        SceneManager.LoadScene("Main");
+    }
     private void Awake()
     {
         string path = Path.Combine(Application.dataPath, "battleData.json");
         string battleData = File.ReadAllText(path);
         bd = JsonUtility.FromJson<BattleData>(battleData);
-        GameObject EnemySummon = Instantiate(Enemys[bd.battleNo], new Vector2(0, 6.5f), transform.rotation, GameObject.Find("CharacterCanvas").transform);      
+        path = Path.Combine(Application.dataPath, "CharacterData.json");
+        string characterData= File.ReadAllText(path);
+        CD = JsonUtility.FromJson<CharacterData>(characterData);
+        for(int i = 0; i < CD.passive.Length; i++)
+        {
+            if (CD.passive[i])
+            {
+                
+                passiveCharacters[i / 3].passive[i % 3] = true;
+            }
+        }
+        if (bd.battleNo == 0)
+        {
+            GameObject EnemySummon = Instantiate(Enemys[bd.battleNo], new Vector2(0, 6.5f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
+        }
+        else if (bd.battleNo == 1)
+        {
+            GameObject EnemySummon = Instantiate(Enemys[bd.battleNo], new Vector2(3, 6f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
+        }
+    
         TurnCardCount = CardCount;
         nowZ = 1;
         for (int i = 0; i < 4; i++)
@@ -85,6 +114,7 @@ public class BattleManager : MonoBehaviour
     }
   public void Complete()
     {
+        SelectMode = false;
         completeButton.SetActive(false);
         if (card12On)
         {
@@ -173,6 +203,7 @@ public class BattleManager : MonoBehaviour
             CM.CardToField();
         for (int i = 0; i < 4; i++)
         {
+         
             characters[i].isTurnStart = true;
         }
 
@@ -268,7 +299,7 @@ public class BattleManager : MonoBehaviour
         log.logContent.text += "\n덱에"+card.GetComponent<Card>().Name.text+"(을)를 복사!";
         for (int i = 0; i < CopyCount; i++)
         {
-            GameObject newCard = Instantiate(card, new Vector3(0, 0, 0), transform.rotation);
+            GameObject newCard = Instantiate(card, new Vector3(0, 0, 0), transform.rotation,GameObject.Find("CardCanvas").transform);
             newCard.GetComponent<Card>().use = false;
             newCard.GetComponent<Card>().isUsed = false;
             newCard.GetComponent<Transform>().localScale = new Vector2(1, 1);
@@ -312,6 +343,7 @@ public class BattleManager : MonoBehaviour
     int toGraveCount = 0;
     public void card12()
     {
+        SelectMode = true;
         log.logContent.text += "\n리셋!";
         card12On = true;
         completeButton.SetActive(true);
@@ -340,5 +372,12 @@ public class BattleManager : MonoBehaviour
         GraveOn(); 
         ReviveCount += r;
     }
- 
+ public void Victory()
+    {
+        victory.SetActive(true);
+    }
+    public void Defetead()
+    {
+        defeated.SetActive(true);
+    }
 }

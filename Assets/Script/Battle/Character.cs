@@ -19,11 +19,18 @@ public class Character : MonoBehaviour
     public TextMeshProUGUI armorT;
     public TextMeshProUGUI actT;
     public TextMeshProUGUI board;
- 
+    public bool[] passive;
     public List<DMGboard> DMGboards=new List<DMGboard>();
-    public class DMGboard
+    public struct ArmorBreak
     {
-      
+        public int dmg;
+        public string name;
+
+    }
+    public List<ArmorBreak> armorBreak = new List<ArmorBreak>();
+    
+    public class DMGboard
+    {      
        public int dmg;
        public string name;
        public int count;
@@ -121,6 +128,17 @@ public class Character : MonoBehaviour
         BM.Setting();      
         if (Armor > 0)
         {
+            ArmorBreak newA = new ArmorBreak();
+            if (Armor > dmg)
+            {
+                newA.dmg = dmg/2;
+            }
+            else
+            {
+                newA.dmg = Armor / 2;
+            }
+            newA.name = enemyname;
+            armorBreak.Add(newA);
             dmgStack++;
             Armor -= dmg;
             if (Armor < 0)
@@ -136,22 +154,28 @@ public class Character : MonoBehaviour
             Hp -= dmg;
         }
         if (Hp <= 0)
-        {           
-            die();
+        {
+            if (!isDie)
+            {
+                Hp = 0;
+                die();
+            }
         }
     }
     void die()
     {
-        Hp = 0;
         isDie = true;
+        Hp = 0;      
         Color color = new Color(0.3f, 0.3f, 0.3f);
-        GetComponent<SpriteRenderer>().color = color;
+        GetComponent<Image>().color = color;
         Act = 0;
         board.text = "";
         Armor = 0;
-       BM.diecount++;
+        BM.diecount++;
         if (BM.diecount == 4)
-            Time.timeScale = 0;
+        { Time.timeScale = 0;
+            BM.Defetead();
+        }
         for(int i = 0; i < BM.forward.Count; i++)
         {
             if (BM.forward[i] == gameObject.GetComponent<Character>())

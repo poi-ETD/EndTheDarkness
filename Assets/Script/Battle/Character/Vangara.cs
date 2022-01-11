@@ -12,7 +12,7 @@ public class Vangara : MonoBehaviour
     [SerializeField] int[] EnemyStack;
     BattleManager BM;
     Character[] TeamCharacter = new Character[3];
-  
+    int armorcount = 0;
     private void Start()
     {
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
@@ -77,24 +77,49 @@ public class Vangara : MonoBehaviour
             BM.log.logContent.text += "\n선봉의 호령!반가라의 방어도가 3증가합니다.";
         }
     }
+    void passive3()
+    {
+       
+        if (armorcount !=myCharacter.armorBreak.Count)
+        {
+      
+            for(int i = 0; i < enemyScript.Length; i++)
+            {
+                if (enemyScript[i].Name == myCharacter.armorBreak[armorcount].name)
+                {
+                    enemyScript[i].onHit(myCharacter.armorBreak[armorcount].dmg);
+                    BM.log.logContent.text += "\n무장!" + enemyScript[i].Name + "에게 추가 데미지!";
+                }
+            }
+
+            armorcount++;
+        }
+    }
     private void Update()
     {
+        if (myCharacter.passive[2])
+        {
+            passive3();
+        }
         if (!myCharacter.isDie) { 
         if (myCharacter.isSet)
         {
-            if (passive[1])
+            if (myCharacter.passive[0])
             {
                 passive1();
             }
+             
             myCharacter.isSet = false;
         }
         if (myCharacter.isTurnEnd)
-        {
-            myCharacter.isTurnEnd = false;
+            {
+               
+                myCharacter.isTurnEnd = false;
         }
         if (myCharacter.isTurnStart)
         {
-            if (passive[2])
+            
+            if (myCharacter.passive[1])
                 passive2();
             myCharacter.isTurnStart = false;
         }

@@ -41,7 +41,7 @@ public class BlackWhite : MonoBehaviour
     {
         BM.log.logContent.text += "\n흑백의 효과로 모든 적에게 " + BlackWhiteStack + "의 데미지!"; 
         for (int i = 0; i < enemyScript.Length; i++)
-        {            
+        {            if(!enemyScript[i].isDie)
             enemyScript[i].onHit(BlackWhiteStack);
         }
     }

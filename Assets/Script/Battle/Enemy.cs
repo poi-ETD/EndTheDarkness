@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-
+using UnityEngine.UI;
 public class Enemy : MonoBehaviour
 {
     public int Hp;
@@ -12,7 +12,7 @@ public class Enemy : MonoBehaviour
     public TurnManager TM;
     public BattleManager BM;
     [SerializeField] TextMeshProUGUI HpT;
-    [SerializeField] TextMeshProUGUI Board;
+   public TextMeshProUGUI Board;
     [SerializeField] TextMeshProUGUI ArmorT;
     public int hitStack;
     public int dmgStack;
@@ -36,7 +36,7 @@ public class Enemy : MonoBehaviour
         {
             Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero, 0f);
-            if (hit.collider != null)
+            if (hit.collider != null&&!isDie)
             {
                 if (hit.collider.gameObject == gameObject)
                 {
@@ -51,12 +51,11 @@ public class Enemy : MonoBehaviour
         }
 
     }
-
-
     public void EnemyStartTurn()
     {
+     
         power = false;
-        Board.text = "";
+      
     }
     public void EnemyEndTurn()
     {
@@ -68,9 +67,8 @@ public class Enemy : MonoBehaviour
         TM.PlayerTurnStart();
     }
     public void onHit(int dmg)
-    {
-     
-        BM.Setting();
+    {   
+       BM.Setting();
        dmgStack++;
         if (Armor > 0)
         {
@@ -90,17 +88,25 @@ public class Enemy : MonoBehaviour
             }
         }
         if (Hp <= 0)
-        {
-            isDie = true;
+        {        
             if (noDie)
             {
                 Hp += dmg;
                 power = true;
             }
+            else
+            {
+                isDie = true;
+                Hp = 0;
+                Color color = new Color(0.3f, 0.3f, 0.3f);
+                GetComponent<Image>().color = color;
+               
+            }
         }
     }
     public void GetArmor(int arm)
     {
+     
         nextTurnArmor += arm;
         Board.text += "Armor + " + arm + "\n";
     }

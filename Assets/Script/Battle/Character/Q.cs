@@ -7,10 +7,9 @@ public class Q : MonoBehaviour
     [SerializeField] Text ghostT;
     public int Ghost;
     [SerializeField] Character myCharacter;
-    public bool[] passive;
     TurnManager TM;
     BattleManager BM;
-    bool passive1;
+    bool isKing;
     CardManager CM;
     int specialDrow;
     int turnStartGhost;
@@ -22,6 +21,23 @@ public class Q : MonoBehaviour
         CM = GameObject.Find("CardManager").GetComponent<CardManager>();
         myCharacter.Name = "큐";
         // Update is called once per frame
+    }
+    void passive1()
+    {
+        if (Ghost > 50 && !isKing)
+        {
+            BM.log.logContent.text += "\nQ가 백옥의 왕 Q로 변신합니다.";
+            myCharacter.Hp = 100;
+            myCharacter.maxHp = 100;
+            isKing = true;
+            myCharacter.Atk+=2;
+            BM.startCost++;
+        }
+    }
+    void kingpassive2()
+    {
+        myCharacter.Act++;
+        CM.CardToField();
     }
     void passive2()
     {
@@ -61,8 +77,8 @@ public class Q : MonoBehaviour
     {
         if (!myCharacter.isDie)
         {
-            if (passive[3]) passive3();
-            if (passive[2]) passive2();
+            if (myCharacter.passive[2]&&!isKing) passive3();
+            if (myCharacter.passive[1]&&!isKing) passive2();
            // ghostT.text = "망자:" + Ghost;
             if (myCharacter.isSet)
             {
@@ -71,11 +87,15 @@ public class Q : MonoBehaviour
             }
             if (myCharacter.isTurnEnd)
             {
-
+                if (myCharacter.passive[0]) passive1();
                 myCharacter.isTurnEnd = false;
             }
             if (myCharacter.isTurnStart)
             {
+                if (isKing)
+                {
+                    kingpassive2();
+                }
                 turnStartGhost = Ghost;
                 GhostPlus = 0;
                 myCharacter.isTurnStart = false;

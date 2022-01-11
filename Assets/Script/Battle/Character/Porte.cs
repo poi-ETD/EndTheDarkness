@@ -5,7 +5,6 @@ using UnityEngine;
 public class Porte : MonoBehaviour
 {
     [SerializeField] Character myCharacter;
-    public bool[] passive;
     TurnManager TM;
     BattleManager BM;
     bool Passive1;
@@ -47,6 +46,7 @@ public class Porte : MonoBehaviour
     {
         if (!myCharacter.isDie)
         {
+            if(myCharacter.passive[1])
             passive2();
             if (myCharacter.isSet)
             {
@@ -55,12 +55,13 @@ public class Porte : MonoBehaviour
             }
             if (myCharacter.isTurnEnd)
             {
-                passive1();
+                if (myCharacter.passive[0])
+                    passive1();
                 myCharacter.isTurnEnd = false;
             }
             if (myCharacter.isTurnStart)
             {
-              Passive2 =  false;
+                Passive2 =  false;
                 myCharacter.isTurnStart = false;
             }
         }

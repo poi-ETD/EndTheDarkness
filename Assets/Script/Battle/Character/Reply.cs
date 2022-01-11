@@ -13,7 +13,8 @@ public class Reply : MonoBehaviour
     TurnManager TM;
     BattleManager BM;
     bool Passive1;
-    private void Awake()
+    bool Passive3;
+    private void Start()
     {
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
@@ -28,6 +29,20 @@ public class Reply : MonoBehaviour
         myCharacter.Name = "스파키";
     }
     // Update is called once per frame
+    void passive3()
+    {
+        if (myCharacter.Act == 0&&!Passive3)
+        {
+            int rand = Random.Range(0, TM.CM.field.Count);
+            TM.CM.field[rand].GetComponent<Card>().cardcost = 0;
+            Passive3 = true;
+         
+        }
+        else if(myCharacter.Act>0&&Passive3)
+        {
+            Passive3 = false;
+        }
+    }
     void passive1()
     {
         if (TM.turnCard % 3 == 0 && TM.turnCard > 0 && !Passive1)
@@ -47,23 +62,26 @@ public class Reply : MonoBehaviour
         {
             if (EnemyStack[i] != enemyScript[i].dmgStack)
             {
-              
-                enemyScript[i].onHit(myCharacter.turnAtk);
-                EnemyStack[i]++;
-                EnemyStack[i]++;
-                BM.log.logContent.text += "\n독단적인 팀플레이!"+enemyScript[i].Name+"에게 "+ myCharacter.turnAtk+"의 데미지가 주어집니다.";
+                if (!enemyScript[i].isDie)
+                {
+                    enemyScript[i].onHit(myCharacter.turnAtk);
+                    EnemyStack[i]++;
+                    EnemyStack[i]++;
+                    BM.log.logContent.text += "\n독단적인 팀플레이!" + enemyScript[i].Name + "에게 " + myCharacter.turnAtk + "의 데미지가 주어집니다.";
+                }
             }
         }
     }
     void Update()
     {
-        if (passive[2])
+        passive3();
+        if (myCharacter.passive[1])
         {
             passive2();
         }
         if (!myCharacter.isDie)
         {
-            if (passive[1])
+            if (myCharacter.passive[0])
             {
                 passive1();
             }
