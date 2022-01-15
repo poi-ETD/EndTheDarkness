@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-public class Card5 : MonoBehaviour
+public class Card17 : MonoBehaviour
 {
     public BattleManager BM;
     public TurnManager TM;
     public CardManager CM;
-    public int ghostCount;
-    public int copyCount;
+
+    public int armor;
+
+    public int nextarmor;
 
     [SerializeField] Card myCard;
 
@@ -24,12 +26,11 @@ public class Card5 : MonoBehaviour
                 {
                     BM.log.logContent.text += "\n" + BM.character.Name + "이(가) " + myCard.Name.text + "발동!";
                     BM.character.Act--;
-     
-                     BM.ghostRevive(ghostCount);
-                    BM.CopyCard(copyCount);
+                    BM.getArmor(armor);
+                    BM.NextTurnArmor(nextarmor);
                     myCard.isUsed = true;
                     BM.cost -= myCard.cardcost;
-                  
+
                 }
                 else if (BM.character.Act > 0)
                 {
@@ -53,6 +54,7 @@ public class Card5 : MonoBehaviour
     }
     private void Awake()
     {
+        myCard = GetComponent<Card>();
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         CM = GameObject.Find("CardManager").GetComponent<CardManager>();

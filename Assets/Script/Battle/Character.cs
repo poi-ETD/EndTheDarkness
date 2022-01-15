@@ -60,6 +60,7 @@ public class Character : MonoBehaviour
     public bool card8;
     public int card8point;
     public string Name;
+    public int reflect;
     // Start is called before the first frame update
     private void Update()
     {
@@ -72,8 +73,7 @@ public class Character : MonoBehaviour
             {
                 if (hit.collider.gameObject == gameObject&&!isDie)
                 {
-                    if (BM.character != hit.collider.GetComponent<Character>()&&
-                        hit.collider.GetComponent<Character>().Act>0)
+                    if (BM.character != hit.collider.GetComponent<Character>()  )
                     {
                         BM.CharacterSelect(hit.collider.gameObject); }
                     else

@@ -20,7 +20,7 @@ public class Card7 : MonoBehaviour
 
             if (BM.character != null)
             {
-                if (BM.cost >= myCard.cardcost)
+                if (BM.cost >= myCard.cardcost && BM.character.Act > 0)
                 {
                     BM.log.logContent.text += "\n" + BM.character.Name + "이(가) " + myCard.Name.text + "발동!";
                     BM.character.Act--;
@@ -31,10 +31,15 @@ public class Card7 : MonoBehaviour
                     BM.cost -= myCard.cardcost;
                
                 }
-                else
+                else if (BM.character.Act > 0)
                 {
                     myCard.use = false;
                     BM.costOver();
+                }
+                else
+                {
+                    myCard.use = false;
+                    BM.overAct();
                 }
             }
             else

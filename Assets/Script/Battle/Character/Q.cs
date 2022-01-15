@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 public class Q : MonoBehaviour
 {
-    [SerializeField] Text ghostT;
+    [SerializeField] TextMeshProUGUI ghostT;
     public int Ghost;
     [SerializeField] Character myCharacter;
     TurnManager TM;
@@ -12,8 +13,8 @@ public class Q : MonoBehaviour
     bool isKing;
     CardManager CM;
     int specialDrow;
-    int turnStartGhost;
-    int GhostPlus;
+    public int turnStartGhost;
+    public int GhostPlus;
     private void Awake()
     {
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
@@ -43,7 +44,6 @@ public class Q : MonoBehaviour
     {
         if (turnStartGhost < Ghost)
         {
-
             GhostPlus++;
             turnStartGhost++;
             if (GhostPlus % 4 == 0 && GhostPlus > 0) {
@@ -79,7 +79,7 @@ public class Q : MonoBehaviour
         {
             if (myCharacter.passive[2]&&!isKing) passive3();
             if (myCharacter.passive[1]&&!isKing) passive2();
-           // ghostT.text = "망자:" + Ghost;
+            ghostT.text = Ghost.ToString();
             if (myCharacter.isSet)
             {
 

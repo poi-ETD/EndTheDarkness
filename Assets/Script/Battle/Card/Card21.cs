@@ -1,16 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-public class Card5 : MonoBehaviour
+using TMPro;
+public class Card21 : MonoBehaviour
 {
     public BattleManager BM;
     public TurnManager TM;
     public CardManager CM;
-    public int ghostCount;
-    public int copyCount;
-
     [SerializeField] Card myCard;
+    public int grave;
 
     private void Update()
     {
@@ -24,12 +22,10 @@ public class Card5 : MonoBehaviour
                 {
                     BM.log.logContent.text += "\n" + BM.character.Name + "이(가) " + myCard.Name.text + "발동!";
                     BM.character.Act--;
-     
-                     BM.ghostRevive(ghostCount);
-                    BM.CopyCard(copyCount);
+                    BM.RandomReviveToField(grave);
                     myCard.isUsed = true;
                     BM.cost -= myCard.cardcost;
-                  
+
                 }
                 else if (BM.character.Act > 0)
                 {
@@ -53,10 +49,10 @@ public class Card5 : MonoBehaviour
     }
     private void Awake()
     {
+        myCard = GetComponent<Card>();
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         CM = GameObject.Find("CardManager").GetComponent<CardManager>();
-
     }
 
 }

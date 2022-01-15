@@ -42,6 +42,10 @@ public class Porte : MonoBehaviour
             }
         }
     }
+    public void passive3()
+    {
+        BM.porte3();
+    }
     void Update()
     {
         if (!myCharacter.isDie)
@@ -61,6 +65,11 @@ public class Porte : MonoBehaviour
             }
             if (myCharacter.isTurnStart)
             {
+                if (myCharacter.passive[2])
+                {
+                   
+                    passive3();
+                }
                 Passive2 =  false;
                 myCharacter.isTurnStart = false;
             }

@@ -17,12 +17,15 @@ public class CardSetManager : MonoBehaviour
         if (File.Exists(path))
         {
             string cardData = File.ReadAllText(path);
-            CD = JsonUtility.FromJson<CardData>(cardData);
-          
-            for (int i = 0; i < 13; i++)
-            {   CardCountT[i].text = CD.CardCount[i]+"";
-                CardCount[i] = CD.CardCount[i];
-                AllCard += CardCount[i];
+            CD = JsonUtility.FromJson<CardData>(cardData);         
+            for (int i = 0; i < 100; i++)
+            {
+                if (CardCountT[i] != null)
+                {
+                    CardCountT[i].text = CD.CardCount[i] + "";
+                    CardCount[i] = CD.CardCount[i];
+                    AllCard += CardCount[i];
+                }
             }
         }
         AllCardT.text = "총 카드 장 수 : "+AllCard;

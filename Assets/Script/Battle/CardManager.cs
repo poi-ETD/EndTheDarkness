@@ -30,11 +30,9 @@ public class CardManager : MonoBehaviour
         {
             string cardData = File.ReadAllText(path);
             CD = JsonUtility.FromJson<CardData>(cardData);
-            for (int i = 0; i < 13; i++)
-            {
-             
-                CardCount[i] = CD.CardCount[i];
-               
+            for (int i = 0; i < cardKind; i++)
+            {             
+               // CardCount[i] = CD.CardCount[i];               
             }
         }
         for (int i = 0; i < cardKind; i++) {
@@ -146,5 +144,19 @@ public class CardManager : MonoBehaviour
         }
         Rebatch();
     
+    }
+    public void FieldToDeck(GameObject FieldCard)
+    {
+       for(int i = 0; i < field.Count; i++)
+        {
+            if (field[i] == FieldCard)
+            {
+                Deck.Add(FieldCard);
+                field[i].SetActive(false);
+                field.RemoveAt(i);
+                break;
+            }
+        }
+        Rebatch();
     }
 }
