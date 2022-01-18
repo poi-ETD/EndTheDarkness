@@ -44,3 +44,6 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Grave
+    uniqueID: 2139423495
+    locked: 0

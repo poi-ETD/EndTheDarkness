@@ -81,14 +81,16 @@ public class Vangara : MonoBehaviour
     {
        
         if (armorcount !=myCharacter.armorBreak.Count)
-        {
-      
+        {      
             for(int i = 0; i < enemyScript.Length; i++)
             {
                 if (enemyScript[i].Name == myCharacter.armorBreak[armorcount].name)
                 {
-                    enemyScript[i].onHit(myCharacter.armorBreak[armorcount].dmg);
-                    BM.log.logContent.text += "\n무장!" + enemyScript[i].Name + "에게 추가 데미지!";
+                    if (myCharacter.armorBreak[armorcount].dmg > 0)
+                    {
+                        enemyScript[i].onHit(myCharacter.armorBreak[armorcount].dmg);
+                        BM.log.logContent.text += "\n무장!" + enemyScript[i].Name + "에게 추가 데미지!";
+                    }
                 }
             }
 

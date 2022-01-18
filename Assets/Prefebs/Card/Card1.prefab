@@ -367,6 +367,8 @@ MonoBehaviour:
   cardcost: 1
   costT: {fileID: 5923663275634668501}
   Name: {fileID: 5923663275127568991}
+  isGrave: 0
+  realcost: 1
 --- !u!114 &5923663275329812120
 MonoBehaviour:
   m_ObjectHideFlags: 0

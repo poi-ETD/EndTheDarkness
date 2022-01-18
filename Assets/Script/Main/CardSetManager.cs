@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.IO;
+using TMPro;
 public class CardSetManager : MonoBehaviour
 {
     public Text[] CardCountT;
@@ -11,6 +12,7 @@ public class CardSetManager : MonoBehaviour
     CardData CD=new CardData();
     public int[] CardCount;
     public int AllCard;
+    [SerializeField] TextMeshProUGUI cardCat;
     private void Awake()
     {
         string path = Path.Combine(Application.dataPath, "CardData.json");
@@ -35,11 +37,9 @@ public class CardSetManager : MonoBehaviour
         
     }
     public void ToMain()
-    {for(int i = 0; i < 100; i++)
+    {
+        for(int i = 0; i < 100; i++)
         {
-
-
-
             CD.CardCount[i] = CardCount[i];
         }
         string cardData = JsonUtility.ToJson(CD,true);

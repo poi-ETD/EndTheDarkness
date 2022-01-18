@@ -36,7 +36,7 @@ public class Reply : MonoBehaviour
             int rand = Random.Range(0, TM.CM.field.Count);
             TM.CM.field[rand].GetComponent<Card>().cardcost = 0;
             Passive3 = true;
-         
+            BM.log.logContent.text += "\n부서진 족쇄!" + TM.CM.field[rand].GetComponent<Card>().Name.text + "의 코스트가 0이 됩니다.";
         }
         else if(myCharacter.Act>0&&Passive3)
         {

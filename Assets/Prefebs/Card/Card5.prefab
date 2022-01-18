@@ -309,6 +309,8 @@ MonoBehaviour:
   cardcost: 2
   costT: {fileID: 3508657662225538805}
   Name: {fileID: 3508657661654439807}
+  isGrave: 0
+  realcost: 2
 --- !u!61 &3508657661586676665
 BoxCollider2D:
   m_ObjectHideFlags: 0

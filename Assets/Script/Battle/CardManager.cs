@@ -32,7 +32,7 @@ public class CardManager : MonoBehaviour
             CD = JsonUtility.FromJson<CardData>(cardData);
             for (int i = 0; i < cardKind; i++)
             {             
-               // CardCount[i] = CD.CardCount[i];               
+               CardCount[i] = CD.CardCount[i];               
             }
         }
         for (int i = 0; i < cardKind; i++) {
@@ -65,6 +65,16 @@ public class CardManager : MonoBehaviour
             Rebatch();
         }            
     }
+    public void TurnStartCardSet()
+    {
+        for(int i = 0; i < Deck.Count; i++)
+        {
+            Deck[i].SetActive(true);
+            Deck[i].GetComponent<Card>().cardcost = Deck[i].GetComponent<Card>().realcost;
+            Deck[i].SetActive(false);
+        }
+    }
+
     public void SpecialCardToField()
     {
    
@@ -77,21 +87,31 @@ public class CardManager : MonoBehaviour
             Rebatch();            
         }
     }
+    public void PlusCard(int i)
+    {
+        GameObject newCard = Instantiate(startCard[i], new Vector3(100, 100, 0), transform.rotation, CardCanvas.transform);
+        Deck.Add(newCard);
+        newCard.SetActive(false);
+    }
     public void UseCard(GameObject usingCard)
     {
         for (int i = field.Count - 1; i >= 0; i--)
         {
             if (usingCard == field[i])
-            {
-                TM.BM.cancleCard();
-                field[i].GetComponent<Card>().isGrave = true;
-                field[i].SetActive(false);
+            {               
+               
                 Grave.Add(field[i]);
                 field[i].transform.parent = GameObject.Find("GraveContent").transform;
                 field.RemoveAt(i);              
                 break;
             }
         }
+        usingCard.GetComponent<Card>().isGrave = true;
+        usingCard.SetActive(false);
+        TM.BM.cancleCard();
+        TM.BM.pcard = usingCard;
+        TM.BM.penemy = TM.BM.enemy;
+        if(usingCard.GetComponent<Card>().Name.text!="스케치 반복")
         TM.BM.allClear();  
         TM.turnCard++;
         Rebatch();
@@ -99,8 +119,7 @@ public class CardManager : MonoBehaviour
 
     public void GraveOn() {
         for (int i = 0; i < Grave.Count; i++)
-        {
-          
+        {        
             Grave[i].SetActive(true);
         }
     }

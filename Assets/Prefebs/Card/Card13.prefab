@@ -368,6 +368,7 @@ MonoBehaviour:
   costT: {fileID: 6996574469649838645}
   Name: {fileID: 6996574470222773183}
   isGrave: 0
+  realcost: 1
 --- !u!61 &6996574470290798457
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -370,6 +370,7 @@ MonoBehaviour:
   costT: {fileID: 5390484147484839741}
   Name: {fileID: 5390484147985647287}
   isGrave: 0
+  realcost: 2
 --- !u!61 &5390484147917621873
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -413,6 +414,7 @@ MonoBehaviour:
   CM: {fileID: 0}
   ghostRevive: 4
   revive: 2
+  oneTimeUse: 0
   myCard: {fileID: 5390484147917621875}
 --- !u!1 &5390484147985647285
 GameObject:

@@ -60,11 +60,9 @@ public class TurnManager : MonoBehaviour
                     enemy[i].nextTurnArmor = 0;
                 }
             }
-
             EndButton.SetActive(false);
             BM.CharacterSelectMode = false;
             BM.EnemySelectMode = false;
-
             for (int i = 0; i < 4; i++)
             {
                 if (!BM.characters[i].isDie)
@@ -120,7 +118,7 @@ public class TurnManager : MonoBehaviour
               
             }
         }
-  
+        CM.TurnStartCardSet();
         BM.TurnStart();
     }
 

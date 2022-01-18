@@ -15,6 +15,7 @@ public class Q : MonoBehaviour
     int specialDrow;
     public int turnStartGhost;
     public int GhostPlus;
+    public Sprite awakeQ;
     private void Awake()
     {
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
@@ -25,11 +26,16 @@ public class Q : MonoBehaviour
     }
     void passive1()
     {
-        if (Ghost > 50 && !isKing)
+        if (Ghost >= 50 && !isKing)
         {
+            GetComponent<Image>().sprite = awakeQ;
             BM.log.logContent.text += "\nQ가 백옥의 왕 Q로 변신합니다.";
             myCharacter.Hp = 100;
             myCharacter.maxHp = 100;
+            CM.PlusCard(13);
+            CM.PlusCard(13);
+            CM.PlusCard(14);
+            CM.PlusCard(14);
             isKing = true;
             myCharacter.Atk+=2;
             BM.startCost++;

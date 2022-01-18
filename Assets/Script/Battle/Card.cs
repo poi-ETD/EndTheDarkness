@@ -14,14 +14,14 @@ public class Card : MonoBehaviour
     [SerializeField] TextMeshProUGUI costT;
     public TextMeshProUGUI Name;
     public bool isGrave;
-    int realcost;
+    public int realcost;
     public void useCard()
     {       
         use = true;
     }
     private void Awake()
     {
-        realcost = cardcost;
+      
         CM = GameObject.Find("CardManager").GetComponent<CardManager>();
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         
