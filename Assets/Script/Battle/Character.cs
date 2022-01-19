@@ -71,7 +71,7 @@ public class Character : MonoBehaviour
             RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero, 0f);
             if (hit.collider != null)
             {
-                if (hit.collider.gameObject == gameObject&&!isDie)
+                if (hit.collider.gameObject == gameObject&&!isDie && !BM.SelectMode)
                 {
                     if (BM.character != hit.collider.GetComponent<Character>()  )
                     {
