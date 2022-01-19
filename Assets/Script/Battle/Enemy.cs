@@ -67,7 +67,8 @@ public class Enemy : MonoBehaviour
         TM.PlayerTurnStart();
     }
     public void onHit(int dmg)
-    {   
+    {
+    
        BM.Setting();
        dmgStack++;
         if (Armor > 0)

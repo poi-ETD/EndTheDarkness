@@ -21,6 +21,7 @@ public class Character : MonoBehaviour
     public TextMeshProUGUI board;
     public bool[] passive;
     public List<DMGboard> DMGboards=new List<DMGboard>();
+    public string enemyName;
     public struct ArmorBreak
     {
         public int dmg;
@@ -125,7 +126,19 @@ public class Character : MonoBehaviour
     public void onDamage(int dmg,string enemyname)
     {
         BM.log.logContent.text += "\n"+Name + "(가)이 " + enemyname + "에게 " + dmg + "의 피해를 입었다!";
-        BM.Setting();      
+        BM.Setting();
+        if (reflect > 0)
+        {
+            for(int i = 0; i < BM.Enemys.Length; i++)
+            {
+                if (BM.Enemys[i].GetComponent<Enemy>().Name == enemyname)
+                {
+                    BM.Enemys[i].GetComponent<Enemy>().onHit(reflect);
+                    BM.log.logContent.text+="\n"+Name+"에게 데미지가 주어져서 " + enemyname + "에게 " + reflect + "의 데미지!";
+                }
+            }
+        }
+        enemyName = enemyname;
         if (Armor > 0)
         {
             ArmorBreak newA = new ArmorBreak();

@@ -1,26 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-public class Card11 : MonoBehaviour
+using TMPro;
+public class Card16 : MonoBehaviour
 {
     public BattleManager BM;
     public TurnManager TM;
     public CardManager CM;
-    public int dmg;
-    public int atk;
     [SerializeField] Card myCard;
-    bool decrease;
+    public int reflect;
+    public int armor;
 
     private void Update()
     {
-        if (TM.turnCard >= 4&&!decrease)
-        {
-            decrease = true;
-            myCard.cardcost -= 2;
-            if (myCard.cardcost < 0)
-                myCard.cardcost = 0;
-        }
+
         if (myCard.use)
         {
 
@@ -30,15 +23,11 @@ public class Card11 : MonoBehaviour
                 {
                     BM.log.logContent.text += "\n" + BM.character.Name + "이(가) " + myCard.Name.text + "발동!";
                     BM.character.Act--;
-                    BM.OnDmgOneTarget(dmg);
-                    BM.TurnAtkUp(atk);
+                    BM.reflectUp(reflect);
+                    BM.getArmor(armor);
                     myCard.isUsed = true;
                     BM.cost -= myCard.cardcost;
-                    if (decrease)
-                    {
-                        myCard.cardcost += 2;
-                        decrease = false;
-                    }
+
                 }
                 else if (BM.character.Act > 0)
                 {
@@ -62,10 +51,10 @@ public class Card11 : MonoBehaviour
     }
     private void Awake()
     {
+        myCard = GetComponent<Card>();
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         CM = GameObject.Find("CardManager").GetComponent<CardManager>();
-
     }
 
 }

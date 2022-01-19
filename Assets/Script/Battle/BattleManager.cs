@@ -15,7 +15,7 @@ public class BattleManager : MonoBehaviour
     public int cost;
     public GameObject card;
     public Enemy penemy;
-    public Card pcard;
+    public GameObject pcard;
     public Character pcharacter;
     Transform tra1;
     Transform tra2;
@@ -28,7 +28,7 @@ public class BattleManager : MonoBehaviour
     public int StartCost;
     public int TurnCardCount;
     [SerializeField] GameObject Warn;
-    [SerializeField] Text warntext;
+    public Text warntext;
     [SerializeField] GameObject useButton;
     public List<Character> forward = new List<Character>();
     public List<Character> back = new List<Character>();
@@ -44,7 +44,7 @@ public class BattleManager : MonoBehaviour
     [SerializeField] GameObject graveView;
     public  int ReviveCount;
     public bool card7mode;
-    [SerializeField] GameObject[] Enemys;
+    public GameObject[] Enemys;
     public BattleData bd;
     public CharacterData CD;
     [SerializeField] GameObject victory;
@@ -52,7 +52,8 @@ public class BattleManager : MonoBehaviour
     public bool SelectMode;
     [SerializeField] Character[] passiveCharacters;
     bool porte3mode;
-    
+    [SerializeField] GameObject condition;
+    public Text conditionText;
     public void toMain()
     {
         SceneManager.LoadScene("Main");
@@ -81,7 +82,7 @@ public class BattleManager : MonoBehaviour
         {
             GameObject EnemySummon = Instantiate(Enemys[bd.battleNo], new Vector2(3, 6f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
         }
-    
+        Enemys = GameObject.FindGameObjectsWithTag("Enemy");
         TurnCardCount = CardCount;
         nowZ = 1;
         for (int i = 0; i < 4; i++)
@@ -98,7 +99,7 @@ public class BattleManager : MonoBehaviour
     }
     private void Update()
     {
-       
+      
             if (Input.GetKey("escape"))
                 Application.Quit();
             
@@ -120,12 +121,15 @@ public class BattleManager : MonoBehaviour
     }
     public void porte3()
     {
+        condition.SetActive(true);
+        conditionText.text = "스타키티시모";
         completeButton.SetActive(true);
         SelectMode = true;
         porte3mode = true;
     }
     public void Complete()
     {
+        condition.SetActive(false);
         SelectMode = false;
         completeButton.SetActive(false);
         if (card12On)
@@ -143,11 +147,13 @@ public class BattleManager : MonoBehaviour
                 CM.field[CM.field.Count - 1].GetComponent<Card>().cardcost -= 2;
                 if (CM.field[CM.field.Count - 1].GetComponent<Card>().cardcost < 0)
                     CM.field[CM.field.Count - 1].GetComponent<Card>().cardcost = 0;
+                log.logContent.text += "\n스타카티시모!"+CM.field[CM.field.Count - 1].GetComponent<Card>().Name.text + "의 코스트가 감소하였습니다.";
                 porte3mode = false;
                 card = null;
             }
             else
             {
+                condition.SetActive(true);
                 SelectMode = true;
                 completeButton.SetActive(true);
                 warntext.text = "스타카티시모:카드 선택을 해주세요.";
@@ -196,6 +202,7 @@ public class BattleManager : MonoBehaviour
     {
         if (!otherCanvasOn)
         {
+        
             if (tra3 != null)
                 tra3.localScale = new Vector2(1, 1);
             enemy = null;
@@ -349,6 +356,7 @@ public class BattleManager : MonoBehaviour
             GameObject newCard = Instantiate(card, new Vector3(0, 0, 0), transform.rotation,GameObject.Find("CardCanvas").transform);
             newCard.GetComponent<Card>().use = false;
             newCard.GetComponent<Card>().isUsed = false;
+            newCard.GetComponent<Card>().isGrave = false;
             newCard.GetComponent<Transform>().localScale = new Vector2(1, 1);
             newCard.SetActive(false);
             CM.Deck.Add(newCard);
@@ -390,6 +398,8 @@ public class BattleManager : MonoBehaviour
     int toGraveCount = 0;
     public void card12()
     {
+        condition.SetActive(true);
+        conditionText.text = "리셋";
         SelectMode = true;
         log.logContent.text += "\n리셋!";
         card12On = true;
@@ -423,6 +433,7 @@ public class BattleManager : MonoBehaviour
         for(int i = 0; i < n; i++)
         {
             int rand = Random.Range(0, CM.Grave.Count);
+           
             CM.GraveToField(CM.Grave[rand]);
 
          
@@ -434,9 +445,24 @@ public class BattleManager : MonoBehaviour
         {
             if (!characters[i].isDie&&characters[i].characterNo == c)
             {
+                log.logContent.text += "\n" + characters[i].Name + "의 공격력이 1증가합니다.";
                 characters[i].Act++;
             }
         }
+    }
+    public void card20Active()
+    {
+        Card p = pcard.GetComponent<Card>();
+        pcard.SetActive(true);
+        p.isGrave = false;
+        p.isUsed = false;
+        p.useCard();
+        
+
+    }
+    public void reflectUp(int r)
+    {
+        character.reflect+=r;
     }
  public void Victory()
     {

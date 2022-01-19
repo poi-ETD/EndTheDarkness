@@ -11,15 +11,15 @@ public class Card1 : MonoBehaviour
     [SerializeField] Card myCard;
 
     private void Update()
-    {
-      
+    {      
         if (myCard.use)
         {
-
+            
             if (BM.character != null && BM.enemy != null)
             {
                 if (BM.cost >= myCard.cardcost&&BM.character.Act>0)
                 {
+               
                     BM.log.logContent.text += "\n" + BM.character.Name + "이(가) " + myCard.Name.text + "발동!";
                     BM.character.Act--;
                     BM.OnDmgOneTarget(dmg);
@@ -40,6 +40,7 @@ public class Card1 : MonoBehaviour
             }
             else
             {
+              
                 myCard.use = false;
                 BM.TargetOn();
             }
