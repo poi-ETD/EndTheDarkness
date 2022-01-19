@@ -106,9 +106,9 @@ public class Enemy : MonoBehaviour
         }
     }
     public void GetArmor(int arm)
-    {
-     
+    {    
         nextTurnArmor += arm;
-        Board.text += "Armor + " + arm + "\n";
+        string newstring = "<sprite name=armor>" + arm + "\n";
+        Board.text += newstring;
     }
 }

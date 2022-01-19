@@ -54,6 +54,32 @@ public class BattleManager : MonoBehaviour
     bool porte3mode;
     [SerializeField] GameObject condition;
     public Text conditionText;
+    public bool GraveReviveMode;
+    [SerializeField] Text graveClose;
+    [SerializeField] Text StackT;
+    [SerializeField] GameObject StackPopUp;
+    public void StackPopUpOn()
+    {
+        if (StackPopUp.activeSelf)
+        {
+            StackPopUp.SetActive(false);
+        }
+        else
+        { StackT.text = "";
+            
+            StackT.text += "이번 턴 사용한 카드 수:" + CM.TM.turnCard + "\n";
+            for(int i = 0; i < 4; i++)
+            {
+                if (characters[i].characterNo == 1)
+                {
+                    StackT.text += "망자:" + characters[i].GetComponent<Q>().Ghost + "\n";
+                    break;                  
+                }
+            }
+           
+            StackPopUp.SetActive(true);
+        }
+    }
     public void toMain()
     {
         SceneManager.LoadScene("Main");
@@ -95,14 +121,13 @@ public class BattleManager : MonoBehaviour
         {
             back.Add(characters[i]);
         }
-
     }
+    GameObject c20;
     private void Update()
-    {
-      
+    {if(pcard!=null)
+        Debug.Log(pcard);
             if (Input.GetKey("escape"))
-                Application.Quit();
-            
+                Application.Quit();            
         costT.text = "cost:" + cost;
         if (card == null||porte3mode)
             useButton.SetActive(false);
@@ -116,8 +141,7 @@ public class BattleManager : MonoBehaviour
                 CM.TM.turnCard--;
                 card = null;
             }
-        }
-   
+        }  
     }
     public void porte3()
     {
@@ -142,6 +166,7 @@ public class BattleManager : MonoBehaviour
         {
             if (card != null)
             {
+                card.transform.localScale = new Vector3(1, 1, 1);
                 CM.FieldToDeck(card);
                 CM.CardToField();
                 CM.field[CM.field.Count - 1].GetComponent<Card>().cardcost -= 2;
@@ -406,34 +431,55 @@ public class BattleManager : MonoBehaviour
         completeButton.SetActive(true);
         
     }
+    public void card12remake()
+    {      
+        int g = CM.field.Count;
+        for(int i = CM.field.Count - 1; i >= 0; i--)
+        {if(card!=CM.field[i])
+            CM.FieldToDeck(CM.field[i]);
+        }
+        specialDrow(g);
+    }
     public void GraveOn()
     {
         otherCanvasOn = true;
+        if (GraveReviveMode)
+            graveClose.text = "부활";
         CM.GraveOn();
         graveView.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
     }
     public void GraveOff()
     {
-        card7mode = false;
-        CM.GraveOff();
-        ReviveCount = 0;
-        otherCanvasOn = false;
-        cancleCard();
-        CancleCharacter();
-        CancleEnemy();
-        graveView.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 1000, 0);
+        if (GraveReviveMode)
+        {
+            graveClose.text = "닫기";
+            GraveReviveMode = false;
+            card7mode = false;
+            CM.Revive();
+        }
+        else
+        {
+            CM.GraveOff();
+            otherCanvasOn = false;          
+            cancleCard();
+            CancleCharacter();
+            CancleEnemy();
+           
+            graveView.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 1000, 0);
+        }
     }
     public void ReviveToField(int r)
-    {        
+    {
+        GraveReviveMode = true;
         GraveOn(); 
         ReviveCount += r;
     }
     public void RandomReviveToField(int n)
-    {
+    {if (n > CM.Grave.Count)
+            n = CM.Grave.Count;
         for(int i = 0; i < n; i++)
         {
-            int rand = Random.Range(0, CM.Grave.Count);
-           
+            int rand = Random.Range(0, CM.Grave.Count);           
             CM.GraveToField(CM.Grave[rand]);
 
          
@@ -450,15 +496,18 @@ public class BattleManager : MonoBehaviour
             }
         }
     }
+   public bool card20done=false;
     public void card20Active()
     {
+        card20done = true;
+        GameObject curCard = card;
         Card p = pcard.GetComponent<Card>();
+        cost += p.cardcost;
         pcard.SetActive(true);
         p.isGrave = false;
         p.isUsed = false;
         p.useCard();
-        
-
+       
     }
     public void reflectUp(int r)
     {

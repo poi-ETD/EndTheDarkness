@@ -117,7 +117,7 @@ public class Character : MonoBehaviour
         board.text = "";
         for(int i = 0; i < DMGboards.Count; i++)
         {
-            string newstring = "<sprite name=" + DMGboards[i].name + ">+" + DMGboards[i].dmg;
+            string newstring = "<sprite name=" + DMGboards[i].name + "><sprite name=dmg>" + DMGboards[i].dmg;
             if (DMGboards[i].count > 0) newstring += " x" + (DMGboards[i].count+1);
             newstring += "\n";
             board.text += newstring;

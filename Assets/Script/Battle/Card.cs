@@ -32,10 +32,16 @@ public class Card : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero, 0f);
-            if (hit.collider != null)
+            RaycastHit2D[] hit = Physics2D.RaycastAll(pos, Vector2.zero, 0f);
+            if (hit != null)
             {
-                if (hit.collider.gameObject == gameObject)
+                bool isCardOn = false; ;
+                for(int i = 0; i < hit.Length; i++)
+                {
+                    if (hit[i].collider.gameObject == gameObject)
+                        isCardOn = true;
+                }
+                if (isCardOn == gameObject)
                 {
                     if (!isGrave)
                     {
@@ -48,15 +54,8 @@ public class Card : MonoBehaviour
                             BM.cancleCard();
                         }
                     }
-                    else if (BM.ReviveCount > 0)
-                    {
-                        CM.GraveToField(gameObject);
-                        BM.ReviveCount--;
-                        if (BM.card7mode)
-                        {
-                            cardcost = 0;
-                        }
-                    }
+                    else 
+                        CM.ClickInGrave(gameObject);                      
                 }
               
             }
