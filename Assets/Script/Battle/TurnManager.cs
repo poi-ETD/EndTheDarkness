@@ -56,6 +56,7 @@ public class TurnManager : MonoBehaviour
                 if (!enemy[i].isDie)
                 {
                     enemy[i].EnemyStartTurn();
+                    enemy[i].HpUp();
                     enemy[i].Armor += enemy[i].nextTurnArmor;
                     enemy[i].nextTurnArmor = 0;
                 }

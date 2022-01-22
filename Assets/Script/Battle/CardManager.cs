@@ -113,6 +113,7 @@ public class CardManager : MonoBehaviour
                 break;
             }
         }
+        BM.character.Acting();
         usingCard.GetComponent<Card>().isGrave = true;
         usingCard.SetActive(false);
         TM.BM.cancleCard();

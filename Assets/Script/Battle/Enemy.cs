@@ -21,6 +21,7 @@ public class Enemy : MonoBehaviour
     public bool noDie;
     public bool power;
     public string Name;
+    int RecoverHp;
     private void Awake()
     {
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
@@ -105,10 +106,46 @@ public class Enemy : MonoBehaviour
             }
         }
     }
-    public void GetArmor(int arm)
-    {    
+    public void GetArmor(int arm,string enemyname)
+    {
+        
         nextTurnArmor += arm;
-        string newstring = "<sprite name=armor>" + arm + "\n";
+        string newstring = "<sprite name="+enemyname+"><sprite name=armor>" + arm + "\n";
         Board.text += newstring;
     }
+    List<int> HpI = new List<int>();
+    List<string> HpS = new List<string>();
+    public void GetHp(int amount,string enemyname)
+    {
+        HpS.Add(enemyname);
+        HpI.Add(amount);
+        string newstring = "<sprite name=" + enemyname + "><sprite name=recover>" + amount + "\n";
+        RecoverHp = amount;
+        Board.text += newstring;
+    }
+    public void GetDynamicHp(int amount,string enemyname)
+    {
+        string newstring = Board.text;
+        for(int i = 0; i < HpS.Count; i++)
+        {
+            if (HpS[i] == enemyname)
+            {
+                int curR = HpI[i];
+                newstring = newstring.Replace("<sprite name=" + enemyname + "><sprite name=recover>" + curR + "\n"
+                , "<sprite name=" + enemyname + "><sprite name=recover>" + amount + "\n");
+                RecoverHp -= curR;
+                RecoverHp += amount;
+                break;
+            }
+        }
+        Board.text = newstring;
+    }
+    public void HpUp()
+    {
+        Hp += RecoverHp;
+        RecoverHp = 0;
+        if (Hp >= maxHp)
+            Hp = maxHp;
+    }
 }
+

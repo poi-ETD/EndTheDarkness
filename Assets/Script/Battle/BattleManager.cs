@@ -89,7 +89,7 @@ public class BattleManager : MonoBehaviour
     private void Awake()
     {
         string path = Path.Combine(Application.persistentDataPath, "battleData.json");
-        string battleData = File.ReadAllText(path);
+       string battleData = File.ReadAllText(path);
         bd = JsonUtility.FromJson<BattleData>(battleData);
         path = Path.Combine(Application.persistentDataPath, "CharacterData.json");
         string characterData= File.ReadAllText(path);
@@ -104,11 +104,11 @@ public class BattleManager : MonoBehaviour
         }
         if (bd.battleNo == 0)
         {
-            GameObject EnemySummon = Instantiate(Enemys[bd.battleNo], new Vector2(0, 6.5f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
+            //GameObject EnemySummon = Instantiate(Enemys[bd.battleNo], new Vector2(0, 6.5f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
         }
         else if (bd.battleNo == 1)
         {
-            GameObject EnemySummon = Instantiate(Enemys[bd.battleNo], new Vector2(3, 6f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
+         //   GameObject EnemySummon = Instantiate(Enemys[bd.battleNo], new Vector2(3, 6f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
         }
         Enemys = GameObject.FindGameObjectsWithTag("Enemy");
         TurnCardCount = CardCount;
@@ -126,8 +126,7 @@ public class BattleManager : MonoBehaviour
     }
     GameObject c20;
     private void Update()
-    {if(pcard!=null)
-        Debug.Log(pcard);
+    {
             if (Input.GetKey("escape"))
                 Application.Quit();            
         costT.text = "cost:" + cost;
@@ -263,6 +262,7 @@ public class BattleManager : MonoBehaviour
 
     public void TurnStart()
     {
+        
         pcharacter = null;
         pcard = null;
         penemy = null;
@@ -275,6 +275,7 @@ public class BattleManager : MonoBehaviour
          
             characters[i].isTurnStart = true;
         }
+        
 
     }
     public void Setting()
@@ -286,6 +287,10 @@ public class BattleManager : MonoBehaviour
     }
     public void TurnEnd()
     {
+        for (int i = 0; i < Enemys.Length; i++)
+        {
+            Enemys[i].GetComponent<Enemy>().Board.text = "";
+        }
         TurnCardCount = CardCount;
         Setting();
         for (int i = 0; i < 4; i++)

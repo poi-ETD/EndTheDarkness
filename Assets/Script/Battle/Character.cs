@@ -62,10 +62,22 @@ public class Character : MonoBehaviour
     public int card8point;
     public string Name;
     public int reflect;
+    int[] Status=new int[20];
+    public void Acting()
+    {
+     
+        if (Status[0] > 0)
+        {
+            onDamage(Status[0], "중독");
+        }
+    }
+    public void StatusAbnom(int status,int count)
+    {
+        Status[status] += count;
+    }
     // Start is called before the first frame update
     private void Update()
-    {
-       
+    {       
         if (Input.GetMouseButtonDown(0))
         {
             Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -95,6 +107,27 @@ public class Character : MonoBehaviour
         Act = 1;
         Hp = maxHp;
     }
+    public void onDynamicHit(int dmg,string enemyname)
+    {      
+        for (int i = 0; i < DMGboards.Count; i++)
+        {
+            if (DMGboards[i].name == enemyname)
+            {
+               
+                DMGboards[i].setDmg(dmg);
+                break;
+            }
+        }
+        board.text = "";
+        for (int i = 0; i < DMGboards.Count; i++)
+        {
+            string newstring = "<sprite name=" + DMGboards[i].name + "><sprite name=dmg>" + DMGboards[i].dmg;
+            if (DMGboards[i].count > 0) newstring += " x" + (DMGboards[i].count + 1);
+            newstring += "\n";
+            board.text += newstring;
+        }
+    }
+
     public void onHit(int dmg,string enemyname)
     {        
         bool isThere = false;       

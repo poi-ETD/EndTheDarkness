@@ -112,7 +112,7 @@ public class Poly : MonoBehaviour
                 }
                 else if (phase1 % 2 == 0)
                 {
-                    myEnemy.GetArmor(5);
+                    myEnemy.GetArmor(5, myEnemy.Name);
                     if (BM.forward.Count > 0)
                     {
                         if (ForwardHaveArmor.Count > 0)
@@ -171,7 +171,7 @@ public class Poly : MonoBehaviour
                             BM.characters[i].NextTurnMinusAct++;
                         }
                     
-                    myEnemy.GetArmor(30);
+                    myEnemy.GetArmor(30, myEnemy.Name);
                 }
                 else if (phase2 % 2 == 0)
 
@@ -226,7 +226,7 @@ public class Poly : MonoBehaviour
                 }
                 else if (phase2 % 2 == 1)
                 {
-                    myEnemy.GetArmor(10);
+                    myEnemy.GetArmor(10, myEnemy.Name);
                 }
             }
             else if (myEnemy.Hp <= 50)
@@ -243,7 +243,7 @@ public class Poly : MonoBehaviour
                         BM.characters[i].NextTurnMinusAct++;
                     }
                     count = 6;
-                    myEnemy.GetArmor(100);
+                    myEnemy.GetArmor(100, myEnemy.Name);
                 }
                 else if (phase3 < 7)
                 {
@@ -274,7 +274,7 @@ public class Poly : MonoBehaviour
                             while (ForwardHaveArmor[rand].isDie)
                                 rand = Random.Range(0, ForwardHaveArmor.Count);
                             ForwardHaveArmor[rand].onHit(13, myEnemy.Name);
-                            myEnemy.GetArmor(10);
+                            myEnemy.GetArmor(10, myEnemy.Name);
 
                         }
                         else
@@ -284,7 +284,7 @@ public class Poly : MonoBehaviour
                             while (BM.characters[rand].isDie)
                                 rand = Random.Range(0, BM.forward.Count);
                             BM.characters[rand].onHit(13,myEnemy.Name);
-                            myEnemy.GetArmor(10);
+                            myEnemy.GetArmor(10, myEnemy.Name);
 
                         }
                     }
@@ -297,7 +297,7 @@ public class Poly : MonoBehaviour
                             while (HaveArmor[rand].isDie)
                                 rand = Random.Range(0, HaveArmor.Count);
                             HaveArmor[rand].onHit(13,myEnemy.Name);
-                            myEnemy.GetArmor(10);
+                            myEnemy.GetArmor(10, myEnemy.Name);
 
                         }
                         else
@@ -307,7 +307,7 @@ public class Poly : MonoBehaviour
                             while (BM.characters[rand].isDie)
                                 rand = Random.Range(0, 4);
                             BM.characters[rand].onHit(13,myEnemy.Name);
-                            myEnemy.GetArmor(10);
+                            myEnemy.GetArmor(10, myEnemy.Name);
                         }
                     }
                 }

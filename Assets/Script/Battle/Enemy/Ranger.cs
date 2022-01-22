@@ -54,7 +54,7 @@ public class Ranger : MonoBehaviour
                         {
                             int rand2 = Random.Range(0, BM.forward.Count);
                             while (BM.characters[rand2].isDie)
-                                rand2 = Random.Range(0, ForwardHaveArmor.Count);
+                                rand2 = Random.Range(0, BM.forward.Count);
                             BM.characters[rand2].onHit(3, myEnemy.Name);
                         }
                     }
@@ -93,7 +93,7 @@ public class Ranger : MonoBehaviour
                 if (rand == 2)
                 {
                    
-                    myEnemy.GetArmor(3);
+                    myEnemy.GetArmor(3, myEnemy.Name);
                 }
                 else
                 {
@@ -101,7 +101,7 @@ public class Ranger : MonoBehaviour
                     {
                         int rand2 = Random.Range(0, BM.forward.Count);
                         while (BM.characters[rand2].isDie)
-                        rand2 = Random.Range(0, ForwardHaveArmor.Count);
+                        rand2 = Random.Range(0, BM.forward.Count);
                         BM.characters[rand2].onHit(3, myEnemy.Name);
 
                     }
