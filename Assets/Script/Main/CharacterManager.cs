@@ -16,13 +16,13 @@ public class CharacterManager : MonoBehaviour
     {
 
         string characterData = JsonUtility.ToJson(CD, true);
-        string path = Path.Combine(Application.dataPath, "CharacterData.json");
+        string path = Path.Combine(Application.persistentDataPath, "CharacterData.json");
         File.WriteAllText(path, characterData);
         SceneManager.LoadScene("Main");
     }
     private void Awake()
     {
-        string path = Path.Combine(Application.dataPath, "CharacterData.json");
+        string path = Path.Combine(Application.persistentDataPath, "CharacterData.json");
         if (File.Exists(path))
         {
             string characterData = File.ReadAllText(path);

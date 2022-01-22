@@ -138,6 +138,7 @@ public class Character : MonoBehaviour
                 }
             }
         }
+        dmgStack++;
         enemyName = enemyname;
         if (Armor > 0)
         {
@@ -152,7 +153,7 @@ public class Character : MonoBehaviour
             }
             newA.name = enemyname;
             armorBreak.Add(newA);
-            dmgStack++;
+           
             Armor -= dmg;
             if (Armor < 0)
             {
@@ -178,7 +179,9 @@ public class Character : MonoBehaviour
     void die()
     {
         isDie = true;
-        Hp = 0;      
+        Hp = 0;
+        hpT.text = Hp + "/" + maxHp;
+
         Color color = new Color(0.3f, 0.3f, 0.3f);
         GetComponent<Image>().color = color;
         Act = 0;

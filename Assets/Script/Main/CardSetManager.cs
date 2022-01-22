@@ -15,7 +15,8 @@ public class CardSetManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI cardCat;
     private void Awake()
     {
-        string path = Path.Combine(Application.dataPath, "CardData.json");
+       string filepath = Application.persistentDataPath + "/CardData.json";
+        string path = Path.Combine(Application.persistentDataPath, "CardData.json");
         if (File.Exists(path))
         {
             string cardData = File.ReadAllText(path);
@@ -43,7 +44,7 @@ public class CardSetManager : MonoBehaviour
             CD.CardCount[i] = CardCount[i];
         }
         string cardData = JsonUtility.ToJson(CD,true);
-        string path = Path.Combine(Application.dataPath, "CardData.json");
+        string path = Path.Combine(Application.persistentDataPath, "CardData.json");
         File.WriteAllText(path,cardData);
         SceneManager.LoadScene("Main");
     }

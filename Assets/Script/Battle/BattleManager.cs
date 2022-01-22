@@ -62,11 +62,12 @@ public class BattleManager : MonoBehaviour
     {
         if (StackPopUp.activeSelf)
         {
+            otherCanvasOn = false;
             StackPopUp.SetActive(false);
         }
         else
         { StackT.text = "";
-            
+            otherCanvasOn = true;
             StackT.text += "이번 턴 사용한 카드 수:" + CM.TM.turnCard + "\n";
             for(int i = 0; i < 4; i++)
             {
@@ -82,14 +83,15 @@ public class BattleManager : MonoBehaviour
     }
     public void toMain()
     {
+        Time.timeScale = 1;
         SceneManager.LoadScene("Main");
     }
     private void Awake()
     {
-        string path = Path.Combine(Application.dataPath, "battleData.json");
+        string path = Path.Combine(Application.persistentDataPath, "battleData.json");
         string battleData = File.ReadAllText(path);
         bd = JsonUtility.FromJson<BattleData>(battleData);
-        path = Path.Combine(Application.dataPath, "CharacterData.json");
+        path = Path.Combine(Application.persistentDataPath, "CharacterData.json");
         string characterData= File.ReadAllText(path);
         CD = JsonUtility.FromJson<CharacterData>(characterData);
         for(int i = 0; i < CD.passive.Length; i++)
@@ -454,8 +456,10 @@ public class BattleManager : MonoBehaviour
         {
             graveClose.text = "닫기";
             GraveReviveMode = false;
-            card7mode = false;
+           
+            ReviveCount = 0;
             CM.Revive();
+            card7mode = false;
         }
         else
         {
@@ -465,7 +469,7 @@ public class BattleManager : MonoBehaviour
             CancleCharacter();
             CancleEnemy();
            
-            graveView.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 1000, 0);
+            graveView.GetComponent<RectTransform>().anchoredPosition = new Vector3(0,2000, 0);
         }
     }
     public void ReviveToField(int r)
@@ -491,7 +495,7 @@ public class BattleManager : MonoBehaviour
         {
             if (!characters[i].isDie&&characters[i].characterNo == c)
             {
-                log.logContent.text += "\n" + characters[i].Name + "의 공격력이 1증가합니다.";
+                log.logContent.text += "\n" + characters[i].Name + "의 행동력이 1증가합니다.";
                 characters[i].Act++;
             }
         }

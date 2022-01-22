@@ -20,6 +20,7 @@ public class Gimmy : MonoBehaviour
     [SerializeField] GameObject PowerLine;
     int onecounter;
     bool[] done = new bool[3];
+    int PhaseTurn;
     private void Start()
     {
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
@@ -49,6 +50,7 @@ public class Gimmy : MonoBehaviour
             StartPattern();
         }
     }
+    bool phaseStart=false;
     void StartPattern()
     {
         myEnemy.Board.text = "";
@@ -81,7 +83,21 @@ public class Gimmy : MonoBehaviour
                 }
             }
             else
-            {               
+            {
+             
+                if (!phaseStart)
+                {
+                    PhaseTurn = TM.t;
+                    phaseStart = true;
+                    myEnemy.GetArmor(100 - TM.t);
+                    for(int i = 0; i < 4; i++)
+                    {
+                       if(!BM.characters[i].isDie)
+                        {
+                            BM.characters[i].NextTurnMinusAct++;
+                        }
+                    }
+                }
                     if (onecounter == 4)
                     {
                         done[0] = false;
@@ -92,7 +108,7 @@ public class Gimmy : MonoBehaviour
                             for (int i = 0; i < 4; i++)
                             {
                                if(!BM.characters[i].isDie)
-                                BM.characters[i].onHit(TM.t/2, myEnemy.Name);
+                                BM.characters[i].onHit(PhaseTurn/2, myEnemy.Name);
                             }
                       
                     }

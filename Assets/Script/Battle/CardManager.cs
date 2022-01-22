@@ -29,7 +29,7 @@ public class CardManager : MonoBehaviour
     }
     private void Awake()
     {
-        string path = Path.Combine(Application.dataPath, "CardData.json");
+        string path = Path.Combine(Application.persistentDataPath, "CardData.json");
         if (File.Exists(path))
         {
             string cardData = File.ReadAllText(path);
@@ -166,11 +166,14 @@ public class CardManager : MonoBehaviour
             if (Gcard == Grave[i])
             {
                 field.Add(Grave[i]);
-                if (BM.card7mode)
-                Grave[i].GetComponent<Card>().cardcost = 0;
+                  
                 Grave[i].GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 225);
                 Grave[i].GetComponent<Image>().color = new Color(1, 1, 1);
                 Grave[i].SetActive(true);
+                if (BM.card7mode)
+                {
+                
+                    Grave[i].GetComponent<Card>().cardcost = 0; }
                 Grave[i].GetComponent<Card>().isGrave = false;
                 Grave[i].GetComponent<Card>().isUsed = false;
                 Grave[i].transform.parent = CardCanvas.transform;
@@ -202,6 +205,7 @@ public class CardManager : MonoBehaviour
         for (int i = ReviveCard.Count - 1; i >= 0; i--)
         {
             GraveToField(ReviveCard[i]);
+            ReviveCard.RemoveAt(i);
         }
     }
     public void ReviveCountOver()

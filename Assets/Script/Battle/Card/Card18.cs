@@ -24,8 +24,7 @@ public class Card18 : MonoBehaviour
                     BM.log.logContent.text += "\n" + BM.character.Name + "이(가) " + myCard.Name.text + "발동!";
                     if(BM.character.Act>0)
                     BM.character.Act--;
-                    BM.OnDmgOneTarget(CM.Grave.Count);
-                    BM.ghostRevive(CM.Grave.Count);
+                    BM.OnDmgOneTarget(dmg);
                     myCard.isUsed = true;
                     BM.cost -= myCard.cardcost;
                 }

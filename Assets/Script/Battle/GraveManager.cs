@@ -10,7 +10,7 @@ public class GraveManager : MonoBehaviour
     {
         for(int i = 0; i < 5; i++)
         {
-            buttons[i] = Instantiate(button, new Vector3(1000+40*i,180, 0), transform.rotation);
+            buttons[i] = Instantiate(button, new Vector3(2000+40*i,180, 0), transform.rotation);
         }
     }
 }

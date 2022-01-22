@@ -34,6 +34,7 @@ public class Reply : MonoBehaviour
         if (myCharacter.Act == 0&&!Passive3)
         {
             int rand = Random.Range(0, TM.CM.field.Count);
+            if (TM.CM.field.Count>0)
             TM.CM.field[rand].GetComponent<Card>().cardcost = 0;
             Passive3 = true;
             BM.log.logContent.text += "\n부서진 족쇄!" + TM.CM.field[rand].GetComponent<Card>().Name.text + "의 코스트가 0이 됩니다.";
@@ -74,13 +75,15 @@ public class Reply : MonoBehaviour
     }
     void Update()
     {
-        passive3();
-        if (myCharacter.passive[1])
-        {
-            passive2();
-        }
+    
+       
         if (!myCharacter.isDie)
         {
+            if (myCharacter.passive[1])
+            {
+                passive2();
+            }
+            passive3();
             if (myCharacter.passive[0])
             {
                 passive1();
