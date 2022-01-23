@@ -127,6 +127,17 @@ public class Character : MonoBehaviour
             board.text += newstring;
         }
     }
+    public void BoardClear()
+    {
+        board.text = "";     
+        string newstring = "";
+        if (Status[0] != 0)
+            {
+                newstring = "<sprite name=poison>" + Status[0] + "\n";
+            }
+        board.text += newstring;
+        
+    }
 
     public void onHit(int dmg,string enemyname)
     {        
@@ -155,6 +166,14 @@ public class Character : MonoBehaviour
             newstring += "\n";
             board.text += newstring;
         }
+       
+            string astring = "";
+            if (Status[0] != 0)
+            {
+              astring = "<sprite name=poison>"+ Status[0]+"\n";
+            }
+            board.text += astring;
+        
     }
     public void onDamage(int dmg,string enemyname)
     {

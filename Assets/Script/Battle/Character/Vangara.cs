@@ -45,7 +45,6 @@ public class Vangara : MonoBehaviour
             {
                 while (TeamStack[i] != TeamCharacter[i].dmgStack)
                 {
-                    Debug.Log(i);
                     TeamStack[i]++;
                     myCharacter.Armor ++;
                     BM.log.logContent.text += "\n굳건한 위치!반가라의 방어력이 증가합니다.";

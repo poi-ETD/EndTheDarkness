@@ -1,40 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!21 &-8435518755443917006
-Material:
-  serializedVersion: 6
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: TextMeshPro/Sprite
-  m_Shader: {fileID: 4800000, guid: cf81c85f95fe47e1a27f6ae460cf182c, type: 3}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _MainTex:
-        m_Texture: {fileID: 2800000, guid: db34818acf0ba234b9612a18cee66e24, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Floats:
-    - _ColorMask: 15
-    - _CullMode: 0
-    - _Stencil: 0
-    - _StencilComp: 8
-    - _StencilOp: 0
-    - _StencilReadMask: 255
-    - _StencilWriteMask: 255
-    - _UseUIAlphaClip: 0
-    m_Colors:
-    - _ClipRect: {r: -32767, g: -32767, b: 32767, a: 32767}
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -45,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 84a92b25f83d49b9bc132d206b370281, type: 3}
-  m_Name: "\uB808\uC778\uC800 (1) (4) (4)"
+  m_Name: "\uB808\uC778\uC800 (1) (4) (4) (2)"
   m_EditorClassIdentifier: 
-  hashCode: -1720645056
-  material: {fileID: -8435518755443917006}
+  hashCode: -1552066925
+  material: {fileID: 5015516210441731645}
   materialHashCode: 0
   m_Version: 1.1.0
   m_FaceInfo:
@@ -72,7 +37,7 @@ MonoBehaviour:
     m_StrikethroughOffset: 0
     m_StrikethroughThickness: 0
     m_TabWidth: 0
-  spriteSheet: {fileID: 2800000, guid: db34818acf0ba234b9612a18cee66e24, type: 3}
+  spriteSheet: {fileID: 2800000, guid: f4fe95e7de5e8f847aa1ecd2f6727af0, type: 3}
   m_SpriteCharacterTable:
   - m_ElementType: 2
     m_Unicode: 65534
@@ -101,46 +66,52 @@ MonoBehaviour:
   - m_ElementType: 2
     m_Unicode: 65534
     m_GlyphIndex: 4
-    m_Scale: 1
-    m_Name: "\uB808\uC778\uC800 (1) (4) (4)_4"
-    m_HashCode: -1176726069
+    m_Scale: 2.5
+    m_Name: "\uAE00\uB798\uC2E0"
+    m_HashCode: 49467000
   - m_ElementType: 2
     m_Unicode: 65534
     m_GlyphIndex: 5
-    m_Scale: 1
-    m_Name: "\uB808\uC778\uC800 (1) (4) (4)_5"
-    m_HashCode: -1176726070
+    m_Scale: 2.5
+    m_Name: "\uC774\uD504\uB9B0"
+    m_HashCode: 54904640
   - m_ElementType: 2
     m_Unicode: 65534
     m_GlyphIndex: 6
-    m_Scale: 1
-    m_Name: "\uB808\uC778\uC800 (1) (4) (4)_6"
-    m_HashCode: -1176726071
+    m_Scale: 2
+    m_Name: poison
+    m_HashCode: -11690620
   - m_ElementType: 2
     m_Unicode: 65534
     m_GlyphIndex: 7
-    m_Scale: 1
-    m_Name: "\uB808\uC778\uC800 (1) (4) (4)_7"
-    m_HashCode: -1176726072
+    m_Scale: 2
+    m_Name: recover
+    m_HashCode: -1614911846
   - m_ElementType: 2
     m_Unicode: 65534
     m_GlyphIndex: 8
-    m_Scale: 1.5
+    m_Scale: 2
     m_Name: dmg
     m_HashCode: 105934
   - m_ElementType: 2
     m_Unicode: 65534
     m_GlyphIndex: 9
-    m_Scale: 1.5
+    m_Scale: 2
     m_Name: armor
     m_HashCode: 119104707
+  - m_ElementType: 2
+    m_Unicode: 65534
+    m_GlyphIndex: 2
+    m_Scale: 2.5
+    m_Name: "\uC9C0\uBBF8"
+    m_HashCode: 1751608
   m_SpriteGlyphTable:
   - m_Index: 0
     m_Metrics:
       m_Width: 64
       m_Height: 64
       m_HorizontalBearingX: -32
-      m_HorizontalBearingY: 50
+      m_HorizontalBearingY: 32
       m_HorizontalAdvance: 64
     m_GlyphRect:
       m_X: 0
@@ -149,14 +120,14 @@ MonoBehaviour:
       m_Height: 64
     m_Scale: 1
     m_AtlasIndex: 0
-    sprite: {fileID: -5979974120146468813, guid: db34818acf0ba234b9612a18cee66e24,
+    sprite: {fileID: 5265857295355579598, guid: f4fe95e7de5e8f847aa1ecd2f6727af0,
       type: 3}
   - m_Index: 1
     m_Metrics:
       m_Width: 64
       m_Height: 64
       m_HorizontalBearingX: -32
-      m_HorizontalBearingY: 50
+      m_HorizontalBearingY: 32
       m_HorizontalAdvance: 64
     m_GlyphRect:
       m_X: 64
@@ -165,14 +136,14 @@ MonoBehaviour:
       m_Height: 64
     m_Scale: 1
     m_AtlasIndex: 0
-    sprite: {fileID: 3343679032904803193, guid: db34818acf0ba234b9612a18cee66e24,
+    sprite: {fileID: 8332922340675420065, guid: f4fe95e7de5e8f847aa1ecd2f6727af0,
       type: 3}
   - m_Index: 2
     m_Metrics:
       m_Width: 64
       m_Height: 64
       m_HorizontalBearingX: -32
-      m_HorizontalBearingY: 50
+      m_HorizontalBearingY: 32
       m_HorizontalAdvance: 64
     m_GlyphRect:
       m_X: 128
@@ -181,7 +152,7 @@ MonoBehaviour:
       m_Height: 64
     m_Scale: 1
     m_AtlasIndex: 0
-    sprite: {fileID: -4077456840297596289, guid: db34818acf0ba234b9612a18cee66e24,
+    sprite: {fileID: -2346977379545656589, guid: f4fe95e7de5e8f847aa1ecd2f6727af0,
       type: 3}
   - m_Index: 3
     m_Metrics:
@@ -197,7 +168,7 @@ MonoBehaviour:
       m_Height: 64
     m_Scale: 1
     m_AtlasIndex: 0
-    sprite: {fileID: 3609982519131906636, guid: db34818acf0ba234b9612a18cee66e24,
+    sprite: {fileID: -742106157813715481, guid: f4fe95e7de5e8f847aa1ecd2f6727af0,
       type: 3}
   - m_Index: 4
     m_Metrics:
@@ -213,7 +184,7 @@ MonoBehaviour:
       m_Height: 64
     m_Scale: 1
     m_AtlasIndex: 0
-    sprite: {fileID: 6998713488941216224, guid: db34818acf0ba234b9612a18cee66e24,
+    sprite: {fileID: -2695080512573306816, guid: f4fe95e7de5e8f847aa1ecd2f6727af0,
       type: 3}
   - m_Index: 5
     m_Metrics:
@@ -229,23 +200,23 @@ MonoBehaviour:
       m_Height: 64
     m_Scale: 1
     m_AtlasIndex: 0
-    sprite: {fileID: 1781493859365027389, guid: db34818acf0ba234b9612a18cee66e24,
+    sprite: {fileID: 4392491093925565563, guid: f4fe95e7de5e8f847aa1ecd2f6727af0,
       type: 3}
   - m_Index: 6
     m_Metrics:
       m_Width: 64
       m_Height: 64
       m_HorizontalBearingX: -32
-      m_HorizontalBearingY: 32
+      m_HorizontalBearingY: 28
       m_HorizontalAdvance: 64
     m_GlyphRect:
-      m_X: 384
+      m_X: 385
       m_Y: 448
       m_Width: 64
       m_Height: 64
     m_Scale: 1
     m_AtlasIndex: 0
-    sprite: {fileID: 7247793657715061376, guid: db34818acf0ba234b9612a18cee66e24,
+    sprite: {fileID: 4478338192937205707, guid: f4fe95e7de5e8f847aa1ecd2f6727af0,
       type: 3}
   - m_Index: 7
     m_Metrics:
@@ -261,14 +232,14 @@ MonoBehaviour:
       m_Height: 64
     m_Scale: 1
     m_AtlasIndex: 0
-    sprite: {fileID: -2333299015915747589, guid: db34818acf0ba234b9612a18cee66e24,
+    sprite: {fileID: -4140197102683355127, guid: f4fe95e7de5e8f847aa1ecd2f6727af0,
       type: 3}
   - m_Index: 8
     m_Metrics:
       m_Width: 64
       m_Height: 64
       m_HorizontalBearingX: -32
-      m_HorizontalBearingY: 50
+      m_HorizontalBearingY: 32
       m_HorizontalAdvance: 64
     m_GlyphRect:
       m_X: 0
@@ -277,14 +248,14 @@ MonoBehaviour:
       m_Height: 64
     m_Scale: 1
     m_AtlasIndex: 0
-    sprite: {fileID: -2777548086347572629, guid: db34818acf0ba234b9612a18cee66e24,
+    sprite: {fileID: 4991920457798239451, guid: f4fe95e7de5e8f847aa1ecd2f6727af0,
       type: 3}
   - m_Index: 9
     m_Metrics:
       m_Width: 64
       m_Height: 64
       m_HorizontalBearingX: -32
-      m_HorizontalBearingY: 50
+      m_HorizontalBearingY: 32
       m_HorizontalAdvance: 64
     m_GlyphRect:
       m_X: 64
@@ -293,7 +264,42 @@ MonoBehaviour:
       m_Height: 64
     m_Scale: 1
     m_AtlasIndex: 0
-    sprite: {fileID: 7465861971867368109, guid: db34818acf0ba234b9612a18cee66e24,
+    sprite: {fileID: -5508759424848289508, guid: f4fe95e7de5e8f847aa1ecd2f6727af0,
       type: 3}
   spriteInfoList: []
   fallbackSpriteAssets: []
+--- !u!21 &5015516210441731645
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: TextMeshPro/Sprite
+  m_Shader: {fileID: 4800000, guid: cf81c85f95fe47e1a27f6ae460cf182c, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: f4fe95e7de5e8f847aa1ecd2f6727af0, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _ColorMask: 15
+    - _CullMode: 0
+    - _Stencil: 0
+    - _StencilComp: 8
+    - _StencilOp: 0
+    - _StencilReadMask: 255
+    - _StencilWriteMask: 255
+    - _UseUIAlphaClip: 0
+    m_Colors:
+    - _ClipRect: {r: -32767, g: -32767, b: 32767, a: 32767}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}

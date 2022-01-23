@@ -125,23 +125,50 @@ public class Enemy : MonoBehaviour
     }
     public void GetDynamicHp(int amount,string enemyname)
     {
+        
         string newstring = Board.text;
+        bool isThere = false;
         for(int i = 0; i < HpS.Count; i++)
         {
             if (HpS[i] == enemyname)
             {
+                isThere = true;
                 int curR = HpI[i];
-                newstring = newstring.Replace("<sprite name=" + enemyname + "><sprite name=recover>" + curR + "\n"
-                , "<sprite name=" + enemyname + "><sprite name=recover>" + amount + "\n");
+                if (amount > 0)
+                {
+                    newstring = newstring.Replace("<sprite name=" + enemyname + "><sprite name=recover>" + curR + "\n"
+                    , "<sprite name=" + enemyname + "><sprite name=recover>" + amount + "\n");
+                    HpS.RemoveAt(i);
+                    HpI.RemoveAt(i);
+                    HpS.Add(enemyname);
+                    HpI.Add(amount);
+                }
+                else
+                {
+                    newstring = newstring.Replace("<sprite name=" + enemyname + "><sprite name=recover>" + curR + "\n"
+                  , "");
+                    HpS.RemoveAt(i);
+                    HpI.RemoveAt(i);
+                }
                 RecoverHp -= curR;
-                RecoverHp += amount;
+                RecoverHp += amount;            
                 break;
             }
         }
+        if (!isThere && amount !=0)
+        {
+            RecoverHp += amount;
+            HpS.Add(enemyname);
+            HpI.Add(amount);
+            newstring = "<sprite name=" + enemyname + "><sprite name=recover>" + amount + "\n";
+        }
+        Debug.Log(RecoverHp);
         Board.text = newstring;
     }
     public void HpUp()
     {
+        HpI.Clear();
+        HpS.Clear();
         Hp += RecoverHp;
         RecoverHp = 0;
         if (Hp >= maxHp)

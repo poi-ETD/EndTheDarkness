@@ -34,7 +34,9 @@ public class BlackWhite : MonoBehaviour
     public void PlusStack()
     {
         BlackWhiteStack++;
-        myCard.Content.text += "\n흑백(" + BlackWhiteStack + ")";
+        string newstring = myCard.Content.text;
+        newstring = newstring.Replace("\n흑백(" + (BlackWhiteStack - 1) + ")", "\n흑백(" + BlackWhiteStack + ")");
+        myCard.Content.text = newstring;
        
     }   
     public void onDamage()

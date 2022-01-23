@@ -104,12 +104,16 @@ public class BattleManager : MonoBehaviour
         }
         if (bd.battleNo == 0)
         {
-            //GameObject EnemySummon = Instantiate(Enemys[bd.battleNo], new Vector2(0, 6.5f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
+            GameObject EnemySummon = Instantiate(Enemys[bd.battleNo], new Vector2(0, 6.5f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
         }
         else if (bd.battleNo == 1)
         {
-         //   GameObject EnemySummon = Instantiate(Enemys[bd.battleNo], new Vector2(3, 6f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
+           GameObject EnemySummon = Instantiate(Enemys[bd.battleNo], new Vector2(3, 6f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
         }
+        else if (bd.battleNo == 2)
+        {
+            GameObject EnemySummon = Instantiate(Enemys[bd.battleNo], new Vector2(0,0), transform.rotation, GameObject.Find("CharacterCanvas").transform);
+        } 
         Enemys = GameObject.FindGameObjectsWithTag("Enemy");
         TurnCardCount = CardCount;
         nowZ = 1;
@@ -271,9 +275,9 @@ public class BattleManager : MonoBehaviour
         for (int i = 0; i < TurnCardCount; i++)
             CM.CardToField();
         for (int i = 0; i < 4; i++)
-        {
-         
+        {         
             characters[i].isTurnStart = true;
+           
         }
         
 

@@ -57,9 +57,10 @@ public class CardManager : MonoBehaviour
     {
         for (int i = 0; i < field.Count; i++)
         {
-            field[i].GetComponent<RectTransform>().anchoredPosition = new Vector3(-300 + 150f * i, -520, 0);
-            //transform.position = new Vector3(-300 + 150f * i, -520, 0);
-            field[i].SetActive(true);
+            //GetComponent<RectTransform>().anchoredPosition = new Vector2(-300 + 150f * i, -520);
+            
+           field[i]. transform.position = new Vector3(-6.66f + 3.33f * i, -11.55f, 0);
+           field[i].SetActive(true);
         }
     }
     public void CardToField()

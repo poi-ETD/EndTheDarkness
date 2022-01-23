@@ -59,6 +59,7 @@ public class TurnManager : MonoBehaviour
                     enemy[i].HpUp();
                     enemy[i].Armor += enemy[i].nextTurnArmor;
                     enemy[i].nextTurnArmor = 0;
+
                 }
             }
             EndButton.SetActive(false);
@@ -78,7 +79,7 @@ public class TurnManager : MonoBehaviour
                         }
                     }
                     BM.characters[i].DMGboards.Clear();
-
+                    BM.characters[i].BoardClear();
                 }
             }
             t++;

@@ -21,6 +21,7 @@ public class ifrin : MonoBehaviour
     bool[] randCount;
     int myHp;
     int glassinHp;
+    bool p4;
     private void Start()
     {
         myHp = myEnemy.Hp;
@@ -42,103 +43,123 @@ public class ifrin : MonoBehaviour
         {
             StartPattern();
         }
-        if ((curTurn)%4==0&&myEnemy.Hp != myHp||glassinHp!=Glassin.Hp)
+        if (p4 && myEnemy.Hp != myHp || p4 && glassinHp != Glassin.Hp)
         {
-            Debug.Log(curTurn);
             glassinHp = Glassin.Hp;
             myHp = myEnemy.Hp;
             for (int i = 0; i < 4; i++)
             {
                 if (!BM.characters[i].isDie)
                 {
-                    BM.characters[i].onDynamicHit(Mathf.Abs(myHp-Glassin.Hp), myEnemy.Name);
+                    BM.characters[i].onDynamicHit(Mathf.Abs(myHp - Glassin.Hp), myEnemy.Name);
                 }
             }
         }
     }
     void StartPattern()
     {
-       
-        if (BM.diecount < 4)
+        if (!myEnemy.isDie)
         {
-            if ((curTurn+1) % 4 != 0)
+            if (BM.diecount < 4)
             {
-                rand = Random.Range(0, 3);
-                while (randCount[rand])
+                if (!Glassin.isDie)
                 {
-                    rand = Random.Range(0, 3);
-                }
-                    
-                if (rand == 0)
-                {
-                    randCount[0] = true;
-                    for(int i = 0; i < 2; i++) {
-                        if (BM.forward.Count > 0)
-                        {
-                            int rand2 = Random.Range(0, BM.forward.Count);
-                            while (BM.characters[rand2].isDie)
-                                rand2 = Random.Range(0, BM.forward.Count);
-                            BM.characters[rand2].onHit(5, myEnemy.Name);
-
-                        }
-                        else
-                        {
-                            int rand2 = Random.Range(0, 4);
-                            while (BM.characters[rand2].isDie)
-                                rand2 = Random.Range(0, 4);
-                            BM.characters[rand2].onHit(5, myEnemy.Name);
-
-                        }
-                    }
-                }
-                if (rand == 1)
-                {
-                    randCount[1] = true;
-                    for(int i = 0; i < 4; i++)
+                    if ((curTurn + 1) % 4 != 0)
                     {
-                        if (!BM.characters[i].isDie)
-                        {
-                            BM.characters[i].onHit(3,myEnemy.Name);
-                        }
-                    }
-                }
-                if (rand == 2)
-                {
-                    randCount[2] = true;
-                    if (BM.forward.Count > 0)
-                    {
-                        int rand2 = Random.Range(0, BM.forward.Count);
-                        while (BM.characters[rand2].isDie)
-                            rand2 = Random.Range(0, BM.forward.Count);
-                        BM.characters[rand2].StatusAbnom(0, 2);
 
+                        p4 = false;
+                        rand = Random.Range(0, 3);
+                        while (randCount[rand])
+                        {
+                            rand = Random.Range(0, 3);
+                        }
+
+                        if (rand == 0)
+                        {
+                            randCount[0] = true;
+                            for (int i = 0; i < 2; i++)
+                            {
+                                if (BM.forward.Count > 0)
+                                {
+                                    int rand2 = Random.Range(0, BM.forward.Count);
+                                    while (BM.characters[rand2].isDie)
+                                        rand2 = Random.Range(0, BM.forward.Count);
+                                    BM.characters[rand2].onHit(5, myEnemy.Name);
+
+                                }
+                                else
+                                {
+                                    int rand2 = Random.Range(0, 4);
+                                    while (BM.characters[rand2].isDie)
+                                        rand2 = Random.Range(0, 4);
+                                    BM.characters[rand2].onHit(5, myEnemy.Name);
+
+                                }
+                            }
+                        }
+                        if (rand == 1)
+                        {
+                            randCount[1] = true;
+                            for (int i = 0; i < 4; i++)
+                            {
+                                if (!BM.characters[i].isDie)
+                                {
+                                    BM.characters[i].onHit(3, myEnemy.Name);
+                                }
+                            }
+                        }
+                        if (rand == 2)
+                        {
+                            randCount[2] = true;
+                            if (BM.forward.Count > 0)
+                            {
+                                int rand2 = Random.Range(0, BM.forward.Count);
+                                while (BM.characters[rand2].isDie)
+                                    rand2 = Random.Range(0, BM.forward.Count);
+                                BM.characters[rand2].StatusAbnom(0, 2);
+
+                            }
+                            else
+                            {
+                                int rand2 = Random.Range(0, 4);
+                                while (BM.characters[rand2].isDie)
+                                    rand2 = Random.Range(0, 4);
+                                BM.characters[rand2].StatusAbnom(0, 2);
+                            }
+                        }
                     }
                     else
                     {
-                        int rand2 = Random.Range(0, 4);
-                        while (BM.characters[rand2].isDie)
-                            rand2 = Random.Range(0, 4);
-                        BM.characters[rand2].StatusAbnom(0, 2);
+                        p4 = true;
+                        myHp = myEnemy.Hp;
+                        glassinHp = Glassin.Hp;
+                        for (int i = 0; i < 4; i++)
+                        {
+                            if (!BM.characters[i].isDie)
+                            {
+                                BM.characters[i].onHit(Mathf.Abs(Glassin.Hp - myHp), myEnemy.Name);
+                            }
+                        }
+                        randCount[0] = false;
+                        randCount[1] = false;
+                        randCount[2] = false;
                     }
+
                 }
-            }
-            else
-            {
-                myHp = myEnemy.Hp;
-                glassinHp = Glassin.Hp;
-                for (int i = 0; i < 4; i++)
+                if (Glassin.isDie)
                 {
-                    if (!BM.characters[i].isDie)
+                    for (int i = 0; i < 4; i++)
                     {
-                        BM.characters[i].onHit(Mathf.Abs(Glassin.Hp-myHp), myEnemy.Name);
+                        if (!BM.characters[i].isDie)
+                        {
+                            BM.characters[i].onHit(10, myEnemy.Name);
+                            BM.characters[i].NextTurnMinusAct++;
+                        }
                     }
                 }
-                randCount[0] = false;
-                randCount[1] = false;
-                randCount[2] = false;
+                myEnemy.EnemyEndTurn();
+                curTurn++;
             }
-            myEnemy.EnemyEndTurn();
-            curTurn++;
         }
     }
 }

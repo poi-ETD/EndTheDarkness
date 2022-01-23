@@ -21,6 +21,7 @@ public class glassin : MonoBehaviour
     bool[] randCount;
     int myHp;
     int IfrininHp;
+    bool p4;
     private void Start()
     {
         myHp = myEnemy.Hp;
@@ -36,118 +37,143 @@ public class glassin : MonoBehaviour
         if (myEnemy.isDie)
         {
             myEnemy.Hp = 0;
-        
+
         }
         if (curTurn != TM.t)
         {
             StartPattern();
         }
-        if ((curTurn) % 4 == 0 && myEnemy.Hp != myHp ||IfrininHp != Ifrin.Hp)
+
+        if (p4)
         {
-            IfrininHp = Ifrin.Hp;
-            myHp = myEnemy.Hp;
-            if (myHp < IfrininHp)
+            if (myEnemy.Hp != myHp || IfrininHp != Ifrin.Hp)
             {
-                myEnemy.GetDynamicHp(Mathf.Abs(myHp - IfrininHp), myEnemy.Name);
-            }
-            else
-            {
-                Ifrin.GetDynamicHp(Mathf.Abs(myHp - IfrininHp), myEnemy.Name);
+                IfrininHp = Ifrin.Hp;
+                myHp = myEnemy.Hp;
+                if (myHp < IfrininHp)
+                {
+                    myEnemy.GetDynamicHp(Mathf.Abs(myHp - IfrininHp), myEnemy.Name);
+                    Ifrin.GetDynamicHp(0, myEnemy.Name);
+                }
+                else
+                {
+                    Ifrin.GetDynamicHp(Mathf.Abs(myHp - IfrininHp), myEnemy.Name);
+                    myEnemy.GetDynamicHp(0, myEnemy.Name);
+                }
             }
         }
     }
     void StartPattern()
     {
-       
-        if (BM.diecount < 4)
+        if (!myEnemy.isDie)
         {
-            if ((curTurn + 1) % 4 != 0)
+            if (BM.diecount < 4)
             {
-                rand = Random.Range(0, 3);
-                
-                while (randCount[rand])
+                if (!Ifrin.isDie)
                 {
-                    rand = Random.Range(0, 3);
-                }
+                    if ((curTurn + 1) % 4 != 0)
+                    {
+                        p4 = false;
+                        rand = Random.Range(0, 3);
 
-                if (rand == 0)
-                {
-                    randCount[0] = true;
-                    if (myEnemy.Hp >= Ifrin.Hp)
-                    {
-                        Ifrin.GetArmor(6,myEnemy.Name);
-                    }
-                    else
-                    {
-                        myEnemy.GetArmor(6, myEnemy.Name);
-                    }
-                       
-                    
-                }
-                if (rand == 1)
-                {
-                    randCount[1] = true;
-                    if (BM.diecount >= 1)
-                    {
-                        int rand2 = Random.Range(0, 4);
-                        while (BM.characters[rand2].isDie)
+                        while (randCount[rand])
                         {
-                            rand2 = Random.Range(0, 4);
+                            rand = Random.Range(0, 3);
                         }
-                        BM.characters[rand2].NextTurnMinusAct++;
-                    }
-                    else
-                    {
-                        int rand2 = Random.Range(0, 4);
-                        while (BM.characters[rand2].isDie)
-                        {
-                             rand2 = Random.Range(0, 4);
-                        }
-                        int rand3 = Random.Range(0, 4);
-                        while(BM.characters[rand3].isDie||rand2==rand3) rand3 = Random.Range(0, 4);
-                        BM.characters[rand2].NextTurnMinusAct++;
-                        BM.characters[rand3].NextTurnMinusAct++;
-                    }
-                }
-                if (rand == 2)
-                {
-                    randCount[2] = true;
-                    if (BM.forward.Count > 0)
-                    {
-                        int rand2 = Random.Range(0, BM.forward.Count);
-                        while (BM.characters[rand2].isDie)
-                            rand2 = Random.Range(0, BM.forward.Count);
-                        BM.characters[rand2].onHit(5, myEnemy.Name);
 
+                        if (rand == 0)
+                        {
+                            randCount[0] = true;
+                            if (myEnemy.Hp > Ifrin.Hp)
+                            {
+                                Ifrin.GetArmor(6, myEnemy.Name);
+                            }
+                            else if (myEnemy.Hp < Ifrin.Hp)
+                            {
+                                myEnemy.GetArmor(6, myEnemy.Name);
+                            }
+
+
+                        }
+                        if (rand == 1)
+                        {
+                            randCount[1] = true;
+                            if (BM.diecount >= 1)
+                            {
+                                int rand2 = Random.Range(0, 4);
+                                while (BM.characters[rand2].isDie)
+                                {
+                                    rand2 = Random.Range(0, 4);
+                                }
+                                BM.characters[rand2].NextTurnMinusAct++;
+                            }
+                            else
+                            {
+                                int rand2 = Random.Range(0, 4);
+                                while (BM.characters[rand2].isDie)
+                                {
+                                    rand2 = Random.Range(0, 4);
+                                }
+                                int rand3 = Random.Range(0, 4);
+                                while (BM.characters[rand3].isDie || rand2 == rand3) rand3 = Random.Range(0, 4);
+                                BM.characters[rand2].NextTurnMinusAct++;
+                                BM.characters[rand3].NextTurnMinusAct++;
+                            }
+                        }
+                        if (rand == 2)
+                        {
+                            randCount[2] = true;
+                            if (BM.forward.Count > 0)
+                            {
+                                int rand2 = Random.Range(0, BM.forward.Count);
+                                while (BM.characters[rand2].isDie)
+                                    rand2 = Random.Range(0, BM.forward.Count);
+                                BM.characters[rand2].onHit(5, myEnemy.Name);
+
+                            }
+                            else
+                            {
+                                int rand2 = Random.Range(0, 4);
+                                while (BM.characters[rand2].isDie)
+                                    rand2 = Random.Range(0, 4);
+                                BM.characters[rand2].onHit(5, myEnemy.Name);
+                            }
+                        }
                     }
                     else
                     {
-                        int rand2 = Random.Range(0, 4);
-                        while (BM.characters[rand2].isDie)
-                            rand2 = Random.Range(0, 4);
-                        BM.characters[rand2].onHit(5, myEnemy.Name);
+                        p4 = true;
+                        myHp = myEnemy.Hp;
+                        IfrininHp = Ifrin.Hp;
+                        randCount[0] = false;
+                        randCount[1] = false;
+                        randCount[2] = false;
+                        if (myHp < IfrininHp)
+                        {
+                            myEnemy.GetHp(Mathf.Abs(myHp - IfrininHp), myEnemy.Name);
+                        }
+                        else
+                        {
+                            Ifrin.GetHp(Mathf.Abs(myHp - IfrininHp), myEnemy.Name);
+                        }
                     }
-                }
-            }
-            else
-            {
-                myHp = myEnemy.Hp;
-                IfrininHp = Ifrin.Hp;       
-                randCount[0] = false;
-                randCount[1] = false;
-                randCount[2] = false;
-                if (myHp < IfrininHp)
-                {
-                    myEnemy.GetHp(Mathf.Abs(myHp - IfrininHp),myEnemy.Name);
                 }
                 else
                 {
-                    Ifrin.GetHp(Mathf.Abs(myHp - IfrininHp), myEnemy.Name);
+                    for (int i = 0; i < 4; i++)
+                    {
+                        if (!BM.characters[i].isDie)
+                        {
+                            BM.characters[i].onHit(10, myEnemy.Name);
+                            BM.characters[i].NextTurnMinusAct++;
+                        }
+                    }
+                   
                 }
+                if (Ifrin.isDie)
+                    myEnemy.EnemyEndTurn();
+                curTurn++;
             }
-            if(Ifrin.isDie)
-            myEnemy.EnemyEndTurn();
-            curTurn++;
         }
     }
 }
