@@ -58,6 +58,8 @@ public class BattleManager : MonoBehaviour
     [SerializeField] Text graveClose;
     [SerializeField] Text StackT;
     [SerializeField] GameObject StackPopUp;
+    public Text CardUseText;
+    
     public void StackPopUpOn()
     {
         if (StackPopUp.activeSelf)
@@ -137,6 +139,7 @@ public class BattleManager : MonoBehaviour
         if (card == null||porte3mode)
             useButton.SetActive(false);
         else useButton.SetActive(true);
+        if (card20done) useButton.SetActive(true);
         if (card12On)
         {
             if (card != null)
@@ -304,11 +307,27 @@ public class BattleManager : MonoBehaviour
     }
     public void useCard()
     {
-        if (card != null)
+      if (!EnemySelectMode)
+        {
+            if (card20done)
+            {        
+                cost += pcard.GetComponent<Card>().cardcost;
+                pcard.GetComponent<Card>().isGrave = false;
+                pcard.GetComponent<Card>().isUsed = false;
+                pcard.GetComponent<Card>().useCard();
+            }
+            else if (card != null)
+            {
+                
+                card.GetComponent<Card>().useCard();
+            }
+            
+        }
+        else
         {
             
-            card.GetComponent<Card>().useCard();
-           
+             CardUseText.text = "카드 사용";
+             EnemySelectMode = false;
         }
 
     }
@@ -352,7 +371,9 @@ public class BattleManager : MonoBehaviour
         Warn.SetActive(false);
     }
     public void OnDmgOneTarget(int dmg)
-    {       
+    {
+        CardUseText.text = "카드사용";
+        EnemySelectMode = false;
         log.logContent.text += "\n"+enemy.Name+"에게 "+(dmg + character.turnAtk)+"의 데미지!";
         enemy.onHit(dmg + character.turnAtk);
     }
@@ -513,14 +534,12 @@ public class BattleManager : MonoBehaviour
     public void card20Active()
     {
         card20done = true;
-        GameObject curCard = card;
-        Card p = pcard.GetComponent<Card>();
-        cost += p.cardcost;
         pcard.SetActive(true);
-        p.isGrave = false;
-        p.isUsed = false;
-        p.useCard();
-       
+        pcard.transform.parent = CM.CardCanvas.transform;
+        pcard.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0.5f);
+        pcard.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0.5f);
+        pcard.GetComponent<RectTransform>().anchoredPosition = new Vector3(-50, -230, 0);
+
     }
     public void reflectUp(int r)
     {
@@ -533,5 +552,10 @@ public class BattleManager : MonoBehaviour
     public void Defetead()
     {
         defeated.SetActive(true);
+    }
+    public void goEnemySelectMode()
+    {
+        EnemySelectMode = true;
+        CardUseText.text = "취소";
     }
 }

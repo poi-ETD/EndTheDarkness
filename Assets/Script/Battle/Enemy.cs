@@ -37,7 +37,7 @@ public class Enemy : MonoBehaviour
         {
             Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero, 0f);
-            if (hit.collider != null&&!isDie&&!BM.SelectMode)
+            if (hit.collider != null&&!isDie&&!BM.SelectMode&&BM.EnemySelectMode)
             {
                 if (hit.collider.gameObject == gameObject)
                 {

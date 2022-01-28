@@ -10,25 +10,22 @@ public class Card18 : MonoBehaviour
     public int dmg;
     [SerializeField] Card myCard;
 
-
+    bool isNotCancle;
     private void Update()
     {
 
         if (myCard.use)
         {
 
-            if (BM.character != null && BM.enemy != null)
+            if (BM.character != null)
             {
-                if (BM.cost >= myCard.cardcost)
+                if (BM.cost >= myCard.cardcost&&!isNotCancle)
                 {
-                    BM.log.logContent.text += "\n" + BM.character.Name + "이(가) " + myCard.Name.text + "발동!";
-                    if(BM.character.Act>0)
-                    BM.character.Act--;
-                    BM.OnDmgOneTarget(dmg);
-                    myCard.isUsed = true;
-                    BM.cost -= myCard.cardcost;
+                    isNotCancle = true;
+                    BM.goEnemySelectMode();
+                  
                 }
-                else
+                else if(!isNotCancle)
                 {
                     myCard.use = false;
                     BM.costOver();
@@ -39,6 +36,21 @@ public class Card18 : MonoBehaviour
                 myCard.use = false;
                 BM.TargetOn();
             }
+        }
+        if (BM.EnemySelectMode && BM.enemy != null&&myCard.use)
+        {
+            isNotCancle = false;
+            BM.log.logContent.text += "\n" + BM.character.Name + "이(가) " + myCard.Name.text + "발동!";
+            if (BM.character.Act > 0)
+                BM.character.Act--;
+            BM.OnDmgOneTarget(dmg);
+            myCard.isUsed = true;
+            BM.cost -= myCard.cardcost;
+        }
+        else if (!BM.EnemySelectMode)
+        {
+            isNotCancle = false;
+            myCard.use = false;
         }
     }
     private void Awake()

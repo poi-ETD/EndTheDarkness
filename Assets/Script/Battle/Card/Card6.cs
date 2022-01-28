@@ -7,11 +7,9 @@ public class Card6 : MonoBehaviour
     public BattleManager BM;
     public TurnManager TM;
     public CardManager CM;
-
     public int nextCost;
-
     public int ghostCount;
-
+    bool isNotCancle;
     public int dmg;
 
     [SerializeField] Card myCard;
@@ -22,26 +20,19 @@ public class Card6 : MonoBehaviour
         if (myCard.use)
         {
 
-            if (BM.character != null && BM.enemy != null)
+            if (BM.character != null)
             {
-                if (BM.cost >= myCard.cardcost && BM.character.Act > 0)
+                if (BM.cost >= myCard.cardcost && BM.character.Act > 0 && !isNotCancle)
                 {
-                    BM.log.logContent.text += "\n" + BM.character.Name + "이(가) " + myCard.Name.text + "발동!";
-                    BM.character.Act--;
-                    BM.nextTurnStartCost++;
-                    BM.ghostRevive(ghostCount);
-                    BM.OnDmgOneTarget(dmg);
-                    BM.OnDmgOneTarget(dmg);
-                    myCard.isUsed = true;
-                    BM.cost -= myCard.cardcost;
-
+                    isNotCancle = true;
+                    BM.goEnemySelectMode();                
                 }
-                else if (BM.character.Act > 0)
+                else if (BM.character.Act > 0 && !isNotCancle)
                 {
                     myCard.use = false;
                     BM.costOver();
                 }
-                else
+                else if(!isNotCancle)
                 {
                     myCard.use = false;
                     BM.overAct();
@@ -54,7 +45,23 @@ public class Card6 : MonoBehaviour
             }
 
         }
-
+        if (BM.EnemySelectMode && BM.enemy != null&&myCard.use)
+        {
+            isNotCancle = false;
+            BM.log.logContent.text += "\n" + BM.character.Name + "이(가) " + myCard.Name.text + "발동!";
+            BM.character.Act--;
+            BM.nextTurnStartCost++;
+            BM.ghostRevive(ghostCount);
+            BM.OnDmgOneTarget(dmg);
+            BM.OnDmgOneTarget(dmg);
+            myCard.isUsed = true;
+            BM.cost -= myCard.cardcost;
+        }
+        else if (!BM.EnemySelectMode)
+        {
+            isNotCancle = false;
+            myCard.use = false;
+        }
     }
     private void Awake()
     {

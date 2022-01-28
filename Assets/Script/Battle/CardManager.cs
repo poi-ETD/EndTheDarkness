@@ -18,7 +18,7 @@ public class CardManager : MonoBehaviour
     public int[] CardCount = new int[100];
     public GameObject[] startCard = new GameObject[100];
     public int cardKind;
-    [SerializeField] GameObject CardCanvas;
+   public GameObject CardCanvas;
     CardData CD;
     BattleManager BM;
 
@@ -122,7 +122,7 @@ public class CardManager : MonoBehaviour
         { 
             BM.card20done = false;
         }
-        else
+        else if (usingCard.GetComponent<Card>().Name.text != "스케치 반복")
         {
             TM.BM.pcard = usingCard;
         }
@@ -173,8 +173,7 @@ public class CardManager : MonoBehaviour
                 Grave[i].GetComponent<Image>().color = new Color(1, 1, 1);
                 Grave[i].SetActive(true);
                 if (BM.card7mode)
-                {
-                
+                {               
                     Grave[i].GetComponent<Card>().cardcost = 0; }
                 Grave[i].GetComponent<Card>().isGrave = false;
                 Grave[i].GetComponent<Card>().isUsed = false;

@@ -36,7 +36,7 @@ public class TurnManager : MonoBehaviour
 
     public void PlayerTurnEnd()
     {
-        if (!BM.SelectMode)
+        if (!BM.SelectMode&&!BM.EnemySelectMode)
         {
             leftCost = BM.cost;
             for (int i = 0; i < 4; i++)

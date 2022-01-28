@@ -16,7 +16,8 @@ public class Card : MonoBehaviour
     public bool isGrave;
     public int realcost;
     public void useCard()
-    {       
+    {
+        Debug.Log(gameObject);
         use = true;
     }
     private void Awake()
@@ -41,7 +42,7 @@ public class Card : MonoBehaviour
                     if (hit[i].collider.gameObject == gameObject)
                         isCardOn = true;
                 }
-                if (isCardOn == gameObject)
+                if (isCardOn == gameObject&&!BM.EnemySelectMode)
                 {
                     if (!isGrave)
                     {

@@ -27,8 +27,7 @@ public class Card5 : MonoBehaviour
                     BM.ghostRevive(ghostCount);
                     BM.CopyCard(copyCount);
                     myCard.isUsed = true;
-                    BM.cost -= myCard.cardcost;
-                  
+                    BM.cost -= myCard.cardcost;                  
                 }
                 else if (BM.character.Act > 0)
                 {

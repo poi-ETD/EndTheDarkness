@@ -10,35 +10,32 @@ public class Card3 : MonoBehaviour
     public Text Content;
     public int dmg;
     public int drowCount;
-
+    bool isNotCancle;
     [SerializeField] Card myCard;
     private void Update()
     {
-
         if (myCard.use)
         {
-
-            if (BM.character != null && BM.enemy != null)
+            if (BM.character != null )
             {
-                if (BM.cost >= myCard.cardcost && BM.character.Act > 0)
+                if (!isNotCancle)
                 {
-                    BM.log.logContent.text += "\n" + BM.character.Name + "이(가) " + myCard.Name.text + "발동!";
-                    BM.character.Act--;
-                    BM.OnDmgOneTarget(dmg);
-                    BM.specialDrow(drowCount);
-                    myCard.isUsed = true;
-                    BM.cost -= myCard.cardcost;
-     
-                }
-                else if (BM.character.Act > 0)
-                {
-                    myCard.use = false;
-                    BM.costOver();
-                }
-                else
-                {
-                    myCard.use = false;
-                    BM.overAct();
+                    if (BM.cost >= myCard.cardcost && BM.character.Act > 0)
+                    {
+                        isNotCancle = true;
+                        BM.goEnemySelectMode();
+                    }
+                    else if (BM.character.Act > 0)
+                    {
+                        myCard.use = false;
+                        BM.costOver();
+                    }
+                    else
+                    {
+                        myCard.use = false;
+                        BM.overAct();
+                    }
+                   
                 }
             }
             else
@@ -46,7 +43,21 @@ public class Card3 : MonoBehaviour
                 myCard.use = false;
                 BM.TargetOn();
             }
-
+            if (BM.EnemySelectMode && BM.enemy != null && myCard.use)
+            {
+                isNotCancle = false;
+                BM.log.logContent.text += "\n" + BM.character.Name + "이(가) " + myCard.Name.text + "발동!";
+                BM.character.Act--;
+                BM.OnDmgOneTarget(dmg);
+                BM.specialDrow(drowCount);
+                myCard.isUsed = true;
+                BM.cost -= myCard.cardcost;
+            }
+            else if (!BM.EnemySelectMode)
+            {
+                isNotCancle = false;
+                myCard.use = false;
+            }
         }
 
     }

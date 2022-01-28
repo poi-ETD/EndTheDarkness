@@ -8,7 +8,7 @@ public class Card20 : MonoBehaviour
     public TurnManager TM;
     public CardManager CM;
     [SerializeField] Card myCard;
-
+    bool isU;
     private void Update()
     {
 
@@ -20,8 +20,7 @@ public class Card20 : MonoBehaviour
                 {
                     if (BM.pcard != null&&BM.pcard.GetComponent<Card>().Name.text!="스케치 반복")
                     {
-                        BM.log.logContent.text += "\n" + BM.character.Name + "이(가) " + myCard.Name.text + "발동!";        
-                        BM.enemy = BM.penemy;               
+                        BM.log.logContent.text += "\n" + BM.character.Name + "이(가) " + myCard.Name.text + "발동!";                     
                         BM.card20Active();
                         myCard.isUsed = true;
                         BM.cost -= myCard.cardcost;
@@ -34,7 +33,6 @@ public class Card20 : MonoBehaviour
                         else BM.warntext.text = "스케치 반복은 연속해서 사용 할 수 없습니다.";
                         BM.WarnOn();
                     }
-
                 }
                 else if (BM.character.Act > 0)
                 {
@@ -52,7 +50,6 @@ public class Card20 : MonoBehaviour
                 myCard.use = false;
                 BM.TargetOn();
             }
-
         }
 
     }

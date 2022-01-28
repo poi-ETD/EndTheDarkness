@@ -9,42 +9,51 @@ public class Card1 : MonoBehaviour
     public CardManager CM;
     public int dmg;
     [SerializeField] Card myCard;
-
+    bool isNotCancle;
     private void Update()
     {      
         if (myCard.use)
-        {
-            
-            if (BM.character != null && BM.enemy != null)
+        {          
+            if (BM.character != null)
             {
-                if (BM.cost >= myCard.cardcost&&BM.character.Act>0)
+                if (BM.cost >= myCard.cardcost&&BM.character.Act>0&&!isNotCancle)
                 {
-               
-                    BM.log.logContent.text += "\n" + BM.character.Name + "이(가) " + myCard.Name.text + "발동!";
-                    BM.character.Act--;
-                    BM.OnDmgOneTarget(dmg);
-                    myCard.isUsed = true;
-                    BM.cost -= myCard.cardcost;
-                    
+                    isNotCancle = true;
+                   
+                    BM.goEnemySelectMode();
+                                     
                 }
-                else if(BM.character.Act>0)
+                else if(BM.character.Act>0&&!isNotCancle)
                 {
                     myCard.use = false;
                     BM.costOver();
                 }
-                else
+                else if(!isNotCancle)
                 {
                     myCard.use = false;
                     BM.overAct();
                 }
             }
             else
-            {
-              
+            {             
                 myCard.use = false;
                 BM.TargetOn();
             }
-
+            if (BM.EnemySelectMode && BM.enemy != null && myCard.use)
+            {
+                isNotCancle = false;
+                BM.log.logContent.text += "\n" + BM.character.Name + "이(가) " + myCard.Name.text + "발동!";
+              
+                BM.OnDmgOneTarget(dmg);
+                myCard.isUsed = true;
+                BM.character.Act--;
+                BM.cost -= myCard.cardcost;
+            }
+            else if(!BM.EnemySelectMode)
+            {
+                isNotCancle = false;
+                myCard.use = false;
+            }
         }
 
     }
