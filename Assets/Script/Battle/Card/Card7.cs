@@ -11,6 +11,7 @@ public class Card7 : MonoBehaviour
     public int revive;
     public bool oneTimeUse;
     [SerializeField] Card myCard;
+    bool isU;
 
     private void Update()
     {
@@ -20,23 +21,21 @@ public class Card7 : MonoBehaviour
 
             if (BM.character != null)
             {
-                if (BM.cost >= myCard.cardcost && BM.character.Act > 0)
+                if (BM.cost >= myCard.cardcost && BM.character.Act > 0&&!isU)
                 {
+                  
                     BM.log.logContent.text += "\n" + BM.character.Name + "이(가) " + myCard.Name.text + "발동!";
-                    BM.character.Act--;
-                    BM.ghostRevive(ghostRevive);
+                    isU = true;              
                     BM.ReviveToField(revive);
                     BM.card7mode = true;
-                    myCard.isUsed = true;
-                    BM.cost -= myCard.cardcost;
-               
+                                             
                 }
-                else if (BM.character.Act > 0)
+                else if (BM.character.Act > 0&&!isU)
                 {
                     myCard.use = false;
                     BM.costOver();
                 }
-                else
+                else if(!isU)
                 {
                     myCard.use = false;
                     BM.overAct();
@@ -47,9 +46,26 @@ public class Card7 : MonoBehaviour
                 myCard.use = false;
                 BM.TargetOn();
             }
-
+         
         }
-
+        if (isU)
+        {
+            if (BM.CancleReviveMode)
+            {
+                BM.CancleReviveMode = false;
+                isU = false;
+                myCard.use = false;
+            }
+            if (BM.ReviveMode)
+            {         
+                isU = false;
+                BM.character.Act--;
+                BM.cost -= myCard.cardcost;
+                BM.ghostRevive(ghostRevive);
+                BM.ReviveMode = false;
+                myCard.isUsed = true;
+            }
+        }
     }
     private void Awake()
     {

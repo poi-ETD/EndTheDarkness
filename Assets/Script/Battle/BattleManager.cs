@@ -59,7 +59,11 @@ public class BattleManager : MonoBehaviour
     [SerializeField] Text StackT;
     [SerializeField] GameObject StackPopUp;
     public Text CardUseText;
-    
+    [SerializeField] GameObject CancleButton;
+    public bool card20Activing;
+    [SerializeField] GameObject ReviveCancle;
+    public bool CancleReviveMode;
+    public bool ReviveMode;
     public void StackPopUpOn()
     {
         if (StackPopUp.activeSelf)
@@ -315,6 +319,11 @@ public class BattleManager : MonoBehaviour
                 pcard.GetComponent<Card>().isGrave = false;
                 pcard.GetComponent<Card>().isUsed = false;
                 pcard.GetComponent<Card>().useCard();
+                card20Activing = false;
+              
+                pcard = card;
+            
+                CancleButton.SetActive(false);
             }
             else if (card != null)
             {
@@ -325,9 +334,16 @@ public class BattleManager : MonoBehaviour
         }
         else
         {
-            
-             CardUseText.text = "카드 사용";
-             EnemySelectMode = false;
+            if (card20done)
+            {
+                warntext.text = "스케치 반복 사용 중입니다.";
+                WarnOn();
+            }
+            else
+            {
+                CardUseText.text = "카드 사용";
+                EnemySelectMode = false;
+            }
         }
 
     }
@@ -472,21 +488,45 @@ public class BattleManager : MonoBehaviour
         }
         specialDrow(g);
     }
+    
     public void GraveOn()
     {
         otherCanvasOn = true;
         if (GraveReviveMode)
-            graveClose.text = "부활";
+        {   graveClose.text = "부활";
+            ReviveCancle.SetActive(true);
+            
+        }
         CM.GraveOn();
         graveView.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
+    }
+    public void ReviveCancleUse()
+    {
+        CancleReviveMode = true;
+        for(int i = 0; i < CM.ReviveCard.Count; i++)
+        {
+            CM.ReviveCard[i].GetComponent<Transform>().localScale = new Vector2(1.3f, 1.3f);
+        }
+        CM.ReviveCard.Clear();
+        graveClose.text = "닫기";
+        GraveReviveMode = false;
+        ReviveCancle.SetActive(false);
+        ReviveCount = 0;
+        card7mode = false;
+        CM.GraveOff();
+        otherCanvasOn = false;
+
+
+        graveView.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 2000, 0);
     }
     public void GraveOff()
     {
         if (GraveReviveMode)
         {
+            ReviveMode = true;
             graveClose.text = "닫기";
             GraveReviveMode = false;
-           
+            ReviveCancle.SetActive(false);
             ReviveCount = 0;
             CM.Revive();
             card7mode = false;
@@ -533,13 +573,29 @@ public class BattleManager : MonoBehaviour
    public bool card20done=false;
     public void card20Active()
     {
+     
         card20done = true;
         pcard.SetActive(true);
         pcard.transform.parent = CM.CardCanvas.transform;
+        c20 = card;
         pcard.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0.5f);
         pcard.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0.5f);
-        pcard.GetComponent<RectTransform>().anchoredPosition = new Vector3(-50, -230, 0);
-
+        pcard.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, -230, 0);
+        CancleButton.SetActive(true);
+    }
+    public void cancleButtonUse()
+    {
+       
+        if (card20done)
+        {
+            pcard.SetActive(false);
+            card20done = false;
+            CM.ToGrave(pcard);
+            cost += c20.GetComponent<Card>().cardcost;      
+            CancleButton.SetActive(false);
+            card20Activing = false;
+            CM.GraveToField(c20);
+        }
     }
     public void reflectUp(int r)
     {

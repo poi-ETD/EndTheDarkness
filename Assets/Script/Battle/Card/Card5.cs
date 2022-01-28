@@ -23,11 +23,12 @@ public class Card5 : MonoBehaviour
                 if (BM.cost >= myCard.cardcost && BM.character.Act > 0)
                 {
                     BM.log.logContent.text += "\n" + BM.character.Name + "이(가) " + myCard.Name.text + "발동!";
-                    BM.character.Act--;    
+                    BM.character.Act--;
+                    BM.cost -= myCard.cardcost;
                     BM.ghostRevive(ghostCount);
                     BM.CopyCard(copyCount);
                     myCard.isUsed = true;
-                    BM.cost -= myCard.cardcost;                  
+
                 }
                 else if (BM.character.Act > 0)
                 {

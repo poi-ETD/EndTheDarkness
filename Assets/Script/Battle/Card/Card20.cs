@@ -11,22 +11,24 @@ public class Card20 : MonoBehaviour
     bool isU;
     private void Update()
     {
-
         if (myCard.use)
-        {
+        {          
             if (BM.character != null)
             {
-                if (BM.cost >= myCard.cardcost && BM.character.Act > 0)
+                if (BM.cost >= myCard.cardcost && BM.character.Act > 0 && !BM.card20Activing)
                 {
                     if (BM.pcard != null&&BM.pcard.GetComponent<Card>().Name.text!="스케치 반복")
                     {
+                        
+                        BM.card20Activing=true;
                         BM.log.logContent.text += "\n" + BM.character.Name + "이(가) " + myCard.Name.text + "발동!";                     
                         BM.card20Active();
-                        myCard.isUsed = true;
+                        CM.UseCard(gameObject);
                         BM.cost -= myCard.cardcost;
                     }
                     else
                     {
+                        Debug.Log(BM.pcard);
                         myCard.use = false;
                         if (BM.pcard == null)
                             BM.warntext.text = "이전에 사용한 카드가 없습니다.";
@@ -34,12 +36,12 @@ public class Card20 : MonoBehaviour
                         BM.WarnOn();
                     }
                 }
-                else if (BM.character.Act > 0)
+                else if (BM.character.Act > 0&&!isU)
                 {
                     myCard.use = false;
                     BM.costOver();
                 }
-                else
+                else if(!isU)
                 {
                     myCard.use = false;
                     BM.overAct();
@@ -50,7 +52,9 @@ public class Card20 : MonoBehaviour
                 myCard.use = false;
                 BM.TargetOn();
             }
+          
         }
+
 
     }
     private void Awake()

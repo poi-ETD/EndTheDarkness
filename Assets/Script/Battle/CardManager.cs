@@ -103,17 +103,28 @@ public class CardManager : MonoBehaviour
     }
     public void UseCard(GameObject usingCard)
     {
+     
         for (int i = field.Count - 1; i >= 0; i--)
         {
             if (usingCard == field[i])
-            {
-                Grave.Add(field[i]);
-                field[i].GetComponent<Image>().color = new Color(0.5f, 0.5f, 0.5f);
-                field[i].transform.parent = GameObject.Find("GraveContent").transform;
+            {              
                 field.RemoveAt(i);
                 break;
             }
         }
+        bool InGrave = false;
+        for (int i = 0; i < Grave.Count; i++)
+        {if (Grave[i] == usingCard)
+            {
+                InGrave = true;
+                break;
+            }
+       
+        }
+
+        if (!InGrave) Grave.Add(usingCard);
+        usingCard.GetComponentInChildren<Image>().color = new Color(0.5f, 0.5f, 0.5f);
+        usingCard.transform.parent = GameObject.Find("GraveContent").transform;
         BM.character.Acting();
         usingCard.GetComponent<Card>().isGrave = true;
         usingCard.SetActive(false);
@@ -128,8 +139,10 @@ public class CardManager : MonoBehaviour
         }
         TM.BM.penemy = TM.BM.enemy;
         if (usingCard.GetComponent<Card>().Name.text != "스케치 반복")
+        {
             TM.BM.allClear();
-        TM.turnCard++;
+            TM.turnCard++;
+        }
         Rebatch();
     }
 
@@ -138,6 +151,7 @@ public class CardManager : MonoBehaviour
         for (int i = 0; i < Grave.Count; i++)
         {
             Grave[i].SetActive(true);
+      
         }
     }
     public void GraveOff()
@@ -160,6 +174,13 @@ public class CardManager : MonoBehaviour
         }
         Rebatch();
     }
+    public void ToGrave(GameObject Fcard)
+    {
+       
+           
+        Fcard.transform.parent = GameObject.Find("GraveContent").transform;            
+        Fcard.SetActive(false);
+    }
     public void GraveToField(GameObject Gcard)
     {
         TM.BM.log.logContent.text += "\n" + Gcard.GetComponent<Card>().Name.text + "이(가) 묘지에서 패로 이동합니다.";
@@ -168,9 +189,9 @@ public class CardManager : MonoBehaviour
             if (Gcard == Grave[i])
             {
                 field.Add(Grave[i]);
-                  
+                Gcard.GetComponent<Card>().use=false;
                 Grave[i].GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 225);
-                Grave[i].GetComponent<Image>().color = new Color(1, 1, 1);
+                Grave[i].GetComponentInChildren<Image>().color = new Color(1, 1, 1);
                 Grave[i].SetActive(true);
                 if (BM.card7mode)
                 {               
@@ -178,8 +199,7 @@ public class CardManager : MonoBehaviour
                 Grave[i].GetComponent<Card>().isGrave = false;
                 Grave[i].GetComponent<Card>().isUsed = false;
                 Grave[i].transform.parent = CardCanvas.transform;
-                Grave[i].GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0.5f);
-                Grave[i].GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0.5f);
+                Grave[i].GetComponent<Transform>().localScale = new Vector2(1, 1);
                 Grave.RemoveAt(i);
                 break;
             }
@@ -229,7 +249,7 @@ public class CardManager : MonoBehaviour
             }
             if (isClicked)
             {
-                g.GetComponent<Image>().color = new Color(0.5f, 0.5f, 0.5f);
+                g.GetComponent<Transform>().localScale = new Vector2(1,1f);
                 for (int i = 0; i < ReviveCard.Count; i++)
                 {
                     if (g == ReviveCard[i]) {ReviveCard.RemoveAt(i); break; }
@@ -239,7 +259,7 @@ public class CardManager : MonoBehaviour
             {
                 if (BM.ReviveCount > ReviveCard.Count)
                 {
-                    g.GetComponent<Image>().color = new Color(1,1,1);
+                    g.GetComponent<Transform>().localScale = new Vector2(1.3f, 1.3f);
                     ReviveCard.Add(g);
                 }
                 else

@@ -17,7 +17,7 @@ public class Card : MonoBehaviour
     public int realcost;
     public void useCard()
     {
-        Debug.Log(gameObject);
+     
         use = true;
     }
     private void Awake()
