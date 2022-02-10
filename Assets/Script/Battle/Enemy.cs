@@ -22,6 +22,7 @@ public class Enemy : MonoBehaviour
     public bool power;
     public string Name;
     int RecoverHp;
+    public bool Shadow;
     private void Awake()
     {
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
@@ -37,7 +38,7 @@ public class Enemy : MonoBehaviour
         {
             Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero, 0f);
-            if (hit.collider != null&&!isDie&&!BM.SelectMode&&BM.EnemySelectMode)
+            if (hit.collider != null&&!isDie&&!BM.SelectMode&&BM.EnemySelectMode&&!Shadow)
             {
                 if (hit.collider.gameObject == gameObject)
                 {
@@ -99,6 +100,16 @@ public class Enemy : MonoBehaviour
             else
             {
                 isDie = true;
+                bool V = true;
+                GameObject[] e = GameObject.FindGameObjectsWithTag("Enemy");
+                for(int i = 0; i < e.Length; i++)
+                {
+                    if (!e[i].GetComponent<Enemy>().isDie)
+                    {
+                        V = false;
+                    }
+                }
+                if (V) BM.Victory();
                 Hp = 0;
                 Color color = new Color(0.3f, 0.3f, 0.3f);
                 GetComponent<Image>().color = color;
@@ -164,6 +175,11 @@ public class Enemy : MonoBehaviour
         }
         Debug.Log(RecoverHp);
         Board.text = newstring;
+    }
+    public void onShadow()
+    {
+        Shadow = true;
+        Board.text += "은신";
     }
     public void HpUp()
     {

@@ -72,7 +72,8 @@ public class BattleManager : MonoBehaviour
             StackPopUp.SetActive(false);
         }
         else
-        { StackT.text = "";
+        {   
+            StackT.text = "";
             otherCanvasOn = true;
             StackT.text += "이번 턴 사용한 카드 수:" + CM.TM.turnCard + "\n";
             for(int i = 0; i < 4; i++)
@@ -108,18 +109,14 @@ public class BattleManager : MonoBehaviour
                 passiveCharacters[i / 3].passive[i % 3] = true;
             }
         }
-        if (bd.battleNo == 0)
-        {
-            GameObject EnemySummon = Instantiate(Enemys[bd.battleNo], new Vector2(0, 6.5f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
+        if (bd.battleNo == 3) //폴리만 예외
+        { 
+            GameObject EnemySummon = Instantiate(Enemys[bd.battleNo], new Vector2(0, 6), transform.rotation, GameObject.Find("CharacterCanvas").transform);
         }
-        else if (bd.battleNo == 1)
+        else
         {
-           GameObject EnemySummon = Instantiate(Enemys[bd.battleNo], new Vector2(3, 6f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
+            GameObject EnemySummon = Instantiate(Enemys[bd.battleNo], new Vector2(0, 0), transform.rotation, GameObject.Find("CharacterCanvas").transform);
         }
-        else if (bd.battleNo == 2)
-        {
-            GameObject EnemySummon = Instantiate(Enemys[bd.battleNo], new Vector2(0,0), transform.rotation, GameObject.Find("CharacterCanvas").transform);
-        } 
         Enemys = GameObject.FindGameObjectsWithTag("Enemy");
         TurnCardCount = CardCount;
         nowZ = 1;
@@ -613,5 +610,262 @@ public class BattleManager : MonoBehaviour
     {
         EnemySelectMode = true;
         CardUseText.text = "취소";
+    }
+    //type==0 랜덤 대상 type==1 방어도 높은 적 우선 type==2 체력 높은 적 우선 type==3 방어도 있는 적 우선
+    //ActM =>true 일 시 행동력 감소 포함
+    public void HitFront(int dmg,int type,string Ename,bool ActM)
+    {
+        bool Alive = false;
+        for(int i = 0; i < forward.Count; i++)
+        {
+            if (!characters[i].isDie) Alive = true;
+        }
+        if (!Alive) HitAll(dmg, type,Ename,ActM);
+        else
+        {
+            int rand2 = 0;
+            if (type == 0)
+            {
+                rand2 = Random.Range(0, line);
+                while (characters[rand2].isDie) rand2 = Random.Range(0, line);
+                characters[rand2].onHit(dmg, Ename);
+                if (ActM)
+                {
+                    characters[rand2].NextTurnMinusAct++;    
+                }
+            }
+            if (type == 1)
+            {
+                List<Character> MaxArmor = new List<Character>();
+                int maxArmor = 0;
+                for(int i = 0; i < forward.Count; i++)
+                {
+                    if (characters[i].Armor == maxArmor)
+                    {
+                        MaxArmor.Add(forward[i]);
+                    }
+                    else if (characters[i].Armor > maxArmor)
+                    {
+                        maxArmor = characters[i].Armor;
+                        MaxArmor.Clear();
+                        MaxArmor.Add(forward[i]);
+                    }
+                }
+                rand2 = Random.Range(0, MaxArmor.Count);
+                while(MaxArmor[rand2].isDie) rand2 = Random.Range(0, MaxArmor.Count);
+                MaxArmor[rand2].onHit(dmg, Ename);
+                if (ActM)
+                {
+                    MaxArmor[rand2].NextTurnMinusAct++;
+                }
+            }
+            if (type == 2)
+            {
+                List<Character> MaxHp = new List<Character>();
+                int maxHp = 0;
+                for (int i = 0; i < forward.Count; i++)
+                {
+                    if (characters[i].Hp == maxHp)
+                    {
+                        MaxHp.Add(forward[i]);
+                    }
+                    else if (characters[i].Hp > maxHp)
+                    {
+                        maxHp = characters[i].Hp;
+                        MaxHp.Clear();
+                        MaxHp.Add(forward[i]);
+                    }
+                }
+                rand2 = Random.Range(0, MaxHp.Count);
+                while (MaxHp[rand2].isDie) rand2 = Random.Range(0, MaxHp.Count);
+                MaxHp[rand2].onHit(dmg, Ename);
+                if (ActM)
+                {
+                    MaxHp[rand2].NextTurnMinusAct++;
+                }
+            }
+            if (type == 3)
+            {
+                List<Character> HaveArmor = new List<Character>();
+                for(int i = 0; i < forward.Count; i++)
+                {
+                    if (forward[i].Armor > 0) HaveArmor.Add(forward[i]);
+                }
+                if (HaveArmor.Count == 0) HitFront(dmg, 0, Ename,ActM);
+                else
+                {
+                    rand2 = Random.Range(0, HaveArmor.Count);
+                    HaveArmor[rand2].onHit(dmg, Ename);
+                    if (ActM)
+                {
+                        HaveArmor[rand2].NextTurnMinusAct++;   
+                }
+                }
+            }
+        }
+    }
+    public void HitAll(int dmg,int type,string Ename,bool ActM)
+    {
+        int rand2 = 0;
+        if (type == 0)
+        {
+            rand2 = Random.Range(0, 4);
+            while (characters[rand2].isDie) rand2 = Random.Range(0, 4);
+            characters[rand2].onHit(dmg, Ename);
+            if (ActM)
+            {
+                characters[rand2].NextTurnMinusAct++;
+            }
+        }
+        if (type == 1)
+        {
+            List<Character> MaxArmor = new List<Character>();
+            int maxArmor = 0;
+            for (int i = 0; i < 4; i++)
+            {
+                if (characters[i].Armor == maxArmor)
+                {
+                    MaxArmor.Add(characters[i]);
+                }
+                else if (characters[i].Armor > maxArmor)
+                {
+                    maxArmor = characters[i].Armor;
+                    MaxArmor.Clear();
+                    MaxArmor.Add(characters[i]);
+                }
+            }
+            rand2 = Random.Range(0, MaxArmor.Count);
+            while (MaxArmor[rand2].isDie) rand2 = Random.Range(0, MaxArmor.Count);
+            MaxArmor[rand2].onHit(dmg, Ename);
+            if (ActM)
+            {
+                MaxArmor[rand2].NextTurnMinusAct++;
+            }
+        }
+        if (type == 2)
+        {
+            List<Character> MaxHp = new List<Character>();
+            int maxHp = 0;
+            for (int i = 0; i < 4; i++)
+            {
+                if (characters[i].Hp == maxHp)
+                {
+                    MaxHp.Add(characters[i]);
+                }
+                else if (characters[i].Hp > maxHp)
+                {
+                    maxHp = characters[i].Hp;
+                    MaxHp.Clear();
+                    MaxHp.Add(characters[i]);
+                }
+            }
+            rand2 = Random.Range(0, MaxHp.Count);
+            while (MaxHp[rand2].isDie) rand2 = Random.Range(0, MaxHp.Count);
+            MaxHp[rand2].onHit(dmg, Ename);
+            if (ActM)
+            {
+                MaxHp[rand2].NextTurnMinusAct++;
+            }
+        }
+        if (type == 3)
+        {
+            List<Character> HaveArmor = new List<Character>();
+            for (int i = 0; i < 4; i++)
+            {
+                if (characters[i].Armor > 0) HaveArmor.Add(characters[i]);
+            }
+            if (HaveArmor.Count == 0) HitAll(dmg, 0, Ename,ActM);
+            else
+            {
+                rand2 = Random.Range(0, HaveArmor.Count);
+                HaveArmor[rand2].onHit(dmg, Ename);
+                if (ActM)
+                {
+                    HaveArmor[rand2].NextTurnMinusAct++;
+                }
+            }
+        }
+    }
+    public void HitBack(int dmg,int type,string Ename,bool ActM)
+    {
+        int rand2 = 0;
+        if (type == 0)
+        {
+            rand2 = Random.Range(line, 4);
+            while (characters[rand2].isDie) rand2 = Random.Range(line, 4);
+            characters[rand2].onHit(dmg, Ename);
+            if (ActM)
+            {
+                characters[rand2].NextTurnMinusAct++;
+            }
+        }
+        if (type == 1)
+        {
+            List<Character> MaxArmor = new List<Character>();
+            int maxArmor = 0;
+            for (int i = line; i < 4; i++)
+            {
+                if (characters[i].Armor == maxArmor)
+                {
+                    MaxArmor.Add(characters[i]);
+                }
+                else if (characters[i].Armor > maxArmor)
+                {
+                    maxArmor = characters[i].Armor;
+                    MaxArmor.Clear();
+                    MaxArmor.Add(characters[i]);
+                }
+            }
+            rand2 = Random.Range(0, MaxArmor.Count);
+            while (MaxArmor[rand2].isDie) rand2 = Random.Range(0, MaxArmor.Count);
+            MaxArmor[rand2].onHit(dmg, Ename);
+            if (ActM)
+            {
+                MaxArmor[rand2].NextTurnMinusAct++;
+            }
+        }
+        if (type == 2)
+        {
+            List<Character> MaxHp = new List<Character>();
+            int maxHp = 0;
+            for (int i = line; i < 4; i++)
+            {
+                if (characters[i].Hp == maxHp)
+                {
+                    MaxHp.Add(characters[i]);
+                }
+                else if (characters[i].Hp > maxHp)
+                {
+                    maxHp = characters[i].Hp;
+                    MaxHp.Clear();
+                    MaxHp.Add(characters[i]);
+                }
+            }
+            rand2 = Random.Range(0, MaxHp.Count);
+            while (MaxHp[rand2].isDie) rand2 = Random.Range(0, MaxHp.Count);
+            MaxHp[rand2].onHit(dmg, Ename);
+            if (ActM)
+            {
+                MaxHp[rand2].NextTurnMinusAct++;
+            }
+        }
+        if (type == 3)
+        {
+            List<Character> HaveArmor = new List<Character>();
+            for (int i = line; i < 4; i++)
+            {
+                if (characters[i].Armor > 0) HaveArmor.Add(characters[i]);
+            }
+            if (HaveArmor.Count == 0) HitBack(dmg, 0, Ename,ActM);
+            else
+            {
+                rand2 = Random.Range(0, HaveArmor.Count);
+                HaveArmor[rand2].onHit(dmg, Ename);
+                if (ActM)
+                {
+                    HaveArmor[rand2].NextTurnMinusAct++;
+                }
+            }
+        }
     }
 }

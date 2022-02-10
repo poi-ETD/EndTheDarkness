@@ -233,7 +233,6 @@ public class Character : MonoBehaviour
         isDie = true;
         Hp = 0;
         hpT.text = Hp + "/" + maxHp;
-
         Color color = new Color(0.3f, 0.3f, 0.3f);
         GetComponent<Image>().color = color;
         Act = 0;

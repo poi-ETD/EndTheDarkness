@@ -112,6 +112,7 @@ public class TurnManager : MonoBehaviour
             if (!BM.characters[i].isDie)
             {
                 BM.characters[i].Act = 1 - BM.characters[i].NextTurnMinusAct;
+                if (BM.characters[i].Act < 0) BM.characters[i].Act = 0;
                 BM.characters[i].NextTurnMinusAct = 0;
                 BM.characters[i].turnAtk = BM.characters[i].Atk;
                 BM.characters[i].Armor += BM.characters[i].nextarmor;
