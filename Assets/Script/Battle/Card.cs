@@ -15,6 +15,7 @@ public class Card : MonoBehaviour
     public TextMeshProUGUI Name;
     public bool isGrave;
     public int realcost;
+    public bool isDeck;
     public void useCard()
     {
      
@@ -42,23 +43,23 @@ public class Card : MonoBehaviour
                     if (hit[i].collider.gameObject == gameObject)
                         isCardOn = true;
                 }
-                if (isCardOn == gameObject&&!BM.EnemySelectMode)
+                if (isCardOn)
                 {
-                    if (!isGrave)
+                    if (!BM.EnemySelectMode && !BM.otherCanvasOn)
                     {
-                        if (BM.card != gameObject)
-                        {
-                            BM.SetCard(gameObject);
-                        }
-                        else
-                        {
-                            BM.cancleCard();
-                        }
+                      
+                            if (BM.card != gameObject)
+                            {
+                                BM.SetCard(gameObject);
+                            }
+                            else
+                            {
+                                BM.cancleCard();
+                            }                       
                     }
-                    else 
-                        CM.ClickInGrave(gameObject);                      
+                    else if(isGrave||isDeck)
+                        CM.ClickInGrave(gameObject);
                 }
-              
             }
         }
         if (isUsed&&!isGrave)

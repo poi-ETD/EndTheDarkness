@@ -64,6 +64,7 @@ public class BattleManager : MonoBehaviour
     [SerializeField] GameObject ReviveCancle;
     public bool CancleReviveMode;
     public bool ReviveMode;
+    public GameObject DeckView;
     public void StackPopUpOn()
     {
         if (StackPopUp.activeSelf)
@@ -279,12 +280,23 @@ public class BattleManager : MonoBehaviour
         for (int i = 0; i < TurnCardCount; i++)
             CM.CardToField();
         for (int i = 0; i < 4; i++)
-        {         
+        {
             characters[i].isTurnStart = true;
-           
         }
-        
-
+        if (card22on)
+        {
+            int ArmorSum = 0;
+            for (int i = 0; i < 4; i++)
+            {
+                if (!characters[i].isDie)
+                {
+                    ArmorSum += characters[i].Armor;
+                    characters[i].Armor = 0;
+                }
+            }
+            card22c.Armor += ArmorSum;
+            card22on = false;
+        }
     }
     public void Setting()
     {
@@ -497,6 +509,19 @@ public class BattleManager : MonoBehaviour
         CM.GraveOn();
         graveView.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
     }
+    public void DeckOn()
+    {
+        otherCanvasOn = true;       
+        CM.DeckOn();
+        DeckView.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
+    }
+    public void DeckOff()
+    {
+        SelectDeckCount = 0;
+        otherCanvasOn = false;
+        CM.DeckOff();
+        DeckView.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 2000, 0);
+    }
     public void ReviveCancleUse()
     {
         CancleReviveMode = true;
@@ -534,8 +559,7 @@ public class BattleManager : MonoBehaviour
             otherCanvasOn = false;          
             cancleCard();
             CancleCharacter();
-            CancleEnemy();
-           
+            CancleEnemy();           
             graveView.GetComponent<RectTransform>().anchoredPosition = new Vector3(0,2000, 0);
         }
     }
@@ -868,4 +892,71 @@ public class BattleManager : MonoBehaviour
             }
         }
     }
+    bool card22on;
+    Character card22c;
+    public void card22()
+    {
+        card22c = character;
+        card22on = true;
+        for(int i = 0; i < 4; i++)
+        {
+            if (!characters[i].isDie)
+            {
+                characters[i].Armor += 7;
+            }
+        }
+    }
+    public void card23()
+    {
+        for(int i = 0; i < 4; i++)
+        {
+            characters[i].Act = 0;
+        }
+        for(int i = 0; i < Enemys.Length; i++)
+        {
+            if (!Enemys[i].GetComponent<Enemy>().isDie)
+            {
+                Enemys[i].GetComponent<Enemy>().onHit(1 + character.turnAtk);
+                Enemys[i].GetComponent<Enemy>().onHit(1 + character.turnAtk);
+                Enemys[i].GetComponent<Enemy>().onHit(1 + character.turnAtk);
+            }
+        }
+        CM.TM.turnAtk += 2;
+    }
+    public int SelectDeckCount;
+    public void SelectDeckCard(int count)
+    {
+        DeckOn();  
+        SelectDeckCount = count;
+        DeckSelectMode = true;
+    }
+    public void DeckCancle()
+    {
+        DeckOff(); 
+        DeckSelectCancle = true;
+        DeckSelectMode = false;
+    }
+    public bool DeckSelectMode;
+    public bool DeckSelect;
+    public bool DeckSelectCancle;
+    public void DeckComplete()
+    {
+        if (SelectDeckCount == CM.SelectedCard.Count)
+        {
+            CM.DeckToField();
+            DeckSelectMode = false;
+            DeckSelect = true;
+            DeckOff();
+        }
+        else
+        {
+            Sless.SetActive(true);
+            Invoke("SlessOff", 1f);
+        }
+    }
+    void SlessOff()
+    {
+        Sless.SetActive(false);
+    }
+    [SerializeField] GameObject Sless;
 }

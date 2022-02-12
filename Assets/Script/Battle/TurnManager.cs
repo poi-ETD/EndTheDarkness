@@ -95,7 +95,8 @@ public class TurnManager : MonoBehaviour
             pleaseSelect.SetActive(true);
             Invoke("PSoff", 1f);
         }
-    }   
+    }
+    public int turnAtk;
     void PSoff()
     {
         pleaseSelect.SetActive(false);
@@ -114,13 +115,14 @@ public class TurnManager : MonoBehaviour
                 BM.characters[i].Act = 1 - BM.characters[i].NextTurnMinusAct;
                 if (BM.characters[i].Act < 0) BM.characters[i].Act = 0;
                 BM.characters[i].NextTurnMinusAct = 0;
-                BM.characters[i].turnAtk = BM.characters[i].Atk;
+                BM.characters[i].turnAtk = BM.characters[i].Atk+turnAtk;             
                 BM.characters[i].Armor += BM.characters[i].nextarmor;
                 if (BM.characters[i].Armor < 0) BM.characters[i].Armor = 0;
                 BM.characters[i].nextarmor = 0;
               
             }
         }
+        turnAtk = 0;
         CM.TurnStartCardSet();
         BM.TurnStart();
     }

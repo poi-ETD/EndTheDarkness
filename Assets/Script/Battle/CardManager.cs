@@ -9,9 +9,11 @@ public class CardManager : MonoBehaviour
     public List<GameObject> Grave = new List<GameObject>();
     public List<GameObject> field = new List<GameObject>();
     public List<GameObject> ReviveCard = new List<GameObject>();
+    public List<GameObject> SelectedCard = new List<GameObject>();
     public Text graveT;
     public Text deckT;
     [SerializeField] GameObject graveWarn;
+    [SerializeField] GameObject  selectedWarn;
     public TurnManager TM;
     public int FiledCardCount;
     public int specialDrow;
@@ -19,6 +21,7 @@ public class CardManager : MonoBehaviour
     public GameObject[] startCard = new GameObject[100];
     public int cardKind;
    public GameObject CardCanvas;
+    public GameObject DeckCanvas;
     CardData CD;
     BattleManager BM;
 
@@ -29,7 +32,7 @@ public class CardManager : MonoBehaviour
     }
     private void Awake()
     {
-        string path = Path.Combine(Application.persistentDataPath, "CardData.json");
+        /*string path = Path.Combine(Application.persistentDataPath, "CardData.json");
         if (File.Exists(path))
         {
             string cardData = File.ReadAllText(path);
@@ -38,7 +41,7 @@ public class CardManager : MonoBehaviour
             {
                 CardCount[i] = CD.CardCount[i];
             }
-        }
+        }*/
         for (int i = 0; i < cardKind; i++)
         {
             for (int j = 0; j < CardCount[i]; j++)
@@ -102,8 +105,7 @@ public class CardManager : MonoBehaviour
         newCard.SetActive(false);
     }
     public void UseCard(GameObject usingCard)
-    {
-     
+    {     
         for (int i = field.Count - 1; i >= 0; i--)
         {
             if (usingCard == field[i])
@@ -121,9 +123,7 @@ public class CardManager : MonoBehaviour
             }
        
         }
-
         if (!InGrave) Grave.Add(usingCard);
-        usingCard.GetComponentInChildren<Image>().color = new Color(0.5f, 0.5f, 0.5f);
         usingCard.transform.parent = GameObject.Find("GraveContent").transform;
         BM.character.Acting();
         usingCard.GetComponent<Card>().isGrave = true;
@@ -145,21 +145,54 @@ public class CardManager : MonoBehaviour
         }
         Rebatch();
     }
-
+    public void FieldToGrave(GameObject c)
+    {
+        for (int i = field.Count - 1; i >= 0; i--)
+        {
+            if (c == field[i])
+            {
+                field.RemoveAt(i);
+                break;
+            }
+        }
+        Grave.Add(c);
+        c.transform.parent = GameObject.Find("GraveContent").transform;
+        c.GetComponent<Card>().isGrave = true;
+        c.SetActive(false);
+    }
     public void GraveOn()
     {
         for (int i = 0; i < Grave.Count; i++)
         {
             Grave[i].SetActive(true);
-      
+        }
+    }
+    public void DeckOn()
+    {
+        for (int i = 0; i < Deck.Count; i++)
+        {
+            Deck[i].GetComponent<Card>().isDeck = true;
+            Deck[i].transform.parent =GameObject.Find("DeckContent").transform;
+            Deck[i].SetActive(true);
         }
     }
     public void GraveOff()
     {
         for (int i = 0; i < Grave.Count; i++)
         {
-
             Grave[i].SetActive(false);
+        }
+    }
+    public void DeckOff()
+    {
+        SelectedCard.Clear();
+        for (int i = 0; i < Deck.Count; i++)
+        {
+            Deck[i].GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0.5f);
+            Deck[i].GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0.5f);
+            Deck[i].GetComponent<Card>().isDeck = false;
+            Deck[i].transform.parent = CardCanvas.transform;
+            Deck[i].SetActive(false);
         }
     }
     public void FieldOff()
@@ -175,9 +208,7 @@ public class CardManager : MonoBehaviour
         Rebatch();
     }
     public void ToGrave(GameObject Fcard)
-    {
-       
-           
+    {          
         Fcard.transform.parent = GameObject.Find("GraveContent").transform;            
         Fcard.SetActive(false);
     }
@@ -232,11 +263,21 @@ public class CardManager : MonoBehaviour
     public void ReviveCountOver()
     {
         graveWarn.SetActive(true);
-        Invoke("WarnOff", 1f);
+        Invoke("gWarnOff", 1f);
     }
-    void WarnOff()
+    public void SelectedCountOver()
+    {
+        selectedWarn.SetActive(true);
+        Invoke("sWarnOff", 1f);
+    }
+    void gWarnOff()
     {
         graveWarn.SetActive(false);
+    }
+    void sWarnOff()
+    {
+
+        selectedWarn.SetActive(false);
     }
     public void ClickInGrave(GameObject g)
     {
@@ -264,9 +305,62 @@ public class CardManager : MonoBehaviour
                 }
                 else
                 {
-                    ReviveCountOver();
+                   ReviveCountOver();
                 }
             }
         }
+        if (BM.DeckSelectMode)
+        {
+            bool isClicked = false;
+            for (int i = 0; i < SelectedCard.Count; i++)
+            {
+                if (g == SelectedCard[i]) { isClicked = true; break; }
+            }
+            if (isClicked)
+            {
+                g.GetComponent<Transform>().localScale = new Vector2(1, 1f);
+                for (int i = 0; i < SelectedCard.Count; i++)
+                {
+                    if (g == SelectedCard[i]) { SelectedCard.RemoveAt(i); break; }
+                }
+            }
+            else
+            {
+                if (BM.SelectDeckCount > SelectedCard.Count)
+                {
+                    g.GetComponent<Transform>().localScale = new Vector2(1.3f, 1.3f);
+                    SelectedCard.Add(g);
+                }
+                else
+                {
+                    SelectedCountOver();
+                }
+            }
+
+        }
+    }
+    public void DeckToField()
+    {
+        for (int j = 0; j < SelectedCard.Count; j++)
+        {
+            TM.BM.log.logContent.text += "\n" + SelectedCard[j].GetComponent<Card>().Name.text + "이(가) 덱에서 패로 이동합니다.";
+            for (int i = 0; i < Deck.Count; i++)
+            {
+                if (SelectedCard[j] == Deck[i])
+                {
+                    field.Add(SelectedCard[j]);
+                    SelectedCard[j].GetComponent<Card>().isDeck = false;
+                    SelectedCard[j].GetComponent<Card>().use = false;
+                    SelectedCard[j].GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0.5f);
+                    SelectedCard[j].GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0.5f);
+                    SelectedCard[j].SetActive(true);
+                    SelectedCard[j].transform.parent = CardCanvas.transform;
+                    SelectedCard[j].GetComponent<Transform>().localScale = new Vector2(1, 1);
+                    Deck.RemoveAt(i);
+                    break;
+                }
+            }
+        }
+        Rebatch();
     }
 }
