@@ -801,7 +801,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Hp: 50
-  maxHp: 5
+  maxHp: 50
   Armor: 0
   Atk: 0
   TM: {fileID: 0}
@@ -1030,7 +1030,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Hp: 50
-  maxHp: 5
+  maxHp: 50
   Armor: 0
   Atk: 0
   TM: {fileID: 0}

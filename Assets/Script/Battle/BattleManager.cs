@@ -65,6 +65,36 @@ public class BattleManager : MonoBehaviour
     public bool CancleReviveMode;
     public bool ReviveMode;
     public GameObject DeckView;
+    public GameObject SelectedCard;
+    [SerializeField] GameObject LineObject;
+    public void FormationCollapse()
+    {
+        if (line == 1)
+        {
+            line++;
+        }
+        else if (line == 2)
+        {
+            int rand = Random.Range(0, 2);
+            if (rand == 0) rand = -1;
+            line += rand;
+        }
+        else if (line == 3)
+        {
+            line--;
+        }
+        LineObject.transform.position = new Vector2(-16.66f, (11.66f - 5.55f* line));
+        forward.Clear();
+        back.Clear();
+        for (int i = 0; i < line; i++)
+        {
+            forward.Add(characters[i]);
+        }
+        for (int i = line; i < 4; i++)
+        {
+            back.Add(characters[i]);
+        }
+    }
     public void StackPopUpOn()
     {
         if (StackPopUp.activeSelf)
@@ -110,7 +140,7 @@ public class BattleManager : MonoBehaviour
                 passiveCharacters[i / 3].passive[i % 3] = true;
             }
         }
-        if (bd.battleNo == 3) //폴리만 예외
+       if (bd.battleNo == 3||bd.battleNo==6) //폴리만 예외
         { 
             GameObject EnemySummon = Instantiate(Enemys[bd.battleNo], new Vector2(0, 6), transform.rotation, GameObject.Find("CharacterCanvas").transform);
         }
@@ -943,6 +973,7 @@ public class BattleManager : MonoBehaviour
     {
         if (SelectDeckCount == CM.SelectedCard.Count)
         {
+            SelectedCard = CM.SelectedCard[0];
             CM.DeckToField();
             DeckSelectMode = false;
             DeckSelect = true;

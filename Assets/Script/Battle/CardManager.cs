@@ -32,7 +32,7 @@ public class CardManager : MonoBehaviour
     }
     private void Awake()
     {
-        /*string path = Path.Combine(Application.persistentDataPath, "CardData.json");
+        string path = Path.Combine(Application.persistentDataPath, "CardData.json");
         if (File.Exists(path))
         {
             string cardData = File.ReadAllText(path);
@@ -41,7 +41,7 @@ public class CardManager : MonoBehaviour
             {
                 CardCount[i] = CD.CardCount[i];
             }
-        }*/
+        }
         for (int i = 0; i < cardKind; i++)
         {
             for (int j = 0; j < CardCount[i]; j++)
@@ -224,6 +224,8 @@ public class CardManager : MonoBehaviour
                 Grave[i].GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 225);
                 Grave[i].GetComponentInChildren<Image>().color = new Color(1, 1, 1);
                 Grave[i].SetActive(true);
+                Grave[i].GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0.5f);
+                Grave[i].GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0.5f);
                 if (BM.card7mode)
                 {               
                     Grave[i].GetComponent<Card>().cardcost = 0; }

@@ -1195,7 +1195,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -750, y: 278}
+  m_AnchoredPosition: {x: -750, y: 275}
   m_SizeDelta: {x: 400, y: 15}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &283256827
@@ -1590,7 +1590,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -554, y: 441.49982}
+  m_AnchoredPosition: {x: -554, y: 399.99908}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &363764089
@@ -1798,6 +1798,8 @@ MonoBehaviour:
   - {fileID: 6645752759065849782, guid: 5824b61a1d3ba4549aa12d051a05056c, type: 3}
   - {fileID: 8772484220978383927, guid: 1818e39f4d7b1fb4ab9d3db0fb83ca32, type: 3}
   - {fileID: 6018513487574573648, guid: ec1020db262559c41914b2bbf53c95e6, type: 3}
+  - {fileID: 3168886466794061725, guid: f5632c08302212b439772558243ed323, type: 3}
+  - {fileID: 5202530372473349201, guid: 8b51066dd7768434487d619bea391b33, type: 3}
   victory: {fileID: 109399635}
   defeated: {fileID: 1756809415}
   SelectMode: 0
@@ -1819,12 +1821,14 @@ MonoBehaviour:
   CancleReviveMode: 0
   ReviveMode: 0
   DeckView: {fileID: 314253081}
+  SelectedCard: {fileID: 0}
+  LineObject: {fileID: 283256825}
   card20done: 0
   SelectDeckCount: 0
   DeckSelectMode: 0
   DeckSelect: 0
   DeckSelectCancle: 0
-  Sless: {fileID: 0}
+  Sless: {fileID: 250549145}
 --- !u!1 &404220092
 GameObject:
   m_ObjectHideFlags: 0
@@ -5740,7 +5744,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -550, y: 450}
-  m_SizeDelta: {x: 1100, y: 883}
+  m_SizeDelta: {x: 1100, y: 800}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1514610028
 MonoBehaviour:
@@ -8756,7 +8760,7 @@ PrefabInstance:
     - target: {fileID: 3010364522330572356, guid: 7cd6f3288dade344b88bbfe741886ca5,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 278
+      value: 275
       objectReference: {fileID: 0}
     - target: {fileID: 3010364522330572356, guid: 7cd6f3288dade344b88bbfe741886ca5,
         type: 3}

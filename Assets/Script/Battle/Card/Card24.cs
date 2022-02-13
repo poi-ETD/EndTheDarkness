@@ -55,7 +55,7 @@ public class Card24 : MonoBehaviour
                 isU = false;
                 BM.character.Act--;
                 BM.cost -= myCard.cardcost;
-                for(int i = CM.field.Count-1; i>=0; i--)
+                for(int i = CM.field.Count-2; i>=0; i--)
                 {if(CM.field[i]!=gameObject)
                     CM.FieldToGrave(CM.field[i]);
                 }
