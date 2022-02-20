@@ -63,7 +63,8 @@ public class Card : MonoBehaviour
             }
         }
         if (isUsed&&!isGrave)
-        {          
+        {
+         
             CM.UseCard(gameObject);            
             if (GetComponent<BlackWhite>()!= null)
             {

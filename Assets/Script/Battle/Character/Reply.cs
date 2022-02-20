@@ -14,6 +14,7 @@ public class Reply : MonoBehaviour
     BattleManager BM;
     bool Passive1;
     bool Passive3;
+    int AttackCount;
     private void Start()
     {
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
@@ -65,6 +66,7 @@ public class Reply : MonoBehaviour
             {
                 if (!enemyScript[i].isDie)
                 {
+                    myCharacter.AttackCount++;
                     enemyScript[i].onHit(myCharacter.turnAtk);
                     EnemyStack[i]++;
                     EnemyStack[i]++;
@@ -73,12 +75,23 @@ public class Reply : MonoBehaviour
             }
         }
     }
-    void Update()
+    public void passive4()
     {
-    
-       
+        if (AttackCount != myCharacter.AttackCount)
+        {
+            AttackCount++;
+            if (AttackCount != 0 && AttackCount % 10 == 0) { myCharacter.Atk++; myCharacter.turnAtk++; }
+        }
+    }
+    void Update()
+    {       
         if (!myCharacter.isDie)
         {
+            if (myCharacter.passive[3])
+            {
+                passive4();
+            }
+         
             if (myCharacter.passive[1])
             {
                 passive2();

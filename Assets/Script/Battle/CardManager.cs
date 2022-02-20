@@ -13,14 +13,14 @@ public class CardManager : MonoBehaviour
     public Text graveT;
     public Text deckT;
     [SerializeField] GameObject graveWarn;
-    [SerializeField] GameObject  selectedWarn;
+    [SerializeField] GameObject selectedWarn;
     public TurnManager TM;
     public int FiledCardCount;
     public int specialDrow;
     public int[] CardCount = new int[100];
     public GameObject[] startCard = new GameObject[100];
     public int cardKind;
-   public GameObject CardCanvas;
+    public GameObject CardCanvas;
     public GameObject DeckCanvas;
     CardData CD;
     BattleManager BM;
@@ -61,9 +61,9 @@ public class CardManager : MonoBehaviour
         for (int i = 0; i < field.Count; i++)
         {
             //GetComponent<RectTransform>().anchoredPosition = new Vector2(-300 + 150f * i, -520);
-            
-           field[i]. transform.position = new Vector3(-6.66f + 3.33f * i, -11.55f, 0);
-           field[i].SetActive(true);
+            field[i].transform.parent = GameObject.Find("CardCanvas").transform;
+            field[i].transform.position = new Vector3(-6.66f + 3.33f * i, -11.55f, 0);
+            field[i].SetActive(true);
         }
     }
     public void CardToField()
@@ -105,32 +105,33 @@ public class CardManager : MonoBehaviour
         newCard.SetActive(false);
     }
     public void UseCard(GameObject usingCard)
-    {     
+    {
         for (int i = field.Count - 1; i >= 0; i--)
         {
             if (usingCard == field[i])
-            {              
+            {
                 field.RemoveAt(i);
                 break;
             }
         }
         bool InGrave = false;
         for (int i = 0; i < Grave.Count; i++)
-        {if (Grave[i] == usingCard)
+        {
+            if (Grave[i] == usingCard)
             {
                 InGrave = true;
                 break;
             }
-       
         }
         if (!InGrave) Grave.Add(usingCard);
         usingCard.transform.parent = GameObject.Find("GraveContent").transform;
+        if(BM.character!=null)
         BM.character.Acting();
         usingCard.GetComponent<Card>().isGrave = true;
         usingCard.SetActive(false);
         TM.BM.cancleCard();
-        if (BM.card20done&& usingCard.GetComponent<Card>().Name.text != "스케치 반복")
-        { 
+        if (BM.card20done && usingCard.GetComponent<Card>().Name.text != "스케치 반복")
+        {
             BM.card20done = false;
         }
         else if (usingCard.GetComponent<Card>().Name.text != "스케치 반복")
@@ -172,7 +173,7 @@ public class CardManager : MonoBehaviour
         for (int i = 0; i < Deck.Count; i++)
         {
             Deck[i].GetComponent<Card>().isDeck = true;
-            Deck[i].transform.parent =GameObject.Find("DeckContent").transform;
+            Deck[i].transform.parent = GameObject.Find("DeckContent").transform;
             Deck[i].SetActive(true);
         }
     }
@@ -208,8 +209,8 @@ public class CardManager : MonoBehaviour
         Rebatch();
     }
     public void ToGrave(GameObject Fcard)
-    {          
-        Fcard.transform.parent = GameObject.Find("GraveContent").transform;            
+    {
+        Fcard.transform.parent = GameObject.Find("GraveContent").transform;
         Fcard.SetActive(false);
     }
     public void GraveToField(GameObject Gcard)
@@ -220,15 +221,16 @@ public class CardManager : MonoBehaviour
             if (Gcard == Grave[i])
             {
                 field.Add(Grave[i]);
-                Gcard.GetComponent<Card>().use=false;
+                Gcard.GetComponent<Card>().use = false;
                 Grave[i].GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 225);
                 Grave[i].GetComponentInChildren<Image>().color = new Color(1, 1, 1);
                 Grave[i].SetActive(true);
                 Grave[i].GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0.5f);
                 Grave[i].GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0.5f);
                 if (BM.card7mode)
-                {               
-                    Grave[i].GetComponent<Card>().cardcost = 0; }
+                {
+                    Grave[i].GetComponent<Card>().cardcost = 0;
+                }
                 Grave[i].GetComponent<Card>().isGrave = false;
                 Grave[i].GetComponent<Card>().isUsed = false;
                 Grave[i].transform.parent = CardCanvas.transform;
@@ -288,14 +290,14 @@ public class CardManager : MonoBehaviour
             bool isClicked = false;
             for (int i = 0; i < ReviveCard.Count; i++)
             {
-                if (g== ReviveCard[i]) { isClicked = true; break; }
+                if (g == ReviveCard[i]) { isClicked = true; break; }
             }
             if (isClicked)
             {
-                g.GetComponent<Transform>().localScale = new Vector2(1,1f);
+                g.GetComponent<Transform>().localScale = new Vector2(1, 1f);
                 for (int i = 0; i < ReviveCard.Count; i++)
                 {
-                    if (g == ReviveCard[i]) {ReviveCard.RemoveAt(i); break; }
+                    if (g == ReviveCard[i]) { ReviveCard.RemoveAt(i); break; }
                 }
             }
             else
@@ -307,7 +309,7 @@ public class CardManager : MonoBehaviour
                 }
                 else
                 {
-                   ReviveCountOver();
+                    ReviveCountOver();
                 }
             }
         }
@@ -361,6 +363,48 @@ public class CardManager : MonoBehaviour
                     Deck.RemoveAt(i);
                     break;
                 }
+            }
+        }
+        Rebatch();
+    }
+    public void GraveToDeck(GameObject c)
+    {
+        TM.BM.log.logContent.text += "\n" + c.GetComponent<Card>().Name.text + "이(가) 무덤에서 덱으로 이동합니다.";
+        for (int i = 0; i < Grave.Count; i++)
+        {
+            if (c == Grave[i])
+            {
+               Deck.Add(c);
+                c.GetComponent<Card>().isDeck = true;
+                c.GetComponent<Card>().use = false;
+                c.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0.5f);
+                c.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0.5f);
+                c.transform.parent = GameObject.Find("DeckContent").transform;
+                c.GetComponent<Card>().isGrave = false;
+                c.SetActive(false);
+                Grave.RemoveAt(i);
+                break;
+            }
+        }
+        Rebatch();
+    }
+    public void DeckToGrave(GameObject c)
+    {
+        TM.BM.log.logContent.text += "\n" + c.GetComponent<Card>().Name.text + "이(가) 덱에서 무덤으로 이동합니다.";
+        for (int i = 0; i < Deck.Count; i++)
+        {
+            if (c == Deck[i])
+            {
+                Grave.Add(c);
+                c.GetComponent<Card>().isDeck = false;
+                c.GetComponent<Card>().use = false;
+                c.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0.5f);
+                c.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0.5f);
+                c.transform.parent = GameObject.Find("GraveContent").transform;
+                c.GetComponent<Card>().isGrave = true;
+                c.SetActive(false);
+                Deck.RemoveAt(i);
+                break;
             }
         }
         Rebatch();

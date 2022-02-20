@@ -34,6 +34,7 @@ public class Poly0 : MonoBehaviour
       
         if (BM.diecount < 4)
         {
+            BM.FormationCollapse(myEnemy.Name);
             if (myEnemy.Hp > 200)
             {
                 int rand = Random.Range(0, 3);
@@ -58,7 +59,7 @@ public class Poly0 : MonoBehaviour
                 {
                     phase2start = true;
                     myEnemy.GetArmor(20, myEnemy.Name);
-                    BM.FormationCollapse();
+                    BM.FormationCollapse(myEnemy.Name);
                     for(int i = 0; i < 4; i++)
                     {
                         if (!BM.characters[i].isDie) BM.characters[i].NextTurnMinusAct++;

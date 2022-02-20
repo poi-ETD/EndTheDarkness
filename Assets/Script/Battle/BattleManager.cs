@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 public class BattleManager : MonoBehaviour
 {
     public Character[] characters;
+    public Character[] Scharacters;
     public bool CharacterSelectMode;
     public bool EnemySelectMode;
     public Character character;
@@ -67,33 +68,85 @@ public class BattleManager : MonoBehaviour
     public GameObject DeckView;
     public GameObject SelectedCard;
     [SerializeField] GameObject LineObject;
-    public void FormationCollapse()
+    [SerializeField] GameObject FormationCollapsePopup;
+    [SerializeField] Text FormationCollapseText;
+    [SerializeField] GameObject FormationCollapseButton;
+    [SerializeField] Text[] FormationCollapseButtonText;
+    [SerializeField] GameObject[] CharacterObj;
+    bool MoveToForward;
+    public void FormationCollapse(string ename)
     {
+        otherCanvasOn = true;
         if (line == 1)
         {
+            MoveToForward =true;
             line++;
         }
         else if (line == 2)
         {
             int rand = Random.Range(0, 2);
-            if (rand == 0) rand = -1;
+            if (rand == 0) { rand = -1;MoveToForward = false; }
+            if (rand == 1) MoveToForward = true;
             line += rand;
         }
         else if (line == 3)
         {
+            MoveToForward = false;
             line--;
         }
+      
         LineObject.transform.position = new Vector2(-16.66f, (11.66f - 5.55f* line));
-        forward.Clear();
-        back.Clear();
-        for (int i = 0; i < line; i++)
-        {
-            forward.Add(characters[i]);
+        FormationCollapsePopup.SetActive(true);
+        if (MoveToForward)
+        {   FormationCollapseText.text = ename + "이(가) 진형붕괴를 시전했습니다." + "\n누구를 전방으로 보내겠습니까?";
+            if (line == 2) FormationCollapseButton.SetActive(true);
+            else FormationCollapseButton.SetActive(false);
+            for(int i = 0; i < back.Count; i++)
+            {
+                FormationCollapseButtonText[i].text = back[i].Name;
+            }
         }
-        for (int i = line; i < 4; i++)
+        else
         {
-            back.Add(characters[i]);
+            FormationCollapseText.text = ename + "이(가) 진형붕괴를 시전했습니다." + "\n누구를 후방으로 보내겠습니까?";
+            if (line == 2) FormationCollapseButton.SetActive(true);
+            else FormationCollapseButton.SetActive(false);
+            for (int i = 0; i < forward.Count; i++)
+            {
+                FormationCollapseButtonText[i].text =forward[i].Name;
+            }
         }
+    }
+    public void SelectFormationCollapse(int c)
+    {
+        if (MoveToForward)
+        {
+            forward.Add(back[c]);
+            back.RemoveAt(c);
+        }
+        else
+        {
+            back.Add(forward[c]);
+            forward.RemoveAt(c);
+        }
+        for(int i = 0; i < line; i++)
+        {
+            characters[i] = forward[i];
+         
+        }
+        for(int i = 0; i < 4-line; i++)
+        {
+            characters[i + line] = back[i];
+           
+        }
+ 
+        for(int i = 0; i < 4; i++)
+        {
+           characters[i].transform.position = new Vector2(-800/45f,(400-250*i)/45f);
+        }
+        otherCanvasOn = false;
+        FormationCollapsePopup.SetActive(false);
+
     }
     public void StackPopUpOn()
     {
@@ -126,6 +179,7 @@ public class BattleManager : MonoBehaviour
     }
     private void Awake()
     {
+        Scharacters = characters;
         string path = Path.Combine(Application.persistentDataPath, "battleData.json");
        string battleData = File.ReadAllText(path);
         bd = JsonUtility.FromJson<BattleData>(battleData);
@@ -137,7 +191,7 @@ public class BattleManager : MonoBehaviour
             if (CD.passive[i])
             {
                 
-                passiveCharacters[i / 3].passive[i % 3] = true;
+                passiveCharacters[i / 4].passive[i % 4] = true;
             }
         }
        if (bd.battleNo == 3||bd.battleNo==6) //폴리만 예외
@@ -427,6 +481,7 @@ public class BattleManager : MonoBehaviour
     }
     public void OnDmgOneTarget(int dmg)
     {
+        character.AttackCount++;
         CardUseText.text = "카드사용";
         EnemySelectMode = false;
         log.logContent.text += "\n"+enemy.Name+"에게 "+(dmg + character.turnAtk)+"의 데미지!";
@@ -946,6 +1001,7 @@ public class BattleManager : MonoBehaviour
         {
             if (!Enemys[i].GetComponent<Enemy>().isDie)
             {
+                character.AttackCount+=3;
                 Enemys[i].GetComponent<Enemy>().onHit(1 + character.turnAtk);
                 Enemys[i].GetComponent<Enemy>().onHit(1 + character.turnAtk);
                 Enemys[i].GetComponent<Enemy>().onHit(1 + character.turnAtk);
@@ -990,4 +1046,5 @@ public class BattleManager : MonoBehaviour
         Sless.SetActive(false);
     }
     [SerializeField] GameObject Sless;
+    
 }

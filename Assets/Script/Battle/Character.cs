@@ -22,6 +22,8 @@ public class Character : MonoBehaviour
     public bool[] passive;
     public List<DMGboard> DMGboards=new List<DMGboard>();
     public string enemyName;
+    public int StartNo;
+    public int AttackCount;
     public struct ArmorBreak
     {
         public int dmg;
@@ -106,6 +108,13 @@ public class Character : MonoBehaviour
     {
         Act = 1;
         Hp = maxHp;
+        for(int i = 0; i < 4; i++)
+        {
+            if (BM.characters[i] == GetComponent<Character>())
+            {
+                StartNo = i;
+            }
+        }
     }
     public void onDynamicHit(int dmg,string enemyname)
     {      

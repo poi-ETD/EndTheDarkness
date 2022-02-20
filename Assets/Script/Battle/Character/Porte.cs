@@ -46,6 +46,16 @@ public class Porte : MonoBehaviour
     {
         BM.porte3();
     }
+    public void passive4()
+    {
+        if (CM.Deck.Count > CM.Grave.Count)
+        {
+            CM.DeckToGrave(CM.Deck[Random.Range(0, CM.Deck.Count)]);
+        }
+       else if (CM.Deck.Count < CM.Grave.Count) {
+            CM.GraveToDeck(CM.Grave[Random.Range(0, CM.Grave.Count)]);
+        }
+    }
     void Update()
     {
         if (!myCharacter.isDie)
@@ -69,6 +79,10 @@ public class Porte : MonoBehaviour
                 {
                    
                     passive3();
+                }
+                if (myCharacter.passive[3])
+                {
+                    passive4();
                 }
                 Passive2 =  false;
                 myCharacter.isTurnStart = false;

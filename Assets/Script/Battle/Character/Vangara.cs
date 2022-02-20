@@ -96,6 +96,18 @@ public class Vangara : MonoBehaviour
             armorcount++;
         }
     }
+    void passive4()
+    {
+        if (BM.forward.Count == 1 && BM.forward[0] == GetComponent<Character>())
+        {
+            myCharacter.Armor += 7;
+            myCharacter.Act++;
+        }
+        if (BM.back.Count == 1 && BM.back[0] == GetComponent < Character> ()){
+            myCharacter.Armor += 7;
+            myCharacter.Act++;
+        }
+    }
     private void Update()
     {
         if (myCharacter.passive[2])
@@ -119,7 +131,7 @@ public class Vangara : MonoBehaviour
         }
         if (myCharacter.isTurnStart)
         {
-            
+                if (myCharacter.passive[3]) passive4();
             if (myCharacter.passive[1])
                 passive2();
             myCharacter.isTurnStart = false;

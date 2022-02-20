@@ -78,11 +78,36 @@ public class Q : MonoBehaviour
           specialDrow++;
         }
     }
+    public void passive4()
+    {
+        if (myCharacter.NextTurnMinusAct > 0&&!passive4done)
+        {
+            passive4done = true;
+            if (CM.Grave.Count > 0)
+            {
+                int rand = Random.Range(0, CM.Grave.Count);
+
+                GameObject newCard = CM.Grave[rand];
+                if (newCard.GetComponent<BlackWhite>() == null)
+                {
+                    newCard.AddComponent<BlackWhite>();
+                    newCard.GetComponent<BlackWhite>().birth();
+                }
+                else
+                {
+                    newCard.GetComponent<BlackWhite>().PlusStack();
+                }
+                CM.GraveToField(newCard);
+            }
+        }
+        if (myCharacter.NextTurnMinusAct == 0) passive4done = false;
+    }
+    bool passive4done;
     // Update is called once per frame
     void Update()
     {
         if (!myCharacter.isDie)
-        {
+        {if (myCharacter.passive[3] && !isKing) passive4();
             if (myCharacter.passive[2]&&!isKing) passive3();
             if (myCharacter.passive[1]&&!isKing) passive2();
             ghostT.text = Ghost.ToString();

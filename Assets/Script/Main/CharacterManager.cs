@@ -27,14 +27,16 @@ public class CharacterManager : MonoBehaviour
         {
             string characterData = File.ReadAllText(path);
             CD = JsonUtility.FromJson<CharacterData>(characterData);
-            for (int i = 0; i < 12; i++)
+            for (int i = 0; i < 16; i++)
             {
+             
             if(CD.passive[i])
-                        checkBox[i].GetComponent<Image>().sprite = onCheck;
+            checkBox[i].GetComponent<Image>().sprite = onCheck;
                
             }
         }
-        
+     
+
     }
     void onMuch()
     {
@@ -63,23 +65,24 @@ public class CharacterManager : MonoBehaviour
        
         if (CD.passive[i])
         {
+           
             checkBox[i].GetComponent<Image>().sprite = offCheck;
             CD.passive[i] = false;
-            CD.passiveCount[i/3]--;
+            CD.passiveCount[i/4]--;
         }
         else if (!CD.passive[i])
         {
-            if (CD.passiveCount[i/3] < 2)
+           
+            if (CD.passiveCount[i/4] < 2)
             {
                 checkBox[i].GetComponent<Image>().sprite = onCheck;
                 CD.passive[i] = true;
-                CD.passiveCount[i/3]++;
+                CD.passiveCount[i/4]++;
 
             }
             else
             {
                 onMuch();
-
             }
         }
 

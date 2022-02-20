@@ -28,14 +28,14 @@ public class BlackWhite : MonoBehaviour
             enemyScript[i] = enemys[i].GetComponent<Enemy>();
         }
         myCard = GetComponent<Card>();
-        myCard.Content.text += "\n흑백(" + 1 + ")";
+        myCard.Content.text += "\n모든 적에게 데미지 부여:[" + 1 + "]";
     }
     public string content;
     public void PlusStack()
     {
         BlackWhiteStack++;
         string newstring = myCard.Content.text;
-        newstring = newstring.Replace("\n흑백(" + (BlackWhiteStack - 1) + ")", "\n흑백(" + BlackWhiteStack + ")");
+        newstring = newstring.Replace("\n모든 적에게 데미지 부여:[" + (BlackWhiteStack-1) + "]", "\n모든 적에게 데미지 부여:[" + BlackWhiteStack + "]");
         myCard.Content.text = newstring;
        
     }   
