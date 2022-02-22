@@ -94,8 +94,6 @@ public class BattleManager : MonoBehaviour
             MoveToForward = false;
             line--;
         }
-      
-        LineObject.transform.position = new Vector2(-16.66f, (11.66f - 5.55f* line));
         FormationCollapsePopup.SetActive(true);
         if (MoveToForward)
         {   FormationCollapseText.text = ename + "이(가) 진형붕괴를 시전했습니다." + "\n누구를 전방으로 보내겠습니까?";
@@ -146,7 +144,7 @@ public class BattleManager : MonoBehaviour
         }
         otherCanvasOn = false;
         FormationCollapsePopup.SetActive(false);
-
+        LineObject.transform.position = new Vector2(-16.66f, (11.66f - 5.55f * line));
     }
     public void StackPopUpOn()
     {
