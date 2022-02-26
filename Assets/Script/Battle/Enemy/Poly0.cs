@@ -62,7 +62,7 @@ public class Poly0 : MonoBehaviour
                     BM.FormationCollapse(myEnemy.Name);
                     for(int i = 0; i < 4; i++)
                     {
-                        if (!BM.characters[i].isDie) BM.characters[i].NextTurnMinusAct++;
+                        if (!BM.characters[i].isDie) BM.characters[i].NextTurnMinusAct+=5;
                     }
                 }
                 else

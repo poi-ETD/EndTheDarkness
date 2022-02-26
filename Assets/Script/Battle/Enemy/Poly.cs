@@ -37,11 +37,12 @@ public class Poly : MonoBehaviour
     }
     void StartPattern()
     {
-        myEnemy.Board.text = "";
+    
         if (BM.diecount < 4)
         {
             if (myEnemy.Hp > 150)
             {
+                myEnemy.immortal = true;
                 phase1++;
                 HaveArmor.Clear();
                 ForwardHaveArmor.Clear();
@@ -160,15 +161,15 @@ public class Poly : MonoBehaviour
             }
             else if (myEnemy.Hp <= 150&&myEnemy.Hp>50)
             {
-                myEnemy.noDie = true;
+                myEnemy.immortal = true;
+              
                 phase2++;
                 if (phase2 == 1)
                 {
                   
                         for(int i = 0; i < 4; i++)
-                        {
-                           
-                            BM.characters[i].NextTurnMinusAct++;
+                        {                         
+                            BM.characters[i].NextTurnMinusAct+=5;
                         }
                     
                     myEnemy.GetArmor(30, myEnemy.Name);

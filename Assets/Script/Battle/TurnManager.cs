@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System.Collections;   
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -77,6 +77,11 @@ public class TurnManager : MonoBehaviour
                             BM.characters[i].onDamage(BM.characters[i].DMGboards[j].dmg, BM.characters[i].DMGboards[j].name);
                             count++;
                         }
+                    }
+                    for(int j = 0; j < 20; j++)
+                    {
+                        BM.characters[i].Status[j] += BM.characters[i].nextStatus[j];
+                        BM.characters[i].nextStatus[j] = 0;
                     }
                     BM.characters[i].DMGboards.Clear();
                     BM.characters[i].BoardClear();

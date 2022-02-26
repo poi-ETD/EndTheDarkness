@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ifrin : MonoBehaviour
+public class IfrinS : MonoBehaviour
 {
     public TurnManager TM;
     public int curTurn;
@@ -34,79 +34,43 @@ public class ifrin : MonoBehaviour
     }
     void Update()
     {
-        if (myEnemy.isDie)
-        {
-            myEnemy.Hp = 0;
-            if (Glassin.isDie) BM.Victory();
-        }
         if (curTurn != TM.t)
         {
             StartPattern();
         }
-        if (p4 && myEnemy.Hp != myHp || p4 && glassinHp != Glassin.Hp)
-        {
-            glassinHp = Glassin.Hp;
-            myHp = myEnemy.Hp;
-            for (int i = 0; i < 4; i++)
-            {
-                if (!BM.characters[i].isDie)
-                {
-                    BM.characters[i].onDynamicHit(Mathf.Abs(myHp - Glassin.Hp), myEnemy.Name);
-                }
-            }
-        }
+      
     }
     void StartPattern()
     {
         if (!myEnemy.isDie)
         {
-            if (BM.diecount < 4)
+            if (myEnemy.Hp > 10)
             {
-                if (!Glassin.isDie)
+                if (BM.diecount < 4)
                 {
+                    myEnemy.immortal = true;
                     if ((curTurn + 1) % 4 != 0)
                     {
 
-                        p4 = false;
                         rand = Random.Range(0, 3);
                         while (randCount[rand])
                         {
                             rand = Random.Range(0, 3);
                         }
-
                         if (rand == 0)
                         {
                             randCount[0] = true;
                             for (int i = 0; i < 2; i++)
                             {
-                                if (BM.forward.Count > 0)
-                                {
-                                    int rand2 = Random.Range(0, BM.forward.Count);
-                                    while (BM.characters[rand2].isDie)
-                                        rand2 = Random.Range(0, BM.forward.Count);
-                                    BM.characters[rand2].onHit(5, myEnemy.Name);
+                                BM.HitFront(5, 0, myEnemy.Name, false);
+                        
 
-                                }
-                                else
-                                {
-                                    int rand2 = Random.Range(0, 4);
-                                    while (BM.characters[rand2].isDie)
-                                        rand2 = Random.Range(0, 4);
-                                    BM.characters[rand2].onHit(5, myEnemy.Name);
-
-                                }
                             }
                         }
                         if (rand == 1)
                         {
                             randCount[1] = true;
-                            for (int i = 0; i < 4; i++)
-                            {
-                                if (!BM.characters[i].isDie)
-                                {
-                                    BM.characters[i].onHit(3, myEnemy.Name);
-                                }
-                            }
+                            BM.HitAll(3, 4, myEnemy.Name, false);
                         }
                         if (rand == 2)
                         {
@@ -117,7 +81,6 @@ public class ifrin : MonoBehaviour
                                 while (BM.characters[rand2].isDie)
                                     rand2 = Random.Range(0, BM.forward.Count);
                                 BM.characters[rand2].StatusAbnom(0, 2);
-
                             }
                             else
                             {
@@ -130,36 +93,22 @@ public class ifrin : MonoBehaviour
                     }
                     else
                     {
-                        p4 = true;
-                        myHp = myEnemy.Hp;
-                        glassinHp = Glassin.Hp;
-                        for (int i = 0; i < 4; i++)
-                        {
-                            if (!BM.characters[i].isDie)
-                            {
-                                BM.characters[i].onHit(Mathf.Abs(Glassin.Hp - myHp), myEnemy.Name);
-                            }
-                        }
+                        BM.HitFront((myEnemy.maxHp - myEnemy.Hp) / 10, 4, myEnemy.Name, false);
+                        BM.HitBack((myEnemy.maxHp - myEnemy.Hp) / 20, 4, myEnemy.Name, false);
                         randCount[0] = false;
                         randCount[1] = false;
                         randCount[2] = false;
                     }
 
                 }
-                if (Glassin.isDie)
-                {
-                    for (int i = 0; i < 4; i++)
-                    {
-                        if (!BM.characters[i].isDie)
-                        {
-                            BM.characters[i].onHit(20, myEnemy.Name);
-                            BM.characters[i].NextTurnMinusAct+=5;
-                        }
-                    }
-                }
+            }
+            else
+            {
+                myEnemy.onShadow();
+            }
                 myEnemy.EnemyEndTurn();
                 curTurn++;
             }
-        }
+        
     }
 }

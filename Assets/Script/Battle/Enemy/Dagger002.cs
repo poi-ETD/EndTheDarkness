@@ -56,8 +56,15 @@ public class Dagger002 : MonoBehaviour
                         BM.HitFront(3, 1, myEnemy.Name, true);
                     }
                     if (rand == 1)
-                    {
+                    {if(myEnemy.CanShadow())
                         myEnemy.onShadow();
+                        else
+                        {
+                            BM.HitFront(3, 0, myEnemy.Name, true);
+                            BM.HitFront(3, 0, myEnemy.Name, true);
+                            BM.HitFront(3, 0, myEnemy.Name, true);
+
+                        }
                         BM.HitBack(1, 0, myEnemy.Name, false);
                         pattern = true;
                     }

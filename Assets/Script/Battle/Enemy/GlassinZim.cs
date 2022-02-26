@@ -18,7 +18,7 @@ public class GlassinZim : MonoBehaviour
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         myEnemy.Name = "글래신";
         StartPattern();
-        myEnemy.Shadow = true;
+       
     }
     void Update()
     {
@@ -35,9 +35,9 @@ public class GlassinZim : MonoBehaviour
         {
             if (!myEnemy.isDie)
             {
+                myEnemy.onShadow();
                 if (z.n < 3)
                 {
-
                     int rand = Random.Range(0, 2);
                     if (rand == 0)
                     {   if(z!=null)

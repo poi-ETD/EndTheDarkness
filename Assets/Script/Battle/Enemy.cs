@@ -20,9 +20,25 @@ public class Enemy : MonoBehaviour
     public bool isDie;
     public bool noDie;
     public bool power;
+    public bool immortal;
     public string Name;
     int RecoverHp;
     public bool Shadow;
+    int EndTurnDmg;
+    public bool CanShadow()
+    {
+        bool can = false;
+        for(int i = 0; i < BM.Enemys.Length; i++)
+        {
+            if (BM.Enemys[i] == gameObject)
+                continue;
+            if (!BM.Enemys[i].GetComponent<Enemy>().isDie && !BM.Enemys[i].GetComponent<Enemy>().Shadow)
+            {
+                can = true;
+            }
+        }
+        return can;
+    }
     private void Awake()
     {
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
@@ -54,66 +70,67 @@ public class Enemy : MonoBehaviour
 
     }
     public void EnemyStartTurn()
-    {
-     
+    {     
         power = false;
-      
+        Shadow = false;
+        immortal = false;
     }
     public void EnemyEndTurn()
-    {
-      
+    {      
         Invoke("TurnStart", 0.5f);
     }
     void TurnStart()
     {
         TM.PlayerTurnStart();
     }
+    
     public void onHit(int dmg)
     {
-    
-       BM.Setting();
-       dmgStack++;
-        if (Armor > 0)
+        if (!power)
         {
-            Armor -= dmg;
-            if (Armor < 0)
+            BM.Setting();
+            dmgStack++;
+            if (Armor > 0)
             {
-                Hp += Armor;
-                Armor = 0;
-            }
-        }
-        else
-        {
-            if (!power)
-            {
-                hitStack++;
-                Hp -= dmg;
-            }
-        }
-        if (Hp <= 0)
-        {        
-            if (noDie)
-            {
-                Hp += dmg;
-                power = true;
+                Armor -= dmg;
+                if (Armor < 0)
+                {
+                    Hp += Armor;
+                    Armor = 0;
+                }
             }
             else
             {
-                isDie = true;
-                bool V = true;
-                GameObject[] e = GameObject.FindGameObjectsWithTag("Enemy");
-                for(int i = 0; i < e.Length; i++)
+                if (!power)
                 {
-                    if (!e[i].GetComponent<Enemy>().isDie)
-                    {
-                        V = false;
-                    }
+                    hitStack++;
+                    Hp -= dmg;
                 }
-                if (V) BM.Victory();
-                Hp = 0;
-                Color color = new Color(0.3f, 0.3f, 0.3f);
-                GetComponent<Image>().color = color;
-               
+            }
+            if (Hp <= 0)
+            {
+                if (immortal)
+                {
+                    Hp = 1;
+                }
+                else
+                {
+                    isDie = true;
+                    bool V = true;
+                    GameObject[] e = GameObject.FindGameObjectsWithTag("Enemy");
+                    for (int i = 0; i < e.Length; i++)
+                    {
+                        if (!e[i].GetComponent<Enemy>().isDie)
+                        {
+                            V = false;
+                        }
+                    }
+                    if (V) BM.Victory();
+                    Hp = 0;
+                    Color color = new Color(0.3f, 0.3f, 0.3f);
+                    GetComponent<Image>().color = color;
+
+                }
             }
         }
     }
@@ -128,6 +145,7 @@ public class Enemy : MonoBehaviour
     List<string> HpS = new List<string>();
     public void GetHp(int amount,string enemyname)
     {
+        
         HpS.Add(enemyname);
         HpI.Add(amount);
         string newstring = "<sprite name=" + enemyname + "><sprite name=recover>" + amount + "\n";
@@ -173,18 +191,26 @@ public class Enemy : MonoBehaviour
             HpI.Add(amount);
             newstring = "<sprite name=" + enemyname + "><sprite name=recover>" + amount + "\n";
         }
-        Debug.Log(RecoverHp);
         Board.text = newstring;
     }
     public void onShadow()
     {
         Shadow = true;
-        Board.text += "은신";
+        Board.text += "은신\n";
+    }
+    public void onEnemyHit(int dmg, string Name)
+    {
+        EndTurnDmg += dmg;
+        
+        string newstring = "<sprite name=" + Name+ "><sprite name=dmg>" + dmg + "\n";
+        Board.text += newstring;
     }
     public void HpUp()
     {
         HpI.Clear();
         HpS.Clear();
+        Hp -= EndTurnDmg;
+        EndTurnDmg = 0;
         Hp += RecoverHp;
         RecoverHp = 0;
         if (Hp >= maxHp)

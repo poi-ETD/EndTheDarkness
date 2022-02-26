@@ -13,18 +13,40 @@ public class MainManager : MonoBehaviour
     [SerializeField] GameObject warn;
     bool smallmode;
     [SerializeField] Text smallt;
-    public void GoBattleScene(int p)
+    [SerializeField] Text Ignum;
+    public void SetBattleScene(int p)
     {
         bd.battleNo = p;
         SaveBattleDataToJson();
+        SceneManager.LoadScene("Main");  
+    }
+    private void Awake()
+    {
+      
+        string path = Path.Combine(Application.persistentDataPath, "BattleData.json");
+        if (File.Exists(path))
+        {
+            string battleData = File.ReadAllText(path);
+            bd= JsonUtility.FromJson<BattleData>(battleData);
+            if(Ignum!=null)
+            Ignum.text = "이그넘 : " + bd.Ignum;
+        }
+    }
+    public void GoBattleScene()
+    {
         string path1 = Path.Combine(Application.persistentDataPath, "CardData.json");
         string path2 = Path.Combine(Application.persistentDataPath, "CharacterData.json");
-        if(File.Exists(path1)&&File.Exists(path2))
-        SceneManager.LoadScene("battle");
+        string path3 = Path.Combine(Application.persistentDataPath, "BattleData.json");
+        if (File.Exists(path1) && File.Exists(path2)&&File.Exists(path3))
+            SceneManager.LoadScene("battle");
         else
         {
             warnon();
         }
+    }
+    public void GoBattleSetScene()
+    {
+        SceneManager.LoadScene("SetBattle");
     }
     public void GoCharacterScene()
     {
@@ -78,4 +100,5 @@ public class MainManager : MonoBehaviour
 public class BattleData
 {
     public int battleNo;
+    public int Ignum;
 }

@@ -64,10 +64,12 @@ public class Character : MonoBehaviour
     public int card8point;
     public string Name;
     public int reflect;
-    int[] Status=new int[20];
+    public int[] Status=new int[20];
+    public int[] nextStatus = new int[20];
+    //0 -> 중독
     public void Acting()
     {
-     
+        Debug.Log("Aa");
         if (Status[0] > 0)
         {
             onDamage(Status[0], "중독");
@@ -75,7 +77,7 @@ public class Character : MonoBehaviour
     }
     public void StatusAbnom(int status,int count)
     {
-        Status[status] += count;
+        nextStatus[status] += count;
     }
     // Start is called before the first frame update
     private void Update()
@@ -104,17 +106,12 @@ public class Character : MonoBehaviour
         armorT.text = "Armor : " + Armor;
         actT.text = "Act : " + Act;
     }
-    private void Awake()
+    private void Start()
     {
         Act = 1;
         Hp = maxHp;
-        for(int i = 0; i < 4; i++)
-        {
-            if (BM.characters[i] == GetComponent<Character>())
-            {
-                StartNo = i;
-            }
-        }
+        BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
+        
     }
     public void onDynamicHit(int dmg,string enemyname)
     {      
@@ -144,45 +141,46 @@ public class Character : MonoBehaviour
             {
                 newstring = "<sprite name=poison>" + Status[0] + "\n";
             }
-        board.text += newstring;
-        
+        board.text += newstring;        
     }
 
     public void onHit(int dmg,string enemyname)
-    {        
-        bool isThere = false;       
-        for(int i = 0; i < DMGboards.Count; i++)
-        {         
-            if (DMGboards[i].dmg == dmg && DMGboards[i].name == enemyname)
-            {            
-                isThere = true;
-                DMGboards[i].countup();
-                break;
+    {
+        if (!isDie&&dmg>0)
+        {
+            bool isThere = false;
+            for (int i = 0; i < DMGboards.Count; i++)
+            {
+                if (DMGboards[i].dmg == dmg && DMGboards[i].name == enemyname)
+                {
+                    isThere = true;
+                    DMGboards[i].countup();
+                    break;
+                }
             }
-        }
-        if (!isThere)
-        {
-            DMGboard newBoard=new DMGboard();
-            newBoard.setDmg(dmg);
-            newBoard.setName(enemyname);
-            DMGboards.Add(newBoard);          
-        }
-        board.text = "";
-        for(int i = 0; i < DMGboards.Count; i++)
-        {
-            string newstring = "<sprite name=" + DMGboards[i].name + "><sprite name=dmg>" + DMGboards[i].dmg;
-            if (DMGboards[i].count > 0) newstring += " x" + (DMGboards[i].count+1);
-            newstring += "\n";
-            board.text += newstring;
-        }
-       
+            if (!isThere)
+            {
+                DMGboard newBoard = new DMGboard();
+                newBoard.setDmg(dmg);
+                newBoard.setName(enemyname);
+                DMGboards.Add(newBoard);
+            }
+            board.text = "";
+            for (int i = 0; i < DMGboards.Count; i++)
+            {
+                string newstring = "<sprite name=" + DMGboards[i].name + "><sprite name=dmg>" + DMGboards[i].dmg;
+                if (DMGboards[i].count > 0) newstring += " x" + (DMGboards[i].count + 1);
+                newstring += "\n";
+                board.text += newstring;
+            }
+
             string astring = "";
             if (Status[0] != 0)
             {
-              astring = "<sprite name=poison>"+ Status[0]+"\n";
+                astring = "<sprite name=poison>" + Status[0] + "\n";
             }
             board.text += astring;
-        
+        }
     }
     public void onDamage(int dmg,string enemyname)
     {

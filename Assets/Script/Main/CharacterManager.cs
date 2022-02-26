@@ -11,7 +11,9 @@ public class CharacterManager : MonoBehaviour
     public GameObject[] checkBox;
     public Sprite onCheck;
     float timer;
-    public Sprite offCheck; 
+    public Sprite offCheck;
+    public Text[] sText;
+  
     public void ToMain()
     {
 
@@ -33,6 +35,15 @@ public class CharacterManager : MonoBehaviour
             if(CD.passive[i])
             checkBox[i].GetComponent<Image>().sprite = onCheck;
                
+            }
+            for(int i = 0; i < sText.Length; i++)
+            {
+                
+                sText[i].text = "선택 안됨";
+                if (CD.FrontSelectedCharacter[i])
+                    sText[i].text = "전방";
+                else if (CD.BackSelectedCharacter[i])
+                    sText[i].text = "후방";
             }
         }
      
@@ -87,9 +98,48 @@ public class CharacterManager : MonoBehaviour
         }
 
     }
+    public void SetCharacter(int i) //0->선택x 1->전방 2->후방
+    {
+        if (!CD.FrontSelectedCharacter[i]&&!CD.BackSelectedCharacter[i])
+        {
+            if (CD.SumCharacter > 4)
+            {
+                onMuch();
+            }
+            else
+            {
+             
+                sText[i].text = "전방";
+                CD.FrontSelectedCharacter[i] = true;
+                CD.SumCharacter++;
+            }
+        }
+        else if (CD.FrontSelectedCharacter[i])
+        {
+           
+            sText[i].text = "후방";
+            CD.FrontSelectedCharacter[i] = false;
+            CD.BackSelectedCharacter[i] = true;
+
+        }
+        else 
+        {
+           
+            sText[i].text = "선택안됨";
+            CD.FrontSelectedCharacter[i] = false;
+            CD.BackSelectedCharacter[i] = false;
+            CD.SumCharacter--;
+        }
+    }
 }
 public class CharacterData
 {
     public bool[] passive=new bool[30];
+    public string[] passiveName = {"백옥의 왕","군단","흑백","절망","지치지 않는 폭주","독단적인 팀플레이",
+        "부서진 족쇄","몰아치기","굳건한 위치","선봉의 호령","무장","독불장군","창조의 잠재력","미라클 드로우",
+        "스타키티시모","평균율"};
     public int[] passiveCount=new int[10];
+    public bool[] FrontSelectedCharacter=new bool[10];
+    public bool[] BackSelectedCharacter=new bool[10];
+    public int SumCharacter;
 }

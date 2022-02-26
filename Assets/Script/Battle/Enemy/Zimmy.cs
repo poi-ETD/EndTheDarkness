@@ -51,7 +51,7 @@ public class Zimmy : MonoBehaviour
                         {
                             BM.HitFront(1, 0, myEnemy.Name, false);
                         }
-                        for (int i = 0; i < 2 + n; i++)
+                        for (int i = 0; i <  n; i++)
                         {
                             BM.HitBack(1, 0, myEnemy.Name, false);
                         }
@@ -80,7 +80,7 @@ public class Zimmy : MonoBehaviour
                             {
                                 BM.HitFront(1, 0, myEnemy.Name, false);
                             }
-                            for (int i = 0; i < 2 +  n; i++)
+                            for (int i = 0; i <  n; i++)
                             {
                                 BM.HitBack(1, 0, myEnemy.Name, false);
                             }

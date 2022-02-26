@@ -7,8 +7,8 @@ using System.IO;
 using UnityEngine.SceneManagement;
 public class BattleManager : MonoBehaviour
 {
-    public Character[] characters;
-    public Character[] Scharacters;
+    [SerializeField] GameObject[] CharacterPrefebs;
+    public List<Character> characters=new List<Character>();
     public bool CharacterSelectMode;
     public bool EnemySelectMode;
     public Character character;
@@ -74,6 +74,7 @@ public class BattleManager : MonoBehaviour
     [SerializeField] Text[] FormationCollapseButtonText;
     [SerializeField] GameObject[] CharacterObj;
     bool MoveToForward;
+    
     public void FormationCollapse(string ename)
     {
         otherCanvasOn = true;
@@ -177,22 +178,40 @@ public class BattleManager : MonoBehaviour
     }
     private void Awake()
     {
-        Scharacters = characters;
+        
         string path = Path.Combine(Application.persistentDataPath, "battleData.json");
-       string battleData = File.ReadAllText(path);
+        string battleData = File.ReadAllText(path);
         bd = JsonUtility.FromJson<BattleData>(battleData);
         path = Path.Combine(Application.persistentDataPath, "CharacterData.json");
         string characterData= File.ReadAllText(path);
         CD = JsonUtility.FromJson<CharacterData>(characterData);
-        for(int i = 0; i < CD.passive.Length; i++)
+       /* for(int i = 0; i < CD.passive.Length; i++)
         {
             if (CD.passive[i])
             {
                 
                 passiveCharacters[i / 4].passive[i % 4] = true;
             }
+        }*/
+        line = 0;
+        for(int i = 0; i < CD.FrontSelectedCharacter.Length; i++)
+        {
+            if (CD.FrontSelectedCharacter[i])
+            { 
+                line++;
+                GameObject CharacterC=Instantiate(CharacterPrefebs[i], new Vector2(-800 / 45f, (400 - 250 * characters.Count) / 45f),transform.rotation,GameObject.Find("CharacterCanvas").transform);
+                characters.Add(CharacterC.GetComponent<Character>()); 
+            }
         }
-       if (bd.battleNo == 3||bd.battleNo==6) //폴리만 예외
+        for (int i = 0; i < CD.BackSelectedCharacter.Length; i++)
+        {
+            if (CD.BackSelectedCharacter[i])
+            {                
+                GameObject CharacterC = Instantiate(CharacterPrefebs[i], new Vector2(-800 / 45f, (400 - 250 * characters.Count) / 45f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
+                characters.Add(CharacterC.GetComponent<Character>());
+            }
+        }
+        if (bd.battleNo == 3||bd.battleNo==6) //폴리만 예외
         { 
             GameObject EnemySummon = Instantiate(Enemys[bd.battleNo], new Vector2(0, 6), transform.rotation, GameObject.Find("CharacterCanvas").transform);
         }
@@ -213,7 +232,9 @@ public class BattleManager : MonoBehaviour
         {
             back.Add(characters[i]);
         }
+        LineObject.transform.position = new Vector2(-16.66f, (11.66f - 5.55f * line));
     }
+
     GameObject c20;
     private void Update()
     {
@@ -719,6 +740,7 @@ public class BattleManager : MonoBehaviour
         CardUseText.text = "취소";
     }
     //type==0 랜덤 대상 type==1 방어도 높은 적 우선 type==2 체력 높은 적 우선 type==3 방어도 있는 적 우선
+    //type==4 모든 대상
     //ActM =>true 일 시 행동력 감소 포함
     public void HitFront(int dmg,int type,string Ename,bool ActM)
     {
@@ -809,6 +831,17 @@ public class BattleManager : MonoBehaviour
                 }
                 }
             }
+            if (type == 4)
+            {
+                for(int i = 0; i < line; i++)
+                {
+                    characters[i].onHit(dmg, Ename);
+                    if (ActM)
+                    {
+                        characters[i].NextTurnMinusAct++;
+                    }
+                }
+            }
         }
     }
     public void HitAll(int dmg,int type,string Ename,bool ActM)
@@ -892,6 +925,17 @@ public class BattleManager : MonoBehaviour
                 }
             }
         }
+        if (type == 4)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                characters[i].onHit(dmg, Ename);
+                if (ActM)
+                {
+                    characters[i].NextTurnMinusAct++;
+                }
+            }
+        }
     }
     public void HitBack(int dmg,int type,string Ename,bool ActM)
     {
@@ -971,6 +1015,17 @@ public class BattleManager : MonoBehaviour
                 if (ActM)
                 {
                     HaveArmor[rand2].NextTurnMinusAct++;
+                }
+            }
+        }
+        if (type == 4)
+        {
+            for (int i = line; i < 4; i++)
+            {
+                characters[i].onHit(dmg, Ename);
+                if (ActM)
+                {
+                    characters[i].NextTurnMinusAct++;
                 }
             }
         }
