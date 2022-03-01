@@ -49,7 +49,7 @@ public class Card14 : MonoBehaviour
         {
             isNotCancle = false;
             BM.log.logContent.text += "\n" + BM.character.Name + "이(가) " + myCard.Name.text + "발동!";
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < BM.characters.Count; i++)
             {
                 if (BM.characters[i].characterNo == 1)
                 {

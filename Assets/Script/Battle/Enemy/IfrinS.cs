@@ -46,7 +46,7 @@ public class IfrinS : MonoBehaviour
         {
             if (myEnemy.Hp > 10)
             {
-                if (BM.diecount < 4)
+                if (BM.diecount < BM.characters.Count)
                 {
                     myEnemy.immortal = true;
                     if ((curTurn + 1) % 4 != 0)
@@ -84,9 +84,9 @@ public class IfrinS : MonoBehaviour
                             }
                             else
                             {
-                                int rand2 = Random.Range(0, 4);
+                                int rand2 = Random.Range(0, BM.characters.Count);
                                 while (BM.characters[rand2].isDie)
-                                    rand2 = Random.Range(0, 4);
+                                    rand2 = Random.Range(0, BM.characters.Count);
                                 BM.characters[rand2].StatusAbnom(0, 2);
                             }
                         }

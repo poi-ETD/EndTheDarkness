@@ -38,6 +38,7 @@ public class Gimmy : MonoBehaviour
         }
         else
         {
+            myEnemy.Hp = 200;
             myEnemy.power = true;
         }
         if (myEnemy.Hp<100)
@@ -54,137 +55,83 @@ public class Gimmy : MonoBehaviour
     void StartPattern()
     {
         myEnemy.Board.text = "";
-        if (BM.diecount < 4)
+        if (BM.diecount < BM.characters.Count)
         {
             if (myEnemy.power)
             {
-                if (BM.forward.Count > 0)
+                for (int i = 0; i < TM.t; i++)
                 {
-
-                    for (int i = 0; i < TM.t; i++)
-                    {
-                        int rand = Random.Range(0, BM.forward.Count);
-                        while (BM.characters[rand].isDie)
-                            rand = Random.Range(0, ForwardHaveArmor.Count);
-                        BM.characters[rand].onHit(1, myEnemy.Name);
-                    }
-                }
-                else
-                {
-
-                    for (int i = 0; i < TM.t; i++)
-                    {
-                        int rand = Random.Range(0, 4);
-                        while (BM.characters[rand].isDie)
-                            rand = Random.Range(0, 4);
-                        BM.characters[rand].onHit(1, myEnemy.Name);
-                    }
-
+                    BM.HitFront(1, 0, myEnemy.Name, false);
                 }
             }
             else
             {
-             
+
                 if (!phaseStart)
                 {
                     PhaseTurn = TM.t;
                     phaseStart = true;
                     myEnemy.GetArmor(100 - TM.t, myEnemy.Name);
-                    for(int i = 0; i < 4; i++)
+                    for (int i = 0; i < BM.characters.Count; i++)
                     {
-                       if(!BM.characters[i].isDie)
+                        if (!BM.characters[i].isDie)
                         {
                             BM.characters[i].NextTurnMinusAct++;
                         }
                     }
                 }
-                    if (onecounter == 4)
+                if (onecounter == 4)
+                {
+                    done[0] = false;
+                    done[1] = false;
+                    done[2] = false;
+                    onecounter = 0;
+
+                    for (int i = 0; i < BM.characters.Count; i++)
                     {
-                        done[0] = false;
-                        done[1] = false;
-                        done[2] = false;
-                        onecounter = 0;
-                      
-                            for (int i = 0; i < 4; i++)
-                            {
-                               if(!BM.characters[i].isDie)
-                                BM.characters[i].onHit(PhaseTurn/2, myEnemy.Name);
-                            }
-                      
+                        if (!BM.characters[i].isDie)
+                            BM.characters[i].onHit(PhaseTurn / 2, myEnemy.Name);
+                    }
+
+                }
+                else
+                {
+                    for (int i = 0; i < 3; i++)
+                    {
+                        if (!done[i])
+                        {
+                            break;
+                        }
+                        if (i == 2)
+                        {
+                            done[0] = false;
+                            done[2] = false;
+                            done[1] = false;
+                        }
+                    }//done 3개 다 true라면 초기화
+                    int rand = Random.Range(0, 3);
+                    while (done[rand])
+                    {
+                        rand = Random.Range(0, 3);
+                    }
+                    done[rand] = true;
+                    if (rand == 2)
+                    {
+                        for (int i = 0; i < 4; i++)
+                        {
+                            BM.HitFront(2, 0, myEnemy.Name, false);
+                        }
                     }
                     else
                     {
-                        for (int i = 0; i < 3; i++)
-                        {
-                            if (!done[i])
-                            {
-                                break;
-                            }
-                            if (i == 2)
-                            {
-                                done[0] = false;
-                                done[2] = false;
-                                done[1] = false;
-                            }
-                        }//done 3개 다 true라면 초기화
-                        int rand = Random.Range(0, 3);
-                        while (done[rand])
-                        {
-                            rand = Random.Range(0, 3);
-                        }
-                        done[rand] = true;
-                        if (rand == 2)
-                        {
-                        if (BM.forward.Count > 0)
-                        {
-                            for (int i = 0; i <4; i++)
-                            {
-                                int rand2 = Random.Range(0, BM.forward.Count);
-                                while (BM.characters[rand2].isDie)
-                                    rand2 = Random.Range(0, ForwardHaveArmor.Count);
-                                BM.characters[rand2].onHit(2, myEnemy.Name);
-                            }
+                        for (int i = 0; i < 2; i++)
+                            BM.HitFront(3, 0, myEnemy.Name, false);
 
-                        }
-                        else
-                        {
-                            for (int i = 0; i <4; i++)
-                            {
-                                int rand2 = Random.Range(0, 4);
-                                while (BM.characters[rand2].isDie)
-                                    rand2 = Random.Range(0, 4);
-                                BM.characters[rand2].onHit(2, myEnemy.Name);
-                            }
-
-                        }
                     }
-                        else
-                        {
-                        if (BM.forward.Count > 0)
-                        {
-                            for (int i = 0; i < 2; i++)
-                            {
-                                int rand2 = Random.Range(0, BM.forward.Count);
-                                while (BM.characters[rand2].isDie)
-                                    rand2 = Random.Range(0, ForwardHaveArmor.Count);
-                                BM.characters[rand2].onHit(3, myEnemy.Name);
+                    onecounter++;
 
-                            }
-                        }
-                        else
-                        {
-                            for (int i = 0; i < 2; i++)
-                            {
-                                int rand2 = Random.Range(0, 4);
-                                while (BM.characters[rand2].isDie)
-                                    rand2 = Random.Range(0, 4);
-                                BM.characters[rand2].onHit(3, myEnemy.Name);
-                            }
-
-                        }
-                            onecounter++;
-                        }
-                    }
+                }
+            
                 }
             
         myEnemy.EnemyEndTurn();

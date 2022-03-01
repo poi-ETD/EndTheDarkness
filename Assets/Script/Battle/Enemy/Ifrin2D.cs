@@ -40,7 +40,7 @@ public class Ifrin2D : MonoBehaviour
     {
         if (!myEnemy.isDie)
         {
-            if (BM.diecount < 4)
+            if (BM.diecount < BM.characters.Count)
             {
                 if (posionCount < 5)
                 {
@@ -60,7 +60,7 @@ public class Ifrin2D : MonoBehaviour
                         else
                         {
                             posionCount++;
-                            for (int i = 0; i < 4; i++)
+                            for (int i = 0; i < BM.characters.Count; i++)
                             {
                                 if (!BM.characters[i].isDie)
                                 {                           
@@ -69,7 +69,7 @@ public class Ifrin2D : MonoBehaviour
                             }
                         }
                         posionCount+=2;
-                        for (int i = 0; i < 4; i++)
+                        for (int i = 0; i < BM.characters.Count; i++)
                         {
                             if (!BM.characters[i].isDie)
                             {                           
@@ -82,7 +82,7 @@ public class Ifrin2D : MonoBehaviour
                         BM.HitFront(5, 0, myEnemy.Name, false);
                         BM.HitFront(5, 0, myEnemy.Name, false);
                         posionCount++;
-                        for (int i = 0; i < 4; i++)
+                        for (int i = 0; i < BM.characters.Count; i++)
                         {
                             if (!BM.characters[i].isDie)
                             {
@@ -93,7 +93,7 @@ public class Ifrin2D : MonoBehaviour
                 }
                 else
                 {
-                    for(int i = 0; i < 4; i++)
+                    for(int i = 0; i < BM.characters.Count; i++)
                     {
                         if (!BM.characters[i].isDie)
                         {

@@ -39,7 +39,7 @@ public class TurnManager : MonoBehaviour
         if (!BM.SelectMode&&!BM.EnemySelectMode)
         {
             leftCost = BM.cost;
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < BM.characters.Count; i++)
             {
                 BM.characters[i].board.text = "";
                 if (!BM.characters[i].isDie && BM.characters[i].card8)
@@ -65,7 +65,7 @@ public class TurnManager : MonoBehaviour
             EndButton.SetActive(false);
             BM.CharacterSelectMode = false;
             BM.EnemySelectMode = false;
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < BM.characters.Count; i++)
             {
                 if (!BM.characters[i].isDie)
                 {
@@ -113,13 +113,17 @@ public class TurnManager : MonoBehaviour
         PlayerTurn =true;
         BM.CharacterSelectMode = true;
         EndButton.SetActive(true);
-        for(int i = 0; i < 4; i++)
+        for(int i = 0; i < BM.characters.Count; i++)
         {
             if (!BM.characters[i].isDie)
             {
                 BM.characters[i].Act = 1 - BM.characters[i].NextTurnMinusAct;
+                if (BM.BlessBM[4]) BM.characters[i].Act++;
+                if (BM.BlessBM[4] && t == 1) BM.characters[i].Act = 0;
                 if (BM.characters[i].Act < 0) BM.characters[i].Act = 0;
                 BM.characters[i].NextTurnMinusAct = 0;
+                Debug.Log(BM.characters[i].Atk);
+                Debug.Log(BM.characters[i].turnAtk);
                 BM.characters[i].turnAtk = BM.characters[i].Atk+turnAtk;             
                 BM.characters[i].Armor += BM.characters[i].nextarmor;
                 if (BM.characters[i].Armor < 0) BM.characters[i].Armor = 0;

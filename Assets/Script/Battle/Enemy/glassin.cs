@@ -67,7 +67,7 @@ public class glassin : MonoBehaviour
     {
         if (!myEnemy.isDie)
         {
-            if (BM.diecount < 4)
+            if (BM.diecount < BM.characters.Count)
             {
                 if (!Ifrin.isDie)
                 {
@@ -100,22 +100,22 @@ public class glassin : MonoBehaviour
                             randCount[1] = true;
                             if (BM.diecount >= 1)
                             {
-                                int rand2 = Random.Range(0, 4);
+                                int rand2 = Random.Range(0, BM.characters.Count);
                                 while (BM.characters[rand2].isDie)
                                 {
-                                    rand2 = Random.Range(0, 4);
+                                    rand2 = Random.Range(0, BM.characters.Count);
                                 }
                                 BM.characters[rand2].NextTurnMinusAct++;
                             }
                             else
                             {
-                                int rand2 = Random.Range(0, 4);
+                                int rand2 = Random.Range(0, BM.characters.Count);
                                 while (BM.characters[rand2].isDie)
                                 {
-                                    rand2 = Random.Range(0, 4);
+                                    rand2 = Random.Range(0, BM.characters.Count);
                                 }
-                                int rand3 = Random.Range(0, 4);
-                                while (BM.characters[rand3].isDie || rand2 == rand3) rand3 = Random.Range(0, 4);
+                                int rand3 = Random.Range(0, BM.characters.Count);
+                                while (BM.characters[rand3].isDie || rand2 == rand3) rand3 = Random.Range(0, BM.characters.Count);
                                 BM.characters[rand2].NextTurnMinusAct++;
                                 BM.characters[rand3].NextTurnMinusAct++;
                             }
@@ -133,9 +133,9 @@ public class glassin : MonoBehaviour
                             }
                             else
                             {
-                                int rand2 = Random.Range(0, 4);
+                                int rand2 = Random.Range(0, BM.characters.Count);
                                 while (BM.characters[rand2].isDie)
-                                    rand2 = Random.Range(0, 4);
+                                    rand2 = Random.Range(0, BM.characters.Count);
                                 BM.characters[rand2].onHit(5, myEnemy.Name);
                             }
                         }
@@ -160,7 +160,7 @@ public class glassin : MonoBehaviour
                 }
                 else
                 {
-                    for (int i = 0; i < 4; i++)
+                    for (int i = 0; i < BM.characters.Count; i++)
                     {
                         if (!BM.characters[i].isDie)
                         {

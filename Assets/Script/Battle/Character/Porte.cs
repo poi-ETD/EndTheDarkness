@@ -23,9 +23,11 @@ public class Porte : MonoBehaviour
     {
         if (CM.FiledCardCount > 3)
         {
-
-            BM.TurnCardCount+=2;
-            BM.log.logContent.text += "\n창조의 잠재력!다음 턴 드로우를 2장 더 합니다.";
+            for (int i = 0; i < myCharacter.passive[0]; i++)
+            {
+                BM.TurnCardCount += 2;
+                BM.log.logContent.text += "\n창조의 잠재력!다음 턴 드로우를 2장 더 합니다.";
+            }
         }
     }
     public void passive2()
@@ -36,31 +38,38 @@ public class Porte : MonoBehaviour
             if (!Passive2)
             {
                 Passive2 = true;
-                BM.cost++;
-                myCharacter.Act++;
-                BM.log.logContent.text += "\n미라클 드로우!포르테의 행동력,코스트가 증가합니다";
+                for (int i = 0; i < myCharacter.passive[1];i++) {
+                    BM.cost++;
+                    myCharacter.Act++;
+                    BM.log.logContent.text += "\n미라클 드로우!포르테의 행동력,코스트가 증가합니다"; }
             }
         }
     }
     public void passive3()
     {
+        BM.porte3count = myCharacter.passive[2];
         BM.porte3();
     }
     public void passive4()
     {
-        if (CM.Deck.Count > CM.Grave.Count)
+        for (int j = 0; j < myCharacter.passive[3]; j++)
         {
-            CM.DeckToGrave(CM.Deck[Random.Range(0, CM.Deck.Count)]);
-        }
-       else if (CM.Deck.Count < CM.Grave.Count) {
-            CM.GraveToDeck(CM.Grave[Random.Range(0, CM.Grave.Count)]);
+            if (CM.Deck.Count > CM.Grave.Count)
+            {
+
+                CM.DeckToGrave(CM.Deck[Random.Range(0, CM.Deck.Count)]);
+            }
+            else if (CM.Deck.Count < CM.Grave.Count)
+            {
+                CM.GraveToDeck(CM.Grave[Random.Range(0, CM.Grave.Count)]);
+            }
         }
     }
     void Update()
     {
         if (!myCharacter.isDie)
         {
-            if(myCharacter.passive[1])
+            if(myCharacter.passive[1]>0)
             passive2();
             if (myCharacter.isSet)
             {
@@ -69,18 +78,18 @@ public class Porte : MonoBehaviour
             }
             if (myCharacter.isTurnEnd)
             {
-                if (myCharacter.passive[0])
+                if (myCharacter.passive[0]>0)
                     passive1();
                 myCharacter.isTurnEnd = false;
             }
             if (myCharacter.isTurnStart)
             {
-                if (myCharacter.passive[2])
+                if (myCharacter.passive[2]>0)
                 {
                    
                     passive3();
                 }
-                if (myCharacter.passive[3])
+                if (myCharacter.passive[3]>0)
                 {
                     passive4();
                 }

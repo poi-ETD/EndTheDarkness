@@ -38,192 +38,43 @@ public class Poly : MonoBehaviour
     void StartPattern()
     {
     
-        if (BM.diecount < 4)
+        if (BM.diecount < BM.characters.Count)
         {
             if (myEnemy.Hp > 150)
             {
                 myEnemy.immortal = true;
                 phase1++;
-                HaveArmor.Clear();
-                ForwardHaveArmor.Clear();
-                for (int i = 0; i < 4; i++)
-                {
-                    if (BM.characters[i].Armor > 0)
-                    {
-                        HaveArmor.Add(BM.characters[i]);
-                    }
-                }
-                for (int i = 0; i < BM.forward.Count; i++)
-                {
-                    if (BM.forward[i].Armor > 0)
-                    {
-                        ForwardHaveArmor.Add(BM.characters[i]);
-                    }
-                }
                 if (phase1 % 2 == 1)
                 {
-                   
-                    if (BM.forward.Count > 0)
-                    {
-                        if (ForwardHaveArmor.Count > 0)
-                        {
-                            for (int i = 0; i < 2; i++)
-                            {
-                                
-                                int rand = Random.Range(0, ForwardHaveArmor.Count);
-                                while (ForwardHaveArmor[rand].isDie)
-                                    rand = Random.Range(0, ForwardHaveArmor.Count);
-                                ForwardHaveArmor[rand].onHit(8, myEnemy.Name);
-                            }
-                        }
-                        else
-                        {
-                            for (int i = 0; i < 2; i++)
-                            {
-                                int rand = Random.Range(0, BM.forward.Count);
-                                while (BM.characters[rand].isDie)
-                                    rand = Random.Range(0, ForwardHaveArmor.Count);
-                                BM.characters[rand].onHit(8, myEnemy.Name);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (HaveArmor.Count > 0)
-                        {
-                            for (int i = 0; i < 2; i++)
-                            {
-                                int rand = Random.Range(0, HaveArmor.Count);
-                                while (HaveArmor[rand].isDie)
-                                    rand = Random.Range(0, HaveArmor.Count);
-                               HaveArmor[rand].onHit(8, myEnemy.Name);
-                            }
-                        }
-                        else
-                        {
-                            for (int i = 0; i < 2; i++)
-                            {
-                                int rand = Random.Range(0, 4);
-                                while (BM.characters[rand].isDie)
-                                    rand = Random.Range(0, 4);
-                                BM.characters[rand].onHit(8, myEnemy.Name);
-                            }
-                        }
-                    }
+                    BM.HitFront(8, 1, myEnemy.Name, false);
+                    BM.HitFront(8, 1, myEnemy.Name, false);
                 }
                 else if (phase1 % 2 == 0)
                 {
                     myEnemy.GetArmor(5, myEnemy.Name);
-                    if (BM.forward.Count > 0)
-                    {
-                        if (ForwardHaveArmor.Count > 0)
-                        {
-
-                            int rand = Random.Range(0, ForwardHaveArmor.Count);
-                            while (ForwardHaveArmor[rand].isDie)
-                                rand = Random.Range(0, ForwardHaveArmor.Count);
-                          ForwardHaveArmor[rand].onHit(3, myEnemy.Name);
-
-                        }
-                        else
-                        {
-
-                            int rand = Random.Range(0, BM.forward.Count);
-                            while (BM.characters[rand].isDie)
-                                rand = Random.Range(0, BM.forward.Count);
-                            BM.characters[rand].onHit(3, myEnemy.Name);
-
-                        }
-                    }
-                    else
-                    {
-                        if (HaveArmor.Count > 0)
-                        {
-
-                            int rand = Random.Range(0, HaveArmor.Count);
-                            while (HaveArmor[rand].isDie)
-                                rand = Random.Range(0, HaveArmor.Count);
-                           HaveArmor[rand].onHit(3, myEnemy.Name);
-
-                        }
-                        else
-                        {
-
-                            int rand = Random.Range(0, 4);
-                            while (BM.characters[rand].isDie)
-                                rand = Random.Range(0, 4);
-                            BM.characters[rand].onHit(3, myEnemy.Name);
-
-                        }
-                    }
+                    BM.HitFront(3, 1, myEnemy.Name, false);
                 }
-              
             }
-            else if (myEnemy.Hp <= 150&&myEnemy.Hp>50)
+            else if (myEnemy.Hp <= 150 && myEnemy.Hp > 50)
             {
                 myEnemy.immortal = true;
-              
+
                 phase2++;
                 if (phase2 == 1)
                 {
-                  
-                        for(int i = 0; i < 4; i++)
-                        {                         
-                            BM.characters[i].NextTurnMinusAct+=5;
-                        }
-                    
+
+                    for (int i = 0; i < BM.characters.Count; i++)
+                    {
+                        BM.characters[i].NextTurnMinusAct += 5;
+                    }
+
                     myEnemy.GetArmor(30, myEnemy.Name);
                 }
                 else if (phase2 % 2 == 0)
-
                 {
-          
-                    if (BM.forward.Count > 0)
-                    {
-                        if (ForwardHaveArmor.Count > 0)
-                        {
 
-                            int rand = Random.Range(0, ForwardHaveArmor.Count);
-                            while (ForwardHaveArmor[rand].isDie)
-                                rand = Random.Range(0, ForwardHaveArmor.Count);
-                          ForwardHaveArmor[rand].onHit(10, myEnemy.Name);
-                         ForwardHaveArmor[rand].NextTurnMinusAct = 1;
+                    BM.HitFront(10, 1, myEnemy.Name, true);
 
-                        }
-                        else
-                        {
-
-                            int rand = Random.Range(0, BM.forward.Count);
-                            while (BM.characters[rand].isDie)
-                                rand = Random.Range(0, BM.forward.Count);
-                            BM.characters[rand].onHit(10, myEnemy.Name);
-                            BM.characters[rand].NextTurnMinusAct = 1;
-
-                        }
-                    }
-                    else
-                    {
-                        if (HaveArmor.Count > 0)
-                        {
-
-                            int rand = Random.Range(0, HaveArmor.Count);
-                            while (HaveArmor[rand].isDie)
-                                rand = Random.Range(0, HaveArmor.Count);
-                            HaveArmor[rand].onHit(10, myEnemy.Name);
-                            HaveArmor[rand].NextTurnMinusAct = 1;
-
-                        }
-                        else
-                        {
-
-                            int rand = Random.Range(0, 4);
-                            while (BM.characters[rand].isDie)
-                                rand = Random.Range(0, 4);
-                            BM.characters[rand].onHit(10, myEnemy.Name);
-                            BM.characters[rand].NextTurnMinusAct = 1;
-
-                        }
-                    }
                 }
                 else if (phase2 % 2 == 1)
                 {
@@ -232,13 +83,13 @@ public class Poly : MonoBehaviour
             }
             else if (myEnemy.Hp <= 50)
             {
-                
+
                 myEnemy.noDie = false;
                 phase3++;
-              
+
                 if (phase3 == 1)
                 {
-                    for (int i = 0; i < 4; i++)
+                    for (int i = 0; i < BM.characters.Count; i++)
                     {
 
                         BM.characters[i].NextTurnMinusAct++;
@@ -251,10 +102,10 @@ public class Poly : MonoBehaviour
                     count--;
                     t.text = "" + count;
                 }
-                else if(phase3==7)
+                else if (phase3 == 7)
                 {
                     t.text = "";
-                    for(int i = 0; i < 4; i++)
+                    for (int i = 0; i < BM.characters.Count; i++)
                     {
                         if (!BM.characters[i].isDie)
                         {
@@ -263,54 +114,9 @@ public class Poly : MonoBehaviour
                     }
                 }
                 else
-
                 {
-
-                    if (BM.forward.Count > 0)
-                    {
-                        if (ForwardHaveArmor.Count > 0)
-                        {
-
-                            int rand = Random.Range(0, ForwardHaveArmor.Count);
-                            while (ForwardHaveArmor[rand].isDie)
-                                rand = Random.Range(0, ForwardHaveArmor.Count);
-                            ForwardHaveArmor[rand].onHit(13, myEnemy.Name);
-                            myEnemy.GetArmor(10, myEnemy.Name);
-
-                        }
-                        else
-                        {
-
-                            int rand = Random.Range(0, BM.forward.Count);
-                            while (BM.characters[rand].isDie)
-                                rand = Random.Range(0, BM.forward.Count);
-                            BM.characters[rand].onHit(13,myEnemy.Name);
-                            myEnemy.GetArmor(10, myEnemy.Name);
-
-                        }
-                    }
-                    else
-                    {
-                        if (HaveArmor.Count > 0)
-                        {
-
-                            int rand = Random.Range(0, HaveArmor.Count);
-                            while (HaveArmor[rand].isDie)
-                                rand = Random.Range(0, HaveArmor.Count);
-                            HaveArmor[rand].onHit(13,myEnemy.Name);
-                            myEnemy.GetArmor(10, myEnemy.Name);
-
-                        }
-                        else
-                        {
-
-                            int rand = Random.Range(0, 4);
-                            while (BM.characters[rand].isDie)
-                                rand = Random.Range(0, 4);
-                            BM.characters[rand].onHit(13,myEnemy.Name);
-                            myEnemy.GetArmor(10, myEnemy.Name);
-                        }
-                    }
+                    myEnemy.GetArmor(10, myEnemy.Name);
+                    BM.HitFront(13, 1, myEnemy.Name, false);
                 }
             }
             myEnemy.EnemyEndTurn();

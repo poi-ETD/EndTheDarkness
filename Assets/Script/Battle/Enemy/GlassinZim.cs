@@ -31,7 +31,7 @@ public class GlassinZim : MonoBehaviour
     void StartPattern()
     {
 
-        if (BM.diecount < 4)
+        if (BM.diecount < BM.characters.Count)
         {
             if (!myEnemy.isDie)
             {
@@ -42,10 +42,10 @@ public class GlassinZim : MonoBehaviour
                     if (rand == 0)
                     {   if(z!=null)
                         z.myEnemy.GetArmor(10, myEnemy.Name);
-                        int rand2 = Random.Range(0, 4);
+                        int rand2 = Random.Range(0, BM.characters.Count);
                         while (BM.characters[rand2].isDie)
                         {
-                            rand2 = Random.Range(0, 4);
+                            rand2 = Random.Range(0, BM.characters.Count);
                         }
                         BM.characters[rand2].NextTurnMinusAct++;
                     }
@@ -63,10 +63,10 @@ public class GlassinZim : MonoBehaviour
                     {
                         z.atk = 1;
                         z.n++;
-                        int rand2 = Random.Range(0, 4);
+                        int rand2 = Random.Range(0, BM.characters.Count);
                         while (BM.characters[rand2].isDie)
                         {
-                            rand2 = Random.Range(0, 4);
+                            rand2 = Random.Range(0, BM.characters.Count);
                         }
                         BM.characters[rand2].NextTurnMinusAct++;
                     }

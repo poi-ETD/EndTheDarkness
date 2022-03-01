@@ -19,11 +19,12 @@ public class Character : MonoBehaviour
     public TextMeshProUGUI armorT;
     public TextMeshProUGUI actT;
     public TextMeshProUGUI board;
-    public bool[] passive;
+    public int[] passive;
     public List<DMGboard> DMGboards=new List<DMGboard>();
     public string enemyName;
     public int StartNo;
     public int AttackCount;
+    public bool[] bless = new bool[20];
     public struct ArmorBreak
     {
         public int dmg;
@@ -69,7 +70,6 @@ public class Character : MonoBehaviour
     //0 -> 중독
     public void Acting()
     {
-        Debug.Log("Aa");
         if (Status[0] > 0)
         {
             onDamage(Status[0], "중독");
@@ -81,7 +81,15 @@ public class Character : MonoBehaviour
     }
     // Start is called before the first frame update
     private void Update()
-    {       
+    {
+        if (bless[2])
+        {
+            Armor = 0;
+        }
+        if (bless[6])
+        {
+            turnAtk = 1;
+        }
         if (Input.GetMouseButtonDown(0))
         {
             Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -109,9 +117,10 @@ public class Character : MonoBehaviour
     private void Start()
     {
         Act = 1;
-        Hp = maxHp;
+      
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
-        
+        if (Hp <= 0) die();
+        if (Hp > maxHp) Hp = maxHp;
     }
     public void onDynamicHit(int dmg,string enemyname)
     {      
@@ -223,7 +232,22 @@ public class Character : MonoBehaviour
         else
         {
             hitStack++;
-            
+            if (BM.BlessBM[7])
+            {
+                
+                bool isF=false;
+                for(int i = 0; i < BM.forward.Count; i++)
+                {
+                    if (BM.forward[i] == this) isF = true;
+                }
+                if (isF)
+                {
+                    for(int i = 0; i < BM.Enemys.Length; i++)
+                    {
+                        if (!BM.Enemys[i].GetComponent<Enemy>().isDie) BM.Enemys[i].GetComponent<Enemy>().onHit(dmg);
+                    }
+                }
+            }
             Hp -= dmg;
         }
         if (Hp <= 0)
@@ -246,17 +270,17 @@ public class Character : MonoBehaviour
         board.text = "";
         Armor = 0;
         BM.diecount++;
-        if (BM.diecount == 4)
-        { Time.timeScale = 0;
+        if (BM.diecount == BM.characters.Count)
+        {   Time.timeScale = 0;
             BM.Defetead();
         }
-        for(int i = 0; i < BM.forward.Count; i++)
+      /*  for(int i = 0; i < BM.forward.Count; i++)
         {
             if (BM.forward[i] == gameObject.GetComponent<Character>())
             {
                 
                 BM.forward.RemoveAt(i);
             }
-        }
+        }*/
     }
 }

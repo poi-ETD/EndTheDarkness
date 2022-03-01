@@ -37,7 +37,7 @@ public class Dagger002 : MonoBehaviour
     }
     void StartPattern()
     {
-        if (BM.diecount < 4)
+        if (BM.diecount < BM.characters.Count)
         {
             if (!myEnemy.isDie)
             {

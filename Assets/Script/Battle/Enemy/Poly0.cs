@@ -32,15 +32,16 @@ public class Poly0 : MonoBehaviour
     void StartPattern()
     {
       
-        if (BM.diecount < 4)
+        if (BM.diecount <BM.characters.Count)
         {
-          
+            BM.FormationCollapse(myEnemy.Name);     
             if (myEnemy.Hp > 200)
             {
                 int rand = Random.Range(0, 3);
                 if (rand == 0)
                 {
-                    BM.HitFront(4, 0, myEnemy.Name, false);
+                    BM.HitFront(4
+                        , 0, myEnemy.Name, false);
                     BM.HitFront(4, 0, myEnemy.Name, false);
                 }
                 else if (rand == 1)
@@ -60,7 +61,7 @@ public class Poly0 : MonoBehaviour
                     phase2start = true;
                     myEnemy.GetArmor(20, myEnemy.Name);
                     BM.FormationCollapse(myEnemy.Name);
-                    for(int i = 0; i < 4; i++)
+                    for(int i = 0; i < BM.characters.Count; i++)
                     {
                         if (!BM.characters[i].isDie) BM.characters[i].NextTurnMinusAct+=5;
                     }

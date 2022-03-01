@@ -44,7 +44,7 @@ public class GlassinS : MonoBehaviour
     {
         if (!myEnemy.isDie)
         {
-            if (BM.diecount < 4)
+            if (BM.diecount < BM.characters.Count)
             {
                 if (Ifrin.Hp > 10)
                 {
@@ -75,22 +75,22 @@ public class GlassinS : MonoBehaviour
                             randCount[1] = true;
                             if (BM.diecount >= 1)
                             {
-                                int rand2 = Random.Range(0, 4);
+                                int rand2 = Random.Range(0, BM.characters.Count);
                                 while (BM.characters[rand2].isDie)
                                 {
-                                    rand2 = Random.Range(0, 4);
+                                    rand2 = Random.Range(0, BM.characters.Count);
                                 }
                                 BM.characters[rand2].NextTurnMinusAct++;
                             }
                             else
                             {
-                                int rand2 = Random.Range(0, 4);
+                                int rand2 = Random.Range(0, BM.characters.Count);
                                 while (BM.characters[rand2].isDie)
                                 {
-                                    rand2 = Random.Range(0, 4);
+                                    rand2 = Random.Range(0, BM.characters.Count);
                                 }
-                                int rand3 = Random.Range(0, 4);
-                                while (BM.characters[rand3].isDie || rand2 == rand3) rand3 = Random.Range(0, 4);
+                                int rand3 = Random.Range(0, BM.characters.Count);
+                                while (BM.characters[rand3].isDie || rand2 == rand3) rand3 = Random.Range(0, BM.characters.Count);
                                 BM.characters[rand2].NextTurnMinusAct++;
                                 BM.characters[rand3].NextTurnMinusAct++;
                             }
@@ -98,21 +98,7 @@ public class GlassinS : MonoBehaviour
                         if (rand == 2)
                         {
                             randCount[2] = true;
-                            if (BM.forward.Count > 0)
-                            {
-                                int rand2 = Random.Range(0, BM.forward.Count);
-                                while (BM.characters[rand2].isDie)
-                                    rand2 = Random.Range(0, BM.forward.Count);
-                                BM.characters[rand2].onHit(5, myEnemy.Name);
-
-                            }
-                            else
-                            {
-                                int rand2 = Random.Range(0, 4);
-                                while (BM.characters[rand2].isDie)
-                                    rand2 = Random.Range(0, 4);
-                                BM.characters[rand2].onHit(5, myEnemy.Name);
-                            }                           
+                            BM.HitFront(5, 0, myEnemy.Name, false);                   
                                 if (myEnemy.Hp < Ifrin.Hp)
                                 {
                                  

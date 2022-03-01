@@ -139,7 +139,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &59179789
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1928,10 +1928,9 @@ MonoBehaviour:
   - {fileID: 7953161098302442313, guid: af64e7082df220545ae667f664153da1, type: 3}
   - {fileID: 1233573338231355905, guid: f5632c08302212b439772558243ed323, type: 3}
   - {fileID: 8772484220978383927, guid: 1818e39f4d7b1fb4ab9d3db0fb83ca32, type: 3}
-  - {fileID: 5171553541266741408, guid: 8c1b02021fe9ae04a81e7ae265f6978f, type: 3}
-  - {fileID: 6645752759065849782, guid: 5824b61a1d3ba4549aa12d051a05056c, type: 3}
   - {fileID: 5202530372473349201, guid: 8b51066dd7768434487d619bea391b33, type: 3}
-  - {fileID: 6018513487574573648, guid: ec1020db262559c41914b2bbf53c95e6, type: 3}
+  - {fileID: 6645752759065849782, guid: 5824b61a1d3ba4549aa12d051a05056c, type: 3}
+  - {fileID: 5171553541266741408, guid: 8c1b02021fe9ae04a81e7ae265f6978f, type: 3}
   - {fileID: 1008581653891502491, guid: 453039e87a2e4d34ab622c02931dcc49, type: 3}
   victory: {fileID: 109399635}
   defeated: {fileID: 1756809415}
@@ -1958,7 +1957,10 @@ MonoBehaviour:
   LineObject: {fileID: 283256825}
   FormationCollapsePopup: {fileID: 1687981602}
   FormationCollapseText: {fileID: 915697556}
-  FormationCollapseButton: {fileID: 1252549395}
+  FormationCollapseButton:
+  - {fileID: 887438621}
+  - {fileID: 59179788}
+  - {fileID: 1252549395}
   FormationCollapseButtonText:
   - {fileID: 624004766}
   - {fileID: 669565424}
@@ -1968,6 +1970,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  BlessBM: 0000000000000000000000000000000000000000
+  porte3count: 0
   card20done: 0
   SelectDeckCount: 0
   DeckSelectMode: 0
@@ -4043,6 +4047,49 @@ MonoBehaviour:
   m_ChildControlHeight: 1
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
+--- !u!1 &837590958
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 837590959}
+  - component: {fileID: 837590960}
+  m_Layer: 0
+  m_Name: BlessManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &837590959
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 837590958}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1261941366}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &837590960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 837590958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14c5c23e4d2f86349aa0440b37ba7216, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &865262704
 GameObject:
   m_ObjectHideFlags: 0
@@ -4139,7 +4186,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &887438622
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5545,7 +5592,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1252549396
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5687,6 +5734,7 @@ Transform:
   - {fileID: 1818976531}
   - {fileID: 397930970}
   - {fileID: 2043666057}
+  - {fileID: 837590959}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

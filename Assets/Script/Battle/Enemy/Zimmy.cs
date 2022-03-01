@@ -32,7 +32,7 @@ public class Zimmy : MonoBehaviour
     void StartPattern()
     {
 
-        if (BM.diecount < 4)
+        if (BM.diecount < BM.characters.Count)
         {
             if (!myEnemy.isDie)
             {

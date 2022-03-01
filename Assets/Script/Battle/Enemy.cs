@@ -70,13 +70,14 @@ public class Enemy : MonoBehaviour
 
     }
     public void EnemyStartTurn()
-    {     
-        power = false;
+    {
         Shadow = false;
-        immortal = false;
     }
     public void EnemyEndTurn()
-    {      
+    {
+        power = false;
+  
+        immortal = false;
         Invoke("TurnStart", 0.5f);
     }
     void TurnStart()
@@ -86,6 +87,7 @@ public class Enemy : MonoBehaviour
     
     public void onHit(int dmg)
     {
+     
         if (!power)
         {
             BM.Setting();
@@ -105,6 +107,8 @@ public class Enemy : MonoBehaviour
                 {
                     hitStack++;
                     Hp -= dmg;
+                    if (Hp > maxHp)
+                        Hp = maxHp;
                 }
             }
             if (Hp <= 0)

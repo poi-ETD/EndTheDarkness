@@ -38,7 +38,7 @@ public class Ranger : MonoBehaviour
     {
       
         myEnemy.Board.text = "";
-        if (BM.diecount < 4)
+        if (BM.diecount < BM.characters.Count)
         {
             if (!myEnemy.isDie)
             {              
@@ -48,27 +48,12 @@ public class Ranger : MonoBehaviour
                     done[1] = false;
                     done[2] = false;
                     onecounter = 0;
-                    if (BM.forward.Count > 0)
-                    {
+                   
                         for (int i = 0; i < 2; i++)
                         {
-                            int rand2 = Random.Range(0, BM.forward.Count);
-                            while (BM.characters[rand2].isDie)
-                                rand2 = Random.Range(0, BM.forward.Count);
-                            BM.characters[rand2].onHit(3, myEnemy.Name);
+                        BM.HitFront(3, 0, myEnemy.Name, false);
                         }
-                    }
-                    else
-                    {
-                        for (int i = 0; i < 2; i++)
-                        {
-                            int rand2 = Random.Range(0, 4);
-                            while (BM.characters[rand2].isDie)
-                                rand2 = Random.Range(0, 4);
-                            BM.characters[rand2].onHit(3, myEnemy.Name);
-                        }
-
-                    }
+                  
                 }
                 else { 
                 for (int i = 0; i < 3; i++)
@@ -90,33 +75,22 @@ public class Ranger : MonoBehaviour
                     rand = Random.Range(0, 3);
                 }
                     done[rand] = true;
-                if (rand == 2)
-                {
-                   
-                    myEnemy.GetArmor(3, myEnemy.Name);
-                }
-                else
-                {
-                    if (BM.forward.Count > 0)
+                    if (rand == 2)
                     {
-                        int rand2 = Random.Range(0, BM.forward.Count);
-                        while (BM.characters[rand2].isDie)
-                        rand2 = Random.Range(0, BM.forward.Count);
-                        BM.characters[rand2].onHit(3, myEnemy.Name);
 
+                        myEnemy.GetArmor(3, myEnemy.Name);
                     }
                     else
                     {
-                        int rand2 = Random.Range(0, 4);
-                        while (BM.characters[rand2].isDie)
-                            rand2 = Random.Range(0, 4);
-                        BM.characters[rand2].onHit(3, myEnemy.Name);
 
+                        BM.HitFront(3, 0, myEnemy.Name, false);
 
                     }
+                 
+                    
                     onecounter++;
                 }
-            }
+            
             }
           
             curTurn++;

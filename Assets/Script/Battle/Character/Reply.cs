@@ -33,12 +33,17 @@ public class Reply : MonoBehaviour
     void passive3()
     {
         if (myCharacter.Act == 0&&!Passive3)
-        {
-            int rand = Random.Range(0, TM.CM.field.Count);
-            if (TM.CM.field.Count>0)
-            TM.CM.field[rand].GetComponent<Card>().cardcost = 0;
-            Passive3 = true;
-            BM.log.logContent.text += "\n부서진 족쇄!" + TM.CM.field[rand].GetComponent<Card>().Name.text + "의 코스트가 0이 됩니다.";
+        {              
+                if (TM.CM.field.Count > 0)
+            {
+                for (int j = 0; j < myCharacter.passive[2]; j++)
+                {
+                    int rand = Random.Range(0, TM.CM.field.Count);
+                    Passive3 = true;
+                    TM.CM.field[rand].GetComponent<Card>().cardcost = 0;             
+                    BM.log.logContent.text += "\n부서진 족쇄!" + TM.CM.field[rand].GetComponent<Card>().Name.text + "의 코스트가 0이 됩니다.";
+                }
+            }
         }
         else if(myCharacter.Act>0&&Passive3)
         {
@@ -50,8 +55,11 @@ public class Reply : MonoBehaviour
         if (TM.turnCard % 3 == 0 && TM.turnCard > 0 && !Passive1)
         {
             Passive1 = true;
-            myCharacter.Act++;
-            BM.log.logContent.text += "\n지치지 않는 폭주!스파키의 현재 행동력이 추가됩니다.";
+            for (int j = 0; j < myCharacter.passive[0]; j++)
+            {
+                myCharacter.Act++;
+                BM.log.logContent.text += "\n지치지 않는 폭주!스파키의 현재 행동력이 추가됩니다.";
+            }
         }
         else if (TM.turnCard % 3 != 0 || TM.turnCard == 0)
         {
@@ -64,13 +72,19 @@ public class Reply : MonoBehaviour
         {
             if (EnemyStack[i] != enemyScript[i].dmgStack)
             {
+                Debug.Log(EnemyStack[i]);
+                Debug.Log(enemyScript[i].dmgStack);
+                Debug.Log(i);
                 if (!enemyScript[i].isDie)
                 {
-                    myCharacter.AttackCount++;
-                    enemyScript[i].onHit(myCharacter.turnAtk);
                     EnemyStack[i]++;
-                    EnemyStack[i]++;
-                    BM.log.logContent.text += "\n독단적인 팀플레이!" + enemyScript[i].Name + "에게 " + myCharacter.turnAtk + "의 데미지가 주어집니다.";
+                    for (int j = 0; j < myCharacter.passive[1]; j++)
+                    {
+                        myCharacter.AttackCount++;
+                        enemyScript[i].onHit(myCharacter.turnAtk);                  
+                        EnemyStack[i]++;
+                        BM.log.logContent.text += "\n독단적인 팀플레이!" + enemyScript[i].Name + "에게 " + myCharacter.turnAtk + "의 데미지가 주어집니다.";
+                    } 
                 }
             }
         }
@@ -80,24 +94,29 @@ public class Reply : MonoBehaviour
         if (AttackCount != myCharacter.AttackCount)
         {
             AttackCount++;
-            if (AttackCount != 0 && AttackCount % 10 == 0) { myCharacter.Atk++; myCharacter.turnAtk++; }
+            if (AttackCount != 0 && AttackCount % 10 == 0) {
+                for (int j = 0; j < myCharacter.passive[3]; j++)
+                {
+                    myCharacter.Atk += 2; myCharacter.turnAtk += 2;
+                } }
         }
     }
     void Update()
     {       
         if (!myCharacter.isDie)
         {
-            if (myCharacter.passive[3])
+            if (myCharacter.passive[3]>0)
             {
                 passive4();
             }
          
-            if (myCharacter.passive[1])
+            if (myCharacter.passive[1]>0)
             {
                 passive2();
             }
+            if(myCharacter.passive[2]>0)
             passive3();
-            if (myCharacter.passive[0])
+            if (myCharacter.passive[0]>0)
             {
                 passive1();
             }

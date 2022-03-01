@@ -70,48 +70,54 @@ public class BattleManager : MonoBehaviour
     [SerializeField] GameObject LineObject;
     [SerializeField] GameObject FormationCollapsePopup;
     [SerializeField] Text FormationCollapseText;
-    [SerializeField] GameObject FormationCollapseButton;
+    [SerializeField] GameObject[] FormationCollapseButton;
     [SerializeField] Text[] FormationCollapseButtonText;
     [SerializeField] GameObject[] CharacterObj;
     bool MoveToForward;
-    
+    public bool[] BlessBM = new bool[20];
+    public int porte3count;
     public void FormationCollapse(string ename)
     {
         otherCanvasOn = true;
-        if (line == 1)
+        if (forward.Count < back.Count)
         {
-            MoveToForward =true;
+            MoveToForward = true;
             line++;
-        }
-        else if (line == 2)
+        }    
+        else if (forward.Count ==back.Count)
         {
             int rand = Random.Range(0, 2);
             if (rand == 0) { rand = -1;MoveToForward = false; }
             if (rand == 1) MoveToForward = true;
             line += rand;
         }
-        else if (line == 3)
+        else if (forward.Count>back.Count)
         {
             MoveToForward = false;
             line--;
         }
+        for(int i = 0; i < 3; i++)
+        {
+            FormationCollapseButton[i].SetActive(false);
+        }
         FormationCollapsePopup.SetActive(true);
         if (MoveToForward)
         {   FormationCollapseText.text = ename + "이(가) 진형붕괴를 시전했습니다." + "\n누구를 전방으로 보내겠습니까?";
-            if (line == 2) FormationCollapseButton.SetActive(true);
-            else FormationCollapseButton.SetActive(false);
+ 
             for(int i = 0; i < back.Count; i++)
             {
+                FormationCollapseButton[i].SetActive(true);
                 FormationCollapseButtonText[i].text = back[i].Name;
             }
+            
         }
         else
         {
             FormationCollapseText.text = ename + "이(가) 진형붕괴를 시전했습니다." + "\n누구를 후방으로 보내겠습니까?";
-            if (line == 2) FormationCollapseButton.SetActive(true);
-            else FormationCollapseButton.SetActive(false);
+
             for (int i = 0; i < forward.Count; i++)
             {
+                FormationCollapseButton[i].SetActive(true);
                 FormationCollapseButtonText[i].text =forward[i].Name;
             }
         }
@@ -120,32 +126,52 @@ public class BattleManager : MonoBehaviour
     {
         if (MoveToForward)
         {
+            CD.frontCounter++;
+            CD.backCounter--;
             forward.Add(back[c]);
             back.RemoveAt(c);
         }
         else
         {
+            CD.frontCounter--;
+            CD.backCounter++;
             back.Add(forward[c]);
             forward.RemoveAt(c);
         }
-        for(int i = 0; i < line; i++)
+        for (int i = 0; i < CD.FrontSelectedCharacter.Length; i++)
+        {
+            CD.FrontSelectedCharacter[i] = false;
+        }
+        for (int i = 0; i < CD.BackSelectedCharacter.Length; i++)
+        {
+            CD.BackSelectedCharacter[i] = false;
+        }
+        for (int i = 0; i < line; i++)
         {
             characters[i] = forward[i];
-         
+            CD.FrontRotate[i] = forward[i].characterNo - 1;
+            CD.RotateCharacter[i] = forward[i].characterNo - 1;
+            CD.CurCharacterAtk[i] = forward[i].Atk;
+            CD.FrontSelectedCharacter[forward[i].characterNo - 1] = true;
         }
-        for(int i = 0; i < 4-line; i++)
+        for(int i = 0; i < characters.Count - line; i++)
         {
             characters[i + line] = back[i];
-           
+            CD.BackRotate[i] = back[i].characterNo - 1;
+            CD.RotateCharacter[i + line] = back[i].characterNo - 1;
+            CD.CurCharacterAtk[i + line] = back[i].Atk;
+            CD.BackSelectedCharacter[back[i].characterNo - 1] = true;
         }
  
-        for(int i = 0; i < 4; i++)
+        for(int i = 0; i < characters.Count; i++)
         {
            characters[i].transform.position = new Vector2(-800/45f,(400-250*i)/45f);
         }
         otherCanvasOn = false;
         FormationCollapsePopup.SetActive(false);
         LineObject.transform.position = new Vector2(-16.66f, (11.66f - 5.55f * line));
+   
+   
     }
     public void StackPopUpOn()
     {
@@ -159,7 +185,7 @@ public class BattleManager : MonoBehaviour
             StackT.text = "";
             otherCanvasOn = true;
             StackT.text += "이번 턴 사용한 카드 수:" + CM.TM.turnCard + "\n";
-            for(int i = 0; i < 4; i++)
+            for(int i = 0; i < characters.Count; i++)
             {
                 if (characters[i].characterNo == 1)
                 {
@@ -173,6 +199,22 @@ public class BattleManager : MonoBehaviour
     }
     public void toMain()
     {
+        string path = Path.Combine(Application.persistentDataPath, "BattleData.json");
+        if (File.Exists(path))
+        {
+            string battleData = File.ReadAllText(path);
+            bd = JsonUtility.FromJson<BattleData>(battleData);
+            for(int i = 0; i < characters.Count; i++)
+            {
+                bd.maxHp[i] = characters[i].maxHp;
+                bd.curHp[i] = characters[i].Hp;
+            }
+           battleData = JsonUtility.ToJson(bd);
+            File.WriteAllText(path, battleData);
+        }
+        string path4 = Path.Combine(Application.persistentDataPath, "CharacterData.json");
+        string CharacterData = JsonUtility.ToJson(CD);
+        File.WriteAllText(path4, CharacterData);
         Time.timeScale = 1;
         SceneManager.LoadScene("Main");
     }
@@ -184,31 +226,34 @@ public class BattleManager : MonoBehaviour
         bd = JsonUtility.FromJson<BattleData>(battleData);
         path = Path.Combine(Application.persistentDataPath, "CharacterData.json");
         string characterData= File.ReadAllText(path);
-        CD = JsonUtility.FromJson<CharacterData>(characterData);
-       /* for(int i = 0; i < CD.passive.Length; i++)
+        CD = JsonUtility.FromJson<CharacterData>(characterData);        
+        line = CD.frontCounter;
+        for(int i = 0; i < CD.frontCounter; i++)
         {
-            if (CD.passive[i])
-            {
-                
-                passiveCharacters[i / 4].passive[i % 4] = true;
-            }
-        }*/
-        line = 0;
-        for(int i = 0; i < CD.FrontSelectedCharacter.Length; i++)
-        {
-            if (CD.FrontSelectedCharacter[i])
-            { 
-                line++;
-                GameObject CharacterC=Instantiate(CharacterPrefebs[i], new Vector2(-800 / 45f, (400 - 250 * characters.Count) / 45f),transform.rotation,GameObject.Find("CharacterCanvas").transform);
+                GameObject CharacterC=Instantiate(CharacterPrefebs[CD.FrontRotate[i]], new Vector2(-800 / 45f, (400 - 250 * characters.Count) / 45f),transform.rotation,GameObject.Find("CharacterCanvas").transform);
                 characters.Add(CharacterC.GetComponent<Character>()); 
-            }
+            
         }
-        for (int i = 0; i < CD.BackSelectedCharacter.Length; i++)
+        
+        for (int i = 0; i < CD.backCounter; i++)
         {
-            if (CD.BackSelectedCharacter[i])
-            {                
-                GameObject CharacterC = Instantiate(CharacterPrefebs[i], new Vector2(-800 / 45f, (400 - 250 * characters.Count) / 45f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
+       
+                 
+                GameObject CharacterC = Instantiate(CharacterPrefebs[CD.BackRotate[i]], new Vector2(-800 / 45f, (400 - 250 * characters.Count) / 45f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
                 characters.Add(CharacterC.GetComponent<Character>());
+            
+        }
+        for (int i = 0; i < CD.passive.Length; i++)
+        {
+            if (CD.passive[i]>0)
+            {
+                for (int j = 0; j < characters.Count; j++)
+                {
+                    if (characters[j].characterNo == (i / 4)+1)
+                    {                      
+                        characters[j].passive[i % 4] = CD.passive[i];
+                    }
+                }
             }
         }
         if (bd.battleNo == 3||bd.battleNo==6) //폴리만 예외
@@ -222,13 +267,17 @@ public class BattleManager : MonoBehaviour
         Enemys = GameObject.FindGameObjectsWithTag("Enemy");
         TurnCardCount = CardCount;
         nowZ = 1;
-        for (int i = 0; i < 4; i++)
-            startCost+= characters[i].cost;
+        for (int i = 0; i < characters.Count; i++)
+        {
+            characters[i].Hp = bd.curHp[i];
+            characters[i].Atk = CD.CurCharacterAtk[i];
+            startCost += characters[i].cost;
+        }
         for(int i = 0; i < line; i++)
         {
             forward.Add(characters[i]);
         }
-        for(int i = line; i < 4; i++)
+        for(int i = line; i < characters.Count; i++)
         {
             back.Add(characters[i]);
         }
@@ -286,8 +335,17 @@ public class BattleManager : MonoBehaviour
                 if (CM.field[CM.field.Count - 1].GetComponent<Card>().cardcost < 0)
                     CM.field[CM.field.Count - 1].GetComponent<Card>().cardcost = 0;
                 log.logContent.text += "\n스타카티시모!"+CM.field[CM.field.Count - 1].GetComponent<Card>().Name.text + "의 코스트가 감소하였습니다.";
-                porte3mode = false;
+                porte3count--;
                 card = null;
+                if (porte3count == 0)
+                {
+                    porte3mode = false;
+                
+                }
+                else
+                {
+                    porte3();
+                }
             }
             else
             {
@@ -314,7 +372,7 @@ public class BattleManager : MonoBehaviour
         if (!otherCanvasOn)
         {
             CancleCharacter();
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < characters.Count; i++)
             {
                 if (c.GetComponent<Character>() == characters[i])
                     curCharacterNumber = i;
@@ -382,14 +440,14 @@ public class BattleManager : MonoBehaviour
         Setting();
         for (int i = 0; i < TurnCardCount; i++)
             CM.CardToField();
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < characters.Count; i++)
         {
             characters[i].isTurnStart = true;
         }
         if (card22on)
         {
             int ArmorSum = 0;
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < characters.Count; i++)
             {
                 if (!characters[i].isDie)
                 {
@@ -403,7 +461,7 @@ public class BattleManager : MonoBehaviour
     }
     public void Setting()
     {
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < characters.Count; i++)
         {
             characters[i].isSet = true;
         }
@@ -416,7 +474,7 @@ public class BattleManager : MonoBehaviour
         }
         TurnCardCount = CardCount;
         Setting();
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < characters.Count; i++)
         {
             characters[i].isTurnEnd = true;
         }
@@ -521,7 +579,7 @@ public class BattleManager : MonoBehaviour
     {
         log.logContent.text += "\n망자부활 : " + ghostCount + "!";
         Q q=null;
-        for(int i = 0; i < 4; i++)
+        for(int i = 0; i < characters.Count; i++)
         {
             if (characters[i].characterNo == 1)
             {
@@ -562,7 +620,7 @@ public class BattleManager : MonoBehaviour
     public void teamTurnAtkUp(int atk)
     {
         log.logContent.text += "\n이번 턴 동안 팀 모두의 공격력이 " + atk + "만큼 증가합니다.";
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < characters.Count; i++)
         {
             if (!characters[i].isDie)
             {
@@ -686,7 +744,7 @@ public class BattleManager : MonoBehaviour
     }
     public void ActUpCharacter(int c)
     {
-        for(int i = 0; i < 4; i++)
+        for(int i = 0; i < characters.Count; i++)
         {
             if (!characters[i].isDie&&characters[i].characterNo == c)
             {
@@ -745,11 +803,15 @@ public class BattleManager : MonoBehaviour
     public void HitFront(int dmg,int type,string Ename,bool ActM)
     {
         bool Alive = false;
+      
         for(int i = 0; i < forward.Count; i++)
         {
             if (!characters[i].isDie) Alive = true;
         }
-        if (!Alive) HitAll(dmg, type,Ename,ActM);
+        if (!Alive) {
+          
+            HitAll(dmg, type, Ename, ActM);
+        }
         else
         {
             int rand2 = 0;
@@ -849,8 +911,8 @@ public class BattleManager : MonoBehaviour
         int rand2 = 0;
         if (type == 0)
         {
-            rand2 = Random.Range(0, 4);
-            while (characters[rand2].isDie) rand2 = Random.Range(0, 4);
+            rand2 = Random.Range(0, characters.Count);
+            while (characters[rand2].isDie) rand2 = Random.Range(0, characters.Count);
             characters[rand2].onHit(dmg, Ename);
             if (ActM)
             {
@@ -861,7 +923,7 @@ public class BattleManager : MonoBehaviour
         {
             List<Character> MaxArmor = new List<Character>();
             int maxArmor = 0;
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < characters.Count; i++)
             {
                 if (characters[i].Armor == maxArmor)
                 {
@@ -886,7 +948,7 @@ public class BattleManager : MonoBehaviour
         {
             List<Character> MaxHp = new List<Character>();
             int maxHp = 0;
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < characters.Count; i++)
             {
                 if (characters[i].Hp == maxHp)
                 {
@@ -910,7 +972,7 @@ public class BattleManager : MonoBehaviour
         if (type == 3)
         {
             List<Character> HaveArmor = new List<Character>();
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < characters.Count; i++)
             {
                 if (characters[i].Armor > 0) HaveArmor.Add(characters[i]);
             }
@@ -927,7 +989,7 @@ public class BattleManager : MonoBehaviour
         }
         if (type == 4)
         {
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < characters.Count; i++)
             {
                 characters[i].onHit(dmg, Ename);
                 if (ActM)
@@ -939,93 +1001,106 @@ public class BattleManager : MonoBehaviour
     }
     public void HitBack(int dmg,int type,string Ename,bool ActM)
     {
-        int rand2 = 0;
-        if (type == 0)
+        bool Alive = false;
+
+        for (int i = 0; i < back.Count; i++)
         {
-            rand2 = Random.Range(line, 4);
-            while (characters[rand2].isDie) rand2 = Random.Range(line, 4);
-            characters[rand2].onHit(dmg, Ename);
-            if (ActM)
-            {
-                characters[rand2].NextTurnMinusAct++;
-            }
+            if (!characters[i].isDie) Alive = true;
         }
-        if (type == 1)
+        if (!Alive)
         {
-            List<Character> MaxArmor = new List<Character>();
-            int maxArmor = 0;
-            for (int i = line; i < 4; i++)
-            {
-                if (characters[i].Armor == maxArmor)
-                {
-                    MaxArmor.Add(characters[i]);
-                }
-                else if (characters[i].Armor > maxArmor)
-                {
-                    maxArmor = characters[i].Armor;
-                    MaxArmor.Clear();
-                    MaxArmor.Add(characters[i]);
-                }
-            }
-            rand2 = Random.Range(0, MaxArmor.Count);
-            while (MaxArmor[rand2].isDie) rand2 = Random.Range(0, MaxArmor.Count);
-            MaxArmor[rand2].onHit(dmg, Ename);
-            if (ActM)
-            {
-                MaxArmor[rand2].NextTurnMinusAct++;
-            }
+            HitAll(dmg, type, Ename, ActM);
         }
-        if (type == 2)
+        else
         {
-            List<Character> MaxHp = new List<Character>();
-            int maxHp = 0;
-            for (int i = line; i < 4; i++)
+            int rand2 = 0;
+            if (type == 0)
             {
-                if (characters[i].Hp == maxHp)
-                {
-                    MaxHp.Add(characters[i]);
-                }
-                else if (characters[i].Hp > maxHp)
-                {
-                    maxHp = characters[i].Hp;
-                    MaxHp.Clear();
-                    MaxHp.Add(characters[i]);
-                }
-            }
-            rand2 = Random.Range(0, MaxHp.Count);
-            while (MaxHp[rand2].isDie) rand2 = Random.Range(0, MaxHp.Count);
-            MaxHp[rand2].onHit(dmg, Ename);
-            if (ActM)
-            {
-                MaxHp[rand2].NextTurnMinusAct++;
-            }
-        }
-        if (type == 3)
-        {
-            List<Character> HaveArmor = new List<Character>();
-            for (int i = line; i < 4; i++)
-            {
-                if (characters[i].Armor > 0) HaveArmor.Add(characters[i]);
-            }
-            if (HaveArmor.Count == 0) HitBack(dmg, 0, Ename,ActM);
-            else
-            {
-                rand2 = Random.Range(0, HaveArmor.Count);
-                HaveArmor[rand2].onHit(dmg, Ename);
+                rand2 = Random.Range(line, characters.Count);
+                while (characters[rand2].isDie) rand2 = Random.Range(line, characters.Count);
+                characters[rand2].onHit(dmg, Ename);
                 if (ActM)
                 {
-                    HaveArmor[rand2].NextTurnMinusAct++;
+                    characters[rand2].NextTurnMinusAct++;
                 }
             }
-        }
-        if (type == 4)
-        {
-            for (int i = line; i < 4; i++)
+            if (type == 1)
             {
-                characters[i].onHit(dmg, Ename);
+                List<Character> MaxArmor = new List<Character>();
+                int maxArmor = 0;
+                for (int i = line; i < characters.Count; i++)
+                {
+                    if (characters[i].Armor == maxArmor)
+                    {
+                        MaxArmor.Add(characters[i]);
+                    }
+                    else if (characters[i].Armor > maxArmor)
+                    {
+                        maxArmor = characters[i].Armor;
+                        MaxArmor.Clear();
+                        MaxArmor.Add(characters[i]);
+                    }
+                }
+                rand2 = Random.Range(0, MaxArmor.Count);
+                while (MaxArmor[rand2].isDie) rand2 = Random.Range(0, MaxArmor.Count);
+                MaxArmor[rand2].onHit(dmg, Ename);
                 if (ActM)
                 {
-                    characters[i].NextTurnMinusAct++;
+                    MaxArmor[rand2].NextTurnMinusAct++;
+                }
+            }
+            if (type == 2)
+            {
+                List<Character> MaxHp = new List<Character>();
+                int maxHp = 0;
+                for (int i = line; i < characters.Count; i++)
+                {
+                    if (characters[i].Hp == maxHp)
+                    {
+                        MaxHp.Add(characters[i]);
+                    }
+                    else if (characters[i].Hp > maxHp)
+                    {
+                        maxHp = characters[i].Hp;
+                        MaxHp.Clear();
+                        MaxHp.Add(characters[i]);
+                    }
+                }
+                rand2 = Random.Range(0, MaxHp.Count);
+                while (MaxHp[rand2].isDie) rand2 = Random.Range(0, MaxHp.Count);
+                MaxHp[rand2].onHit(dmg, Ename);
+                if (ActM)
+                {
+                    MaxHp[rand2].NextTurnMinusAct++;
+                }
+            }
+            if (type == 3)
+            {
+                List<Character> HaveArmor = new List<Character>();
+                for (int i = line; i < characters.Count; i++)
+                {
+                    if (characters[i].Armor > 0) HaveArmor.Add(characters[i]);
+                }
+                if (HaveArmor.Count == 0) HitBack(dmg, 0, Ename, ActM);
+                else
+                {
+                    rand2 = Random.Range(0, HaveArmor.Count);
+                    HaveArmor[rand2].onHit(dmg, Ename);
+                    if (ActM)
+                    {
+                        HaveArmor[rand2].NextTurnMinusAct++;
+                    }
+                }
+            }
+            if (type == characters.Count)
+            {
+                for (int i = line; i < characters.Count; i++)
+                {
+                    characters[i].onHit(dmg, Ename);
+                    if (ActM)
+                    {
+                        characters[i].NextTurnMinusAct++;
+                    }
                 }
             }
         }
@@ -1036,7 +1111,7 @@ public class BattleManager : MonoBehaviour
     {
         card22c = character;
         card22on = true;
-        for(int i = 0; i < 4; i++)
+        for(int i = 0; i < characters.Count; i++)
         {
             if (!characters[i].isDie)
             {
@@ -1046,7 +1121,7 @@ public class BattleManager : MonoBehaviour
     }
     public void card23()
     {
-        for(int i = 0; i < 4; i++)
+        for(int i = 0; i < characters.Count; i++)
         {
             characters[i].Act = 0;
         }

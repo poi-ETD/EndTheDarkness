@@ -47,7 +47,7 @@ public class ifrin : MonoBehaviour
         {
             glassinHp = Glassin.Hp;
             myHp = myEnemy.Hp;
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < BM.characters.Count; i++)
             {
                 if (!BM.characters[i].isDie)
                 {
@@ -60,7 +60,7 @@ public class ifrin : MonoBehaviour
     {
         if (!myEnemy.isDie)
         {
-            if (BM.diecount < 4)
+            if (BM.diecount < BM.characters.Count)
             {
                 if (!Glassin.isDie)
                 {
@@ -89,9 +89,9 @@ public class ifrin : MonoBehaviour
                                 }
                                 else
                                 {
-                                    int rand2 = Random.Range(0, 4);
+                                    int rand2 = Random.Range(0, BM.characters.Count);
                                     while (BM.characters[rand2].isDie)
-                                        rand2 = Random.Range(0, 4);
+                                        rand2 = Random.Range(0, BM.characters.Count);
                                     BM.characters[rand2].onHit(5, myEnemy.Name);
 
                                 }
@@ -100,7 +100,7 @@ public class ifrin : MonoBehaviour
                         if (rand == 1)
                         {
                             randCount[1] = true;
-                            for (int i = 0; i < 4; i++)
+                            for (int i = 0; i < BM.characters.Count; i++)
                             {
                                 if (!BM.characters[i].isDie)
                                 {
@@ -121,9 +121,9 @@ public class ifrin : MonoBehaviour
                             }
                             else
                             {
-                                int rand2 = Random.Range(0, 4);
+                                int rand2 = Random.Range(0, BM.characters.Count);
                                 while (BM.characters[rand2].isDie)
-                                    rand2 = Random.Range(0, 4);
+                                    rand2 = Random.Range(0, BM.characters.Count);
                                 BM.characters[rand2].StatusAbnom(0, 2);
                             }
                         }
@@ -133,7 +133,7 @@ public class ifrin : MonoBehaviour
                         p4 = true;
                         myHp = myEnemy.Hp;
                         glassinHp = Glassin.Hp;
-                        for (int i = 0; i < 4; i++)
+                        for (int i = 0; i < BM.characters.Count; i++)
                         {
                             if (!BM.characters[i].isDie)
                             {
@@ -148,7 +148,7 @@ public class ifrin : MonoBehaviour
                 }
                 if (Glassin.isDie)
                 {
-                    for (int i = 0; i < 4; i++)
+                    for (int i = 0; i < BM.characters.Count; i++)
                     {
                         if (!BM.characters[i].isDie)
                         {

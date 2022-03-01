@@ -473,10 +473,11 @@ MonoBehaviour:
   armorT: {fileID: 2849677773824560005}
   actT: {fileID: 2849677773129813563}
   board: {fileID: 2849677773492152906}
-  passive: 00000001
+  passive: 00000000000000000000000000000000
   enemyName: 
   StartNo: 0
   AttackCount: 0
+  bless: 0000000000000000000000000000000000000000
   cost: 1
   isSet: 0
   isTurnStart: 0

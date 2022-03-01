@@ -32,10 +32,13 @@ public class Q : MonoBehaviour
             BM.log.logContent.text += "\nQ가 백옥의 왕 Q로 변신합니다.";
             myCharacter.Hp = 100;
             myCharacter.maxHp = 100;
-            CM.PlusCard(13);
-            CM.PlusCard(13);
-            CM.PlusCard(14);
-            CM.PlusCard(14);
+            for (int j = 0; j < myCharacter.passive[0]; j++)
+            {
+                CM.PlusCard(13);
+                CM.PlusCard(13);
+                CM.PlusCard(14);
+                CM.PlusCard(14);
+            }
             isKing = true;
             myCharacter.Atk+=2;
             BM.startCost++;
@@ -53,8 +56,11 @@ public class Q : MonoBehaviour
             GhostPlus++;
             turnStartGhost++;
             if (GhostPlus % 4 == 0 && GhostPlus > 0) {
-                BM.log.logContent.text += "\n군단!큐의 행동력이 증가합니다.";
-              myCharacter.Act++; }
+                for (int j = 0; j < myCharacter.passive[1]; j++)
+                {
+                    BM.log.logContent.text += "\n군단!큐의 행동력이 증가합니다.";
+                    myCharacter.Act++;
+                } }
         }
     }
     void passive3()
@@ -64,30 +70,8 @@ public class Q : MonoBehaviour
             int gap;
             gap = CM.specialDrow - specialDrow;
             GameObject newCard = CM.field[CM.field.Count - gap];
-            if (newCard.GetComponent<BlackWhite>() == null)
+            for (int j = 0; j < myCharacter.passive[2]; j++)
             {
-                newCard.AddComponent<BlackWhite>();
-                newCard.GetComponent<BlackWhite>().birth();
-            }
-            else
-            {
-                newCard.GetComponent<BlackWhite>().PlusStack();
-            }
-            BM.log.logContent.text += "\n" + newCard.GetComponent<Card>().Name.text;
-            BM.log.logContent.text += "에 흑백 효과가 추가됩니다";
-          specialDrow++;
-        }
-    }
-    public void passive4()
-    {
-        if (myCharacter.NextTurnMinusAct > 0&&!passive4done)
-        {
-            passive4done = true;
-            if (CM.Grave.Count > 0)
-            {
-                int rand = Random.Range(0, CM.Grave.Count);
-
-                GameObject newCard = CM.Grave[rand];
                 if (newCard.GetComponent<BlackWhite>() == null)
                 {
                     newCard.AddComponent<BlackWhite>();
@@ -97,7 +81,35 @@ public class Q : MonoBehaviour
                 {
                     newCard.GetComponent<BlackWhite>().PlusStack();
                 }
-                CM.GraveToField(newCard);
+                BM.log.logContent.text += "\n" + newCard.GetComponent<Card>().Name.text;
+                BM.log.logContent.text += "에 흑백 효과가 추가됩니다";
+            }
+          specialDrow++;
+        }
+    }
+    public void passive4()
+    {
+        if (myCharacter.NextTurnMinusAct > 0&&!passive4done)
+        {
+            passive4done = true;
+            for (int j = 0; j < myCharacter.passive[3]; j++)
+            {
+                if (CM.Grave.Count > 0)
+                {
+                    int rand = Random.Range(0, CM.Grave.Count);
+
+                    GameObject newCard = CM.Grave[rand];
+                    if (newCard.GetComponent<BlackWhite>() == null)
+                    {
+                        newCard.AddComponent<BlackWhite>();
+                        newCard.GetComponent<BlackWhite>().birth();
+                    }
+                    else
+                    {
+                        newCard.GetComponent<BlackWhite>().PlusStack();
+                    }
+                    CM.GraveToField(newCard);
+                }
             }
         }
         if (myCharacter.NextTurnMinusAct == 0) passive4done = false;
@@ -107,9 +119,9 @@ public class Q : MonoBehaviour
     void Update()
     {
         if (!myCharacter.isDie)
-        {if (myCharacter.passive[3] && !isKing) passive4();
-            if (myCharacter.passive[2]&&!isKing) passive3();
-            if (myCharacter.passive[1]&&!isKing) passive2();
+        {if (myCharacter.passive[3]>0 && !isKing) passive4();
+            if (myCharacter.passive[2]>0&&!isKing) passive3();
+            if (myCharacter.passive[1]>0&&!isKing) passive2();
             ghostT.text = Ghost.ToString();
             if (myCharacter.isSet)
             {
@@ -118,7 +130,7 @@ public class Q : MonoBehaviour
             }
             if (myCharacter.isTurnEnd)
             {
-                if (myCharacter.passive[0]) passive1();
+                if (myCharacter.passive[0]>0) passive1();
                 myCharacter.isTurnEnd = false;
             }
             if (myCharacter.isTurnStart)

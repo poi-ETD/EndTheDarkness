@@ -40,7 +40,7 @@ public class Glassin003 : MonoBehaviour
     void StartPattern()
     {
 
-        if (BM.diecount < 4)
+        if (BM.diecount < BM.characters.Count)
         {
             if (!myEnemy.isDie)
             {
@@ -52,10 +52,10 @@ public class Glassin003 : MonoBehaviour
                 }
                 if (curTurn == 0)
                 {
-                  for(int i = 0; i < 4; i++)
+                  for(int i = 0; i < BM.characters.Count; i++)
                     {
                         if (!BM.characters[i].isDie)
-                            BM.characters[i].NextTurnMinusAct++;
+                            BM.characters[i].NextTurnMinusAct+=5;
                     }
                     myEnemy.GetArmor(10, myEnemy.Name);
                 }

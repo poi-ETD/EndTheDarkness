@@ -42,7 +42,7 @@ public class Dagger001 : MonoBehaviour
     }
     void StartPattern()
     {
-        if (BM.diecount < 4)
+        if (BM.diecount < BM.characters.Count)
         {
             if (!myEnemy.isDie)
             {
@@ -59,83 +59,25 @@ public class Dagger001 : MonoBehaviour
 
                     if (pattern == 0)
                     {
-                        if (BM.forward.Count > 0)
-                        {
-                            for (int i = 0; i < 2; i++)
-                            {
-                                int rand2 = Random.Range(0, BM.forward.Count);
-                                while (BM.characters[rand2].isDie)
-                                    rand2 = Random.Range(0, BM.forward.Count);
-                                BM.characters[rand2].onHit(3, myEnemy.Name);
-                            }
-                        }
-                        else
-                        {
-                            for (int i = 0; i < 2; i++)
-                            {
-                                int rand2 = Random.Range(0, 4);
-                                while (BM.characters[rand2].isDie)
-                                    rand2 = Random.Range(0, 4);
-                                BM.characters[rand2].onHit(3, myEnemy.Name);
-
-
-                            }
-                        }
+                        BM.HitFront(3, 0, myEnemy.Name, false);
+                        BM.HitFront(3, 0, myEnemy.Name, false);
                     }
                     if (pattern == 1)
                     {
                         myEnemy.GetArmor(3, myEnemy.Name);
-                        if (BM.forward.Count > 0)
-                        {
-                            int rand2 = Random.Range(0, BM.forward.Count);
-                            while (BM.characters[rand2].isDie)
-                                rand2 = Random.Range(0, BM.forward.Count);
-                            BM.characters[rand2].onHit(3, myEnemy.Name);
-
-                        }
-                        else
-                        {
-
-                            int rand2 = Random.Range(0, 4);
-                            while (BM.characters[rand2].isDie)
-                                rand2 = Random.Range(0, 4);
-                            BM.characters[rand2].onHit(3, myEnemy.Name);
-                        }
+                        BM.HitFront(3, 0, myEnemy.Name, false);
                     }
                     if (pattern == 2)
                     {
-                        int rand2 = Random.Range(0, BM.back.Count);
-                        BM.characters[BM.line + rand2].NextTurnMinusAct++;
-                        BM.characters[BM.line + rand2].onHit(1, myEnemy.Name);
+                        BM.HitBack(1, 0, myEnemy.Name, true);
                     }
                 }
                 else
                 {
-                    int rand2;
-                    if (BM.forward.Count > 0)
-                    {
-                        for (int i = 0; i < 3; i++)
-                        {
-                            rand2 = Random.Range(0, BM.forward.Count);
-                            while (BM.characters[rand2].isDie)
-                                rand2 = Random.Range(0, BM.forward.Count);
-                            BM.characters[rand2].onHit(3, myEnemy.Name);
-                        }
-                    }
-                    else
-                    {
-                        for (int i = 0; i < 3; i++)
-                        {
-                            rand2 = Random.Range(0, 4);
-                            while (BM.characters[rand2].isDie)
-                                rand2 = Random.Range(0, 4);
-                            BM.characters[rand2].onHit(3, myEnemy.Name);
-
-
-                        }
-                    }
-                    rand2 = Random.Range(0, BM.back.Count);
-                    BM.characters[BM.line + rand2].onHit(1, myEnemy.Name);
+                    BM.HitFront(3, 0, myEnemy.Name, false);
+                    BM.HitFront(3, 0, myEnemy.Name, false);
+                    BM.HitFront(3, 0, myEnemy.Name, false);
+                    BM.HitBack(1, 0, myEnemy.Name, false);
                 }
             }
         }

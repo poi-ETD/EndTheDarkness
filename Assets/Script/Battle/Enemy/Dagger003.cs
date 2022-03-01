@@ -36,7 +36,7 @@ public class Dagger003 : MonoBehaviour
     void StartPattern()
     {
 
-        if (BM.diecount < 4)
+        if (BM.diecount < BM.characters.Count)
         {
             if (!myEnemy.isDie)
             {
@@ -61,7 +61,7 @@ public class Dagger003 : MonoBehaviour
                         myEnemy.onShadow();
                         else
                         {
-                            for(int i = 0; i < 4; i++)
+                            for(int i = 0; i < BM.characters.Count; i++)
                             {if (!BM.characters[i].isDie)
                                     BM.characters[i].onHit(2,myEnemy.Name);
                             }
