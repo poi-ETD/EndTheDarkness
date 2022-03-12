@@ -64,7 +64,7 @@ public class Card : MonoBehaviour
         }
         if (isUsed&&!isGrave)
         {
-         
+            if (Name.text != "리셋")
             CM.UseCard(gameObject);            
             if (GetComponent<BlackWhite>()!= null)
             {
@@ -74,5 +74,43 @@ public class Card : MonoBehaviour
             cardcost = realcost;
         }
     }
-    
+
+    [HideInInspector] public Vector3 origin_Position;
+    private bool isOnMouse;
+
+    private void OnMouseEnter()
+    {
+        isOnMouse = true;
+        if(BM.otherCanvasOn&&isGrave||BM.otherCanvasOn&&isDeck)
+        HandManager.Instance.CardMouseEnter(this);
+        if (!BM.otherCanvasOn)
+        {
+            if(!isGrave&&!isDeck) HandManager.Instance.CardMouseEnter(this);
+        }
+    }
+
+    private void OnMouseOver()
+    {
+     
+        if (transform.position.y == origin_Position.y && !isOnMouse)
+        {
+            if (BM.otherCanvasOn && isGrave || BM.otherCanvasOn && isDeck)
+                HandManager.Instance.CardMouseEnter(this);
+            if (!BM.otherCanvasOn)
+            {
+                if (!isGrave && !isDeck) HandManager.Instance.CardMouseEnter(this);
+            }
+        }
+    }
+
+    private void OnMouseExit()
+    {
+        isOnMouse = false;
+        HandManager.Instance.CardMouseExit(this);
+    }
+
+    public void SavePosition(float x, float y, float z)
+    {
+        origin_Position = new Vector3(x, y, z);
+    }
 }

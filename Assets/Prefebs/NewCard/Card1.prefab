@@ -831,6 +831,7 @@ GameObject:
   - component: {fileID: 9053282550429952278}
   - component: {fileID: 9053282550429952279}
   - component: {fileID: -8729179083978840914}
+  - component: {fileID: 7409906897185309188}
   m_Layer: 5
   m_Name: Card1
   m_TagString: Untagged
@@ -884,6 +885,7 @@ MonoBehaviour:
   Name: {fileID: 9053282549130077092}
   isGrave: 0
   realcost: 1
+  isDeck: 0
 --- !u!114 &9053282550429952279
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -927,3 +929,17 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 150, y: 240}
   m_EdgeRadius: 0
+--- !u!114 &7409906897185309188
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9053282550429952276}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09ad1abd6d7ef75489d54a82d4d48cb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  handNumber: 0
+  origin_Position: {x: 0, y: 0, z: 0}

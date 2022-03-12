@@ -24,6 +24,7 @@ public class CardManager : MonoBehaviour
     public GameObject DeckCanvas;
     CardData CD;
     BattleManager BM;
+    HandManager HM;
 
     private void Update()
     {
@@ -55,25 +56,30 @@ public class CardManager : MonoBehaviour
             Deck[i].SetActive(false);
         }
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
+        HM = GameObject.Find("HandManager").GetComponent<HandManager>();
     }
     public void Rebatch()
     {
-        for (int i = 0; i < field.Count; i++)
+        HM.InitCard();
+     /*   for (int i = 0; i < field.Count; i++)
         {
             //GetComponent<RectTransform>().anchoredPosition = new Vector2(-300 + 150f * i, -520);
             field[i].transform.parent = GameObject.Find("CardCanvas").transform;
             field[i].transform.position = new Vector3(-6.66f + 3.33f * i, -11.55f, 0);
             field[i].SetActive(true);
-        }
+        }*/
     }
+
     public void CardToField()
     {
         if (Deck.Count > 0)
         {
             int rand = Random.Range(0, Deck.Count);
             field.Add(Deck[rand]);
+            HM.AddCard(Deck[rand]);
             Deck.RemoveAt(rand);
-            Rebatch();
+            //Rebatch();
+           
         }
     }
     public void TurnStartCardSet()
@@ -94,6 +100,7 @@ public class CardManager : MonoBehaviour
             specialDrow++;
             int rand = Random.Range(0, Deck.Count);
             field.Add(Deck[rand]);
+            HM.AddCard(Deck[rand]);
             Deck.RemoveAt(rand);
             Rebatch();
         }
@@ -125,6 +132,7 @@ public class CardManager : MonoBehaviour
         }
         if (!InGrave) Grave.Add(usingCard);
         usingCard.transform.parent = GameObject.Find("GraveContent").transform;
+        
         if(BM.character!=null)
         BM.character.Acting();
         usingCard.GetComponent<Card>().isGrave = true;
@@ -166,6 +174,7 @@ public class CardManager : MonoBehaviour
         for (int i = 0; i < Grave.Count; i++)
         {
             Grave[i].SetActive(true);
+            Grave[i].transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
         }
     }
     public void DeckOn()
@@ -175,6 +184,7 @@ public class CardManager : MonoBehaviour
             Deck[i].GetComponent<Card>().isDeck = true;
             Deck[i].transform.parent = GameObject.Find("DeckContent").transform;
             Deck[i].SetActive(true);
+            Deck[i].transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
         }
     }
     public void GraveOff()
@@ -203,6 +213,7 @@ public class CardManager : MonoBehaviour
         {
             field[i].transform.position = new Vector3(100, 100, 0);
             field[i].SetActive(false);
+            field[i].transform.parent = CardCanvas.transform;
             Deck.Add(field[i]);
             field.RemoveAt(i);
         }
@@ -221,6 +232,7 @@ public class CardManager : MonoBehaviour
             if (Gcard == Grave[i])
             {
                 field.Add(Grave[i]);
+                HM.AddCard(Grave[i]);
                 Gcard.GetComponent<Card>().use = false;
                 Grave[i].GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 225);
                 Grave[i].GetComponentInChildren<Image>().color = new Color(1, 1, 1);
@@ -233,7 +245,7 @@ public class CardManager : MonoBehaviour
                 }
                 Grave[i].GetComponent<Card>().isGrave = false;
                 Grave[i].GetComponent<Card>().isUsed = false;
-                Grave[i].transform.parent = CardCanvas.transform;
+           
                 Grave[i].GetComponent<Transform>().localScale = new Vector2(1, 1);
                 Grave.RemoveAt(i);
                 break;
@@ -249,19 +261,26 @@ public class CardManager : MonoBehaviour
             if (field[i] == FieldCard)
             {
                 Deck.Add(FieldCard);
+                FieldCard.transform.parent = GameObject.Find("CardCanvas").transform;
                 field[i].SetActive(false);
                 field.RemoveAt(i);
                 break;
             }
         }
+   
         Rebatch();
     }
     public void Revive()
+    {
+        StartCoroutine("ReviveC");
+    }
+    IEnumerator ReviveC()
     {
         for (int i = ReviveCard.Count - 1; i >= 0; i--)
         {
             GraveToField(ReviveCard[i]);
             ReviveCard.RemoveAt(i);
+            yield return new WaitForSeconds(0.5f);
         }
     }
     public void ReviveCountOver()
@@ -353,6 +372,7 @@ public class CardManager : MonoBehaviour
                 if (SelectedCard[j] == Deck[i])
                 {
                     field.Add(SelectedCard[j]);
+                    HM.AddCard(SelectedCard[j]);
                     SelectedCard[j].GetComponent<Card>().isDeck = false;
                     SelectedCard[j].GetComponent<Card>().use = false;
                     SelectedCard[j].GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0.5f);
@@ -374,7 +394,7 @@ public class CardManager : MonoBehaviour
         {
             if (c == Grave[i])
             {
-               Deck.Add(c);
+                Deck.Add(c);
                 c.GetComponent<Card>().isDeck = true;
                 c.GetComponent<Card>().use = false;
                 c.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0.5f);

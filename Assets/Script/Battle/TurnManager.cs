@@ -122,8 +122,7 @@ public class TurnManager : MonoBehaviour
                 if (BM.BlessBM[4] && t == 1) BM.characters[i].Act = 0;
                 if (BM.characters[i].Act < 0) BM.characters[i].Act = 0;
                 BM.characters[i].NextTurnMinusAct = 0;
-                Debug.Log(BM.characters[i].Atk);
-                Debug.Log(BM.characters[i].turnAtk);
+             
                 BM.characters[i].turnAtk = BM.characters[i].Atk+turnAtk;             
                 BM.characters[i].Armor += BM.characters[i].nextarmor;
                 if (BM.characters[i].Armor < 0) BM.characters[i].Armor = 0;

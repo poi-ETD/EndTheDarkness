@@ -357,6 +357,7 @@ GameObject:
   - component: {fileID: 4785158078806430546}
   - component: {fileID: 4785158078806430544}
   - component: {fileID: 8049060164384615983}
+  - component: {fileID: -2476733274449105084}
   m_Layer: 5
   m_Name: Card3
   m_TagString: Untagged
@@ -444,6 +445,7 @@ MonoBehaviour:
   Name: {fileID: 4785158078739193750}
   isGrave: 0
   realcost: 2
+  isDeck: 0
 --- !u!61 &4785158078806430544
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -489,6 +491,20 @@ MonoBehaviour:
   dmg: 7
   drowCount: 1
   myCard: {fileID: 4785158078806430546}
+--- !u!114 &-2476733274449105084
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4785158078806430550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09ad1abd6d7ef75489d54a82d4d48cb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  handNumber: 0
+  origin_Position: {x: 0, y: 0, z: 0}
 --- !u!1 &4785158078916020216
 GameObject:
   m_ObjectHideFlags: 0

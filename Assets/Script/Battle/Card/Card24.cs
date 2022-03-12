@@ -55,15 +55,15 @@ public class Card24 : MonoBehaviour
                 isU = false;
                 BM.character.Act--;
                 BM.cost -= myCard.cardcost;
-                for(int i = CM.field.Count-2; i>=0; i--)
-                {if(CM.field[i]!=gameObject)
-                    CM.FieldToGrave(CM.field[i]);
-                }
+              
                 BM.DeckSelect = false;
                 myCard.isUsed = true;
+                BM.card24();
+
             }
         }
     }
+
     private void Awake()
     {
         myCard = GetComponent<Card>();

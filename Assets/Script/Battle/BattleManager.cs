@@ -76,6 +76,7 @@ public class BattleManager : MonoBehaviour
     bool MoveToForward;
     public bool[] BlessBM = new bool[20];
     public int porte3count;
+    HandManager HM;
     public void FormationCollapse(string ename)
     {
         otherCanvasOn = true;
@@ -282,6 +283,7 @@ public class BattleManager : MonoBehaviour
             back.Add(characters[i]);
         }
         LineObject.transform.position = new Vector2(-16.66f, (11.66f - 5.55f * line));
+        HM = GameObject.Find("HandManager").GetComponent<HandManager>();
     }
 
     GameObject c20;
@@ -409,10 +411,11 @@ public class BattleManager : MonoBehaviour
         if (!otherCanvasOn)
         {
             cancleCard();
-            tra2 = c.GetComponent<Transform>();
+            /*tra2 = c.GetComponent<Transform>();
             tra2.localScale = new Vector2(1.5f, 1.5f);
-            card = c;
-            c.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, -230, 0);
+       
+            c.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, -230, 0);*/
+                 card = c;
         }
     }
     public void cancleCard()
@@ -429,17 +432,25 @@ public class BattleManager : MonoBehaviour
             CM.Rebatch();
         }
     }
-
+    IEnumerator turnStartDrow()
+    {
+        for (int i = 0; i < TurnCardCount; i++)
+        {  
+            CM.CardToField();
+            yield return new WaitForSeconds(0.5f);
+        }
+        yield return new WaitForSeconds(0.5f);
+        HM.InitCard();
+    }
     public void TurnStart()
     {
-        
+        HM.isInited = false;
         pcharacter = null;
         pcard = null;
         penemy = null;
         log.logContent.text += "\n" + CM.TM.t + "턴 시작!";
         Setting();
-        for (int i = 0; i < TurnCardCount; i++)
-            CM.CardToField();
+        StartCoroutine("turnStartDrow");
         for (int i = 0; i < characters.Count; i++)
         {
             characters[i].isTurnStart = true;
@@ -572,8 +583,15 @@ public class BattleManager : MonoBehaviour
     public void specialDrow(int drow)
     {
         log.logContent.text += "\n 카드를 통해 드로우 " + drow + "장!";
+        StartCoroutine("specialDrowC", drow);
+    }
+    IEnumerator specialDrowC(int drow)
+    {
         for (int i = 0; i < drow; i++)
+        {
             CM.SpecialCardToField();
+            yield return new WaitForSeconds(0.5f);
+        }
     }
     public void ghostRevive(int ghostCount)
     {
@@ -652,14 +670,25 @@ public class BattleManager : MonoBehaviour
     }
     public void card12remake()
     {      
-        int g = CM.field.Count;
-        for(int i = CM.field.Count - 1; i >= 0; i--)
-        {if(card!=CM.field[i])
-            CM.FieldToDeck(CM.field[i]);
+     
+        StartCoroutine("card12C");
+        
+    }
+    IEnumerator card12C()
+    {
+        int g = CM.field.Count-1;
+        for (int i = CM.field.Count - 1; i >= 0; i--)
+        {
+            if (CM.field[i] != null)
+            {
+                if (card != CM.field[i])
+                    CM.FieldToDeck(CM.field[i]);
+            }
+            yield return new WaitForSeconds(0.3f);
         }
+        CM.UseCard(card);
         specialDrow(g);
     }
-    
     public void GraveOn()
     {
         otherCanvasOn = true;
@@ -764,6 +793,7 @@ public class BattleManager : MonoBehaviour
         pcard.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0.5f);
         pcard.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0.5f);
         pcard.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, -230, 0);
+        pcard.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
         CancleButton.SetActive(true);
     }
     public void cancleButtonUse()
@@ -1137,6 +1167,22 @@ public class BattleManager : MonoBehaviour
         }
         CM.TM.turnAtk += 2;
     }
+    public void card24()
+    {
+        StartCoroutine("card24c");
+    }
+    IEnumerator card24c()
+    {
+        while (CM.field.Count > 1)
+        {
+
+            CM.FieldToGrave(CM.field[0]);
+            HM.InitCard();
+            yield return new WaitForSeconds(0.2f);
+        }
+
+    }
+
     public int SelectDeckCount;
     public void SelectDeckCard(int count)
     {

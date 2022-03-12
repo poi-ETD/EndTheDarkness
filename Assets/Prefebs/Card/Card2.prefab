@@ -282,6 +282,7 @@ GameObject:
   - component: {fileID: 814640352778359405}
   - component: {fileID: 814640352778359407}
   - component: {fileID: 1775142804999370484}
+  - component: {fileID: -6359099064362174554}
   m_Layer: 5
   m_Name: Card2
   m_TagString: Untagged
@@ -369,6 +370,7 @@ MonoBehaviour:
   Name: {fileID: 814640352576380585}
   isGrave: 0
   realcost: 1
+  isDeck: 0
 --- !u!61 &814640352778359407
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -412,6 +414,20 @@ MonoBehaviour:
   CM: {fileID: 0}
   armor: 7
   myCard: {fileID: 814640352778359405}
+--- !u!114 &-6359099064362174554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 814640352778359401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09ad1abd6d7ef75489d54a82d4d48cb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  handNumber: 0
+  origin_Position: {x: 0, y: 0, z: 0}
 --- !u!1 &814640352897736200
 GameObject:
   m_ObjectHideFlags: 0
