@@ -43,23 +43,18 @@ public class CharacterManager : MonoBehaviour
             CD.RotateCharacter[i]=characterNumber[i];
             CD.CurCharacterAtk[i] = CD.CharacterAtk[characterNumber[i]];
         }
+        for (int i = 0; i < characterNumber.Count; i++)
+            CD.curHp[i] = CD.CharaterHp[characterNumber[i]];
 
         string characterData = JsonUtility.ToJson(CD, true);
         string path = Path.Combine(Application.persistentDataPath, "CharacterData.json");
+      
+     
+            
         File.WriteAllText(path, characterData);
-        string path2 = Path.Combine(Application.persistentDataPath, "BattleData.json");
-        if (File.Exists(path2))
-        {
-            string battleData = File.ReadAllText(path2);
-            BattleData bd = JsonUtility.FromJson<BattleData>(battleData);
-            for (int i = 0; i < CD.SumCharacter; i++)
-            {
-                bd.maxHp[i] = CD.CharaterHp[characterNumber[i]];
-                bd.curHp[i] = bd.maxHp[i];
-            }
-            battleData = JsonUtility.ToJson(bd);
-            File.WriteAllText(path2, battleData);
-        }
+
+
+
         SceneManager.LoadScene("Main");
     }
     private void Awake()
@@ -190,6 +185,7 @@ public class CharacterData
     public int[] CharacterAtk = { 1, 1, 0, 0 };
     public int[] CurCharacterAtk = new int[4];
     public int[] CharaterHp = { 30, 50, 60, 10 };
+    public int[] curHp = new int[4];
     public int backCounter;
     public int frontCounter;
 }

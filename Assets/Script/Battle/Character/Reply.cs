@@ -89,16 +89,19 @@ public class Reply : MonoBehaviour
             }
         }
     }
+    bool p4;
     public void passive4()
     {
         if (AttackCount != myCharacter.AttackCount)
         {
             AttackCount++;
-            if (AttackCount != 0 && AttackCount % 10 == 0) {
+            if (AttackCount != 0 && AttackCount % 20 == 0&&!p4) {
+                p4 = true;
                 for (int j = 0; j < myCharacter.passive[3]; j++)
                 {
                     myCharacter.Atk += 2; myCharacter.turnAtk += 2;
-                } }
+                } 
+            }
         }
     }
     void Update()

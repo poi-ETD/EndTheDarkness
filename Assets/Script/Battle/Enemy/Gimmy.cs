@@ -72,13 +72,7 @@ public class Gimmy : MonoBehaviour
                     PhaseTurn = TM.t;
                     phaseStart = true;
                     myEnemy.GetArmor(100 - TM.t, myEnemy.Name);
-                    for (int i = 0; i < BM.characters.Count; i++)
-                    {
-                        if (!BM.characters[i].isDie)
-                        {
-                            BM.characters[i].NextTurnMinusAct++;
-                        }
-                    }
+                  
                 }
                 if (onecounter == 4)
                 {

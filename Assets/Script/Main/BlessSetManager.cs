@@ -6,10 +6,10 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 public class BlessSetManager : MonoBehaviour
 {
-    BattleData bd;
-    BlessData bld;
-    CardData CardD;
-    CharacterData CharD;
+    BattleData bd=new BattleData();
+    BlessData bld=new BlessData();
+    CardData CardD=new CardData();
+    CharacterData CharD=new CharacterData();
     [SerializeField] Text[] OnOff;
     public GameObject[] cardlist;
     public GameObject cardButton;
@@ -35,6 +35,16 @@ public class BlessSetManager : MonoBehaviour
         {
             string blessData = File.ReadAllText(path2);
             bld = JsonUtility.FromJson<BlessData>(blessData);
+           
+                for (int i = 1; i < bld.BlessOn.Length; i++)
+                {
+                    if (OnOff[i] != null)
+                    {
+                        if (bld.BlessOn[i]) OnOff[i].text = "On";
+                        else OnOff[i].text = "Off";
+                    }
+                }
+            
         }
         string path3 = Path.Combine(Application.persistentDataPath, "CardData.json");
         if (File.Exists(path3))
@@ -48,21 +58,16 @@ public class BlessSetManager : MonoBehaviour
             string charData = File.ReadAllText(path4);
             CharD = JsonUtility.FromJson<CharacterData>(charData);
         }
-        for (int i = 1; i < bld.BlessOn.Length; i++)
-        {
-            if (OnOff[i] != null)
-            {
-                if (bld.BlessOn[i]) OnOff[i].text = "On";
-                else OnOff[i].text = "Off";
-            }
-        }
+      
+            
+        
     }
     public void bless1()
     {
         bd.Ignum += 1000;
         for(int i = 0; i < CharD.SumCharacter; i++)
         {
-            bd.curHp[i] = Mathf.FloorToInt(bd.curHp[i] * 0.7f);
+            CharD.curHp[i] = Mathf.FloorToInt(CharD.curHp[i] * 0.7f);
         }
     }
     public void bless2()
@@ -127,6 +132,10 @@ public class BlessSetManager : MonoBehaviour
             }
         }
 
+    }
+    public void resetScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
     [SerializeField] GameObject[] B6Buttons;
     public void bless6()

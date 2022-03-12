@@ -206,8 +206,8 @@ public class BattleManager : MonoBehaviour
             bd = JsonUtility.FromJson<BattleData>(battleData);
             for(int i = 0; i < characters.Count; i++)
             {
-                bd.maxHp[i] = characters[i].maxHp;
-                bd.curHp[i] = characters[i].Hp;
+                
+             CD.curHp[i] = characters[i].Hp;
             }
            battleData = JsonUtility.ToJson(bd);
             File.WriteAllText(path, battleData);
@@ -269,7 +269,7 @@ public class BattleManager : MonoBehaviour
         nowZ = 1;
         for (int i = 0; i < characters.Count; i++)
         {
-            characters[i].Hp = bd.curHp[i];
+            characters[i].Hp = CD.curHp[i];
             characters[i].Atk = CD.CurCharacterAtk[i];
             startCost += characters[i].cost;
         }

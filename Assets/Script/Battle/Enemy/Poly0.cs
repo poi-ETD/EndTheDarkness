@@ -34,7 +34,7 @@ public class Poly0 : MonoBehaviour
       
         if (BM.diecount <BM.characters.Count)
         {
-            BM.FormationCollapse(myEnemy.Name);     
+            
             if (myEnemy.Hp > 200)
             {
                 int rand = Random.Range(0, 3);

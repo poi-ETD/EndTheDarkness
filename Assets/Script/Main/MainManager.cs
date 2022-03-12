@@ -41,16 +41,43 @@ public class MainManager : MonoBehaviour
         string path1 = Path.Combine(Application.persistentDataPath, "CardData.json");
         string path2 = Path.Combine(Application.persistentDataPath, "CharacterData.json");
         string path3 = Path.Combine(Application.persistentDataPath, "BattleData.json");
-        if (File.Exists(path1) && File.Exists(path2)&&File.Exists(path3))
+        string path4 = Path.Combine(Application.persistentDataPath, "BlessData.json");
+        if (File.Exists(path1) && File.Exists(path2)&&File.Exists(path3) && File.Exists(path4))
             SceneManager.LoadScene("battle");
         else
         {
             warnon();
         }
     }
+    public void resetSetting()
+    {
+        string path1 = Path.Combine(Application.persistentDataPath, "CardData.json");
+        string path2 = Path.Combine(Application.persistentDataPath, "CharacterData.json");
+        string path3 = Path.Combine(Application.persistentDataPath, "BattleData.json");
+        string path4 = Path.Combine(Application.persistentDataPath, "BlessData.json");
+        if(File.Exists(path1))
+        System.IO.File.Delete(path1);
+        if (File.Exists(path2))
+            System.IO.File.Delete(path2);
+        if (File.Exists(path3))
+            System.IO.File.Delete(path3);
+        if (File.Exists(path4))
+            System.IO.File.Delete(path4);
+
+    }
     public void GoBlessScene()
     {
-        SceneManager.LoadScene("Bless");
+        string path1 = Path.Combine(Application.persistentDataPath, "CardData.json");
+        string path2 = Path.Combine(Application.persistentDataPath, "CharacterData.json");
+        string path3 = Path.Combine(Application.persistentDataPath, "BattleData.json");
+    
+        if (File.Exists(path1) && File.Exists(path2) && File.Exists(path3))
+            SceneManager.LoadScene("Bless");
+        else
+        {
+            warnon();
+        }
+      
     }
     public void GoBattleSetScene()
     {
@@ -72,18 +99,19 @@ public class MainManager : MonoBehaviour
     }
     public void RecoverAll()
     {
-        string path = Path.Combine(Application.persistentDataPath, "BattleData.json");
+        string path = Path.Combine(Application.persistentDataPath, "CharacterData.json");
         if (File.Exists(path))
         {
-            string battleData = File.ReadAllText(path);
-            bd = JsonUtility.FromJson<BattleData>(battleData);
-            for (int i = 0; i < 4; i++)
+            string characterData = File.ReadAllText(path);
+          CharacterData cd = JsonUtility.FromJson<CharacterData>(characterData);
+            for (int i = 0; i < cd.SumCharacter; i++)
             {
 
-                bd.curHp[i] = 2000;
+                cd.curHp[i] = cd.CharaterHp[cd.RotateCharacter[i]];
+               
             }
-            battleData = JsonUtility.ToJson(bd);
-            File.WriteAllText(path, battleData);
+            characterData = JsonUtility.ToJson(cd);
+            File.WriteAllText(path, characterData);
         }
     }
     int rcount;
@@ -118,15 +146,17 @@ public class MainManager : MonoBehaviour
         }
       else  if (rcount == 1)
         {
-            string path = Path.Combine(Application.persistentDataPath, "BattleData.json");
+            string path = Path.Combine(Application.persistentDataPath, "CharacterData.json");
             if (File.Exists(path))
             {
                
-                string battleData = File.ReadAllText(path);
-                bd = JsonUtility.FromJson<BattleData>(battleData);
-                bd.curHp[c-1] = i;
-                battleData = JsonUtility.ToJson(bd);
-                File.WriteAllText(path, battleData);
+                string characterData = File.ReadAllText(path);
+                CharacterData cd = JsonUtility.FromJson<CharacterData>(characterData);
+                cd.curHp[c-1] = i;
+                if (cd.curHp[c - 1] > cd.CharaterHp[cd.RotateCharacter[c - 1]])
+                    cd.curHp[c - 1] = cd.CharaterHp[cd.RotateCharacter[c - 1]];
+               characterData = JsonUtility.ToJson(cd);
+                File.WriteAllText(path, characterData);
             }
             rcount = 0;
             Recover.text = "";
@@ -173,6 +203,5 @@ public class BattleData
 {
     public int battleNo;
     public int Ignum;
-    public int[] maxHp=new int[4];
-    public int[] curHp=new int[4];
+   
 }

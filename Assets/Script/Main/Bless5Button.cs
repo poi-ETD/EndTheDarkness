@@ -24,7 +24,7 @@ public class Bless5Button : MonoBehaviour
         File.WriteAllText(path3, cardData);
         if (BLM.removecount == 0)
         {
-        
+            BLM.resetScene();
             BLM.bless5PopUp.SetActive(false);
         }
         Destroy(gameObject);
