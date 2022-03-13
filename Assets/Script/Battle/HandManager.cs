@@ -84,9 +84,9 @@ public class HandManager : MonoBehaviour
             float random_Position_X = Random.Range(-0.2f, 0.2f);
             float random_Position_Y = Random.Range(-0.2f, 0.2f);
             newCard.transform.parent = GameObject.Find("HandCardCanvas").transform;
-            newCard.transform.position = new Vector3(18,-6, 0);
+            newCard.transform.position = new Vector3(18,-10, 0);
             newCard.transform.rotation = Quaternion.Euler(new Vector3(0, 0, random_Rotation_Z));
-            newCard.transform.DOMove(new Vector2(random_Position_X, random_Position_Y), 1);
+            newCard.transform.DOMove(new Vector2(random_Position_X, random_Position_Y-10), 1);
             newCard.GetComponent<Image>().DOFade(1f, 1).SetEase(Ease.OutExpo);
             list_Card.Add(newCard);
             count_Card++;
@@ -97,7 +97,7 @@ public class HandManager : MonoBehaviour
             // card.GetComponent<HandCard>().handNumber = count_Card;
             newCard.SetActive(true);
             newCard.transform.parent = GameObject.Find("HandCardCanvas").transform;
-            newCard.transform.position = new Vector3(18f, -6f, 0f);
+            newCard.transform.position = new Vector3(18f, -10f, 0f);
             newCard.transform.rotation = Quaternion.identity;       
             newCard.GetComponent<Image>().DOFade(1f, 1).SetEase(Ease.OutExpo);
             ArrangeCard();

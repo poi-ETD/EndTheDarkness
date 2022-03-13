@@ -131,8 +131,7 @@ public class CardManager : MonoBehaviour
             }
         }
         if (!InGrave) Grave.Add(usingCard);
-        usingCard.transform.parent = GameObject.Find("GraveContent").transform;
-        
+        usingCard.transform.parent = GameObject.Find("GraveContent").transform;      
         if(BM.character!=null)
         BM.character.Acting();
         usingCard.GetComponent<Card>().isGrave = true;

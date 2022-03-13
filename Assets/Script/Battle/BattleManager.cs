@@ -437,9 +437,9 @@ public class BattleManager : MonoBehaviour
         for (int i = 0; i < TurnCardCount; i++)
         {  
             CM.CardToField();
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.25f);
         }
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1.2f);
         HM.InitCard();
     }
     public void TurnStart()
@@ -499,11 +499,14 @@ public class BattleManager : MonoBehaviour
                 cost += pcard.GetComponent<Card>().cardcost;
                 pcard.GetComponent<Card>().isGrave = false;
                 pcard.GetComponent<Card>().isUsed = false;
+                if (pcard.GetComponent<Card>().Name.text == "리셋")
+                {
+                    card = pcard;
+                }
                 pcard.GetComponent<Card>().useCard();
-                card20Activing = false;
-              
+                card20Activing = false;              
                 pcard = card;
-            
+                
                 CancleButton.SetActive(false);
             }
             else if (card != null)
@@ -669,14 +672,17 @@ public class BattleManager : MonoBehaviour
         
     }
     public void card12remake()
-    {      
-     
+    {
+        
         StartCoroutine("card12C");
         
     }
     IEnumerator card12C()
     {
-        int g = CM.field.Count-1;
+        GameObject pc = card;
+        CM.UseCard(card);
+        pc.GetComponent<Card>().use = false;
+        int g = CM.field.Count;
         for (int i = CM.field.Count - 1; i >= 0; i--)
         {
             if (CM.field[i] != null)
@@ -686,8 +692,8 @@ public class BattleManager : MonoBehaviour
             }
             yield return new WaitForSeconds(0.3f);
         }
-        CM.UseCard(card);
         specialDrow(g);
+        pcard = pc;
     }
     public void GraveOn()
     {
