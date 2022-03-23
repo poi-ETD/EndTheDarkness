@@ -19,7 +19,7 @@ public class Bless5Button : MonoBehaviour
             cardData = File.ReadAllText(path3);
             CardD = JsonUtility.FromJson<CardData>(cardData);
         }
-        CardD.CardCount[CardNo]--;
+       // CardD.CardCount[CardNo]--;
         cardData = JsonUtility.ToJson(CardD);
         File.WriteAllText(path3, cardData);
         if (BLM.removecount == 0)

@@ -25,6 +25,9 @@ public class Enemy : MonoBehaviour
     int RecoverHp;
     public bool Shadow;
     int EndTurnDmg;
+    EnemyInfo ei;
+    public Image[] HpImage;
+    public Image myImage;
     public bool CanShadow()
     {
         bool can = false;
@@ -44,12 +47,14 @@ public class Enemy : MonoBehaviour
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         Hp = maxHp;
+        ei = GameObject.Find("SelectEnemyInformation").GetComponent<EnemyInfo>();
+      
     }
     private void Update()
     {
      
-        HpT.text = Hp + "/" + maxHp;
-        ArmorT.text = "Armor:" + Armor;
+      //  HpT.text = Hp + "/" + maxHp;
+        //ArmorT.text = "Armor:" + Armor;
         if (Input.GetMouseButtonDown(0))
         {
             Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -67,7 +72,25 @@ public class Enemy : MonoBehaviour
 
 
         }
+        if (Input.GetMouseButtonDown(0))
+        {
+            Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero, 0f);
+            if (hit.collider != null && !isDie && !BM.SelectMode && !BM.EnemySelectMode)
+            {
+                if (hit.collider.gameObject == gameObject)
+                {
+                  
+                    if (ei.SelectedEnemy == this)
+                    { ei.setNull(); }
+                    else
+                        ei.setThis(this);
+                }
+            }
 
+
+        }
+        HpImage[0].fillAmount = Hp / (float)maxHp;
     }
     public void EnemyStartTurn()
     {
@@ -132,7 +155,7 @@ public class Enemy : MonoBehaviour
                     if (V) BM.Victory();
                     Hp = 0;
                     Color color = new Color(0.3f, 0.3f, 0.3f);
-                    GetComponent<Image>().color = color;
+                    myImage.color = color;
 
                 }
             }

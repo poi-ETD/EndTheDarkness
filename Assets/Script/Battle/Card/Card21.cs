@@ -8,7 +8,7 @@ public class Card21 : MonoBehaviour
     public TurnManager TM;
     public CardManager CM;
     [SerializeField] Card myCard;
-    public int grave;
+    public int grave=3;
 
     private void Update()
     {

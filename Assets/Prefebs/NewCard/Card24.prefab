@@ -753,6 +753,7 @@ MonoBehaviour:
   isGrave: 0
   realcost: 1
   isDeck: 0
+  origin_Position: {x: 0, y: 0, z: 0}
 --- !u!61 &6136799773712634349
 BoxCollider2D:
   m_ObjectHideFlags: 0

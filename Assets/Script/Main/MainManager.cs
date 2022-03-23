@@ -97,7 +97,7 @@ public class MainManager : MonoBehaviour
         string path = Path.Combine(Application.persistentDataPath, "battleData.json");
         File.WriteAllText(path, battleData);
     }
-    public void RecoverAll()
+   /* public void RecoverAll()
     {
         string path = Path.Combine(Application.persistentDataPath, "CharacterData.json");
         if (File.Exists(path))
@@ -121,9 +121,9 @@ public class MainManager : MonoBehaviour
         rcount = 0;
         RecoverPopUp.SetActive(true);
         RecoverT[0].text = "회복시킬 캐릭터의 번호를 입력하세요.\n1~4";
-    }
+    }*/
     int c;
-    public void Recover2()
+ /*   public void Recover2()
     {
         
         int i = int.Parse(Recover.text);
@@ -163,7 +163,7 @@ public class MainManager : MonoBehaviour
             RecoverPopUp.SetActive(false);
         }
     }
-    
+    */
     private void Update()
     {
         if (wtime < 0)

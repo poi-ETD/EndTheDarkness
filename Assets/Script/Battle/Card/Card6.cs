@@ -7,10 +7,10 @@ public class Card6 : MonoBehaviour
     public BattleManager BM;
     public TurnManager TM;
     public CardManager CM;
-    public int nextCost;
-    public int ghostCount;
+    public int nextCost=1;
+    public int ghostCount=3;
     bool isNotCancle;
-    public int dmg;
+    public int dmg=7;
 
     [SerializeField] Card myCard;
 
@@ -68,7 +68,7 @@ public class Card6 : MonoBehaviour
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         CM = GameObject.Find("CardManager").GetComponent<CardManager>();
-
+        myCard = GetComponent<Card>();
     }
 
 }

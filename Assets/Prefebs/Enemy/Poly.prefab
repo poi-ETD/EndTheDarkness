@@ -34,7 +34,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -237}
+  m_AnchoredPosition: {x: 0, y: -220}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6645752758451820025
@@ -168,7 +168,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 276, y: 150}
+  m_AnchoredPosition: {x: -7, y: -300}
   m_SizeDelta: {x: 200, y: 55.205627}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6645752758977762951
@@ -218,7 +218,7 @@ MonoBehaviour:
     bottomLeft: {r: 1, g: 1, b: 1, a: 1}
     bottomRight: {r: 1, g: 1, b: 1, a: 1}
   m_fontColorGradientPreset: {fileID: 0}
-  m_spriteAsset: {fileID: 11400000, guid: 3d7b33ca46010b545a0eaab4f74e1ce1, type: 2}
+  m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
   m_TextStyleHashCode: -1183493901
@@ -262,7 +262,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: -27.811546, w: -392.1419}
+  m_margin: {x: 0, y: 0, z: -122.283676, w: -177.3834}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -278,10 +278,10 @@ GameObject:
   m_Component:
   - component: {fileID: 6645752759065849783}
   - component: {fileID: 6645752759065849781}
-  - component: {fileID: 6645752759065849778}
   - component: {fileID: 6645752759065849779}
   - component: {fileID: 6645752759065849776}
   - component: {fileID: 6645752759065849780}
+  - component: {fileID: 119164449891107098}
   m_Layer: 0
   m_Name: Poly
   m_TagString: Enemy
@@ -296,7 +296,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6645752759065849782}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -4050}
   m_LocalScale: {x: 1, y: 1, z: 45}
   m_Children:
@@ -324,8 +324,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab823e43d2f39d74093838d54ae10e6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 300
-  maxHp: 300
+  Hp: 50
+  maxHp: 50
   Armor: 0
   Atk: 0
   TM: {fileID: 0}
@@ -339,26 +339,9 @@ MonoBehaviour:
   isDie: 0
   noDie: 0
   power: 0
+  immortal: 0
   Name: 
---- !u!114 &6645752759065849778
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6645752759065849782}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3dd2f962b9cefee4faee9d9abb68eb44, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TM: {fileID: 0}
-  curTurn: 0
-  myEnemy: {fileID: 6645752759065849781}
-  BM: {fileID: 0}
-  HaveArmor: []
-  ForwardHaveArmor: []
-  t: {fileID: 5659444702409252793}
+  Shadow: 0
 --- !u!61 &6645752759065849779
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -383,7 +366,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 300, y: 450}
+  m_Size: {x: 250, y: 375}
   m_EdgeRadius: 0
 --- !u!222 &6645752759065849776
 CanvasRenderer:
@@ -412,7 +395,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 336d4147104731245ba39f97f66dac33, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9387536bc7566e24185ebeb07157764a, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -422,6 +405,27 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &119164449891107098
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6645752759065849782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1d8ab4ddb885144e9ebb3e942a6a509, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TM: {fileID: 0}
+  curTurn: 0
+  myEnemy: {fileID: 6645752759065849781}
+  BM: {fileID: 0}
+  HaveArmor: []
+  ForwardHaveArmor: []
+  t: {fileID: 0}
+  plusname: 1
+  anotherDagger: {fileID: 0}
 --- !u!1 &6645752759223923198
 GameObject:
   m_ObjectHideFlags: 0
@@ -456,7 +460,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -287}
+  m_AnchoredPosition: {x: 0, y: -260}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6645752759223923197

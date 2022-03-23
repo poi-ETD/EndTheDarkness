@@ -9,7 +9,7 @@ public class Card10 : MonoBehaviour
     public CardManager CM;
 
 
-    public int atk;
+    public int atk=1;
    [SerializeField] Card myCard;
 
     private void Update()
@@ -55,7 +55,7 @@ public class Card10 : MonoBehaviour
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         CM = GameObject.Find("CardManager").GetComponent<CardManager>();
-
+        myCard = GetComponent<Card>();
     }
 
 }

@@ -8,9 +8,9 @@ public class Card8 : MonoBehaviour
     public TurnManager TM;
     public CardManager CM;
 
-    public int armor;
+    public int armor=5;
 
-    public int nextarmor;
+    public int nextarmor=10;
 
     [SerializeField] Card myCard;
 
@@ -57,7 +57,7 @@ public class Card8 : MonoBehaviour
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         CM = GameObject.Find("CardManager").GetComponent<CardManager>();
-
+        myCard = GetComponent<Card>();
     }
 
 }

@@ -38,7 +38,7 @@ public class Vangara : MonoBehaviour
     }
     void passive1()
     {
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < BM.characters.Count-1; i++)
         {
             if (TeamStack[i] != TeamCharacter[i].dmgStack)
             {

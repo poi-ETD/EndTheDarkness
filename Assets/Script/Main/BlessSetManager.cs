@@ -62,14 +62,14 @@ public class BlessSetManager : MonoBehaviour
             
         
     }
-    public void bless1()
+  /*  public void bless1()
     {
         bd.Ignum += 1000;
         for(int i = 0; i < CharD.SumCharacter; i++)
         {
             CharD.curHp[i] = Mathf.FloorToInt(CharD.curHp[i] * 0.7f);
         }
-    }
+    }*/
     public void bless2()
     {
         if (bld.BlessOn[2])
@@ -113,7 +113,7 @@ public class BlessSetManager : MonoBehaviour
             bld.BlessOn[4] = true;
         }
     }
-    public void bless5()
+   /* public void bless5()
     {
         bd.Ignum = 0;
         removecount = 6;
@@ -132,13 +132,13 @@ public class BlessSetManager : MonoBehaviour
             }
         }
 
-    }
+    }*/
     public void resetScene()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
     [SerializeField] GameObject[] B6Buttons;
-    public void bless6()
+ /*   public void bless6()
     {
         bless6PopUp.SetActive(true);
         for(int i = 0; i < CharD.SumCharacter; i++)
@@ -172,7 +172,7 @@ public class BlessSetManager : MonoBehaviour
         {
             CharD.CurCharacterAtk[i] = CharD.CharacterAtk[CharD.RotateCharacter[i]];
         }
-    }
+    }*/
     public void bless7()
     {
         if (bld.BlessOn[7])

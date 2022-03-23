@@ -7,13 +7,12 @@ public class Card2 : MonoBehaviour
     public BattleManager BM;
     public TurnManager TM;
     public CardManager CM;
-    public int armor;
+    public int armor=7;
     [SerializeField] Card myCard;       
     private void Update()
     {
         if (myCard.use)
         {
-
             if (BM.character != null)
             {
                 if (BM.cost >= myCard.cardcost&&BM.character.Act>0)
@@ -51,7 +50,7 @@ public class Card2 : MonoBehaviour
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         CM = GameObject.Find("CardManager").GetComponent<CardManager>();
-       
+        myCard = GetComponent<Card>();
     }
 
 }

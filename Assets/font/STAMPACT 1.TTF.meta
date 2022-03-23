@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: f9310a7c86d994347b6c5883f14a0725
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Stamp Act
+  fontNames:
+  - Stamp Act
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 447696e7d76199b48abd54e17126d3e1, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -4,188 +4,241 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
 using UnityEngine.SceneManagement;
+using TMPro;
+using Newtonsoft.Json;
 public class CharacterManager : MonoBehaviour
 {
     CharacterData CD = new CharacterData();
-    public GameObject passiveMuch;
-    public GameObject[] checkBox;
-    public Sprite onCheck;
     float timer;
-    public Sprite offCheck;
-    public Text[] sText;
-    List<int> characterNumber = new List<int>();
+    CharacterData2 CD2 = new CharacterData2();
+    [SerializeField] Sprite[] CharacterImgae;
+    [SerializeField] Sprite[] CharacterFaceImgae;
+    [SerializeField] GameObject Canvas;
+    [SerializeField] GameObject Prefebs;
+    List<int> CharacterList = new List<int>();
+    [SerializeField] Image[] listImage;
+    int counter;
+    List<int> FrontCharacter = new List<int>();
+    List<int> BackCharacter = new List<int>();
+    [SerializeField] TextMeshProUGUI[] SetText;//1->이름 2~5 -> 패시브 1 6->패시브 팝업 텍스트 7->경고 팝업 텍스트
+    [SerializeField] GameObject PassivePopup;
+    int curPassive;
+    [SerializeField] GameObject[] Arrows;
+    [SerializeField] Image[] FrontButton;
+    int curFormation;
+    [SerializeField] CardSetManager cardManager;
+    [SerializeField] Image SubImage;
+    [SerializeField] GameObject warnPopup;
     public void ToMain()
-    {
-        CD.frontCounter = 0;
-        CD.backCounter = 0;
-        int line = 0;
-        for(int i = 0; i < CD.FrontSelectedCharacter.Length; i++)
+    { 
+        cardManager.SaveCard();
+        for(int i = 0; i < CharacterList.Count; i++)
         {
-            if (CD.FrontSelectedCharacter[i]) {
-                CD.frontCounter++;
-                CD.FrontRotate[line] = i;
-                line++;
-                characterNumber.Add(i);
-            };
+            if (CD.characterDatas[i].curFormation == 0) {
+                CD.line++;
+              }
+           
         }
-        line = 0;
-        for (int i = 0; i < CD.BackSelectedCharacter.Length; i++)
-        {
-            if (CD.BackSelectedCharacter[i]) {
-                CD.backCounter++;
-                CD.BackRotate[line] = i;
-                line++;
-                characterNumber.Add(i);
-            }
-        }
-        for (int i = 0; i < CD.SumCharacter; i++)
-        {
-            CD.RotateCharacter[i]=characterNumber[i];
-            CD.CurCharacterAtk[i] = CD.CharacterAtk[characterNumber[i]];
-        }
-        for (int i = 0; i < characterNumber.Count; i++)
-            CD.curHp[i] = CD.CharaterHp[characterNumber[i]];
-
-        string characterData = JsonUtility.ToJson(CD, true);
-        string path = Path.Combine(Application.persistentDataPath, "CharacterData.json");
-      
-     
-            
+        CD.size = CharacterList.Count;
+        string characterData = JsonConvert.SerializeObject(CD);       
+        string path = Path.Combine(Application.persistentDataPath, "CharacterData.json");                       
         File.WriteAllText(path, characterData);
-
-
-
         SceneManager.LoadScene("Main");
+    }
+    public void RemoveCharacter(int i)
+    {if(i<CharacterList.Count)
+        CharacterList.RemoveAt(i);
+        setListImage();
     }
     private void Awake()
     {
+        curPassive = -1;
+        curFormation = -1;
+        counter = -1;
         string path = Path.Combine(Application.persistentDataPath, "CharacterData.json");
         if (File.Exists(path))
         {
             string characterData = File.ReadAllText(path);
-            CD = JsonUtility.FromJson<CharacterData>(characterData);
-            for (int i = 0; i < 16; i++)
-            {
-             
-            if(CD.passive[i]>0)
-            checkBox[i].GetComponent<Image>().sprite = onCheck;            
-            }
-            for(int i = 0; i < sText.Length; i++)
-            {
-                
-                sText[i].text = "선택 안됨";
-                if (CD.FrontSelectedCharacter[i])
-                    sText[i].text = "전방";
-                else if (CD.BackSelectedCharacter[i])
-                    sText[i].text = "후방";
-            }
+            CD = JsonConvert.DeserializeObject<CharacterData>(characterData);
+         
         }
-      /*for (int i = 0; i < 4; i++)
+   for(int i = 1; i < CD2.cd.Length; i++)
         {
-            CD.passiveCount[i] = 0;
-        }*/
+            GameObject cha = Instantiate(Prefebs, Canvas.transform);
+            cha.GetComponent<CharacterSetting>().SetCharacter(i,CharacterImgae[i]);
+        }
 
     }
-    void onMuch()
+    public void setCharacter(int n)
     {
-        passiveMuch.SetActive(true);
-        timer =1;
-    }
-    
-    void offMuch()
-    {
-        passiveMuch.SetActive(false);
-    }
-    private void Update()
-    {
-        if (timer > 0)
+        bool isThere=false;
+        for(int i = 0; i < CharacterList.Count; i++)
         {
-            timer -= Time.deltaTime;
-            if (timer < 0)
+            if (CharacterList[i] == n)
             {
-                offMuch();
-                timer = 0;
+                CharacterList.RemoveAt(i);
+                isThere = true;
             }
         }
+        if (!isThere && CharacterList.Count < 4)
+        {
+          
+            CharacterList.Add(n);
+        }
+        setListImage();
     }
-    public void onPassive(int i)
+    void setListImage()
     {
-        Debug.Log(i);
-        Debug.Log(CD.passiveCount[i / 4]);
-       
-        if (CD.passive[i]>0)
+        for(int i = 0; i < CharacterList.Count; i++)
+        {
+            listImage[i].sprite = CharacterFaceImgae[CharacterList[i]];
+            listImage[i].color = new Color(1, 1, 1, 1);
+        }
+        for(int i = CharacterList.Count; i < 4; i++)
+        {
+            listImage[i].color = new Color(1, 1, 1, 0);
+        }
+    }
+    public void SetSubSetting() //1->이름 2~5 -> 패시브 1 6->패시브 팝업 텍스트
+    {      
+        if (counter > -1)
+        { int no = CharacterList[counter];
+            if (curFormation == -1)
+            {
+                warnPopup.SetActive(true);
+                SetText[6].text = "진형이 설정되지 않았습니다.";
+                return;
+            }
+            if (curPassive == -1)
+            {
+                warnPopup.SetActive(true);
+                SetText[6].text = "패시브가 설정되지 않았습니다.";
+                return;
+            }// public curCharacterData(string name, int no, int cost, int atk, 
+            //int maxHp, int curHp, int passive1, int passive2, int passive3, int passive4, int curFormation)
+                CD.characterDatas[counter]=new CharacterData.curCharacterData(
+                CD2.cd[no].Name,no, CD2.cd[no].Cost, CD2.cd[no].Atk, CD2.cd[no].maxHp, CD2.cd[no].maxHp,0,0,0,0,curFormation);
+            if (curPassive == 0)
+            {
+                CD.characterDatas[counter].passive1++;
+            }
+            if (curPassive == 1)
+            {
+                CD.characterDatas[counter].passive2++;
+            }
+            if (curPassive == 2)
+            {
+                CD.characterDatas[counter].passive3++;
+            }
+            if (curPassive == 3)
+            {
+                CD.characterDatas[counter].passive4++;
+            }
+           
+        }
+      
+        if (counter+1 >= CharacterList.Count)
+        {
+            ToMain();
+            return;
+        }
+        counter++;
+        cardManager.clear();
+        if(CharacterList[counter]==1)
+        cardManager.getStarterCard(CharacterList[counter],5);
+        else
+        {
+            cardManager.getStarterCard(CharacterList[counter], 1);
+        }
+        SubImage.sprite = CharacterImgae[CharacterList[counter]];
+        SetText[0].text = CD2.cd[CharacterList[counter]].Name;
+        SetText[1].text = CD2.cd[CharacterList[counter]].passive1;
+        SetText[2].text = CD2.cd[CharacterList[counter]].passive2;
+        SetText[3].text = CD2.cd[CharacterList[counter]].passive3;
+        SetText[4].text = CD2.cd[CharacterList[counter]].passive4;      
+        Canvas.SetActive(false);
+        curPassive = -1;
+        curFormation = -1;
+        PassivePopup.SetActive(false);
+        for(int i=0;i<4;i++)
+        Arrows[i].SetActive(false);
+        FrontButton[0].color = new Color(1, 1, 1);
+        FrontButton[1].color = new Color(1, 1, 1);
+    }
+    public void setPassive(int i)
+    {
+        if (curPassive != i)
         {          
-            checkBox[i].GetComponent<Image>().sprite = offCheck;
-            CD.passive[i] = 0;
-            CD.passiveCount[i/4]--;
+            PassivePopup.SetActive(true);
+            if (i == 0)
+                SetText[5].text = CD2.cd[CharacterList[counter]].passiveContent1;
+            if (i == 1)
+                SetText[5].text = CD2.cd[CharacterList[counter]].passiveContent2;
+            if (i == 2)
+                SetText[5].text = CD2.cd[CharacterList[counter]].passiveContent3;
+            if (i == 3)
+                SetText[5].text = CD2.cd[CharacterList[counter]].passiveContent4;
+            if (curPassive != -1)
+                Arrows[curPassive].SetActive(false);
+            curPassive = i;
+           
+            Arrows[i].SetActive(true);
         }
-        else if (CD.passive[i]==0)
-        {           
-            if (CD.passiveCount[i/4] < 2)
-            {
-                checkBox[i].GetComponent<Image>().sprite = onCheck;
-                CD.passive[i] = 1;
-                CD.passiveCount[i/4]++;
-            }
-            else
-            {
-                onMuch();
-            }
+        else
+        {
+            Arrows[curPassive].SetActive(false);
+            PassivePopup.SetActive(false);
+            curPassive = -1;
         }
-
     }
-    public void SetCharacter(int i) //0->선택x 1->전방 2->후방
+    public void setFormation(int i)
     {
-        if (!CD.FrontSelectedCharacter[i]&&!CD.BackSelectedCharacter[i])
+        if (i == curFormation)
         {
-            if (CD.SumCharacter > 4)
-            {
-                onMuch();
-            }
-            else
-            {
-             
-                sText[i].text = "전방";
-                CD.FrontSelectedCharacter[i] = true;
-                CD.SumCharacter++;
-            }
+            FrontButton[i].color = new Color(1, 1, 1);
+            curFormation = -1;
         }
-        else if (CD.FrontSelectedCharacter[i])
+        else
         {
-           
-            sText[i].text = "후방";
-            CD.FrontSelectedCharacter[i] = false;
-            CD.BackSelectedCharacter[i] = true;
-
-        }
-        else 
-        {
-           
-            sText[i].text = "선택안됨";
-            CD.FrontSelectedCharacter[i] = false;
-            CD.BackSelectedCharacter[i] = false;
-            CD.SumCharacter--;
+            if(curFormation!=-1)
+            FrontButton[curFormation].color = new Color(1, 1, 1);
+            curFormation = i;
+            FrontButton[curFormation].color = new Color(1, 0, 0);
         }
     }
 }
-public class CharacterData
+
+public class CharacterData 
 {
-    public int[] passive=new int[30];
-    public string[] passiveName = {"백옥의 왕","군단","흑백","절망","지치지 않는 폭주","독단적인 팀플레이",
-        "부서진 족쇄","몰아치기","굳건한 위치","선봉의 호령","무장","독불장군","창조의 잠재력","미라클 드로우",
-        "스타키티시모","평균율"};
-    public int[] passiveCount=new int[10];
-    public bool[] FrontSelectedCharacter=new bool[10];
-    public bool[] BackSelectedCharacter=new bool[10];
-    public int[] FrontRotate = new int[4];
-    public int[] BackRotate = new int[4];
-    public int SumCharacter;
-    public int[] RotateCharacter = new int[4];
-    public string[] CharacterName = { "큐", "스파키", "반가라", "포르테" };
-    public int[] CharacterAtk = { 1, 1, 0, 0 };
-    public int[] CurCharacterAtk = new int[4];
-    public int[] CharaterHp = { 30, 50, 60, 10 };
-    public int[] curHp = new int[4];
-    public int backCounter;
-    public int frontCounter;
+  public struct curCharacterData
+    {
+        public string Name;
+        public int No;
+        public int Cost;
+        public int Atk;
+        public int maxHp;
+        public int curHp;
+        public int passive1;
+        public int passive2;
+        public int passive3;
+        public int passive4;
+        public int curFormation; //0->전방 1->후방
+        public curCharacterData(string name, int no, int cost, int atk, int maxHp, int curHp, int passive1, int passive2, int passive3, int passive4, int curFormation)
+        {
+            Name = name;
+            No = no;
+            Cost = cost;
+            Atk = atk;
+            this.maxHp = maxHp;
+            this.curHp = curHp;
+            this.passive1 = passive1;
+            this.passive2 = passive2;
+            this.passive3 = passive3;
+            this.passive4 = passive4;
+            this.curFormation = curFormation;
+        }
+    }
+    public curCharacterData[] characterDatas = new curCharacterData[5];
+    public int line;
+    public int size;
 }

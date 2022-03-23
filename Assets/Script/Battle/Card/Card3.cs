@@ -8,8 +8,8 @@ public class Card3 : MonoBehaviour
     public TurnManager TM;
     public CardManager CM;
     public Text Content;
-    public int dmg;
-    public int drowCount;
+    public int dmg=7;
+    public int drowCount=1;
     bool isNotCancle;
     [SerializeField] Card myCard;
     private void Update()
@@ -66,7 +66,7 @@ public class Card3 : MonoBehaviour
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         CM = GameObject.Find("CardManager").GetComponent<CardManager>();
-    
+        myCard = GetComponent<Card>();
     }
 
 }

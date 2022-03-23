@@ -1,5 +1,41 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &8725588451331433223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1841735120482559714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f36fc0b9159996c4c8e788902248ca14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TM: {fileID: 0}
+  curTurn: 0
+  myEnemy: {fileID: 1841735120482559713}
+  BM: {fileID: 0}
+  t: {fileID: 0}
+  another: {fileID: 1841735121085128573}
+--- !u!114 &8725588450279580144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1841735121085128574}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04a3b06bed06d0845a35ccdee9140fde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TM: {fileID: 0}
+  curTurn: 0
+  myEnemy: {fileID: 1841735121085128573}
+  BM: {fileID: 0}
+  t: {fileID: 0}
+  another: {fileID: 1841735120482559713}
 --- !u!1 &3113906237955583794
 GameObject:
   m_ObjectHideFlags: 0
@@ -37,42 +73,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &8725588450279580144
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1841735121085128574}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04a3b06bed06d0845a35ccdee9140fde, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TM: {fileID: 0}
-  curTurn: 0
-  myEnemy: {fileID: 1841735121085128573}
-  BM: {fileID: 0}
-  t: {fileID: 0}
-  another: {fileID: 1841735120482559713}
---- !u!114 &8725588451331433223
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1841735120482559714}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f36fc0b9159996c4c8e788902248ca14, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TM: {fileID: 0}
-  curTurn: 0
-  myEnemy: {fileID: 1841735120482559713}
-  BM: {fileID: 0}
-  t: {fileID: 0}
-  another: {fileID: 1841735121085128573}
 --- !u!1001 &5023022912724201672
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -119,7 +119,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 651a36a14aae08f4cb1e8568b5b00b55,
+      objectReference: {fileID: 21300000, guid: 9387536bc7566e24185ebeb07157764a,
         type: 3}
     - target: {fileID: 6645752759065849781, guid: 5824b61a1d3ba4549aa12d051a05056c,
         type: 3}

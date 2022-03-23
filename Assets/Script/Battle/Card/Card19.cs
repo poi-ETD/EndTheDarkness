@@ -7,9 +7,9 @@ public class Card19 : MonoBehaviour
     public BattleManager BM;
     public TurnManager TM;
     public CardManager CM;
-    public int dmg;
-    public int drow;
-    public int ActUpCharacter;
+    public int dmg=6;
+    public int drow=1;
+    public int ActUpCharacter=1;
     [SerializeField] Card myCard;
     bool isNotCancle;
     private void Update()

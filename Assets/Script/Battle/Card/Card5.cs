@@ -7,8 +7,8 @@ public class Card5 : MonoBehaviour
     public BattleManager BM;
     public TurnManager TM;
     public CardManager CM;
-    public int ghostCount;
-    public int copyCount;
+    public int ghostCount=6;
+    public int copyCount=1;
 
     [SerializeField] Card myCard;
 
@@ -55,7 +55,7 @@ public class Card5 : MonoBehaviour
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         CM = GameObject.Find("CardManager").GetComponent<CardManager>();
-
+        myCard = GetComponent<Card>();
     }
 
 }

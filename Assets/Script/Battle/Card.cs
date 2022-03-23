@@ -11,14 +11,19 @@ public class Card : MonoBehaviour
     public bool use;
     BattleManager BM;
     public int cardcost;
-    [SerializeField] TextMeshProUGUI costT;
+    public TextMeshProUGUI costT;
+    public TextMeshProUGUI DeckT;
+    public TextMeshProUGUI NoT;
     public TextMeshProUGUI Name;
     public bool isGrave;
     public int realcost;
     public bool isDeck;
+    public bool isIngame;
+    public int DeckNo;// start->0 Q->1 스파키->2 반가라->3 포르테->4
+    public int type;//스타터->0 스타터x->1 특수->2
+
     public void useCard()
-    {
-     
+    {    
         use = true;
     }
     private void Awake()

@@ -8,8 +8,8 @@ public class Card16 : MonoBehaviour
     public TurnManager TM;
     public CardManager CM;
     [SerializeField] Card myCard;
-    public int reflect;
-    public int armor;
+    public int reflect=1;
+    public int armor=3;
 
     private void Update()
     {

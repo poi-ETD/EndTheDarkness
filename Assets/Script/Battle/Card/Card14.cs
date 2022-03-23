@@ -75,6 +75,7 @@ public class Card14 : MonoBehaviour
     }
     private void Awake()
     {
+        myCard = GetComponent<Card>();
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         CM = GameObject.Find("CardManager").GetComponent<CardManager>();

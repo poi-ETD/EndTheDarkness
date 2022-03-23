@@ -7,8 +7,8 @@ public class Card7 : MonoBehaviour
     public BattleManager BM;
     public TurnManager TM;
     public CardManager CM;
-    public int ghostRevive;
-    public int revive;
+    public int ghostRevive=4;
+    public int revive=2;
     public bool oneTimeUse;
     [SerializeField] Card myCard;
     bool isU;
@@ -72,6 +72,7 @@ public class Card7 : MonoBehaviour
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         CM = GameObject.Find("CardManager").GetComponent<CardManager>();
+        myCard = GetComponent<Card>();
     }
 
 }

@@ -9,7 +9,7 @@ public class Card24 : MonoBehaviour
     public CardManager CM;
     [SerializeField] Card myCard;
     bool isU;
-    public int DeckCount;
+    public int DeckCount=1;
 
     private void Update()
     {

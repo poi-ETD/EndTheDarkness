@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
+using Newtonsoft.Json;
+using System.Reflection;
+
 public class CardManager : MonoBehaviour
 {
+    
     public List<GameObject> Deck = new List<GameObject>();
     public List<GameObject> Grave = new List<GameObject>();
     public List<GameObject> field = new List<GameObject>();
@@ -14,42 +18,52 @@ public class CardManager : MonoBehaviour
     public Text deckT;
     [SerializeField] GameObject graveWarn;
     [SerializeField] GameObject selectedWarn;
+    [SerializeField] GameObject CardPrefebs;
     public TurnManager TM;
     public int FiledCardCount;
     public int specialDrow;
-    public int[] CardCount = new int[100];
-    public GameObject[] startCard = new GameObject[100];
     public int cardKind;
     public GameObject CardCanvas;
     public GameObject DeckCanvas;
     CardData CD;
     BattleManager BM;
     HandManager HM;
-
+    CardData2 cd = new CardData2();
+    string[] deckText = new string[5];
+    public ScriptableObject scrip;
     private void Update()
     {
         graveT.text = "" + Grave.Count;
         deckT.text = "" + Deck.Count;
     }
     private void Awake()
-    {
+    { deckText[0] = "BASE";
+        deckText[1] = "Q";
+        deckText[2] = "SPARKY";
+        deckText[3] = "VANGARA";
+        deckText[4] = "PORTE";
+        string filepath = Application.persistentDataPath + "/CardData.json";
         string path = Path.Combine(Application.persistentDataPath, "CardData.json");
         if (File.Exists(path))
         {
             string cardData = File.ReadAllText(path);
-            CD = JsonUtility.FromJson<CardData>(cardData);
-            for (int i = 0; i < cardKind; i++)
-            {
-                CardCount[i] = CD.CardCount[i];
-            }
+            CD = JsonConvert.DeserializeObject<CardData>(cardData);
+
         }
-        for (int i = 0; i < cardKind; i++)
+        for (int i = 0; i < CD.AllCard; i++)
         {
-            for (int j = 0; j < CardCount[i]; j++)
-            {
-                GameObject newCard = Instantiate(startCard[i], new Vector3(100, 100, 0), transform.rotation, CardCanvas.transform);
-                Deck.Add(newCard);
-            }
+            GameObject newCard = Instantiate(CardPrefebs, CardCanvas.transform);
+            newCard.GetComponent<Card>().NoT.text= "NO." + cd.cd[CD.cardNo[i]].No.ToString("D3");//넘버
+            newCard.GetComponent<Card>().DeckT.text = deckText[cd.cd[CD.cardNo[i]].Deck];
+            newCard.GetComponent<Card>().Content.text = cd.cd[CD.cardNo[i]].Content;
+            newCard.GetComponent<Card>().Name.text = cd.cd[CD.cardNo[i]].Name;
+            newCard.GetComponent<Card>().cardcost = CD.cardCost[i];
+            newCard.GetComponent<Card>().realcost = CD.cardCost[i];
+            addComponent(newCard,CD.cardNo[i]);
+
+          
+            
+            Deck.Add(newCard);
         }
         for (int i = 0; i < Deck.Count; i++)
         {
@@ -58,16 +72,110 @@ public class CardManager : MonoBehaviour
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         HM = GameObject.Find("HandManager").GetComponent<HandManager>();
     }
+    void addComponent(GameObject obj,int i)
+    {
+        if (i == 1)
+        {
+            obj.AddComponent<Card1>();
+        }
+        if (i == 2)
+        {
+            obj.AddComponent<Card2>();
+        }
+        if (i == 3)
+        {
+            obj.AddComponent<Card3>();
+        }
+        if (i == 4)
+        {
+            obj.AddComponent<Card4>();
+        }
+        if (i == 5)
+        {
+            obj.AddComponent<Card5>();
+        }
+        if (i == 6)
+        {
+            obj.AddComponent<Card6>();
+        }
+        if (i == 7)
+        {
+            obj.AddComponent<Card7>();
+        }
+        if (i == 8)
+        {
+            obj.AddComponent<Card8>();
+        }
+        if (i == 9)
+        {
+            obj.AddComponent<Card9>();
+        }
+        if (i == 10)
+        {
+            obj.AddComponent<Card10>();
+        }
+         if (i == 11)
+        {
+            obj.AddComponent<Card11>();
+        }
+        if (i == 12)
+        {
+            obj.AddComponent<Card12>();
+        }
+        if (i == 13)
+        {
+            obj.AddComponent<Card13>();
+        }
+        if (i == 14)
+        {
+            obj.AddComponent<Card14>();
+        }
+        if (i == 15)
+        {
+            obj.AddComponent<Card15>();
+        }
+        if (i == 16)
+        {
+            obj.AddComponent<Card16>();
+        }
+        if (i == 17)
+        {
+            obj.AddComponent<Card17>();
+        }
+        if (i == 18)
+        {
+            obj.AddComponent<Card18>();
+        }
+        if (i == 19)
+        {
+            obj.AddComponent<Card19>();
+        }
+        if (i == 20)
+        {
+            obj.AddComponent<Card20>();
+        }
+        if (i == 21)
+        {
+            obj.AddComponent<Card21>();
+        }
+        if (i == 22)
+        {
+            obj.AddComponent<Card22>();
+        }
+        if (i == 23)
+        {
+            obj.AddComponent<Card23>();
+        }
+        if (i == 24)
+        {
+            obj.AddComponent<Card24>();
+        }
+    
+    }
     public void Rebatch()
     {
         HM.InitCard();
-     /*   for (int i = 0; i < field.Count; i++)
-        {
-            //GetComponent<RectTransform>().anchoredPosition = new Vector2(-300 + 150f * i, -520);
-            field[i].transform.parent = GameObject.Find("CardCanvas").transform;
-            field[i].transform.position = new Vector3(-6.66f + 3.33f * i, -11.55f, 0);
-            field[i].SetActive(true);
-        }*/
+     
     }
 
     public void CardToField()
@@ -78,7 +186,7 @@ public class CardManager : MonoBehaviour
             field.Add(Deck[rand]);
             HM.AddCard(Deck[rand]);
             Deck.RemoveAt(rand);
-            //Rebatch();
+ 
            
         }
     }
@@ -107,7 +215,14 @@ public class CardManager : MonoBehaviour
     }
     public void PlusCard(int i)
     {
-        GameObject newCard = Instantiate(startCard[i], new Vector3(100, 100, 0), transform.rotation, CardCanvas.transform);
+        GameObject newCard = Instantiate(CardPrefebs, CardCanvas.transform);
+        newCard.GetComponent<Card>().NoT.text = "NO." + cd.cd[i].No.ToString("D3");//넘버
+        newCard.GetComponent<Card>().DeckT.text = deckText[cd.cd[i].Deck];
+        newCard.GetComponent<Card>().Content.text = cd.cd[i].Content;
+        newCard.GetComponent<Card>().Name.text = cd.cd[i].Name;
+        newCard.GetComponent<Card>().cardcost = cd.cd[i].Cost;
+        newCard.GetComponent<Card>().realcost = cd.cd[i].Cost;
+        addComponent(newCard, i);
         Deck.Add(newCard);
         newCard.SetActive(false);
     }
@@ -238,18 +353,20 @@ public class CardManager : MonoBehaviour
                 Grave[i].SetActive(true);
                 Grave[i].GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0.5f);
                 Grave[i].GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0.5f);
+             
                 if (BM.card7mode)
                 {
                     Grave[i].GetComponent<Card>().cardcost = 0;
+                
                 }
                 Grave[i].GetComponent<Card>().isGrave = false;
-                Grave[i].GetComponent<Card>().isUsed = false;
-           
+                Grave[i].GetComponent<Card>().isUsed = false;           
                 Grave[i].GetComponent<Transform>().localScale = new Vector2(1, 1);
                 Grave.RemoveAt(i);
                 break;
             }
         }
+   
         Rebatch();
 
     }
@@ -281,6 +398,7 @@ public class CardManager : MonoBehaviour
             ReviveCard.RemoveAt(i);
             yield return new WaitForSeconds(0.5f);
         }
+        BM.card7mode = false;
     }
     public void ReviveCountOver()
     {

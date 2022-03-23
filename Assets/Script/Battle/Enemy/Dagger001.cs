@@ -46,6 +46,7 @@ public class Dagger001 : MonoBehaviour
         {
             if (!myEnemy.isDie)
             {
+              
                 if ((curTurn + 1) % 5 != 0)
                 {
                     pattern = Random.Range(0, 3);

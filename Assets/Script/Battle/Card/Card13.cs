@@ -7,8 +7,8 @@ public class Card13 : MonoBehaviour
     public BattleManager BM;
     public TurnManager TM;
     public CardManager CM;
-    public int specialDrow;
-    public int revive;
+    public int specialDrow=1;
+    public int revive=1;
     [SerializeField] Card myCard;
     bool isU;
 

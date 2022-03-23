@@ -7,7 +7,7 @@ public class Card18 : MonoBehaviour
     public BattleManager BM;
     public TurnManager TM;
     public CardManager CM;
-    public int dmg;
+    public int dmg=2;
     [SerializeField] Card myCard;
 
     bool isNotCancle;

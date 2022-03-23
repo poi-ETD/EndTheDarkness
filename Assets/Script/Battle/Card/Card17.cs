@@ -8,9 +8,9 @@ public class Card17 : MonoBehaviour
     public TurnManager TM;
     public CardManager CM;
 
-    public int armor;
+    public int armor=15;
 
-    public int nextarmor;
+    public int nextarmor=-15;
 
     [SerializeField] Card myCard;
 

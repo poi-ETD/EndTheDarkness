@@ -7,8 +7,8 @@ public class Card11 : MonoBehaviour
     public BattleManager BM;
     public TurnManager TM;
     public CardManager CM;
-    public int dmg;
-    public int atk;
+    public int dmg=5;
+    public int atk=1;
     [SerializeField] Card myCard;
     bool decrease;
     bool isNotCancle;
@@ -77,7 +77,7 @@ public class Card11 : MonoBehaviour
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         CM = GameObject.Find("CardManager").GetComponent<CardManager>();
-
+        myCard = GetComponent<Card>();
     }
 
 }

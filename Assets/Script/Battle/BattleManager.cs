@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.IO;
 using UnityEngine.SceneManagement;
+using Newtonsoft.Json;
 public class BattleManager : MonoBehaviour
 {
     [SerializeField] GameObject[] CharacterPrefebs;
@@ -25,8 +26,6 @@ public class BattleManager : MonoBehaviour
     public int startCost;
     public int CardCount;
     [SerializeField] CardManager CM;
-    float nowZ;
-    public int StartCost;
     public int TurnCardCount;
     [SerializeField] GameObject Warn;
     public Text warntext;
@@ -51,7 +50,6 @@ public class BattleManager : MonoBehaviour
     [SerializeField] GameObject victory;
     [SerializeField] GameObject defeated;
     public bool SelectMode;
-    [SerializeField] Character[] passiveCharacters;
     bool porte3mode;
     [SerializeField] GameObject condition;
     public Text conditionText;
@@ -72,11 +70,12 @@ public class BattleManager : MonoBehaviour
     [SerializeField] Text FormationCollapseText;
     [SerializeField] GameObject[] FormationCollapseButton;
     [SerializeField] Text[] FormationCollapseButtonText;
-    [SerializeField] GameObject[] CharacterObj;
     bool MoveToForward;
     public bool[] BlessBM = new bool[20];
     public int porte3count;
     HandManager HM;
+    List<Character> characterOriginal = new List<Character>();
+
     public void FormationCollapse(string ename)
     {
         otherCanvasOn = true;
@@ -103,70 +102,48 @@ public class BattleManager : MonoBehaviour
         }
         FormationCollapsePopup.SetActive(true);
         if (MoveToForward)
-        {   FormationCollapseText.text = ename + "이(가) 진형붕괴를 시전했습니다." + "\n누구를 전방으로 보내겠습니까?";
- 
+        {   FormationCollapseText.text = ename + "이(가) 진형붕괴를 시전했습니다." + "\n누구를 전방으로 보내겠습니까?"; 
             for(int i = 0; i < back.Count; i++)
             {
                 FormationCollapseButton[i].SetActive(true);
                 FormationCollapseButtonText[i].text = back[i].Name;
-            }
-            
+            }            
         }
         else
         {
             FormationCollapseText.text = ename + "이(가) 진형붕괴를 시전했습니다." + "\n누구를 후방으로 보내겠습니까?";
-
             for (int i = 0; i < forward.Count; i++)
-            {
+            {             
                 FormationCollapseButton[i].SetActive(true);
-                FormationCollapseButtonText[i].text =forward[i].Name;
+                FormationCollapseButtonText[i].text =forward[i].Name;             
             }
         }
     }
     public void SelectFormationCollapse(int c)
     {
+        CD.line = line;
         if (MoveToForward)
         {
-            CD.frontCounter++;
-            CD.backCounter--;
+            
             forward.Add(back[c]);
             back.RemoveAt(c);
         }
         else
         {
-            CD.frontCounter--;
-            CD.backCounter++;
+          
             back.Add(forward[c]);
             forward.RemoveAt(c);
         }
-        for (int i = 0; i < CD.FrontSelectedCharacter.Length; i++)
-        {
-            CD.FrontSelectedCharacter[i] = false;
-        }
-        for (int i = 0; i < CD.BackSelectedCharacter.Length; i++)
-        {
-            CD.BackSelectedCharacter[i] = false;
-        }
+        characters.Clear();
         for (int i = 0; i < line; i++)
         {
-            characters[i] = forward[i];
-            CD.FrontRotate[i] = forward[i].characterNo - 1;
-            CD.RotateCharacter[i] = forward[i].characterNo - 1;
-            CD.CurCharacterAtk[i] = forward[i].Atk;
-            CD.FrontSelectedCharacter[forward[i].characterNo - 1] = true;
+            forward[i].transform.position = new Vector2(-800 / 45f, (400 - 250 * characters.Count) / 45f);
+            characters.Add(forward[i]);
         }
-        for(int i = 0; i < characters.Count - line; i++)
+        for (int i = line; i < CD.size; i++)
         {
-            characters[i + line] = back[i];
-            CD.BackRotate[i] = back[i].characterNo - 1;
-            CD.RotateCharacter[i + line] = back[i].characterNo - 1;
-            CD.CurCharacterAtk[i + line] = back[i].Atk;
-            CD.BackSelectedCharacter[back[i].characterNo - 1] = true;
-        }
- 
-        for(int i = 0; i < characters.Count; i++)
-        {
-           characters[i].transform.position = new Vector2(-800/45f,(400-250*i)/45f);
+            back[i - line].transform.position = new Vector2(-800 / 45f, (400 - 250 * characters.Count) / 45f);
+            characters.Add(back[i - line]);
         }
         otherCanvasOn = false;
         FormationCollapsePopup.SetActive(false);
@@ -201,61 +178,79 @@ public class BattleManager : MonoBehaviour
     public void toMain()
     {
         string path = Path.Combine(Application.persistentDataPath, "BattleData.json");
-        if (File.Exists(path))
-        {
+     
             string battleData = File.ReadAllText(path);
             bd = JsonUtility.FromJson<BattleData>(battleData);
             for(int i = 0; i < characters.Count; i++)
             {
-                
-             CD.curHp[i] = characters[i].Hp;
+                bool isForward = false;
+                CD.characterDatas[i].curHp = characterOriginal[i].Hp;
+                for(int j = 0; j < forward.Count; j++)
+                {
+                    if (forward[j] == characterOriginal[i])
+                    {
+                        CD.characterDatas[i].curFormation = 0;
+                        isForward = true;
+                    break;
+                    }
+                }
+                if (!isForward) CD.characterDatas[i].curFormation = 1;
             }
+           
            battleData = JsonUtility.ToJson(bd);
             File.WriteAllText(path, battleData);
-        }
+        
         string path4 = Path.Combine(Application.persistentDataPath, "CharacterData.json");
-        string CharacterData = JsonUtility.ToJson(CD);
+        string CharacterData = JsonConvert.SerializeObject(CD);
         File.WriteAllText(path4, CharacterData);
         Time.timeScale = 1;
+       
         SceneManager.LoadScene("Main");
     }
     private void Awake()
     {
-        
+        startCost = 0;
         string path = Path.Combine(Application.persistentDataPath, "battleData.json");
         string battleData = File.ReadAllText(path);
         bd = JsonUtility.FromJson<BattleData>(battleData);
         path = Path.Combine(Application.persistentDataPath, "CharacterData.json");
-        string characterData= File.ReadAllText(path);
-        CD = JsonUtility.FromJson<CharacterData>(characterData);        
-        line = CD.frontCounter;
-        for(int i = 0; i < CD.frontCounter; i++)
+       string characterData= File.ReadAllText(path);
+        CD = JsonConvert.DeserializeObject<CharacterData>(characterData);
+        line = CD.line;
+        for(int i = 0; i < CD.size; i++)
         {
-                GameObject CharacterC=Instantiate(CharacterPrefebs[CD.FrontRotate[i]], new Vector2(-800 / 45f, (400 - 250 * characters.Count) / 45f),transform.rotation,GameObject.Find("CharacterCanvas").transform);
-                characters.Add(CharacterC.GetComponent<Character>()); 
-            
-        }
-        
-        for (int i = 0; i < CD.backCounter; i++)
-        {
-       
-                 
-                GameObject CharacterC = Instantiate(CharacterPrefebs[CD.BackRotate[i]], new Vector2(-800 / 45f, (400 - 250 * characters.Count) / 45f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
-                characters.Add(CharacterC.GetComponent<Character>());
-            
-        }
-        for (int i = 0; i < CD.passive.Length; i++)
-        {
-            if (CD.passive[i]>0)
+            GameObject CharacterC=null;
+          
+            if (CD.characterDatas[i].curFormation == 0)
             {
-                for (int j = 0; j < characters.Count; j++)
-                {
-                    if (characters[j].characterNo == (i / 4)+1)
-                    {                      
-                        characters[j].passive[i % 4] = CD.passive[i];
-                    }
-                }
+               CharacterC = Instantiate(CharacterPrefebs[CD.characterDatas[i].No], new Vector2(-800 / 45f, (400 - 250 * characters.Count) / 45f), transform.rotation, GameObject.Find("CharacterCanvas").transform);           
+                forward.Add(CharacterC.GetComponent<Character>());
             }
+            else
+            {
+               CharacterC = Instantiate(CharacterPrefebs[CD.characterDatas[i].No], new Vector2(-800 / 45f, (400 - 250 * characters.Count) / 45f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
+                back.Add(CharacterC.GetComponent<Character>());
+            }
+            characterOriginal.Add(CharacterC.GetComponent<Character>());
+            CharacterC.GetComponent<Character>().Atk = CD.characterDatas[i].Atk;
+            CharacterC.GetComponent<Character>().Hp = CD.characterDatas[i].curHp;
+            startCost += CD.characterDatas[i].Cost;
+            CharacterC.GetComponent<Character>().passive[0] = CD.characterDatas[i].passive1;
+            CharacterC.GetComponent<Character>().passive[1] = CD.characterDatas[i].passive2;
+            CharacterC.GetComponent<Character>().passive[2] = CD.characterDatas[i].passive3;
+            CharacterC.GetComponent<Character>().passive[3] = CD.characterDatas[i].passive4;
+            CharacterC.GetComponent<Character>().Name = CD.characterDatas[i].Name;
+        }
+            
+     for(int i = 0; i < line; i++)
+        {
+            forward[i].transform.position = new Vector2(-800 / 45f, (400 - 250 * characters.Count) / 45f);
+            characters.Add(forward[i]);
+        }
+        for (int i = line; i <CD.size; i++)
+        {
+            back[i -line].transform.position = new Vector2(-800 / 45f, (400 - 250 * characters.Count) / 45f);
+            characters.Add(back[i-line]);
         }
         if (bd.battleNo == 3||bd.battleNo==6) //폴리만 예외
         { 
@@ -263,25 +258,11 @@ public class BattleManager : MonoBehaviour
         }
         else
         {
-            GameObject EnemySummon = Instantiate(Enemys[bd.battleNo], new Vector2(0, 0), transform.rotation, GameObject.Find("CharacterCanvas").transform);
+            GameObject EnemySummon = Instantiate(Enemys[bd.battleNo], new Vector2(-2, -2), transform.rotation, GameObject.Find("CharacterCanvas").transform);
         }
         Enemys = GameObject.FindGameObjectsWithTag("Enemy");
         TurnCardCount = CardCount;
-        nowZ = 1;
-        for (int i = 0; i < characters.Count; i++)
-        {
-            characters[i].Hp = CD.curHp[i];
-            characters[i].Atk = CD.CurCharacterAtk[i];
-            startCost += characters[i].cost;
-        }
-        for(int i = 0; i < line; i++)
-        {
-            forward.Add(characters[i]);
-        }
-        for(int i = line; i < characters.Count; i++)
-        {
-            back.Add(characters[i]);
-        }
+      
         LineObject.transform.position = new Vector2(-16.66f, (11.66f - 5.55f * line));
         HM = GameObject.Find("HandManager").GetComponent<HandManager>();
     }
@@ -289,7 +270,8 @@ public class BattleManager : MonoBehaviour
     GameObject c20;
     private void Update()
     {
-            if (Input.GetKey("escape"))
+      
+        if (Input.GetKey("escape"))
                 Application.Quit();            
         costT.text = "cost:" + cost;
         if (card == null||porte3mode)
@@ -434,6 +416,7 @@ public class BattleManager : MonoBehaviour
     }
     IEnumerator turnStartDrow()
     {
+      
         for (int i = 0; i < TurnCardCount; i++)
         {  
             CM.CardToField();
@@ -734,8 +717,6 @@ public class BattleManager : MonoBehaviour
         card7mode = false;
         CM.GraveOff();
         otherCanvasOn = false;
-
-
         graveView.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 2000, 0);
     }
     public void GraveOff()
@@ -748,7 +729,7 @@ public class BattleManager : MonoBehaviour
             ReviveCancle.SetActive(false);
             ReviveCount = 0;
             CM.Revive();
-            card7mode = false;
+           
         }
         else
         {

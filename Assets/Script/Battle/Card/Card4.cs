@@ -7,7 +7,7 @@ public class Card4 : MonoBehaviour
     public BattleManager BM;
     public TurnManager TM;
     public CardManager CM;
-    public int drowCount;
+    public int drowCount=2;
     [SerializeField] Card myCard;
 
     private void Update()
@@ -53,7 +53,7 @@ public class Card4 : MonoBehaviour
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         CM = GameObject.Find("CardManager").GetComponent<CardManager>();
-
+        myCard = GetComponent<Card>();
     }
 
 }

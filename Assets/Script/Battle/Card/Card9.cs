@@ -9,7 +9,7 @@ public class Card9 : MonoBehaviour
     public CardManager CM;
 
  
-    public int nextarmor;
+    public int nextarmor=16;
 
     [SerializeField] Card myCard;
 
@@ -56,7 +56,7 @@ public class Card9 : MonoBehaviour
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         CM = GameObject.Find("CardManager").GetComponent<CardManager>();
-
+        myCard = GetComponent<Card>();
     }
 
 }

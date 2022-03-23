@@ -5,69 +5,124 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.IO;
 using TMPro;
+using Newtonsoft.Json;
 public class CardSetManager : MonoBehaviour
 {
-    public Text[] CardCountT;
+    
     public Text AllCardT;
     CardData CD=new CardData();
-    public int[] CardCount;
+    public int[] CardCount=new int[100];
     public int AllCard;
-    [SerializeField] TextMeshProUGUI cardCat;
+    public GameObject Canvas;
+    public GameObject CardPrefebs;
+    CardData2 cd = new CardData2();
+    public int curCardCount;
+   public int maxiumCardCount;
+    [SerializeField] TextMeshProUGUI cardCount;
     private void Awake()
     {
-       string filepath = Application.persistentDataPath + "/CardData.json";
+        string filepath = Application.persistentDataPath + "/CardData.json";
         string path = Path.Combine(Application.persistentDataPath, "CardData.json");
         if (File.Exists(path))
-        {
+        {           
             string cardData = File.ReadAllText(path);
-            CD = JsonUtility.FromJson<CardData>(cardData);         
-            for (int i = 0; i < 100; i++)
+            CD = JsonConvert.DeserializeObject<CardData>(cardData);
+
+        }
+        AllCard = CD.AllCard;
+        for (int i = 0; i < AllCard; i++)
+        {
+            CardCount[CD.cardNo[i]]++;
+        }
+      /*  for (int i = 1; i < cd.cd.Length; i++)
+        {
+           
+           
+            GameObject newCard = Instantiate(CardPrefebs, Canvas.transform);
+            newCard.GetComponent<NoBattleCard>().setCardInfo(i);
+        }
+    */
+    }
+    public void getStarterCard(int no,int counter) //->no==0이면 모든 카드, type==1->스타트 2->직업
+    {
+        curCardCount = 0;
+        maxiumCardCount = counter;
+        cardCount.text = "선택 가능한 최대 카드 수 : " + maxiumCardCount;
+        for (int i = 1; i < cd.cd.Length; i++)
+        {if (cd.cd[i].Deck == no && cd.cd[i].type == 0)
             {
-                if (CardCountT[i] != null)
-                {
-                    CardCountT[i].text = CD.CardCount[i] + "";
-                    CardCount[i] = CD.CardCount[i];
-                    AllCard += CardCount[i];
-                }
+                GameObject newCard = Instantiate(CardPrefebs, Canvas.transform);
+                newCard.GetComponent<NoBattleCard>().setCardInfo(i);
             }
         }
-        AllCardT.text = "총 카드 장 수 : "+AllCard;
     }
-    private void Update()
+    public void CardOver()
     {
         
     }
-    public void ToMain()
+    private void Update()
     {
-        for(int i = 0; i < 100; i++)
+      
+    }
+ /*   public void ToMain()
+    {
+        CD.AllCard = AllCard;
+        int counter = 0;
+        for(int i = 0; i < cd.cd.Length; i++)
         {
-            CD.CardCount[i] = CardCount[i];
+            while (CardCount[i] != 0)
+            {
+                CardCount[i]--;
+                CD.cardNo[counter] = i;
+                CD.cardCost[counter] = cd.cd[i].Cost;
+                Debug.Log(cd.cd[i].Cost);
+                counter++;
+            }
         }
-        string cardData = JsonUtility.ToJson(CD,true);
+        string cardData = JsonConvert.SerializeObject(CD);
         string path = Path.Combine(Application.persistentDataPath, "CardData.json");
         File.WriteAllText(path,cardData);
         SceneManager.LoadScene("Main");
-    }
-    public void CardPlus(int i)
+    }*/
+    public void clear()
     {
-        if (CardCount[i] < 5)
-        {   CardCount[i]++;
-            CardCountT[i].text = CardCount[i].ToString();
-            AllCard++;
-            AllCardT.text = "총 카드 장 수 : " + AllCard;
+        Transform[] childList = Canvas.GetComponentsInChildren<Transform>();
+
+      for(int i = 1; i < childList.Length; i++)
+        {
+            Destroy(childList[i].gameObject);
         }
     }
-    public void CardMinus(int i)
-    {
-        if (CardCount[i] >0)
-        {   CardCount[i]--;
-            CardCountT[i].text = CardCount[i].ToString();
-            AllCard--;
-            AllCardT.text = "총 카드 장 수 : " + AllCard;
+public void SaveCard()
+    {     
+  for(int i = 1; i <= 4; i++)
+        {for (int j = 0; j < 5; j++)
+            {
+                CD.cardNo.Add(i);
+                CD.cardCost.Add(cd.cd[i].Cost);
+            }
         }
-    }
+        for (int i = 0; i < cd.cd.Length; i++)
+        {
+            while (CardCount[i] != 0)
+            {
+                CardCount[i]--;
+                CD.cardNo.Add(i);
+                CD.cardCost.Add(cd.cd[i].Cost);
+
+
+            }
+        }
+        CD.AllCard = CD.cardNo.Count;
+        string cardData = JsonConvert.SerializeObject(CD);
+        string path = Path.Combine(Application.persistentDataPath, "CardData.json");
+        File.WriteAllText(path, cardData);
+    }  
 }
+
 class CardData
 {
-    public int[] CardCount=new int[100];
+    public List<int> cardNo = new List<int>();
+    public List<int> cardCost = new List<int>();
+    public int AllCard;
 }
