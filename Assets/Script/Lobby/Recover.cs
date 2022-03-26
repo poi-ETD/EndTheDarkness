@@ -1,0 +1,91 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using TMPro;
+public class Recover : MonoBehaviour
+{    
+    [SerializeField] LobbyManager lobby;
+    int recoverCount;
+    [SerializeField] GameObject[] Recovers;
+    bool recoverMode;
+    bool reviveMode;
+    [SerializeField] GameObject recoverView;
+    [SerializeField] GameObject PopUpCanvas;
+    [SerializeField] GameObject Popup;
+    [SerializeField] TextMeshProUGUI popupText;
+    public void RecoverD()
+    {
+        if (lobby.GD.isAct) return;
+        if (lobby.canvasOn) return;
+        recoverView.SetActive(true);
+        lobby.canvasOn = true;
+        PopUpCanvas.SetActive(true);
+        for (int i = 0; i < lobby.ChD.size; i++)
+        { 
+            Recovers[i].SetActive(true);
+            Recovers[i].GetComponent<TextMeshProUGUI>().text = lobby.ChD.characterDatas[i].Name;
+            Recovers[i].transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = lobby.ChD.characterDatas[i].curHp + "/" + lobby.ChD.characterDatas[i].maxHp;
+            if (lobby.ChD.characterDatas[i].curHp == 0) {
+                Recovers[i].transform.GetChild(1).gameObject.SetActive(false);
+                Recovers[i].transform.GetChild(2).gameObject.SetActive(false);
+                Recovers[i].transform.GetChild(3).gameObject.SetActive(true);
+            }
+            else
+            {
+                Recovers[i].transform.GetChild(1).gameObject.SetActive(true);
+                Recovers[i].transform.GetChild(2).gameObject.SetActive(true);
+                Recovers[i].transform.GetChild(3).gameObject.SetActive(false);
+            }
+        }
+        for (int i = lobby.ChD.size; i < 4; i++)
+        {
+            Recovers[i].SetActive(false);
+        }
+
+    }
+   public void Revive(int i)
+    {
+        if (lobby.GD.Ignum < 800)
+        {
+            Popup.SetActive(true);
+            return;
+        }
+        lobby.GD.Ignum -= 800;
+        lobby.ChD.characterDatas[i].curHp = 1;
+        recoverView.SetActive(false);
+        PopUpCanvas.SetActive(false);
+        lobby.DayAct();
+        lobby.canvasOn = false;
+    }
+    public void EmergencyRecover(int i)
+    {
+        if (lobby.GD.Ignum < 10)
+        {
+            Popup.SetActive(true);
+            return;
+        }
+        lobby.GD.Ignum -= 10;
+        lobby.ChD.characterDatas[i].curHp += lobby.ChD.characterDatas[i].maxHp * Random.Range(1, 3) / 10;
+        if (lobby.ChD.characterDatas[i].curHp > lobby.ChD.characterDatas[i].maxHp) lobby.ChD.characterDatas[i].curHp = lobby.ChD.characterDatas[i].maxHp;
+        recoverView.SetActive(false);
+        PopUpCanvas.SetActive(false);
+        lobby.DayAct();
+        lobby.canvasOn = false;
+    }
+    public void HighRecover(int i)
+    {
+        if (lobby.GD.Ignum < 100)
+        {
+            Popup.SetActive(true);
+            return;
+        }
+        lobby.GD.Ignum -= 100;
+        lobby.ChD.characterDatas[i].curHp += lobby.ChD.characterDatas[i].maxHp * Random.Range(5, 10) / 10;
+        if (lobby.ChD.characterDatas[i].curHp > lobby.ChD.characterDatas[i].maxHp) lobby.ChD.characterDatas[i].curHp = lobby.ChD.characterDatas[i].maxHp;
+        recoverView.SetActive(false);
+        PopUpCanvas.SetActive(false);
+        lobby.DayAct();
+        lobby.canvasOn = false;
+    }
+
+}

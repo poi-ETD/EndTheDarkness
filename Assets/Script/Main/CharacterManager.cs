@@ -43,7 +43,7 @@ public class CharacterManager : MonoBehaviour
         string characterData = JsonConvert.SerializeObject(CD);       
         string path = Path.Combine(Application.persistentDataPath, "CharacterData.json");                       
         File.WriteAllText(path, characterData);
-        SceneManager.LoadScene("Main");
+        SceneManager.LoadScene("Lobby");
     }
     public void RemoveCharacter(int i)
     {if(i<CharacterList.Count)
@@ -99,6 +99,12 @@ public class CharacterManager : MonoBehaviour
             listImage[i].color = new Color(1, 1, 1, 0);
         }
     }
+    public bool noSelect;
+    public void noSelectMakeFalse()
+    {
+        noSelect = false;
+    }
+    [SerializeField] GameObject MaxCardPopup;
     public void SetSubSetting() //1->이름 2~5 -> 패시브 1 6->패시브 팝업 텍스트
     {      
         if (counter > -1)
@@ -114,26 +120,21 @@ public class CharacterManager : MonoBehaviour
                 warnPopup.SetActive(true);
                 SetText[6].text = "패시브가 설정되지 않았습니다.";
                 return;
-            }// public curCharacterData(string name, int no, int cost, int atk, 
+            }
+            if (cardManager.curCardCount < cardManager.maxiumCardCount&&!noSelect)
+            {
+                noSelect = true;
+                MaxCardPopup.SetActive(true);
+                return;
+            }
+            noSelect = false;
+            MaxCardPopup.SetActive(false);
+            // public curCharacterData(string name, int no, int cost, int atk, 
             //int maxHp, int curHp, int passive1, int passive2, int passive3, int passive4, int curFormation)
-                CD.characterDatas[counter]=new CharacterData.curCharacterData(
-                CD2.cd[no].Name,no, CD2.cd[no].Cost, CD2.cd[no].Atk, CD2.cd[no].maxHp, CD2.cd[no].maxHp,0,0,0,0,curFormation);
-            if (curPassive == 0)
-            {
-                CD.characterDatas[counter].passive1++;
-            }
-            if (curPassive == 1)
-            {
-                CD.characterDatas[counter].passive2++;
-            }
-            if (curPassive == 2)
-            {
-                CD.characterDatas[counter].passive3++;
-            }
-            if (curPassive == 3)
-            {
-                CD.characterDatas[counter].passive4++;
-            }
+            int[] passiveO = new int[4];
+            CD.characterDatas[counter]=new CharacterData.curCharacterData(
+                CD2.cd[no].Name, no, CD2.cd[no].Cost, CD2.cd[no].Atk, CD2.cd[no].maxHp, CD2.cd[no].maxHp,passiveO,curFormation);
+            CD.characterDatas[counter].passive[curPassive]++;
            
         }
       
@@ -152,10 +153,10 @@ public class CharacterManager : MonoBehaviour
         }
         SubImage.sprite = CharacterImgae[CharacterList[counter]];
         SetText[0].text = CD2.cd[CharacterList[counter]].Name;
-        SetText[1].text = CD2.cd[CharacterList[counter]].passive1;
-        SetText[2].text = CD2.cd[CharacterList[counter]].passive2;
-        SetText[3].text = CD2.cd[CharacterList[counter]].passive3;
-        SetText[4].text = CD2.cd[CharacterList[counter]].passive4;      
+        SetText[1].text = CD2.cd[CharacterList[counter]].passive[0];
+        SetText[2].text = CD2.cd[CharacterList[counter]].passive[1];
+        SetText[3].text = CD2.cd[CharacterList[counter]].passive[2];
+        SetText[4].text = CD2.cd[CharacterList[counter]].passive[3];      
         Canvas.SetActive(false);
         curPassive = -1;
         curFormation = -1;
@@ -170,14 +171,9 @@ public class CharacterManager : MonoBehaviour
         if (curPassive != i)
         {          
             PassivePopup.SetActive(true);
-            if (i == 0)
-                SetText[5].text = CD2.cd[CharacterList[counter]].passiveContent1;
-            if (i == 1)
-                SetText[5].text = CD2.cd[CharacterList[counter]].passiveContent2;
-            if (i == 2)
-                SetText[5].text = CD2.cd[CharacterList[counter]].passiveContent3;
-            if (i == 3)
-                SetText[5].text = CD2.cd[CharacterList[counter]].passiveContent4;
+            
+                SetText[5].text = CD2.cd[CharacterList[counter]].passiveContent[0];
+            
             if (curPassive != -1)
                 Arrows[curPassive].SetActive(false);
             curPassive = i;
@@ -208,9 +204,24 @@ public class CharacterManager : MonoBehaviour
     }
 }
 
-public class CharacterData 
+public class CharacterData
 {
-  public struct curCharacterData
+   /* private static CharacterData instance;
+
+    //게임 매니저 인스턴스에 접근할 수 있는 프로퍼티. static이므로 다른 클래스에서 맘껏 호출할 수 있다.
+    public static CharacterData Instance
+    {
+        get
+        {
+            if (null == instance)
+            {
+                //게임 인스턴스가 없다면 하나 생성해서 넣어준다.
+                instance = new CharacterData();
+            }
+            return instance;
+        }
+    }*/
+    public struct curCharacterData
     {
         public string Name;
         public int No;
@@ -218,12 +229,9 @@ public class CharacterData
         public int Atk;
         public int maxHp;
         public int curHp;
-        public int passive1;
-        public int passive2;
-        public int passive3;
-        public int passive4;
+        public int[] passive;
         public int curFormation; //0->전방 1->후방
-        public curCharacterData(string name, int no, int cost, int atk, int maxHp, int curHp, int passive1, int passive2, int passive3, int passive4, int curFormation)
+        public curCharacterData(string name, int no, int cost, int atk, int maxHp, int curHp, int[] passive, int curFormation)
         {
             Name = name;
             No = no;
@@ -231,10 +239,7 @@ public class CharacterData
             Atk = atk;
             this.maxHp = maxHp;
             this.curHp = curHp;
-            this.passive1 = passive1;
-            this.passive2 = passive2;
-            this.passive3 = passive3;
-            this.passive4 = passive4;
+            this.passive = passive;
             this.curFormation = curFormation;
         }
     }

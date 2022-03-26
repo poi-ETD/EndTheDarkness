@@ -45,7 +45,7 @@ public class BattleManager : MonoBehaviour
     public  int ReviveCount;
     public bool card7mode;
     public GameObject[] Enemys;
-    public BattleData bd;
+    public GameData gd;
     public CharacterData CD;
     [SerializeField] GameObject victory;
     [SerializeField] GameObject defeated;
@@ -177,10 +177,7 @@ public class BattleManager : MonoBehaviour
     }
     public void toMain()
     {
-        string path = Path.Combine(Application.persistentDataPath, "BattleData.json");
-     
-            string battleData = File.ReadAllText(path);
-            bd = JsonUtility.FromJson<BattleData>(battleData);
+       
             for(int i = 0; i < characters.Count; i++)
             {
                 bool isForward = false;
@@ -197,8 +194,7 @@ public class BattleManager : MonoBehaviour
                 if (!isForward) CD.characterDatas[i].curFormation = 1;
             }
            
-           battleData = JsonUtility.ToJson(bd);
-            File.WriteAllText(path, battleData);
+        
         
         string path4 = Path.Combine(Application.persistentDataPath, "CharacterData.json");
         string CharacterData = JsonConvert.SerializeObject(CD);
@@ -210,9 +206,9 @@ public class BattleManager : MonoBehaviour
     private void Awake()
     {
         startCost = 0;
-        string path = Path.Combine(Application.persistentDataPath, "battleData.json");
-        string battleData = File.ReadAllText(path);
-        bd = JsonUtility.FromJson<BattleData>(battleData);
+        string path = Path.Combine(Application.persistentDataPath, "GameData.json");
+        string gameData = File.ReadAllText(path);
+        gd = JsonConvert.DeserializeObject<GameData>(gameData);
         path = Path.Combine(Application.persistentDataPath, "CharacterData.json");
        string characterData= File.ReadAllText(path);
         CD = JsonConvert.DeserializeObject<CharacterData>(characterData);
@@ -235,10 +231,7 @@ public class BattleManager : MonoBehaviour
             CharacterC.GetComponent<Character>().Atk = CD.characterDatas[i].Atk;
             CharacterC.GetComponent<Character>().Hp = CD.characterDatas[i].curHp;
             startCost += CD.characterDatas[i].Cost;
-            CharacterC.GetComponent<Character>().passive[0] = CD.characterDatas[i].passive1;
-            CharacterC.GetComponent<Character>().passive[1] = CD.characterDatas[i].passive2;
-            CharacterC.GetComponent<Character>().passive[2] = CD.characterDatas[i].passive3;
-            CharacterC.GetComponent<Character>().passive[3] = CD.characterDatas[i].passive4;
+            CharacterC.GetComponent<Character>().passive = CD.characterDatas[i].passive;
             CharacterC.GetComponent<Character>().Name = CD.characterDatas[i].Name;
         }
             
@@ -252,13 +245,13 @@ public class BattleManager : MonoBehaviour
             back[i -line].transform.position = new Vector2(-800 / 45f, (400 - 250 * characters.Count) / 45f);
             characters.Add(back[i-line]);
         }
-        if (bd.battleNo == 3||bd.battleNo==6) //폴리만 예외
+        if (gd.BattleNo == 3||gd.BattleNo==6) //폴리만 예외
         { 
-            GameObject EnemySummon = Instantiate(Enemys[bd.battleNo], new Vector2(0, 6), transform.rotation, GameObject.Find("CharacterCanvas").transform);
+            GameObject EnemySummon = Instantiate(Enemys[gd.BattleNo], new Vector2(0, 6), transform.rotation, GameObject.Find("CharacterCanvas").transform);
         }
         else
         {
-            GameObject EnemySummon = Instantiate(Enemys[bd.battleNo], new Vector2(-2, -2), transform.rotation, GameObject.Find("CharacterCanvas").transform);
+            GameObject EnemySummon = Instantiate(Enemys[gd.BattleNo], new Vector2(-2, -2), transform.rotation, GameObject.Find("CharacterCanvas").transform);
         }
         Enemys = GameObject.FindGameObjectsWithTag("Enemy");
         TurnCardCount = CardCount;

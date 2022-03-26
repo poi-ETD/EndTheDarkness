@@ -5,10 +5,16 @@ using TMPro;
 
 public class NoBattleCard : MonoBehaviour
 {
-    int no;
+    int no=1;
     [SerializeField] TextMeshProUGUI[] CardInfo;
     CardData2 cd=new CardData2();
     CardSetManager csm;
+    int deckNo;
+    
+    public void setCost(int i)
+    {
+        CardInfo[3].text = "" + i;//코스트
+    }
     public void setCardInfo(int i)
     {
         csm = GameObject.Find("CardSetManager").GetComponent<CardSetManager>();   
@@ -41,6 +47,36 @@ public class NoBattleCard : MonoBehaviour
         CardInfo[4].text = Name;
         CardInfo[5].text = csm.CardCount[no] + "";
     }
+    public void setCardInfoInLobby(int i,int d)
+    {
+        deckNo = d;
+        no = cd.cd[i].No;
+        CardInfo[0].text = cd.cd[i].Name;//제목
+        CardInfo[1].text = cd.cd[i].Content;//내용
+        CardInfo[2].text = "NO." + cd.cd[i].No.ToString("D3");//넘버
+        string Name = "";
+        if (cd.cd[i].Deck == 0)
+        {
+            Name = "BASE";
+        }
+        if (cd.cd[i].Deck == 1)
+        {
+            Name = "Q";
+        }
+        if (cd.cd[i].Deck == 2)
+        {
+            Name = "SPARKY";
+        }
+        if (cd.cd[i].Deck == 3)
+        {
+            Name = "VANGARA";
+        }
+        if (cd.cd[i].Deck == 4)
+        {
+            Name = "PORTE";
+        }
+        CardInfo[4].text = Name;
+    }
     public void CardPlus(int i)
     {
         csm.AllCard -= csm.CardCount[no];
@@ -71,5 +107,12 @@ public class NoBattleCard : MonoBehaviour
         CardInfo[5].text = csm.CardCount[no] + "";
         csm.AllCard += csm.CardCount[no];
     }
-    
+    public void CardSee()
+    {
+        GameObject.Find("LobbyManager").GetComponent<LobbyManager>().ThisCardSee(deckNo);
+    }
+    public void CardSeeInShop()
+    {
+        GameObject.Find("LobbyManager").GetComponent<LobbyManager>().CardSelectInShop(gameObject,no);
+    }
 }

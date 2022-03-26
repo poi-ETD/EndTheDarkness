@@ -156,6 +156,9 @@ MonoBehaviour:
   Canvas: {fileID: 988648611}
   CardPrefebs: {fileID: 4418929267741498549, guid: 4a64992badb8c2940b1e278825986b12,
     type: 3}
+  curCardCount: 0
+  maxiumCardCount: 0
+  cardCount: {fileID: 0}
 --- !u!4 &137527550
 Transform:
   m_ObjectHideFlags: 0

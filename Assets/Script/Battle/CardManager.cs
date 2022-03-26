@@ -50,7 +50,7 @@ public class CardManager : MonoBehaviour
             CD = JsonConvert.DeserializeObject<CardData>(cardData);
 
         }
-        for (int i = 0; i < CD.AllCard; i++)
+        for (int i = 0; i < CD.cardNo.Count; i++)
         {
             GameObject newCard = Instantiate(CardPrefebs, CardCanvas.transform);
             newCard.GetComponent<Card>().NoT.text= "NO." + cd.cd[CD.cardNo[i]].No.ToString("D3");//넘버
@@ -59,10 +59,7 @@ public class CardManager : MonoBehaviour
             newCard.GetComponent<Card>().Name.text = cd.cd[CD.cardNo[i]].Name;
             newCard.GetComponent<Card>().cardcost = CD.cardCost[i];
             newCard.GetComponent<Card>().realcost = CD.cardCost[i];
-            addComponent(newCard,CD.cardNo[i]);
-
-          
-            
+            addComponent(newCard,CD.cardNo[i]);                    
             Deck.Add(newCard);
         }
         for (int i = 0; i < Deck.Count; i++)

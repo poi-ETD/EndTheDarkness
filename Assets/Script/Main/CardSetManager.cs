@@ -29,7 +29,7 @@ public class CardSetManager : MonoBehaviour
             CD = JsonConvert.DeserializeObject<CardData>(cardData);
 
         }
-        AllCard = CD.AllCard;
+        AllCard = CD.cardNo.Count;
         for (int i = 0; i < AllCard; i++)
         {
             CardCount[CD.cardNo[i]]++;
@@ -113,16 +113,16 @@ public void SaveCard()
 
             }
         }
-        CD.AllCard = CD.cardNo.Count;
+       
         string cardData = JsonConvert.SerializeObject(CD);
         string path = Path.Combine(Application.persistentDataPath, "CardData.json");
         File.WriteAllText(path, cardData);
     }  
 }
 
-class CardData
+public class CardData
 {
     public List<int> cardNo = new List<int>();
     public List<int> cardCost = new List<int>();
-    public int AllCard;
+    
 }
