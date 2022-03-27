@@ -172,7 +172,7 @@ public class CharacterManager : MonoBehaviour
         {          
             PassivePopup.SetActive(true);
             
-                SetText[5].text = CD2.cd[CharacterList[counter]].passiveContent[0];
+                SetText[5].text = CD2.cd[CharacterList[counter]].passiveContent[i];
             
             if (curPassive != -1)
                 Arrows[curPassive].SetActive(false);

@@ -194,6 +194,13 @@ public class CardManager : MonoBehaviour
             Deck[i].SetActive(true);
             Deck[i].GetComponent<Card>().cardcost = Deck[i].GetComponent<Card>().realcost;
             Deck[i].SetActive(false);
+          
+        }
+        for (int i = 0; i < Grave.Count; i++)
+        {
+            Grave[i].SetActive(true);
+            Grave[i].GetComponent<Card>().cardcost = Grave[i].GetComponent<Card>().realcost;
+            Grave[i].SetActive(false);
         }
     }
 

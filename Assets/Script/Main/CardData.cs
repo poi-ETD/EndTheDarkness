@@ -12,6 +12,7 @@ public class CardData2
         public int Deck;
         public int type;
         public int No;
+     
         public cardData(string Name, string Content, int Cost, int Deck,int type,int No)
         {
             this.Name = Name;

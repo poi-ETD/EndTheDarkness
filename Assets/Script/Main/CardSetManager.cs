@@ -100,6 +100,8 @@ public void SaveCard()
             {
                 CD.cardNo.Add(i);
                 CD.cardCost.Add(cd.cd[i].Cost);
+                CD.cardGet.Add(CD.get);
+                CD.get++;
             }
         }
         for (int i = 0; i < cd.cd.Length; i++)
@@ -109,7 +111,8 @@ public void SaveCard()
                 CardCount[i]--;
                 CD.cardNo.Add(i);
                 CD.cardCost.Add(cd.cd[i].Cost);
-
+                CD.cardGet.Add(CD.get);
+                CD.get++;
 
             }
         }
@@ -124,5 +127,7 @@ public class CardData
 {
     public List<int> cardNo = new List<int>();
     public List<int> cardCost = new List<int>();
+    public List<int> cardGet = new List<int>();
+    public int get;
     
 }

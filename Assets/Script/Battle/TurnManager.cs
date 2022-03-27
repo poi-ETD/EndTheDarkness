@@ -120,6 +120,7 @@ public class TurnManager : MonoBehaviour
                 BM.characters[i].Act = 1 - BM.characters[i].NextTurnMinusAct;
                 if (BM.BlessBM[4]) BM.characters[i].Act++;
                 if (BM.BlessBM[4] && t == 1) BM.characters[i].Act = 0;
+                if (BM.BlessBM[12] && t == 1) BM.characters[i].Act = 0;
                 if (BM.characters[i].Act < 0) BM.characters[i].Act = 0;
                 BM.characters[i].NextTurnMinusAct = 0;
              

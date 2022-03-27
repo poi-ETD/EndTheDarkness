@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
-
+using System.Linq;
 
 public class Bless : MonoBehaviour
 {
@@ -16,6 +17,43 @@ public class Bless : MonoBehaviour
     [SerializeField] GameObject noIgn;
     [SerializeField] TextMeshProUGUI[] blessT;
     blessData bd = new blessData();
+    CharacterData2 chainfo = new CharacterData2();
+    [SerializeField] GameObject bless6;
+    [SerializeField] GameObject bless5;
+    [SerializeField] GameObject bless5Content;
+    int blessNum;
+    public int blesscount;
+    public TextMeshProUGUI bless5countt;
+    [SerializeField] GameObject bless5RemoveCard;
+    List<GameObject> b5cardList = new List<GameObject>();
+    [SerializeField] GameObject bless14;
+    [SerializeField] GameObject bless12;
+    [SerializeField] GameObject bless12Content;
+    public int bless12count;
+    public TextMeshProUGUI bless12countt;
+    public int curBless;
+    List<int> blessList= new List<int>();
+    [SerializeField] GameObject[] blessIcon;
+    private void Start()
+    {
+        setBlessIcon();
+
+    }
+    public void setBlessIcon()
+    {
+       for(int i = 1; i < lobby.GD.blessbool.Length; i++)
+        {if (blessIcon[i] == null) continue;
+            if (lobby.GD.blessbool[i])
+            {
+                Debug.Log(i);
+                blessIcon[i].SetActive(true);
+            }
+            else
+            {
+                blessIcon[i].SetActive(false);
+            }
+        }
+    }
     public void IgnumSet(int i)
     {
         noIgn.SetActive(false);
@@ -41,11 +79,98 @@ public class Bless : MonoBehaviour
     }
     public void exitBlessPopup()
     {
-        noIgn.SetActive(false);
-        lobby.canvasOn = false;
-        BlessPopup.SetActive(false);
+        if (blessNum >0)
+        {
+          if(  blessNum==6)
+            b6();
+            if (blessNum == 5)
+                b5();
+            if (blessNum == 12) b12();
+            blessNum = 0;
+        }
+        else
+        {
+            noIgn.SetActive(false);
+            lobby.canvasOn = false;
+            BlessPopup.SetActive(false);
+        }
     }
-   public void GetBless()
+    Dictionary<int, int[]> CardList = new Dictionary<int, int[]>(); //key->넘버 value->코스트
+    void b12()
+    {
+        blesscount = 0;
+        curBless = 12;
+        CardList.Clear();
+        BlessPopup.SetActive(false);
+        BlessObj.SetActive(false);
+        bless12.SetActive(true);
+        bless12Content.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
+        for (int i = 0; i < lobby.CD.cardNo.Count; i++)
+        {
+            GameObject newCard = Instantiate(bless5RemoveCard, bless12Content.transform);
+            newCard.GetComponent<NoBattleCard>().setCardInfoInLobby(lobby.CD.cardNo[i], i);
+            newCard.GetComponent<NoBattleCard>().setCost(lobby.CD.cardCost[i]);
+            int[] k = { lobby.CD.cardNo[i], lobby.CD.cardCost[i] };
+            CardList.Add(i, k);
+            b5cardList.Add(newCard);
+        }
+        setBlessIcon();
+    }
+    void b5()
+    {
+        blesscount = 0;
+        curBless = 5;
+        CardList.Clear();
+        BlessPopup.SetActive(false);
+        BlessObj.SetActive(false);
+        bless5.SetActive(true);
+        bless5Content.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);         
+        for (int i = 0; i < lobby.CD.cardNo.Count; i++)
+        {
+            GameObject newCard = Instantiate(bless5RemoveCard, bless5Content.transform);
+            newCard.GetComponent<NoBattleCard>().setCardInfoInLobby(lobby.CD.cardNo[i], i);
+            newCard.GetComponent<NoBattleCard>().setCost(lobby.CD.cardCost[i]);
+            int[] k = { lobby.CD.cardNo[i], lobby.CD.cardCost[i] };
+            CardList.Add(i, k);
+            b5cardList.Add(newCard);
+        }
+        setBlessIcon();
+    }
+    public void OrderByCost()
+    {
+        var queryAsc = CardList.OrderBy(x => x.Value[1]);
+        int count = 0;
+        foreach (var dictionary in queryAsc)
+        {
+
+            b5cardList[dictionary.Key].transform.SetSiblingIndex(count);
+                count++;
+        }
+    }
+    public void OrderByNo()
+    {
+        var queryAsc = CardList.OrderBy(x => x.Value[0]);
+        int count = 0;
+        foreach (var dictionary in queryAsc)
+        {
+
+            b5cardList[dictionary.Key].transform.SetSiblingIndex(count);
+                count++;
+        }
+    }
+    public void OrderByGet()
+    {
+        var queryAsc = CardList.OrderBy(x => x.Key);
+        int count = 0;
+        foreach (var dictionary in queryAsc)
+        {
+
+            b5cardList[dictionary.Key].transform.SetSiblingIndex(count);
+                count++;
+        }
+    }
+   
+    public void GetBless()
     {
         if (lobby.GD.Ignum < Ignum)
         {
@@ -91,10 +216,92 @@ public class Bless : MonoBehaviour
             }
         }
         rand = Random.Range(0, randList.Count);
+        int count = 0;
+        while (lobby.GD.blessbool[rand])
+        {
+            rand = Random.Range(0, randList.Count);
+            count++;
+            if (count > 100) break;
+        }
+        while (lobby.GD.blessbool[rand])
+        {
+            rand = Random.Range(0, randList.Count);
+           
+        }
         blessT[0].text = bd.bd[randList[rand]].Name + "";
         blessT[1].text = bd.bd[randList[rand]].content + "";
+        
+        BlessApply(randList[rand]);//rand
+    }
+    public void b6()
+    {
+        BlessObj.SetActive(false);
+        bless6.SetActive(true);
+        for (int i = 0; i < lobby.ChD.size; i++)
+        {
+            bless6.transform.GetChild(i).gameObject.SetActive(true);
+            bless6.transform.GetChild(i).gameObject.GetComponent<TextMeshProUGUI>().text = lobby.ChD.characterDatas[i].Name;
+            for (int j = 0; j < 4; j++)
+            {
+                if (lobby.ChD.characterDatas[i].passive[j] == 0)
+                {
+                    bless6.transform.GetChild(i).GetChild(j).gameObject.SetActive(false);
+                }
+                else
+                {
+                    bless6.transform.GetChild(i).GetChild(j).gameObject.SetActive(true);
+                    bless6.transform.GetChild(i).GetChild(j).GetChild(0).GetComponent<Text>().text = chainfo.cd[lobby.ChD.characterDatas[i].No].passive[j];
+                }
+            }
+        }
+        for (int i = lobby.ChD.size; i < 4; i++)
+        {
+            bless6.transform.GetChild(i).gameObject.SetActive(false);
+        }
 
-        BlessApply(1);//rand
+    }
+    List<int> b5list = new List<int>();
+    public void RemoveB5()
+    {if (blesscount < 6) return;      
+        for(int i = 0; i <lobby.CD.cardNo.Count; i++)
+        {
+        
+            if(bless5Content.transform.GetChild(i).gameObject.GetComponent<NoBattleCard>().select)
+            b5list.Add(bless5Content.transform.GetChild(i).gameObject.GetComponent<NoBattleCard>().deckNo);
+        }
+        b5list.Sort();
+        for(int i = 5; i >=0; i--)
+        { 
+            lobby.CD.cardNo.RemoveAt(b5list[i]);
+            lobby.CD.cardCost.RemoveAt(b5list[i]);
+            lobby.CD.cardGet.RemoveAt(b5list[i]);
+        }
+        exitBlessPopup();
+        lobby.DayAct();
+        bless5.SetActive(false);
+        b5list.Clear();
+        b5cardList.Clear();
+    }
+    public void B12Apply()
+    {
+        if (blesscount < 3) return;
+        for (int i = 0; i < lobby.CD.cardNo.Count; i++)
+        {
+
+            if (bless12Content.transform.GetChild(i).gameObject.GetComponent<NoBattleCard>().select)
+                b5list.Add(bless12Content.transform.GetChild(i).gameObject.GetComponent<NoBattleCard>().deckNo) ;
+        }
+       for(int i = 0; i < 3; i++)
+        {
+            lobby.CD.cardCost[b5list[i]] = 0;
+            lobby.GD.bless12[i] = lobby.CD.cardGet[b5list[i]];
+        }
+        exitBlessPopup();
+        lobby.DayAct();
+        bless12.SetActive(false);
+        b5list.Clear();
+        b5cardList.Clear();
+        setBlessIcon();
     }
     void BlessApply(int b)
     {
@@ -110,27 +317,31 @@ public class Bless : MonoBehaviour
         }
         else if (b == 5)
         {
-           
+            But[2].SetActive(true);
+            blessNum = 5;
         }
         else if (b == 6)
-        {
-
+        {           
+            But[2].SetActive(true);
+            blessNum = 6;
         }
 
         else if (b == 8)
-        {  int length = lobby.CD.cardNo.Count;
-            int[] randArray = new int[lobby.CD.cardNo.Count/2];
+        {
+            int length = lobby.CD.cardNo.Count;
+            int[] randArray = new int[lobby.CD.cardNo.Count / 2];
             bool isSame;
-            for(int i = 0; i < length/2; ++i)
+            for (int i = 0; i < length / 2; ++i)
             {
                 while (true)
                 {
 
                     randArray[i] = Random.Range(0, length);
                     isSame = false;
-                    for(int j = 0; j < i; ++j)
+                    for (int j = 0; j < i; ++j)
                     {
-                        if (randArray[j] == randArray[i]){
+                        if (randArray[j] == randArray[i])
+                        {
                             isSame = true;
                             break;
                         }
@@ -138,36 +349,78 @@ public class Bless : MonoBehaviour
                     if (!isSame) break;
                 }
             }
-            for(int i = length/2-1; i > 0; i--)
+            for (int i = length / 2 - 1; i > 0; i--)
             {
                 for (int j = 0; j < i; j++)
                 {
                     if (randArray[j] > randArray[j + 1])
                     {
                         int temp = randArray[j];
-                       randArray[j] = randArray[j + 1];
+                        randArray[j] = randArray[j + 1];
                         randArray[j + 1] = temp;
                     }
                 }
             }
-            for(int i = length/2-1; i >=0; i--)
+            for (int i = length / 2 - 1; i >= 0; i--)
             {
                 lobby.CD.cardCost.RemoveAt(randArray[i]);
                 lobby.CD.cardNo.RemoveAt(randArray[i]);
-               
+                lobby.CD.cardGet.RemoveAt(randArray[i]);
             }
             But[2].SetActive(true);
         }
+        else if (b == 12)
+        {
+            But[2].SetActive(true);
+            blessNum = 12;
+            lobby.GD.blessbool[12] = true;
+        }
         else if (b == 14)
         {
-
+            bless14.SetActive(true);
+            for(int i = 0; i < 4; i++)
+            {
+                if (lobby.ChD.characterDatas[i].Name!= null)
+                {
+                    bless14.transform.GetChild(i).gameObject.SetActive(true);
+                    bless14.transform.GetChild(i).GetChild(0).GetComponent<Text>().text = lobby.ChD.characterDatas[i].Name;
+                }
+                else
+                {
+                    bless14.transform.GetChild(i).gameObject.SetActive(false);
+                }
+            }
+          
         }
        else {
+          
             lobby.GD.blessbool[b] = true;
             But[2].SetActive(true); }
         lobby.DayAct();
+        setBlessIcon();
     }
+ 
+    public void bless14But(int i)
+    {
+        lobby.ChD.characterDatas[i].Atk++;
+        lobby.ChD.characterDatas[i].curHp = 1;
+        exitBlessPopup();
+     
+       
+        lobby.DayAct();
+        bless14.SetActive(false);
+        setBlessIcon();
+
+    }
+  public void SelectMorePassive(int i)
+    {
   
+        bless6.SetActive(false);
+        exitBlessPopup();
+        lobby.ChD.characterDatas[i / 4].passive[i % 4]++;
+        lobby.DayAct();
+        setBlessIcon();
+    }
 }
 public class blessData
 {
@@ -196,7 +449,7 @@ public class blessData
         new BData(2,"과도한 영접","전투 동안 , 임의의 후방 아군 한명의 공격력을 2올린다.\n해당 아군의 방어도는 올라가지 않는다.",1,true),
         new BData(3,"숨겨진 약점","시작 드로우를 8장 한다.\n전투가 2번 끝나고 해당 축복은 사라진다.",1,true),
         new BData(4,"은밀한 준비","전투의 첫 턴동안 모든 아군의 행동력이 0이 된다.\n그 이후 모든 아군의 행동력이 2로 고정된다.",2,true),
-        new BData(5,"가벼운 몸짓","(패시브 빈칸이 있는) 아군 한명을 선택해 패시브를 고른다. \n	해당 아군의 공격력은 1로 고정된다.",3,false),
+        new BData(5,"가벼운 몸짓","(패시브 빈칸이 있는) 아군 한명을 선택해 패시브를 고른다. \n	해당 아군의 공격력을 -2로 감소시킨다.",3,false),
         new BData(6,"인위적인 극복","전방에 있는 아군의 체력이 감소할 때마다 그 수치만큼 적 전체에게 데미지를 준다.",3,false),
         new BData(7,"역류하는 고통","덱이 절반 소멸된다.",3,true),
         new BData(8,"a","덱이 절반 소멸된다.",1,false),

@@ -9,8 +9,8 @@ public class NoBattleCard : MonoBehaviour
     [SerializeField] TextMeshProUGUI[] CardInfo;
     CardData2 cd=new CardData2();
     CardSetManager csm;
-    int deckNo;
-    
+    public int deckNo;
+    public bool select;
     public void setCost(int i)
     {
         CardInfo[3].text = "" + i;//코스트
@@ -46,6 +46,39 @@ public class NoBattleCard : MonoBehaviour
         }
         CardInfo[4].text = Name;
         CardInfo[5].text = csm.CardCount[no] + "";
+    }
+    public void SelectInBless5()
+    {       
+        if (select)
+        {
+            GameObject.Find("Bless").GetComponent<Bless>().blesscount--;
+            transform.localScale /= 1.2f;
+            select = false;
+        }
+        else
+        {if (GameObject.Find("Bless").GetComponent<Bless>().curBless == 5)
+            {
+                if (GameObject.Find("Bless").GetComponent<Bless>().blesscount < 6)
+                {
+                    GameObject.Find("Bless").GetComponent<Bless>().blesscount++;
+                    transform.localScale *= 1.2f;
+                    select = true;
+                }
+            }
+            if (GameObject.Find("Bless").GetComponent<Bless>().curBless == 12)
+            {
+                if (GameObject.Find("Bless").GetComponent<Bless>().blesscount < 3)
+                {
+                    GameObject.Find("Bless").GetComponent<Bless>().blesscount++;
+                    transform.localScale *= 1.2f;
+                    select = true;
+                }
+            }
+        }
+        if (GameObject.Find("Bless").GetComponent<Bless>().curBless == 5)
+            GameObject.Find("Bless").GetComponent<Bless>().bless5countt.text = "선택된 카드 수 :"+GameObject.Find("Bless").GetComponent<Bless>().blesscount;
+        if (GameObject.Find("Bless").GetComponent<Bless>().curBless == 12)
+            GameObject.Find("Bless").GetComponent<Bless>().bless12countt.text = "선택된 카드 수 :" + GameObject.Find("Bless").GetComponent<Bless>().blesscount;
     }
     public void setCardInfoInLobby(int i,int d)
     {

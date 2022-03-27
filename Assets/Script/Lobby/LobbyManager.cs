@@ -47,6 +47,8 @@ public class LobbyManager : MonoBehaviour
     [SerializeField] GameObject cancleInShop;
     int SelectedCharacter;
     [SerializeField] GameObject[] ShopButtons;
+    [SerializeField] TextMeshProUGUI curDay;
+  
     private void Awake()
     {
         string path = Path.Combine(Application.persistentDataPath, "CardData.json");
@@ -69,8 +71,10 @@ public class LobbyManager : MonoBehaviour
         }
         else
         {
+            GD.Day = 1;
             save();
             Resetmara();
+         
         }
         IgnumT.text = GD.Ignum + "";
         if (GD.isAct && !GD.isNight)
@@ -80,6 +84,17 @@ public class LobbyManager : MonoBehaviour
                 mainDayAct[i].color = new Color(0.5f, 0.5f, 0.5f);
             }
         }
+        if (!GD.isNight)
+        {
+            day.SetActive(true);
+            night.SetActive(false);
+        }
+        else
+        {
+            day.SetActive(false);
+            night.SetActive(true);
+        }
+        setDay();
     }
     void Resetmara()
     {
@@ -224,15 +239,24 @@ public class LobbyManager : MonoBehaviour
         DayAct();
     }
     public void DayAct()
-    {
-        GD.isAct = true;
+    {if (!GD.blessbool[11])
+        { GD.isAct = true; }
+        else
+        {
+            if (GD.isActInDay) { GD.isAct = true;
+               GD.isActInDay = false;
+            }
+            else GD.isActInDay = true;
+        }
         IgnumT.text = GD.Ignum + "";
         save();
-        for(int i = 0; i < mainDayAct.Length; i++)
+        if (GD.isAct)
         {
-            mainDayAct[i].color = new Color(0.5f, 0.5f, 0.5f);
+            for (int i = 0; i < mainDayAct.Length; i++)
+            {
+                mainDayAct[i].color = new Color(0.5f, 0.5f, 0.5f);
+            }
         }
-       
     }
     public void save()
     {
@@ -253,9 +277,19 @@ public class LobbyManager : MonoBehaviour
         clear();
         canvasOn = false;
     }
+    public void goHome()
+    {
+        save();
+        SceneManager.LoadScene("Main");
+    }
     public void Actfalse()
     {
+        day.SetActive(true);
+        night.SetActive(false);
+        GD.isNight = false;
         GD.isAct = false;
+        GD.isActInDay = false;
+        setDay();
         for (int i = 0; i < mainDayAct.Length; i++)
         {
             mainDayAct[i].color = new Color(1,1,1);
@@ -322,7 +356,9 @@ public class LobbyManager : MonoBehaviour
         {
             CD.cardNo.Add(ShopSelectedCardNo);
             CD.cardCost.Add(CaInfo.cd[ShopSelectedCardNo].Cost);
-          
+            CD.cardGet.Add(CD.get);
+            CD.get++;
+
         }
        cancleInShop.SetActive(true);
         Transform[] childList = GameObject.Find("ShopList").GetComponentsInChildren<Transform>();
@@ -409,8 +445,27 @@ public class LobbyManager : MonoBehaviour
             newCard.GetComponent<NoBattleCard>().setCardInfoInLobby(RandomCardList[r], 0);
         }
     }
-    public void GoBattle()
+    public void NextTurn()
     {
-        SceneManager.LoadScene("battle");
+        if (!GD.isNight)
+        {
+            save();
+            day.SetActive(false);
+            night.SetActive(true);
+            GD.isAct = false;
+            GD.isNight = true;
+            setDay();
+        }
+        else
+        {
+            save();
+            SceneManager.LoadScene("battle");
+
+        }
+    }
+    public void setDay()
+    { string n = "DAY";
+        if (GD.isNight) n = "Night";
+        curDay.text = n + GD.Day;
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 public class Recover : MonoBehaviour
-{    
+{
     [SerializeField] LobbyManager lobby;
     int recoverCount;
     [SerializeField] GameObject[] Recovers;
@@ -13,6 +13,9 @@ public class Recover : MonoBehaviour
     [SerializeField] GameObject PopUpCanvas;
     [SerializeField] GameObject Popup;
     [SerializeField] TextMeshProUGUI popupText;
+    bool ActBless10;
+    [SerializeField] GameObject bless10;
+    [SerializeField] GameObject bless13;
     public void RecoverD()
     {
         if (lobby.GD.isAct) return;
@@ -20,12 +23,29 @@ public class Recover : MonoBehaviour
         recoverView.SetActive(true);
         lobby.canvasOn = true;
         PopUpCanvas.SetActive(true);
+        if (lobby.GD.blessbool[10])
+        {
+            bless10.SetActive(true);
+        }
+        else
+        {
+            bless10.SetActive(false);
+        }
+        if (lobby.GD.blessbool[13])
+        {
+            bless13.SetActive(true);
+        }
+        else
+        {
+            bless13.SetActive(false);
+        }
         for (int i = 0; i < lobby.ChD.size; i++)
-        { 
+        {
             Recovers[i].SetActive(true);
             Recovers[i].GetComponent<TextMeshProUGUI>().text = lobby.ChD.characterDatas[i].Name;
             Recovers[i].transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = lobby.ChD.characterDatas[i].curHp + "/" + lobby.ChD.characterDatas[i].maxHp;
-            if (lobby.ChD.characterDatas[i].curHp == 0) {
+            if (lobby.ChD.characterDatas[i].curHp == 0)
+            {
                 Recovers[i].transform.GetChild(1).gameObject.SetActive(false);
                 Recovers[i].transform.GetChild(2).gameObject.SetActive(false);
                 Recovers[i].transform.GetChild(3).gameObject.SetActive(true);
@@ -43,19 +63,19 @@ public class Recover : MonoBehaviour
         }
 
     }
-   public void Revive(int i)
-    {
-        if (lobby.GD.Ignum < 800)
+    public void Revive(int i)
+    {if (!lobby.GD.blessbool[13])
         {
-            Popup.SetActive(true);
-            return;
+            if (lobby.GD.Ignum < 800)
+            {
+                Popup.SetActive(true);
+                return;
+            }
+            lobby.GD.Ignum -= 800;
         }
-        lobby.GD.Ignum -= 800;
         lobby.ChD.characterDatas[i].curHp = 1;
-        recoverView.SetActive(false);
-        PopUpCanvas.SetActive(false);
-        lobby.DayAct();
-        lobby.canvasOn = false;
+        lobby.save();
+        ReviveEnd();
     }
     public void EmergencyRecover(int i)
     {
@@ -67,10 +87,8 @@ public class Recover : MonoBehaviour
         lobby.GD.Ignum -= 10;
         lobby.ChD.characterDatas[i].curHp += lobby.ChD.characterDatas[i].maxHp * Random.Range(1, 3) / 10;
         if (lobby.ChD.characterDatas[i].curHp > lobby.ChD.characterDatas[i].maxHp) lobby.ChD.characterDatas[i].curHp = lobby.ChD.characterDatas[i].maxHp;
-        recoverView.SetActive(false);
-        PopUpCanvas.SetActive(false);
-        lobby.DayAct();
-        lobby.canvasOn = false;
+        lobby.save();
+        RecoverEnd();
     }
     public void HighRecover(int i)
     {
@@ -82,10 +100,40 @@ public class Recover : MonoBehaviour
         lobby.GD.Ignum -= 100;
         lobby.ChD.characterDatas[i].curHp += lobby.ChD.characterDatas[i].maxHp * Random.Range(5, 10) / 10;
         if (lobby.ChD.characterDatas[i].curHp > lobby.ChD.characterDatas[i].maxHp) lobby.ChD.characterDatas[i].curHp = lobby.ChD.characterDatas[i].maxHp;
+        lobby.save();
+        RecoverEnd();
+    }
+    public void RecoverEnd()
+    {
+        if (!lobby.GD.blessbool[10])
+        {
+            recoverView.SetActive(false);
+            PopUpCanvas.SetActive(false);
+            lobby.DayAct();
+            lobby.canvasOn = false;
+        }
+        else
+        {
+            if (ActBless10)
+            {
+                recoverView.SetActive(false);
+                PopUpCanvas.SetActive(false);
+              
+                lobby.canvasOn = false;
+                ActBless10 = false;
+            }
+            else
+            {
+                lobby.DayAct();
+                ActBless10 = true;
+            }
+        }
+    }
+    public void ReviveEnd()
+    {
         recoverView.SetActive(false);
         PopUpCanvas.SetActive(false);
         lobby.DayAct();
         lobby.canvasOn = false;
     }
-
 }

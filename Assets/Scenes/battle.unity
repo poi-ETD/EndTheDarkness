@@ -4572,6 +4572,7 @@ GameObject:
   m_Component:
   - component: {fileID: 837590959}
   - component: {fileID: 837590960}
+  - component: {fileID: 837590961}
   m_Layer: 0
   m_Name: BlessManager
   m_TagString: Untagged
@@ -4605,6 +4606,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14c5c23e4d2f86349aa0440b37ba7216, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &837590961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 837590958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca0ac43e63320fe4ca9c8c184690d991, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BM: {fileID: 397930971}
 --- !u!1 &865262704
 GameObject:
   m_ObjectHideFlags: 0

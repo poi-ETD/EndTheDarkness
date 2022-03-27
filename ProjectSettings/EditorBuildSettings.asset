@@ -7,7 +7,7 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 1
     path: Assets/Scenes/Main.unity
-    guid: a76c98656e605d44f93f5ae99712f916
+    guid: b1ddd6fedf064814a99d580dbd2c6775
   - enabled: 1
     path: Assets/Scenes/battle.unity
     guid: 64c5189715786a44698f7bfccf460ae9
@@ -24,9 +24,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Bless.unity
     guid: b8d77572dbc47194280e1f10dda845c9
   - enabled: 1
-    path: Assets/Scenes/Main2.unity
-    guid: b1ddd6fedf064814a99d580dbd2c6775
-  - enabled: 1
     path: Assets/Scenes/Lobby.unity
     guid: a9307f08e0330fb4f99527a07264fbb4
+  - enabled: 1
+    path: Assets/Scenes/Main22.unity
+    guid: a76c98656e605d44f93f5ae99712f916
   m_configObjects: {}

@@ -303,9 +303,9 @@ MonoBehaviour:
   m_fontSize: 16
   m_fontSizeBase: 16
   m_fontWeight: 400
-  m_enableAutoSizing: 0
-  m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 13
+  m_fontSizeMax: 16
   m_fontStyle: 0
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
@@ -640,6 +640,8 @@ MonoBehaviour:
   - {fileID: 8144728276220383310}
   - {fileID: 2329759728908965319}
   - {fileID: 0}
+  deckNo: 0
+  B5: 0
 --- !u!114 &5664190743949919880
 MonoBehaviour:
   m_ObjectHideFlags: 0

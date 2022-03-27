@@ -360,6 +360,8 @@ MonoBehaviour:
   - {fileID: 5395337121299793976}
   - {fileID: 1995953977939627441}
   - {fileID: 4264668242335027492}
+  deckNo: 0
+  B5: 0
 --- !u!1 &1361809162285270362
 GameObject:
   m_ObjectHideFlags: 0
@@ -455,9 +457,9 @@ MonoBehaviour:
   m_fontSize: 16
   m_fontSizeBase: 16
   m_fontWeight: 400
-  m_enableAutoSizing: 0
-  m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 13
+  m_fontSizeMax: 16
   m_fontStyle: 0
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
