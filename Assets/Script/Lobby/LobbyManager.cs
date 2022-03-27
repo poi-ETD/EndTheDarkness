@@ -91,6 +91,13 @@ public class LobbyManager : MonoBehaviour
         }
         else
         {
+            if (GD.isAct)
+            {
+                for (int i = 0; i < mainNightAct.Length; i++)
+                {
+                    mainNightAct[i].color = new Color(0.5f, 0.5f, 0.5f);
+                }
+            }
             day.SetActive(false);
             night.SetActive(true);
         }
@@ -239,25 +246,45 @@ public class LobbyManager : MonoBehaviour
         DayAct();
     }
     public void DayAct()
-    {if (!GD.blessbool[11])
-        { GD.isAct = true; }
+    {
+        if (!GD.isNight)
+        {
+            if (!GD.blessbool[11])
+            { GD.isAct = true; }
+            else
+            {
+                if (GD.isActInDay)
+                {
+                    GD.isAct = true;
+                    GD.isActInDay = false;
+                }
+                else GD.isActInDay = true;
+            }
+            IgnumT.text = GD.Ignum + "";
+            save();
+            if (GD.isAct)
+            {
+                for (int i = 0; i < mainDayAct.Length; i++)
+                {
+                    mainDayAct[i].color = new Color(0.5f, 0.5f, 0.5f);
+                }
+            }
+        }
         else
         {
-            if (GD.isActInDay) { GD.isAct = true;
-               GD.isActInDay = false;
-            }
-            else GD.isActInDay = true;
-        }
-        IgnumT.text = GD.Ignum + "";
-        save();
-        if (GD.isAct)
-        {
-            for (int i = 0; i < mainDayAct.Length; i++)
+            GD.isAct = true;
+            IgnumT.text = GD.Ignum + "";
+            save();
+            if (GD.isAct)
             {
-                mainDayAct[i].color = new Color(0.5f, 0.5f, 0.5f);
+                for (int i = 0; i < mainNightAct.Length; i++)
+                {
+                    mainNightAct[i].color = new Color(0.5f, 0.5f, 0.5f);
+                }
             }
         }
     }
+    
     public void save()
     {
         string characterData = JsonConvert.SerializeObject(ChD);
@@ -290,6 +317,10 @@ public class LobbyManager : MonoBehaviour
         GD.isAct = false;
         GD.isActInDay = false;
         setDay();
+        for (int i = 0; i < mainNightAct.Length; i++)
+        {
+            mainNightAct[i].color = new Color(1,1,1);
+        }
         for (int i = 0; i < mainDayAct.Length; i++)
         {
             mainDayAct[i].color = new Color(1,1,1);
@@ -449,12 +480,13 @@ public class LobbyManager : MonoBehaviour
     {
         if (!GD.isNight)
         {
-            save();
+            
             day.SetActive(false);
             night.SetActive(true);
             GD.isAct = false;
             GD.isNight = true;
             setDay();
+            save();
         }
         else
         {

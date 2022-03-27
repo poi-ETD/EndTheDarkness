@@ -46,9 +46,18 @@ public class Recover : MonoBehaviour
             Recovers[i].transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = lobby.ChD.characterDatas[i].curHp + "/" + lobby.ChD.characterDatas[i].maxHp;
             if (lobby.ChD.characterDatas[i].curHp == 0)
             {
-                Recovers[i].transform.GetChild(1).gameObject.SetActive(false);
-                Recovers[i].transform.GetChild(2).gameObject.SetActive(false);
-                Recovers[i].transform.GetChild(3).gameObject.SetActive(true);
+                if (!lobby.GD.isNight)
+                {
+                    Recovers[i].transform.GetChild(1).gameObject.SetActive(false);
+                    Recovers[i].transform.GetChild(2).gameObject.SetActive(false);
+                    Recovers[i].transform.GetChild(3).gameObject.SetActive(true);
+                }
+                else
+                {
+                    Recovers[i].transform.GetChild(1).gameObject.SetActive(false);
+                    Recovers[i].transform.GetChild(2).gameObject.SetActive(false);
+                    Recovers[i].transform.GetChild(3).gameObject.SetActive(false);
+                }
             }
             else
             {

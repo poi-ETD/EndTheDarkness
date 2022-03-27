@@ -34,10 +34,43 @@ public class Bless : MonoBehaviour
     public int curBless;
     List<int> blessList= new List<int>();
     [SerializeField] GameObject[] blessIcon;
+    [SerializeField] GameObject blessRemovePopup;
     private void Start()
     {
         setBlessIcon();
 
+    }
+    public void blessRemovePopupOn()
+    {
+        if (lobby.GD.isAct) return;
+        if (lobby.canvasOn) return;
+        blessRemovePopup.SetActive(true);
+        for(int i = 0; i < lobby.GD.blessbool.Length; i++)
+        {
+            if (lobby.GD.blessbool[i])
+            {
+                blessRemovePopup.transform.GetChild(1).GetChild(i).gameObject.SetActive(true);
+                blessRemovePopup.transform.GetChild(1).GetChild(i).GetChild(0).GetComponent<TextMeshProUGUI>().text = bd.bd[i].Name;
+            }
+            else
+            {
+                blessRemovePopup.transform.GetChild(1).GetChild(i).gameObject.SetActive(false);
+            }
+        }
+        lobby.canvasOn = true;
+    }
+    public void blessRemoveButton(int i)
+    {
+        lobby.GD.blessbool[i] = false;
+     
+        exitRemovePopup();
+        lobby.DayAct();
+        setBlessIcon();
+    }
+    public void exitRemovePopup()
+    {
+        lobby.canvasOn = false;
+        blessRemovePopup.SetActive(false);
     }
     public void setBlessIcon()
     {
@@ -45,7 +78,7 @@ public class Bless : MonoBehaviour
         {if (blessIcon[i] == null) continue;
             if (lobby.GD.blessbool[i])
             {
-                Debug.Log(i);
+             
                 blessIcon[i].SetActive(true);
             }
             else
