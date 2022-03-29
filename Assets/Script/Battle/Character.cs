@@ -109,10 +109,10 @@ public class Character : MonoBehaviour
     }
     public void LateUpdate()
     {
-        hpT.text = Hp + "/" + maxHp;
-        atkT.text = "Atk : " + turnAtk;
-        armorT.text = "Armor : " + Armor;
-        actT.text = "Act : " + Act;
+        hpT.text = "<color=purple><b>" + Hp + "</color></b><size=15>/" + maxHp + "</size>";
+        atkT.text = "" + turnAtk;
+        armorT.text = "" + Armor;
+        actT.text = "" + Act;
     }
     private void Start()
     {

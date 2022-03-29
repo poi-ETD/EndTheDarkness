@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 public class TurnManager : MonoBehaviour
 {
     public bool PlayerTurn;
@@ -10,7 +11,7 @@ public class TurnManager : MonoBehaviour
     public int t;
     public GameObject EndButton;
     public BattleManager BM;
-    public Text turnText;
+    public TextMeshProUGUI turnText;
     public int turnCard;
     public CardManager CM;
     public int leftCost;
@@ -19,7 +20,7 @@ public class TurnManager : MonoBehaviour
     {
      
         t = 1;
-        turnText.text = "현재 턴 : " + t;
+        turnText.text = "" + t;
         PlayerTurn = false;       
         EndButton.SetActive(false);
     }

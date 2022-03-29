@@ -22,7 +22,7 @@ public class BattleManager : MonoBehaviour
     Transform tra1;
     Transform tra2;
     Transform tra3;
-    [SerializeField] Text costT;
+    [SerializeField] TextMeshProUGUI costT;
     public int startCost;
     public int CardCount;
     [SerializeField] CardManager CM;
@@ -73,8 +73,11 @@ public class BattleManager : MonoBehaviour
     bool MoveToForward;
     public bool[] BlessBM = new bool[20];
     public int porte3count;
+    public RectTransform rect_HandCanvas;
     HandManager HM;
     List<Character> characterOriginal = new List<Character>();
+
+    [SerializeField] private GameObject go_Menus;
 
     public void FormationCollapse(string ename)
     {
@@ -137,17 +140,17 @@ public class BattleManager : MonoBehaviour
         characters.Clear();
         for (int i = 0; i < line; i++)
         {
-            forward[i].transform.position = new Vector2(-800 / 45f, (400 - 250 * characters.Count) / 45f);
+            forward[i].transform.position = new Vector2(-880 / 45f, 375 / 45f);
             characters.Add(forward[i]);
         }
         for (int i = line; i < CD.size; i++)
         {
-            back[i - line].transform.position = new Vector2(-800 / 45f, (400 - 250 * characters.Count) / 45f);
+            back[i - line].transform.position = new Vector2(-880 / 45f, (300 - 150 * characters.Count) / 45f);
             characters.Add(back[i - line]);
         }
         otherCanvasOn = false;
         FormationCollapsePopup.SetActive(false);
-        LineObject.transform.position = new Vector2(-16.66f, (11.66f - 5.55f * line));
+        LineObject.transform.position = new Vector2(-18.16f, (10.86f - 5.55f * line));
    
    
     }
@@ -193,9 +196,7 @@ public class BattleManager : MonoBehaviour
                 }
                 if (!isForward) CD.characterDatas[i].curFormation = 1;
             }
-           
-        
-        
+
         string path4 = Path.Combine(Application.persistentDataPath, "CharacterData.json");
         string CharacterData = JsonConvert.SerializeObject(CD);
         File.WriteAllText(path4, CharacterData);
@@ -203,6 +204,15 @@ public class BattleManager : MonoBehaviour
        
         SceneManager.LoadScene("Main");
     }
+
+    public void Click_Menu()
+    {
+        if (go_Menus.activeSelf)
+            go_Menus.SetActive(false);
+        else
+            go_Menus.SetActive(true);
+    }
+
     private void Awake()
     {
         startCost = 0;
@@ -219,12 +229,12 @@ public class BattleManager : MonoBehaviour
           
             if (CD.characterDatas[i].curFormation == 0)
             {
-               CharacterC = Instantiate(CharacterPrefebs[CD.characterDatas[i].No], new Vector2(-800 / 45f, (400 - 250 * characters.Count) / 45f), transform.rotation, GameObject.Find("CharacterCanvas").transform);           
+               CharacterC = Instantiate(CharacterPrefebs[CD.characterDatas[i].No], new Vector2(-880 / 45f, 375 / 45f), transform.rotation, GameObject.Find("CharacterCanvas").transform);           
                 forward.Add(CharacterC.GetComponent<Character>());
             }
             else
             {
-               CharacterC = Instantiate(CharacterPrefebs[CD.characterDatas[i].No], new Vector2(-800 / 45f, (400 - 250 * characters.Count) / 45f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
+               CharacterC = Instantiate(CharacterPrefebs[CD.characterDatas[i].No], new Vector2(-880 / 45f, (300 - 150 * characters.Count) / 45f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
                 back.Add(CharacterC.GetComponent<Character>());
             }
             characterOriginal.Add(CharacterC.GetComponent<Character>());
@@ -235,14 +245,14 @@ public class BattleManager : MonoBehaviour
             CharacterC.GetComponent<Character>().Name = CD.characterDatas[i].Name;
         }
             
-     for(int i = 0; i < line; i++)
+        for(int i = 0; i < line; i++)
         {
-            forward[i].transform.position = new Vector2(-800 / 45f, (400 - 250 * characters.Count) / 45f);
+            forward[i].transform.position = new Vector2(-880 / 45f, 375 / 45f);
             characters.Add(forward[i]);
         }
         for (int i = line; i <CD.size; i++)
         {
-            back[i -line].transform.position = new Vector2(-800 / 45f, (400 - 250 * characters.Count) / 45f);
+            back[i -line].transform.position = new Vector2(-880 / 45f, (300 - 150 * characters.Count) / 45f);
             characters.Add(back[i-line]);
         }
         if (gd.BattleNo == 3||gd.BattleNo==6) //폴리만 예외
@@ -256,7 +266,7 @@ public class BattleManager : MonoBehaviour
         Enemys = GameObject.FindGameObjectsWithTag("Enemy");
         TurnCardCount = CardCount;
       
-        LineObject.transform.position = new Vector2(-16.66f, (11.66f - 5.55f * line));
+        LineObject.transform.position = new Vector2(-18.16f, (10.86f - 5.55f * line));
         HM = GameObject.Find("HandManager").GetComponent<HandManager>();
     }
 
@@ -266,7 +276,7 @@ public class BattleManager : MonoBehaviour
       
         if (Input.GetKey("escape"))
                 Application.Quit();            
-        costT.text = "cost:" + cost;
+        costT.text = "" + cost;
         if (card == null||porte3mode)
             useButton.SetActive(false);
         else useButton.SetActive(true);
@@ -409,7 +419,6 @@ public class BattleManager : MonoBehaviour
     }
     IEnumerator turnStartDrow()
     {
-      
         for (int i = 0; i < TurnCardCount; i++)
         {  
             CM.CardToField();

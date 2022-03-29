@@ -24,6 +24,7 @@ public class CardManager : MonoBehaviour
     public int specialDrow;
     public int cardKind;
     public GameObject CardCanvas;
+    public GameObject HandCanvas;
     public GameObject DeckCanvas;
     CardData CD;
     BattleManager BM;
@@ -37,11 +38,11 @@ public class CardManager : MonoBehaviour
         deckT.text = "" + Deck.Count;
     }
     private void Awake()
-    { deckText[0] = "BASE";
+    { deckText[0] = "기본";
         deckText[1] = "Q";
-        deckText[2] = "SPARKY";
-        deckText[3] = "VANGARA";
-        deckText[4] = "PORTE";
+        deckText[2] = "스파키";
+        deckText[3] = "반가라";
+        deckText[4] = "포르테";
         string filepath = Application.persistentDataPath + "/CardData.json";
         string path = Path.Combine(Application.persistentDataPath, "CardData.json");
         if (File.Exists(path))
@@ -59,7 +60,7 @@ public class CardManager : MonoBehaviour
             newCard.GetComponent<Card>().Name.text = cd.cd[CD.cardNo[i]].Name;
             newCard.GetComponent<Card>().cardcost = CD.cardCost[i];
             newCard.GetComponent<Card>().realcost = CD.cardCost[i];
-            addComponent(newCard,CD.cardNo[i]);                    
+            addComponent(newCard, CD.cardNo[i]);                    
             Deck.Add(newCard);
         }
         for (int i = 0; i < Deck.Count; i++)

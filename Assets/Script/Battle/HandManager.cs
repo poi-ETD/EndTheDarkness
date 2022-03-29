@@ -31,7 +31,6 @@ public class HandManager : MonoBehaviour
     [SerializeField] private GameObject go_SelectedCard;
     [SerializeField] private TextMeshProUGUI text_CardName;
     [SerializeField] private TextMeshProUGUI text_CardContext;
-    [SerializeField] private TextMeshProUGUI text_CardCost;
     BattleManager BM;
     private int selectedCardStack = 0; // prevent to too much fast select error between cards
 
@@ -84,10 +83,12 @@ public class HandManager : MonoBehaviour
             float random_Position_X = Random.Range(-0.2f, 0.2f);
             float random_Position_Y = Random.Range(-0.2f, 0.2f);
             newCard.transform.parent = GameObject.Find("HandCardCanvas").transform;
-            newCard.transform.position = new Vector3(18,-10, 0);
+            newCard.transform.position = new Vector3(18,-7, 0);
             newCard.transform.rotation = Quaternion.Euler(new Vector3(0, 0, random_Rotation_Z));
-            newCard.transform.DOMove(new Vector2(random_Position_X, random_Position_Y-10), 1);
-            newCard.GetComponent<Image>().DOFade(1f, 1).SetEase(Ease.OutExpo);
+            newCard.GetComponent<RectTransform>().localScale = new Vector3(0.5f, 0.5f, 0.5f);
+            newCard.transform.DOMove(new Vector2(random_Position_X, random_Position_Y - 7f), 1);
+            newCard.transform.DOScale(new Vector3(1f, 1f, 1f), 1).SetEase(Ease.OutExpo);
+            newCard.GetComponent<Image>().DOFade(1f, 1).SetEase(Ease.OutExpo); // TODO:non action function -> action function
             list_Card.Add(newCard);
             count_Card++;
         }
@@ -135,21 +136,21 @@ public class HandManager : MonoBehaviour
 
     private void ArrangeCard()
     {
-        float x = 10 / (float)CM.field.Count;
-        float initX = -5f + x / 2;
+        float x = 16 / (float)CM.field.Count;
+        float initX = -8f + x / 2;
 
         for (int i = 0; i < CM.field.Count; i++)
         {
             list_XPosition.Add(initX);
-            list_Rotation.Add(initX * -4);
+            list_Rotation.Add(initX * -2f);
             initX += x;
         }
         int index = 0;
 
         foreach (GameObject card in CM.field)
         {
-            card.GetComponent<Card>().SavePosition(list_XPosition[index], FindY_CircleEquation(list_XPosition[index])-10, -(index / 10f));         
-            card.transform.DOMove(new Vector3(list_XPosition[index], FindY_CircleEquation(list_XPosition[index])-10, -(index / 10f)), 0.3f)
+            card.GetComponent<Card>().SavePosition(list_XPosition[index], FindY_CircleEquation(list_XPosition[index]) - 7f, -(index / 10f));         
+            card.transform.DOMove(new Vector3(list_XPosition[index], FindY_CircleEquation(list_XPosition[index]) - 7f, -(index / 10f)), 0.3f)
                 .SetEase(Ease.OutExpo);
             card.transform.DORotate(new Vector3(0f, 0f, list_Rotation[index]), 0.3f).SetEase(Ease.OutExpo);
             index++;
@@ -161,8 +162,8 @@ public class HandManager : MonoBehaviour
 
     private float FindY_CircleEquation(float x)
     {
-        float y = -14;
-        y += Mathf.Sqrt(196 - Mathf.Pow(x, 2));
+        float y = -30;
+        y += Mathf.Sqrt(900 - Mathf.Pow(x, 2));
         return y;
     }
 
@@ -177,12 +178,11 @@ public class HandManager : MonoBehaviour
         {           
             go_SelectedCard.SetActive(true);
             text_CardContext.text = card.Content.text;
-            text_CardCost.text = card.cardcost + "코스트";
             text_CardName.text = card.Name.text;
             if (!card.isGrave && !card.isDeck)
             {
                 card.transform.DOMove(new Vector3(card.gameObject.transform.position.x, card.gameObject.transform.position.y + 0.5f,
-               card.gameObject.transform.position.z), 0.3f).SetEase(Ease.OutExpo);
+                card.gameObject.transform.position.z), 0.3f).SetEase(Ease.OutExpo);
                 selectedCardStack++;
                 if (selectedCardStack == 1)
                     Invoke("initStack", 0.15f);
