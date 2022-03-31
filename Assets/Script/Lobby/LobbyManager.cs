@@ -9,9 +9,9 @@ using System.Linq;
 using UnityEngine.SceneManagement;
 public class LobbyManager : MonoBehaviour
 {
-   public CardData CD;
-   public CharacterData ChD;
-   public GameData GD=new GameData();
+    public CardData CD;
+    public CharacterData ChD;
+    public GameData GD = new GameData();
     CharacterData2 ChaInfo = new CharacterData2();
     CardData2 CaInfo = new CardData2();
     [SerializeField] GameObject PopUpCanvas;
@@ -48,7 +48,14 @@ public class LobbyManager : MonoBehaviour
     int SelectedCharacter;
     [SerializeField] GameObject[] ShopButtons;
     [SerializeField] TextMeshProUGUI curDay;
-  
+    [SerializeField] GameObject CardRemovePopup;
+    [SerializeField] TextMeshProUGUI[] cardRemoveText;
+    [SerializeField] GameObject RemoveCardPrefebs;
+    [SerializeField] GameObject RemoveContent;
+    [SerializeField] GameObject PassivePopup;
+    [SerializeField] GameObject noIgnumInPassive;
+    [SerializeField] GameObject noStackInPassive;
+    [SerializeField] TextMeshProUGUI curStack;
     private void Awake()
     {
         string path = Path.Combine(Application.persistentDataPath, "CardData.json");
@@ -74,7 +81,7 @@ public class LobbyManager : MonoBehaviour
             GD.Day = 1;
             save();
             Resetmara();
-         
+
         }
         IgnumT.text = GD.Ignum + "";
         if (GD.isAct && !GD.isNight)
@@ -128,7 +135,7 @@ public class LobbyManager : MonoBehaviour
     public void OrderByCost()
     {
         var queryAsc = CardList.OrderBy(x => x.Value[1]);
-        clear();        
+        clear();
         foreach (var dictionary in queryAsc)
         {
             GameObject newCard = Instantiate(cardPrefebs, cardContent.transform);
@@ -174,7 +181,7 @@ public class LobbyManager : MonoBehaviour
                 LC.GetComponent<CharacterSetting>().SetCharacterInLobby(ChD.characterDatas[i].No, CharacterSprtie[ChD.characterDatas[i].No],
                     ChD.characterDatas[i].Atk, ChD.characterDatas[i].Cost, ChD.characterDatas[i].curHp, ChD.characterDatas[i].maxHp,
                     ChD.characterDatas[i].curFormation, ChD.characterDatas[i].passive
-                    ) ;
+                    );
             }
         }
     }
@@ -195,35 +202,53 @@ public class LobbyManager : MonoBehaviour
     }
     public void ThisCardSee(int i)
     {
-        
+
         OneCardCanvas.SetActive(true);
-        OneCard.GetComponent<NoBattleCard>().setCardInfoInLobby(CD.cardNo[i],0);
+        OneCard.GetComponent<NoBattleCard>().setCardInfoInLobby(CD.cardNo[i], 0);
         OneCard.GetComponent<NoBattleCard>().setCost(CD.cardCost[i]);
     }
-    public void GetPassive()
-    {   if (GD.isAct) return;
+    public void GetPassiveInGM() //개발용
+    {
         if (canvasOn) return;
         PassiveView.SetActive(true);
         canvasOn = true;
         PopUpCanvas.SetActive(true);
-       for(int i = 0; i < ChD.size; i++)
+        for (int i = 0; i < ChD.size; i++)
         {
             ByPassive[i].SetActive(true);
             ByPassiveNames[i].text = ChD.characterDatas[i].Name;
             ByPassiveButtons[i * 4].text = ChaInfo.cd[ChD.characterDatas[i].No].passive[0];
-            ByPassiveButtons[i * 4+1].text = ChaInfo.cd[ChD.characterDatas[i].No].passive[1];
-            ByPassiveButtons[i * 4+2].text = ChaInfo.cd[ChD.characterDatas[i].No].passive[2];
-            ByPassiveButtons[i * 4+3].text = ChaInfo.cd[ChD.characterDatas[i].No].passive[3];
+            ByPassiveButtons[i * 4 + 1].text = ChaInfo.cd[ChD.characterDatas[i].No].passive[1];
+            ByPassiveButtons[i * 4 + 2].text = ChaInfo.cd[ChD.characterDatas[i].No].passive[2];
+            ByPassiveButtons[i * 4 + 3].text = ChaInfo.cd[ChD.characterDatas[i].No].passive[3];
         }
 
     }
+    public void GetPassive()
+    {
+        if (GD.isAct) return;
+        if (canvasOn) return;
+        PassiveView.SetActive(true);
+        canvasOn = true;
+        PopUpCanvas.SetActive(true);
+        for (int i = 0; i < ChD.size; i++)
+        {
+            ByPassive[i].SetActive(true);
+            ByPassiveNames[i].text = ChD.characterDatas[i].Name;
+            ByPassiveButtons[i * 4].text = ChaInfo.cd[ChD.characterDatas[i].No].passive[0];
+            ByPassiveButtons[i * 4 + 1].text = ChaInfo.cd[ChD.characterDatas[i].No].passive[1];
+            ByPassiveButtons[i * 4 + 2].text = ChaInfo.cd[ChD.characterDatas[i].No].passive[2];
+            ByPassiveButtons[i * 4 + 3].text = ChaInfo.cd[ChD.characterDatas[i].No].passive[3];
+        }
+    }
     public void GetItem()
-    {   if (canvasOn) return;
+    {
+        if (canvasOn) return;
         if (GD.isAct) return;
         canvasOn = true;
         ItemCanvas.SetActive(true);
         int Ig = 150 + GD.victory * 20;
-        GetItemIgnum.text = Ig + "";      
+        GetItemIgnum.text = Ig + "";
     }
     public void SelectGetItem(bool t)
     {
@@ -242,6 +267,7 @@ public class LobbyManager : MonoBehaviour
         GameObject.Find("PassiveView").SetActive(false);
         PopUpCanvas.SetActive(false);
         ChD.characterDatas[i / 4].passive[i % 4]++;
+        GD.Stack -= 15;
         canvasOn = false;
         DayAct();
     }
@@ -284,7 +310,7 @@ public class LobbyManager : MonoBehaviour
             }
         }
     }
-    
+
     public void save()
     {
         string characterData = JsonConvert.SerializeObject(ChD);
@@ -319,11 +345,11 @@ public class LobbyManager : MonoBehaviour
         setDay();
         for (int i = 0; i < mainNightAct.Length; i++)
         {
-            mainNightAct[i].color = new Color(1,1,1);
+            mainNightAct[i].color = new Color(1, 1, 1);
         }
         for (int i = 0; i < mainDayAct.Length; i++)
         {
-            mainDayAct[i].color = new Color(1,1,1);
+            mainDayAct[i].color = new Color(1, 1, 1);
         }
     } //테스트용 실제 x
     public void CardShopPopupOn()
@@ -332,7 +358,7 @@ public class LobbyManager : MonoBehaviour
         if (GD.isAct) return;
         for (int i = 0; i < ChD.size; i++)
         {
-        
+
             ShopButtons[i].SetActive(true);
             ShopButtons[i].transform.GetChild(0).GetComponent<Text>().text = ChD.characterDatas[i].Name;
         }
@@ -345,28 +371,29 @@ public class LobbyManager : MonoBehaviour
         PopUpCanvas.SetActive(true);
     }
     public void SelectCardShop(int ignum)
-    {   if (isNoIgnum) return;
+    {
+        if (isNoIgnum) return;
         if (GD.Ignum < ignum)
         {
             CardShopNoIgnum.SetActive(true);
-            isNoIgnum = true;           
+            isNoIgnum = true;
             return;
         }
-  
-        
+
+
         GD.Ignum -= ignum;
         IgnumT.text = GD.Ignum + "";
         PopUpCanvas.SetActive(false);
         CardShopCanvas.SetActive(false);
         canvasOn = false;
         CardShopSetting(ignum);
-       // DayAct(); ->저장 포인트를 어디에 둘까?
+        // DayAct(); ->저장 포인트를 어디에 둘까?
     }
     public void CancleNoIgnum()
     {
         isNoIgnum = false;
     }
-    public void CardSelectInShop(GameObject C,int no)
+    public void CardSelectInShop(GameObject C, int no)
     {
         if (ShopSelectedCard == C)
         {
@@ -374,15 +401,16 @@ public class LobbyManager : MonoBehaviour
             ShopSelectedCard = null;
             return;
         }
-        if(ShopSelectedCard!=null)
-        ShopSelectedCard.transform.localScale /= 1.2f;
+        if (ShopSelectedCard != null)
+            ShopSelectedCard.transform.localScale /= 1.2f;
         C.transform.localScale *= 1.2f;
         ShopSelectedCard = C;
         ShopSelectedCardNo = no;
-        
+
     }
     public void CardSelectInList(bool t)
-    {if (ShopSelectedCard == null&&t) return;
+    {
+        if (ShopSelectedCard == null && t) return;
         if (t)
         {
             CD.cardNo.Add(ShopSelectedCardNo);
@@ -391,7 +419,7 @@ public class LobbyManager : MonoBehaviour
             CD.get++;
 
         }
-       cancleInShop.SetActive(true);
+        cancleInShop.SetActive(true);
         Transform[] childList = GameObject.Find("ShopList").GetComponentsInChildren<Transform>();
         for (int i = 1; i < childList.Length; i++)
         {
@@ -408,14 +436,17 @@ public class LobbyManager : MonoBehaviour
     public void CardShopSetting(int type)
     {
         SelectCardCanvas.SetActive(true);
-        if (type == 10) { cancleInShop.SetActive(false);
-        for(int i = 1; i < CaInfo.cd.Length; i++)
+        if (type == 10)
+        {
+            cancleInShop.SetActive(false);
+            for (int i = 1; i < CaInfo.cd.Length; i++)
             {
-                for(int j = 0; j < ChD.characterDatas.Length; j++)
+                for (int j = 0; j < ChD.characterDatas.Length; j++)
                 {
                     if (CaInfo.cd[i].Deck == ChD.characterDatas[j].No)
-                    {if(CaInfo.cd[i].type!=2)
-                        RandomCardList.Add(i);//
+                    {
+                        if (CaInfo.cd[i].type != 2)
+                            RandomCardList.Add(i);//
                         break;
                     }
                 }
@@ -430,10 +461,10 @@ public class LobbyManager : MonoBehaviour
             {
                 for (int j = 0; j < ChD.characterDatas.Length; j++)
                 {
-                    if (CaInfo.cd[i].Deck == ChD.characterDatas[j].No||CaInfo.cd[i].Deck==0)
-                    {                      
-                            if (CaInfo.cd[i].type != 2)
-                                RandomCardList.Add(i);//
+                    if (CaInfo.cd[i].Deck == ChD.characterDatas[j].No || CaInfo.cd[i].Deck == 0)
+                    {
+                        if (CaInfo.cd[i].type != 2)
+                            RandomCardList.Add(i);//
                         break;
                     }
                 }
@@ -442,11 +473,11 @@ public class LobbyManager : MonoBehaviour
             GameObject newCard = Instantiate(ShopPrefebs, GameObject.Find("ShopList").transform);
             newCard.GetComponent<NoBattleCard>().setCardInfoInLobby(RandomCardList[r], 0);
             int f = r;
-            while(r==f) r = Random.Range(0, RandomCardList.Count);
+            while (r == f) r = Random.Range(0, RandomCardList.Count);
             newCard = Instantiate(ShopPrefebs, GameObject.Find("ShopList").transform);
             newCard.GetComponent<NoBattleCard>().setCardInfoInLobby(RandomCardList[r], 0);
             int s = r;
-            while (r == f||s==r) r = Random.Range(0, RandomCardList.Count);
+            while (r == f || s == r) r = Random.Range(0, RandomCardList.Count);
             newCard = Instantiate(ShopPrefebs, GameObject.Find("ShopList").transform);
             newCard.GetComponent<NoBattleCard>().setCardInfoInLobby(RandomCardList[r], 0);
         }
@@ -480,7 +511,7 @@ public class LobbyManager : MonoBehaviour
     {
         if (!GD.isNight)
         {
-            
+
             day.SetActive(false);
             night.SetActive(true);
             GD.isAct = false;
@@ -496,8 +527,181 @@ public class LobbyManager : MonoBehaviour
         }
     }
     public void setDay()
-    { string n = "DAY";
+    {
+        string n = "DAY";
         if (GD.isNight) n = "Night";
         curDay.text = n + GD.Day;
+    }
+    public GameObject removeCard;
+    public int removeCount;
+    public int maxRemoveCount;
+    Dictionary<int, int[]> removeCardList = new Dictionary<int, int[]>(); //key->넘버 value->코스트
+    List<GameObject> objRemovecardList = new List<GameObject>();
+    public void removeCardPopupOn(int n)
+    {
+        if (canvasOn) return;
+        if (GD.isAct) return;
+        canvasOn = true;
+        CardRemovePopup.SetActive(true);
+        cardRemoveText[0].text = "삭제할 카드를 " + n + "장 선택해 주세요.";
+        maxRemoveCount = n;
+        for (int i = 0; i < CD.cardNo.Count; i++)
+        {
+            GameObject newCard = Instantiate(RemoveCardPrefebs, RemoveContent.transform);
+            newCard.GetComponent<NoBattleCard>().setCardInfoInLobby(CD.cardNo[i], i);
+            newCard.GetComponent<NoBattleCard>().setCost(CD.cardCost[i]);
+            int[] k = { CD.cardNo[i], CD.cardCost[i] };
+            removeCardList.Add(i, k);
+            objRemovecardList.Add(newCard);
+        }
+    }
+    public void OrderByCostinRemove()
+    {
+        var queryAsc = CardList.OrderBy(x => x.Value[1]);
+        int count = 0;
+        foreach (var dictionary in queryAsc)
+        {
+
+            objRemovecardList[dictionary.Key].transform.SetSiblingIndex(count);
+            count++;
+        }
+    }
+    public void OrderByNoinRemove()
+    {
+        var queryAsc = CardList.OrderBy(x => x.Value[0]);
+        int count = 0;
+        foreach (var dictionary in queryAsc)
+        {
+
+            objRemovecardList[dictionary.Key].transform.SetSiblingIndex(count);
+            count++;
+        }
+    }
+    public void OrderByGetinRemove()
+    {
+        var queryAsc = CardList.OrderBy(x => x.Key);
+        int count = 0;
+        foreach (var dictionary in queryAsc)
+        {
+
+            objRemovecardList[dictionary.Key].transform.SetSiblingIndex(count);
+            count++;
+        }
+    }
+    public void Remove()
+    {
+        List<int> removeList = new List<int>();
+        if (removeCount < maxRemoveCount) return;
+        for (int i = 0; i < CD.cardNo.Count; i++)
+        {
+
+            if (RemoveContent.transform.GetChild(i).gameObject.GetComponent<NoBattleCard>().select)
+                removeList.Add(RemoveContent.transform.GetChild(i).gameObject.GetComponent<NoBattleCard>().deckNo);
+        }
+        removeList.Sort();
+
+        for (int i = maxRemoveCount - 1; i >= 0; i--)
+        {
+            CD.cardNo.RemoveAt(removeList[i]);
+            CD.cardCost.RemoveAt(removeList[i]);
+            CD.cardGet.RemoveAt(removeList[i]);
+        }
+        canvasOn = false;
+        DayAct();
+        CardRemovePopup.SetActive(false);
+        removeCardList.Clear();
+        objRemovecardList.Clear();
+        Transform[] childList = RemoveContent.GetComponentsInChildren<Transform>();
+        for (int i = 1; i < childList.Length; i++)
+        {
+            Destroy(childList[i].gameObject);
+        }
+    }
+    public void exitRemove()
+    {
+        Transform[] childList = RemoveContent.GetComponentsInChildren<Transform>();
+        for (int i = 1; i < childList.Length; i++)
+        {
+            Destroy(childList[i].gameObject);
+        }
+        CardRemovePopup.SetActive(false);
+        canvasOn = false;
+        removeCardList.Clear();
+        objRemovecardList.Clear();
+    }
+    public void GetPassivePopup()
+    {
+        if (canvasOn) return;
+        if (GD.isAct) return;
+        canvasOn = true;
+        PassivePopup.SetActive(true);
+        PopUpCanvas.SetActive(true);
+        curStack.text = "현재스택:" + GD.Stack;
+    }
+    public void GetStack(int n)
+    {
+        if (n == 1)
+        {
+            if (GD.Ignum < 300)
+            {
+                noIgnumInPassive.SetActive(true);
+                return;
+            }
+            GD.Ignum -= 300;
+            GD.Stack += n;
+        }
+        if (n == 3)
+        {
+            if (GD.Ignum < 1000)
+            {
+                noIgnumInPassive.SetActive(true);
+                return;
+            }
+            GD.Ignum -= 1000;
+            GD.Stack += n;
+        }
+        canvasOn = false;
+        DayAct();
+        PassivePopup.SetActive(false);
+        PopUpCanvas.SetActive(false);
+        noStackInPassive.SetActive(false);
+        noStackInPassive.SetActive(false);
+    }
+    public void getRandomPassive()
+    {
+        if (GD.Stack < 5)
+        {
+            noStackInPassive.SetActive(true);
+            return;
+        }
+        GD.Stack -= 5;
+        int rand = Random.Range(0, ChD.size * 4);
+        ChD.characterDatas[rand / 4].passive[rand % 4]++;
+        canvasOn = false;
+        DayAct();
+        PassivePopup.SetActive(false);
+        PopUpCanvas.SetActive(false);
+        noStackInPassive.SetActive(false);
+        noStackInPassive.SetActive(false);
+    }
+    public void GetSelectPassive() //개발용
+    {
+        if (GD.Stack < 15)
+        {
+            noStackInPassive.SetActive(true);
+            return;
+        }
+        PassivePopup.SetActive(false);
+        PassiveView.SetActive(true);
+        PopUpCanvas.SetActive(true);
+        for (int i = 0; i < ChD.size; i++)
+        {
+            ByPassive[i].SetActive(true);
+            ByPassiveNames[i].text = ChD.characterDatas[i].Name;
+            ByPassiveButtons[i * 4].text = ChaInfo.cd[ChD.characterDatas[i].No].passive[0];
+            ByPassiveButtons[i * 4 + 1].text = ChaInfo.cd[ChD.characterDatas[i].No].passive[1];
+            ByPassiveButtons[i * 4 + 2].text = ChaInfo.cd[ChD.characterDatas[i].No].passive[2];
+            ByPassiveButtons[i * 4 + 3].text = ChaInfo.cd[ChD.characterDatas[i].No].passive[3];
+        }
     }
 }
