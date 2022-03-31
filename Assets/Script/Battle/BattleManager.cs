@@ -42,7 +42,7 @@ public class BattleManager : MonoBehaviour
     public bool otherCanvasOn;
     public Log log;
     [SerializeField] GameObject graveView;
-    public  int ReviveCount;
+    public int ReviveCount;
     public bool card7mode;
     public GameObject[] Enemys;
     public GameData gd;
@@ -273,13 +273,16 @@ public class BattleManager : MonoBehaviour
     GameObject c20;
     private void Update()
     {
-      
         if (Input.GetKey("escape"))
                 Application.Quit();            
         costT.text = "" + cost;
-        if (card == null||porte3mode)
+        if (card == null || porte3mode)
             useButton.SetActive(false);
-        else useButton.SetActive(true);
+        else
+        {
+            useButton.SetActive(true);
+            //Debug.Log("a");
+        }
         if (card20done) useButton.SetActive(true);
         if (card12On)
         {
@@ -290,7 +293,7 @@ public class BattleManager : MonoBehaviour
                 CM.TM.turnCard--;
                 card = null;
             }
-        }  
+        }
     }
     public void porte3()
     {

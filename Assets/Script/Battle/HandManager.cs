@@ -30,6 +30,7 @@ public class HandManager : MonoBehaviour
 
     [SerializeField] private GameObject go_SelectedCard;
     [SerializeField] private TextMeshProUGUI text_CardName;
+    [SerializeField] private TextMeshProUGUI text_CardNo;
     [SerializeField] private TextMeshProUGUI text_CardContext;
     BattleManager BM;
     private int selectedCardStack = 0; // prevent to too much fast select error between cards
@@ -177,8 +178,9 @@ public class HandManager : MonoBehaviour
         if (selectedCardStack <= 2&&isInited)
         {           
             go_SelectedCard.SetActive(true);
-            text_CardContext.text = card.Content.text;
             text_CardName.text = card.Name.text;
+            text_CardNo.text = card.NoT.text;
+            text_CardContext.text = card.Content.text;
             if (!card.isGrave && !card.isDeck)
             {
                 card.transform.DOMove(new Vector3(card.gameObject.transform.position.x, card.gameObject.transform.position.y + 0.5f,

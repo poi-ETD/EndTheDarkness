@@ -34,7 +34,7 @@ public class Card : MonoBehaviour
         
     }
     private void Update()
-    {      
+    {
         costT.text = cardcost + "";
         if (Input.GetMouseButtonDown(0))
         {
