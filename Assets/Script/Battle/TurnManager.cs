@@ -16,11 +16,40 @@ public class TurnManager : MonoBehaviour
     public CardManager CM;
     public int leftCost;
     [SerializeField] GameObject pleaseSelect;
+    public void turnCardPlus()
+    {
+        turnCard++;
+        if (turnCard == 4)
+        {
+            for(int i = 0; i < CM.Grave.Count; i++)
+            {
+                if (CM.Grave[i].GetComponent<Card>().cardNo == 11)
+                {
+                    CM.Grave[i].GetComponent<Card>().decreaseCost(2);
+                }
+            }
+            for (int i = 0; i < CM.field.Count; i++)
+            {
+                if (CM.field[i].GetComponent<Card>().cardNo == 11)
+                {
+                    CM.field[i].GetComponent<Card>().decreaseCost(2);
+                }
+            }
+            for (int i = 0; i < CM.Deck.Count; i++)
+            {
+                if (CM.Deck[i].GetComponent<Card>().cardNo == 11)
+                {
+                    CM.Deck[i].GetComponent<Card>().decreaseCost(2);
+                }
+            }
+            BM.log.logContent.text += "\n모든 스트레이트 펀치의 코스트가 2 감소합니다.";
+        }
+    }
     private void Awake()
     {
      
         t = 1;
-        turnText.text = "" + t;
+        turnText.text = "현재 턴 : " + t;
         PlayerTurn = false;       
         EndButton.SetActive(false);
     }
@@ -45,9 +74,8 @@ public class TurnManager : MonoBehaviour
                 BM.characters[i].board.text = "";
                 if (!BM.characters[i].isDie && BM.characters[i].card8)
                 {
-
                     BM.characters[i].card8 = false;
-                    BM.characters[i].Armor += leftCost * BM.characters[i].card8point;
+                    BM.characters[i].getArmor(leftCost * BM.characters[i].card8point);
                 }
             }
             turnCard = 0;
@@ -58,9 +86,8 @@ public class TurnManager : MonoBehaviour
                 {
                     enemy[i].EnemyStartTurn();
                     enemy[i].HpUp();
-                    enemy[i].Armor += enemy[i].nextTurnArmor;
+                    enemy[i].GetArmorStat(enemy[i].nextTurnArmor);
                     enemy[i].nextTurnArmor = 0;
-
                 }
             }
             EndButton.SetActive(false);
@@ -79,7 +106,7 @@ public class TurnManager : MonoBehaviour
                             count++;
                         }
                     }
-                    for(int j = 0; j < 20; j++)
+                    for(int j = 0; j < 20; j++) //상태이상 처리
                     {
                         BM.characters[i].Status[j] += BM.characters[i].nextStatus[j];
                         BM.characters[i].nextStatus[j] = 0;
@@ -89,12 +116,14 @@ public class TurnManager : MonoBehaviour
                 }
             }
             t++;
-            BM.TurnEnd();
-            BM.cancleCard();
-            BM.CancleCharacter();
-            BM.CancleEnemy();
+            for (int i = 0; i < BM.Enemys.Length; i++)
+            {
+               BM.Enemys[i].GetComponent<Enemy>().Board.text = "";
+            }
+            BM.TurnCardCount = BM.CardCount;
+            BM.allClear();
             CM.FieldOff();
-            turnText.text = "현재 턴 : " + t;
+            turnText.text = "" + t;
         }
         else
         {
@@ -109,7 +138,10 @@ public class TurnManager : MonoBehaviour
     }
     public void PlayerTurnStart()
     {
+        GameObject.Find("HandManager").GetComponent<HandManager>().isInited = false;
+        BM.log.logContent.text += "\n" + t + "턴 시작!";
         BM.cost = BM.startCost+BM.nextTurnStartCost;
+        BM.useCost(0);
         BM.nextTurnStartCost = 0;
         PlayerTurn =true;
         BM.CharacterSelectMode = true;
@@ -118,23 +150,37 @@ public class TurnManager : MonoBehaviour
         {
             if (!BM.characters[i].isDie)
             {
-                BM.characters[i].Act = 1 - BM.characters[i].NextTurnMinusAct;
-                if (BM.BlessBM[4]) BM.characters[i].Act++;
+             
+               
                 if (BM.BlessBM[4] && t == 1) BM.characters[i].Act = 0;
                 if (BM.BlessBM[12] && t == 1) BM.characters[i].Act = 0;
-                if (BM.characters[i].Act < 0) BM.characters[i].Act = 0;
-                BM.characters[i].NextTurnMinusAct = 0;
-             
-                BM.characters[i].turnAtk = BM.characters[i].Atk+turnAtk;             
-                BM.characters[i].Armor += BM.characters[i].nextarmor;
+                BM.characters[i].Act = 1;
+                if (BM.BlessBM[4]) BM.characters[i].Act++;
+                BM.characters[i].onMinusAct(BM.characters[i].NextTurnMinusAct);
+                BM.characters[i].turnAtk = BM.characters[i].Atk;
+                BM.characters[i].AtkUp(turnAtk);          
+                BM.characters[i].getArmor(BM.characters[i].nextarmor);
                 if (BM.characters[i].Armor < 0) BM.characters[i].Armor = 0;
                 BM.characters[i].nextarmor = 0;
               
             }
         }
-        turnAtk = 0;
+        turnAtk = 0;      
+        if (BM.card22on)
+        {
+            int ArmorSum = 0;
+            for (int i = 0; i < BM.characters.Count; i++)
+            {
+                if (!BM.characters[i].isDie)
+                {
+                    ArmorSum += BM.characters[i].Armor;
+                    BM.characters[i].getArmor(-1 * BM.characters[i].Armor);
+                }
+            }
+            BM.card22c.getArmor(ArmorSum);
+            BM.card22on = false;
+        }
         CM.TurnStartCardSet();
-        BM.TurnStart();
     }
-
+  
 }

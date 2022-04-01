@@ -49,48 +49,32 @@ public class Enemy : MonoBehaviour
         Hp = maxHp;
         ei = GameObject.Find("SelectEnemyInformation").GetComponent<EnemyInfo>();
       
-    }
-    private void Update()
+    }        
+    public void onClickEvent()
+{
+    if (isDie) return;
+    if (BM.SelectMode) return;
+    if (BM.EnemySelectMode)
     {
-     
-      //  HpT.text = Hp + "/" + maxHp;
-        //ArmorT.text = "Armor:" + Armor;
-        if (Input.GetMouseButtonDown(0))
-        {
-            Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero, 0f);
-            if (hit.collider != null&&!isDie&&!BM.SelectMode&&BM.EnemySelectMode&&!Shadow)
-            {
-                if (hit.collider.gameObject == gameObject)
-                {
-                    if (BM.enemy != hit.collider.GetComponent<Enemy>())
-                        BM.EnemySelect(hit.collider.gameObject);
-                    else
-                        BM.CancleEnemy();                 
-                }
-            }
+       
+            BM.EnemySelect(gameObject);
+    
+    }
+   
+       
 
+    
+}
+    public void onEnterEvnent()
+    {
 
-        }
-        if (Input.GetMouseButtonDown(0))
-        {
-            Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero, 0f);
-            if (hit.collider != null && !isDie && !BM.SelectMode && !BM.EnemySelectMode)
-            {
-                if (hit.collider.gameObject == gameObject)
-                {
-                  
-                    if (ei.SelectedEnemy == this)
-                    { ei.setNull(); }
-                    else
-                        ei.setThis(this);
-                }
-            }
-
-
-        }
-        HpImage[0].fillAmount = Hp / (float)maxHp;
+        if (isDie) return;
+            ei.setThis(this);
+    }
+    public void onExitEvent()
+    {
+        if (isDie) return;
+        ei.setNull();
     }
     public void EnemyStartTurn()
     {
@@ -106,14 +90,11 @@ public class Enemy : MonoBehaviour
     void TurnStart()
     {
         TM.PlayerTurnStart();
-    }
-    
+    }    
     public void onHit(int dmg)
-    {
-     
+    {   
         if (!power)
-        {
-            BM.Setting();
+        {        
             dmgStack++;
             if (Armor > 0)
             {
@@ -160,6 +141,11 @@ public class Enemy : MonoBehaviour
                 }
             }
         }
+        HpImage[0].fillAmount = Hp / (float)maxHp;
+    }
+    public void GetArmorStat(int arm)
+    {
+        Armor += arm;
     }
     public void GetArmor(int arm,string enemyname)
     {
@@ -242,6 +228,7 @@ public class Enemy : MonoBehaviour
         RecoverHp = 0;
         if (Hp >= maxHp)
             Hp = maxHp;
+        HpImage[0].fillAmount = Hp / (float)maxHp;
     }
 }
 

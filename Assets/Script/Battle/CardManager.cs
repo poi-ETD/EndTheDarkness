@@ -55,12 +55,14 @@ public class CardManager : MonoBehaviour
         {
             GameObject newCard = Instantiate(CardPrefebs, CardCanvas.transform);
             newCard.GetComponent<Card>().NoT.text= "NO." + cd.cd[CD.cardNo[i]].No.ToString("D3");//넘버
+            newCard.GetComponent<Card>().cardNo = cd.cd[CD.cardNo[i]].No;
             newCard.GetComponent<Card>().DeckT.text = deckText[cd.cd[CD.cardNo[i]].Deck];
             newCard.GetComponent<Card>().Content.text = cd.cd[CD.cardNo[i]].Content;
             newCard.GetComponent<Card>().Name.text = cd.cd[CD.cardNo[i]].Name;
             newCard.GetComponent<Card>().cardcost = CD.cardCost[i];
             newCard.GetComponent<Card>().realcost = CD.cardCost[i];
-            addComponent(newCard, CD.cardNo[i]);                    
+            newCard.GetComponent<Card>().selectType = cd.cd[CD.cardNo[i]].select;
+            //addComponent(newCard, CD.cardNo[i]);                    
             Deck.Add(newCard);
         }
         for (int i = 0; i < Deck.Count; i++)
@@ -71,10 +73,10 @@ public class CardManager : MonoBehaviour
         HM = GameObject.Find("HandManager").GetComponent<HandManager>();
     }
     void addComponent(GameObject obj,int i)
-    {
+    {/*
         if (i == 1)
         {
-            obj.AddComponent<Card1>();
+           obj.AddComponent<Card1>();
         }
         if (i == 2)
         {
@@ -167,7 +169,7 @@ public class CardManager : MonoBehaviour
         if (i == 24)
         {
             obj.AddComponent<Card24>();
-        }
+        }*/
     
     }
     public void Rebatch()
@@ -183,9 +185,7 @@ public class CardManager : MonoBehaviour
             int rand = Random.Range(0, Deck.Count);
             field.Add(Deck[rand]);
             HM.AddCard(Deck[rand]);
-            Deck.RemoveAt(rand);
- 
-           
+            Deck.RemoveAt(rand);           
         }
     }
     public void TurnStartCardSet()
@@ -194,17 +194,29 @@ public class CardManager : MonoBehaviour
         {
             Deck[i].SetActive(true);
             Deck[i].GetComponent<Card>().cardcost = Deck[i].GetComponent<Card>().realcost;
-            Deck[i].SetActive(false);
+            Deck[i].GetComponent<Card>().costT.text=Deck[i].GetComponent<Card>().cardcost+ "";
+          Deck[i].SetActive(false);
           
         }
         for (int i = 0; i < Grave.Count; i++)
         {
             Grave[i].SetActive(true);
             Grave[i].GetComponent<Card>().cardcost = Grave[i].GetComponent<Card>().realcost;
+            Grave[i].GetComponent<Card>().costT.text = Grave[i].GetComponent<Card>().realcost+"";
             Grave[i].SetActive(false);
         }
+        StartCoroutine("turnStartDrow");
     }
-
+    IEnumerator turnStartDrow()
+    {
+        for (int i = 0; i < BM.TurnCardCount; i++)
+        {
+            CardToField();
+            yield return new WaitForSeconds(0.25f);
+        }
+        yield return new WaitForSeconds(1.2f);
+        GameObject.Find("HandManager").GetComponent<HandManager>().InitCard();
+    }
     public void SpecialCardToField()
     {
 
@@ -222,11 +234,13 @@ public class CardManager : MonoBehaviour
     {
         GameObject newCard = Instantiate(CardPrefebs, CardCanvas.transform);
         newCard.GetComponent<Card>().NoT.text = "NO." + cd.cd[i].No.ToString("D3");//넘버
+        newCard.GetComponent<Card>().cardNo = cd.cd[i].No;
         newCard.GetComponent<Card>().DeckT.text = deckText[cd.cd[i].Deck];
         newCard.GetComponent<Card>().Content.text = cd.cd[i].Content;
         newCard.GetComponent<Card>().Name.text = cd.cd[i].Name;
         newCard.GetComponent<Card>().cardcost = cd.cd[i].Cost;
         newCard.GetComponent<Card>().realcost = cd.cd[i].Cost;
+        newCard.GetComponent<Card>().selectType = cd.cd[CD.cardNo[i]].select;
         addComponent(newCard, i);
         Deck.Add(newCard);
         newCard.SetActive(false);
@@ -257,19 +271,12 @@ public class CardManager : MonoBehaviour
         usingCard.GetComponent<Card>().isGrave = true;
         usingCard.SetActive(false);
         TM.BM.cancleCard();
-        if (BM.card20done && usingCard.GetComponent<Card>().Name.text != "스케치 반복")
-        {
-            BM.card20done = false;
-        }
-        else if (usingCard.GetComponent<Card>().Name.text != "스케치 반복")
-        {
             TM.BM.pcard = usingCard;
-        }
         TM.BM.penemy = TM.BM.enemy;
         if (usingCard.GetComponent<Card>().Name.text != "스케치 반복")
         {
-            TM.BM.allClear();
-            TM.turnCard++;
+            BM.allClear();
+            TM.turnCardPlus();
         }
         Rebatch();
     }
@@ -362,7 +369,9 @@ public class CardManager : MonoBehaviour
                 if (BM.card7mode)
                 {
                     Grave[i].GetComponent<Card>().cardcost = 0;
-                
+                    Grave[i].GetComponent<Card>().costT.text = "" + 0;
+
+
                 }
                 Grave[i].GetComponent<Card>().isGrave = false;
                 Grave[i].GetComponent<Card>().isUsed = false;           
@@ -445,7 +454,7 @@ public class CardManager : MonoBehaviour
             {
                 if (BM.ReviveCount > ReviveCard.Count)
                 {
-                    g.GetComponent<Transform>().localScale = new Vector2(1.3f, 1.3f);
+                    g.GetComponent<Transform>().localScale = new Vector2(1.1f, 1.1f);
                     ReviveCard.Add(g);
                 }
                 else
@@ -473,7 +482,7 @@ public class CardManager : MonoBehaviour
             {
                 if (BM.SelectDeckCount > SelectedCard.Count)
                 {
-                    g.GetComponent<Transform>().localScale = new Vector2(1.3f, 1.3f);
+                    g.GetComponent<Transform>().localScale = new Vector2(1.1f, 1.1f);
                     SelectedCard.Add(g);
                 }
                 else

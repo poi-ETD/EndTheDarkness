@@ -60,10 +60,7 @@ public class CardSetManager : MonoBehaviour
     {
         
     }
-    private void Update()
-    {
-      
-    }
+  
  /*   public void ToMain()
     {
         CD.AllCard = AllCard;

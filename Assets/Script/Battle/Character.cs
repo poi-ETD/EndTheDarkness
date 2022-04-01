@@ -25,6 +25,7 @@ public class Character : MonoBehaviour
     public int StartNo;
     public int AttackCount;
     public bool[] bless = new bool[20];
+    public GameObject SelectBox;
     public struct ArmorBreak
     {
         public int dmg;
@@ -68,12 +69,25 @@ public class Character : MonoBehaviour
     public int[] Status=new int[20];
     public int[] nextStatus = new int[20];
     //0 -> 중독
+    public void useAct(int i)
+    {
+        Act -= i;
+        if (Act < 0) Act = 0;
+        actT.text = "" + Act;
+    }
+ 
     public void Acting()
     {
         if (Status[0] > 0)
         {
             onDamage(Status[0], "중독");
         }
+    }
+    public void getArmor(int a)
+    {
+        Armor += a;
+        if (Armor < 0) Armor = 0;
+        armorT.text = "" + Armor;
     }
     public void StatusAbnom(int status,int count)
     {
@@ -107,17 +121,10 @@ public class Character : MonoBehaviour
             }              
         }
     }
-    public void LateUpdate()
-    {
-        hpT.text = "<color=purple><b>" + Hp + "</color></b><size=15>/" + maxHp + "</size>";
-        atkT.text = "" + turnAtk;
-        armorT.text = "" + Armor;
-        actT.text = "" + Act;
-    }
     private void Start()
     {
         Act = 1;
-      
+        actT.text = "" + Act;
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         if (Hp <= 0) die();
         if (Hp > maxHp) Hp = maxHp;
@@ -191,10 +198,26 @@ public class Character : MonoBehaviour
             board.text += astring;
         }
     }
+    public void onMinusAct(int i)
+    {
+        Act -= i;
+        if (Act < 0) Act = 0;
+        actT.text = "" + Act;
+        NextTurnMinusAct = 0;
+    }
+    public void AtkUp(int i)
+    {
+        turnAtk += i;
+        atkT.text = turnAtk + "";
+    }
+    public void ActUp(int i)
+    {
+        Act += i;
+        actT.text = "" + Act;
+    }
     public void onDamage(int dmg,string enemyname)
     {
         BM.log.logContent.text += "\n"+Name + "(가)이 " + enemyname + "에게 " + dmg + "의 피해를 입었다!";
-        BM.Setting();
         if (reflect > 0)
         {
             for(int i = 0; i < BM.Enemys.Length; i++)
@@ -258,6 +281,8 @@ public class Character : MonoBehaviour
                 die();
             }
         }
+        if (Hp < 0) Hp = 0;
+        hpT.text = "<color=purple><b>" + Hp + "</color></b><size=15>/" + maxHp + "</size>";
     }
     void die()
     {
