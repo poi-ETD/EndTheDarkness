@@ -13,4 +13,5 @@ public class GameData
     public int BattleNo;
     public int[] bless12 = new int[3];
    public bool isActInDay;
+    public int Stack;
 }

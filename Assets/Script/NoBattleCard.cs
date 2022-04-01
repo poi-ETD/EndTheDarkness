@@ -80,6 +80,27 @@ public class NoBattleCard : MonoBehaviour
         if (GameObject.Find("Bless").GetComponent<Bless>().curBless == 12)
             GameObject.Find("Bless").GetComponent<Bless>().bless12countt.text = "선택된 카드 수 :" + GameObject.Find("Bless").GetComponent<Bless>().blesscount;
     }
+    public void inRemove()
+    {
+        if (select)
+        {
+            GameObject.Find("LobbyManager").GetComponent<LobbyManager>().removeCount--;
+            transform.localScale /= 1.2f;
+            select = false;
+        }
+        else
+        {
+           
+                if (GameObject.Find("LobbyManager").GetComponent<LobbyManager>().removeCount< GameObject.Find("LobbyManager").GetComponent<LobbyManager>().maxRemoveCount)
+                {
+                GameObject.Find("LobbyManager").GetComponent<LobbyManager>().removeCount++;
+                    transform.localScale *= 1.2f;
+                    select = true;
+                }
+            }
+          
+        }
+   
     public void setCardInfoInLobby(int i,int d)
     {
         deckNo = d;
