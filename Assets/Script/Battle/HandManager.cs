@@ -61,7 +61,7 @@ public class HandManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Keypad1))
         {
-           
+            BM.specialDrow(1);
         }
 
         if (Input.GetKeyDown(KeyCode.Keypad2))
@@ -71,7 +71,11 @@ public class HandManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Keypad3))
         {
-            RemoveCard();
+            if (CM.field.Count > 0)
+            {
+                CM.FieldToGrave(CM.field[CM.field.Count - 1]);
+                CM.Rebatch();
+            }
         }
     }
 
@@ -121,7 +125,6 @@ public class HandManager : MonoBehaviour
         Destroy(list_Card[index]);
         list_Card.RemoveAt(index);
         count_Card--;
-
         for (int i = index; i < list_Card.Count; i++)
            // list_Card[i].GetComponent<HandCard>().handNumber--;
 
