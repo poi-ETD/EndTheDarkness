@@ -634,8 +634,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab823e43d2f39d74093838d54ae10e6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 50
-  maxHp: 50
+  Hp: 1
+  maxHp: 1
   Armor: 0
   Atk: 0
   TM: {fileID: 0}
@@ -959,8 +959,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab823e43d2f39d74093838d54ae10e6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 50
-  maxHp: 50
+  Hp: 1
+  maxHp: 1
   Armor: 0
   Atk: 0
   TM: {fileID: 0}

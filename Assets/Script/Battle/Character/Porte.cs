@@ -16,7 +16,7 @@ public class Porte : MonoBehaviour
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         CM = GameObject.Find("CardManager").GetComponent<CardManager>();
-        myCharacter.Name = "포르테";
+     
         // Update is called once per frame
     }
     public void passive1()
@@ -39,8 +39,9 @@ public class Porte : MonoBehaviour
             {
                 Passive2 = true;
                 for (int i = 0; i < myCharacter.passive[1];i++) {
-                    BM.cost++;
-                    myCharacter.Act++;
+                    BM.costUp(1);
+                    
+                    myCharacter.ActUp(1);
                     BM.log.logContent.text += "\n미라클 드로우!포르테의 행동력,코스트가 증가합니다"; }
             }
         }

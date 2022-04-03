@@ -47,7 +47,7 @@ public class Vangara : MonoBehaviour
                     for (int j = 0; j < myCharacter.passive[0]; j++)
                     {
                         TeamStack[i]++;
-                        myCharacter.Armor++;
+                        myCharacter.getArmor(1);
                         BM.log.logContent.text += "\n굳건한 위치!반가라의 방어력이 증가합니다.";
                     }
                 }
@@ -62,7 +62,7 @@ public class Vangara : MonoBehaviour
                     for (int j = 0; j < myCharacter.passive[0]; j++)
                     {
                         EnemyStack[i]++;
-                        myCharacter.Armor++;
+                        myCharacter.getArmor(1);
                         BM.log.logContent.text += "\n굳건한 위치!반가라의 방어력이 증가합니다.";
                     }
                 }
@@ -75,7 +75,7 @@ public class Vangara : MonoBehaviour
         {
             for (int j = 0; j < myCharacter.passive[1]; j++)
             {
-                BM.cost++;
+                BM.costUp(1);
                 BM.log.logContent.text += "\n선봉의 호령!코스트가 1 증가합니다.";
             }
         }
@@ -83,7 +83,7 @@ public class Vangara : MonoBehaviour
         {
             for (int j = 0; j < myCharacter.passive[1]; j++)
             {
-                myCharacter.Armor += 3;
+                myCharacter.getArmor(3);
                 BM.log.logContent.text += "\n선봉의 호령!반가라의 방어도가 3증가합니다.";
             }
         }
@@ -117,16 +117,17 @@ public class Vangara : MonoBehaviour
         {
             for (int j = 0; j < myCharacter.passive[3]; j++)
             {
-                myCharacter.Armor += 7;
-                myCharacter.Act++;
+                myCharacter.getArmor(7);
+                myCharacter.ActUp(1);
             }
         }
         if (BM.back.Count == 1 && BM.back[0] == GetComponent < Character> ()){
 
             for (int j = 0; j < myCharacter.passive[3]; j++)
             {
-                myCharacter.Armor += 7;
-                myCharacter.Act++;
+
+                myCharacter.getArmor(7);
+                myCharacter.ActUp(1);
             }
         }
     }

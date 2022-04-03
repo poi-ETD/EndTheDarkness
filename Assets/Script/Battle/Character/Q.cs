@@ -31,7 +31,8 @@ public class Q : MonoBehaviour
             GetComponent<Image>().sprite = awakeQ;
             BM.log.logContent.text += "\nQ가 백옥의 왕 Q로 변신합니다.";
             myCharacter.Hp = 100;
-            myCharacter.maxHp = 100;
+            myCharacter.Hp = 100;
+            myCharacter.hpT.text = myCharacter.Hp + "/" + myCharacter.Hp;
             for (int j = 0; j < myCharacter.passive[0]; j++)
             {
                 CM.PlusCard(13);
@@ -40,7 +41,8 @@ public class Q : MonoBehaviour
                 CM.PlusCard(14);
             }
             isKing = true;
-            myCharacter.Atk+=2;
+            myCharacter.Atk += 2;
+            myCharacter.AtkUp(2);
             BM.startCost++;
         }
     }
@@ -59,7 +61,7 @@ public class Q : MonoBehaviour
                 for (int j = 0; j < myCharacter.passive[1]; j++)
                 {
                     BM.log.logContent.text += "\n군단!큐의 행동력이 증가합니다.";
-                    myCharacter.Act++;
+                    myCharacter.ActUp(1);
                 } }
         }
     }

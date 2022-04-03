@@ -487,8 +487,9 @@ GameObject:
   - component: {fileID: 6535696080571773974}
   - component: {fileID: 6535696080571773962}
   - component: {fileID: 6535696080571773963}
-  - component: {fileID: 6535696080571773975}
   - component: {fileID: 6535696080571773972}
+  - component: {fileID: 5487373201092571331}
+  - component: {fileID: 5862069484411159173}
   m_Layer: 0
   m_Name: Reply
   m_TagString: Character
@@ -596,7 +597,43 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 200, y: 200}
   m_EdgeRadius: 0
---- !u!114 &6535696080571773975
+--- !u!222 &6535696080571773972
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6535696080571773960}
+  m_CullTransparentMesh: 0
+--- !u!114 &5487373201092571331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6535696080571773960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 6535696080571773962}
+          m_MethodName: onClickEvent
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+--- !u!114 &5862069484411159173
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -609,16 +646,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myCharacter: {fileID: 6535696080571773962}
-  passive: 00010101
+  passive: 
   EnemyStack: 
---- !u!222 &6535696080571773972
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6535696080571773960}
-  m_CullTransparentMesh: 0
 --- !u!1 &6535696080571968689
 GameObject:
   m_ObjectHideFlags: 0

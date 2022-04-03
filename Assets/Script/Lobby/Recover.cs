@@ -17,7 +17,7 @@ public class Recover : MonoBehaviour
     [SerializeField] GameObject bless10;
     [SerializeField] GameObject bless13;
     public void RecoverD()
-    {
+    {   if (lobby.GD.blessbool[15]) return;
         if (lobby.GD.isAct) return;
         if (lobby.canvasOn) return;
         recoverView.SetActive(true);

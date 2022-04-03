@@ -87,6 +87,10 @@ public class Character : MonoBehaviour
     {
         Armor += a;
         if (Armor < 0) Armor = 0;
+        if (bless[2])
+        {
+            Armor = 0;
+        }
         armorT.text = "" + Armor;
     }
     public void StatusAbnom(int status,int count)
@@ -94,31 +98,17 @@ public class Character : MonoBehaviour
         nextStatus[status] += count;
     }
     // Start is called before the first frame update
-    private void Update()
+
+    public void onClickEvent()
     {
-        if (bless[2])
+        if (!isDie && !BM.SelectMode && !BM.EnemySelectMode)
         {
-            Armor = 0;
-        }
-        if (bless[6])
-        {
-            turnAtk = 1;
-        }
-        if (Input.GetMouseButtonDown(0))
-        {
-            Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero, 0f);
-            if (hit.collider != null)
+            if (BM.character != this)
             {
-                if (hit.collider.gameObject == gameObject&&!isDie && !BM.SelectMode&&!BM.EnemySelectMode)
-                {
-                    if (BM.character != hit.collider.GetComponent<Character>()  )
-                    {
-                        BM.CharacterSelect(hit.collider.gameObject); }
-                    else
-                        BM.CancleCharacter();
-                }
-            }              
+                BM.CharacterSelect(gameObject);
+            }
+            else
+                BM.CancleCharacter();
         }
     }
     private void Start()
@@ -208,7 +198,12 @@ public class Character : MonoBehaviour
     public void AtkUp(int i)
     {
         turnAtk += i;
+        if (bless[6])
+        {
+            turnAtk = 1;
+        }
         atkT.text = turnAtk + "";
+
     }
     public void ActUp(int i)
     {
@@ -290,7 +285,7 @@ public class Character : MonoBehaviour
         Hp = 0;
         hpT.text = Hp + "/" + maxHp;
         Color color = new Color(0.3f, 0.3f, 0.3f);
-        GetComponent<Image>().color = color;
+        transform.GetChild(7).GetComponent<Image>().color = color;
         Act = 0;
         board.text = "";
         Armor = 0;

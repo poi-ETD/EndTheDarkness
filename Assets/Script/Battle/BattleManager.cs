@@ -75,9 +75,18 @@ public class BattleManager : MonoBehaviour
     public RectTransform rect_HandCanvas;
     HandManager HM;
     List<Character> characterOriginal = new List<Character>();
-
+    [SerializeField] TextMeshProUGUI rewardIgnum;
+    [SerializeField] GameObject RewardCanvas;
+    public bool isV;
+    [SerializeField] GameObject RewardCardPrefebs;
     [SerializeField] private GameObject go_Menus;
-
+    public int SelectedRewardCount;
+    [SerializeField] GameObject noSelect;
+    public void costUp(int i)
+    {
+        cost += i;
+        costT.text = "" + cost;
+    }
     public void FormationCollapse(string ename)
     {
         otherCanvasOn = true;
@@ -713,9 +722,102 @@ public class BattleManager : MonoBehaviour
     {
         character.reflect+=r;
     }
- public void Victory()
+    int listlength = 3;
+    List<int> RandomCardList = new List<int>();
+    CardData2 data2 = new CardData2();
+    List<int> RancomSelectCard = new List<int>();
+    public void Victory()
     {
+        otherCanvasOn = true;
         victory.SetActive(true);
+        isV = true;
+        int ignum = Random.Range(15, 26) * 10 + gd.victory * 20;
+        if (gd.blessbool[15]) ignum *= 3;
+        rewardIgnum.text = ignum + "이그넘 획득";
+        gd.Ignum += ignum;    
+        if (gd.blessbool[16]) listlength = 4;
+        if (!gd.blessbool[9]) noSelect.SetActive(false);
+        for (int i=0;i<data2.cd.Length; i++)
+        {
+           for(int j = 0; j < characters.Count; j++)
+            {
+                if (data2.cd[i].Deck == characters[j].characterNo && data2.cd[i].type != 2)
+                {
+                    RandomCardList.Add(i);
+                }
+            }
+        }
+        int rand = Random.Range(0, RandomCardList.Count);
+        
+        for(int i = 1; i <= listlength; i++)
+        {
+            int temp = RandomCardList[rand];
+            RandomCardList[rand] = RandomCardList[RandomCardList.Count  - i];
+            RandomCardList[RandomCardList.Count - i] = temp;
+            rand = Random.Range(0, RandomCardList.Count-i);
+        }
+        for (int i = 1; i <= listlength; i++)
+        {
+            Debug.Log(RandomCardList[RandomCardList.Count - i]);
+            GameObject newCard = Instantiate(RewardCardPrefebs, RewardCanvas.transform);
+            newCard.GetComponent<NoBattleCard>().setCardInfoInLobby(RandomCardList[RandomCardList.Count-i], 0);
+            RancomSelectCard.Add(RandomCardList[RandomCardList.Count - i]);
+        }
+    }
+    public void SelectReward()
+    {
+        CardData CardD;
+        string path = Path.Combine(Application.persistentDataPath, "CardData.json");         
+            string cardData = File.ReadAllText(path);
+            CardD = JsonConvert.DeserializeObject<CardData>(cardData);
+        
+        for (int i = 0; i < RancomSelectCard.Count; i++)
+        {
+            Debug.Log(RancomSelectCard[i]);
+            if (RewardCanvas.transform.GetChild(i).GetComponent<NoBattleCard>().select)
+            {         
+                CardD.cardNo.Add(RancomSelectCard[i]);
+                CardD.cardCost.Add(data2.cd[RancomSelectCard[i]].Cost);
+                CardD.cardGet.Add(CardD.get);
+                CardD.get++;
+            }
+        }
+        cardData = JsonConvert.SerializeObject(CardD);
+        path = Path.Combine(Application.persistentDataPath, "CardData.json");
+        File.WriteAllText(path, cardData);
+        NoSelectAndMain();
+    }
+    public void NoSelectAndMain()
+    {
+        for (int i = 0; i < characters.Count; i++)
+        {
+            bool isForward = false;
+            CD.characterDatas[i].curHp = characterOriginal[i].Hp;
+            for (int j = 0; j < forward.Count; j++)
+            {
+                if (forward[j] == characterOriginal[i])
+                {
+                    CD.characterDatas[i].curFormation = 0;
+                    isForward = true;
+                    break;
+                }
+            }
+            if (!isForward) CD.characterDatas[i].curFormation = 1;
+        }
+
+        string path4 = Path.Combine(Application.persistentDataPath, "CharacterData.json");
+        string CharacterData = JsonConvert.SerializeObject(CD);
+        File.WriteAllText(path4, CharacterData);
+        gd.isAct = false;
+        gd.Day++;
+        gd.isNight = false;
+        gd.victory++;
+        gd.isActInDay = false;
+        string path3 = Path.Combine(Application.persistentDataPath, "GameData.json");
+        string GameData = JsonConvert.SerializeObject(gd);
+        File.WriteAllText(path3, GameData);
+        Time.timeScale = 1;
+        SceneManager.LoadScene("Lobby");
     }
     public void Defetead()
     {

@@ -8,7 +8,7 @@ public class EnemyInfo : MonoBehaviour
     public Enemy SelectedEnemy;
     [SerializeField] Image Hp;
     [SerializeField] TextMeshProUGUI[] t; // 0->이름 1->hp 2->아머 
-    [SerializeField] GameObject g;
+    public GameObject g;
     private void Update()
     {
         if (SelectedEnemy != null)
@@ -21,11 +21,14 @@ public class EnemyInfo : MonoBehaviour
 
     public void setNull()
     {
-        SelectedEnemy.myImage.transform.localScale = new Vector2(1, 1);
-        SelectedEnemy.HpImage[0].color = new Color(1, 1, 1, 1);
-        SelectedEnemy.HpImage[1].color = new Color(1, 1, 1, 1);
-        SelectedEnemy = null;
-     g.SetActive(false);
+       
+            SelectedEnemy.myImage.transform.localScale = new Vector2(1, 1);
+            SelectedEnemy.HpImage[0].color = new Color(1, 1, 1, 1);
+            SelectedEnemy.HpImage[1].color = new Color(1, 1, 1, 1);
+        
+            SelectedEnemy = null;
+       
+        g.SetActive(false);
     }
     public void setThis(Enemy e)
     {if(SelectedEnemy!=null)

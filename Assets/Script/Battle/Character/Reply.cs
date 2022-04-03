@@ -40,8 +40,9 @@ public class Reply : MonoBehaviour
                 {
                     int rand = Random.Range(0, TM.CM.field.Count);
                     Passive3 = true;
-                    TM.CM.field[rand].GetComponent<Card>().cardcost = 0;             
-                    BM.log.logContent.text += "\n부서진 족쇄!" + TM.CM.field[rand].GetComponent<Card>().Name.text + "의 코스트가 0이 됩니다.";
+                    TM.CM.field[rand].GetComponent<Card>().cardcost = 0;
+                    TM.CM.field[rand].GetComponent<Card>().costT.text = "" + 0;
+                  BM.log.logContent.text += "\n부서진 족쇄!" + TM.CM.field[rand].GetComponent<Card>().Name.text + "의 코스트가 0이 됩니다.";
                 }
             }
         }
@@ -57,7 +58,7 @@ public class Reply : MonoBehaviour
             Passive1 = true;
             for (int j = 0; j < myCharacter.passive[0]; j++)
             {
-                myCharacter.Act++;
+                myCharacter.ActUp(1);
                 BM.log.logContent.text += "\n지치지 않는 폭주!스파키의 현재 행동력이 추가됩니다.";
             }
         }
@@ -72,9 +73,7 @@ public class Reply : MonoBehaviour
         {
             if (EnemyStack[i] != enemyScript[i].dmgStack)
             {
-                Debug.Log(EnemyStack[i]);
-                Debug.Log(enemyScript[i].dmgStack);
-                Debug.Log(i);
+             
                 if (!enemyScript[i].isDie)
                 {
                     EnemyStack[i]++;
@@ -99,7 +98,7 @@ public class Reply : MonoBehaviour
                 p4 = true;
                 for (int j = 0; j < myCharacter.passive[3]; j++)
                 {
-                    myCharacter.Atk += 2; myCharacter.turnAtk += 2;
+                    myCharacter.AtkUp(2); myCharacter.Atk += 2;
                 } 
             }
         }

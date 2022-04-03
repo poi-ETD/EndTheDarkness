@@ -73,7 +73,9 @@ public class Enemy : MonoBehaviour
     }
     public void onExitEvent()
     {
-        if (isDie) return;
+        if (isDie) {
+            ei.g.SetActive(false);
+            return; }
         ei.setNull();
     }
     public void EnemyStartTurn()
@@ -133,7 +135,8 @@ public class Enemy : MonoBehaviour
                             V = false;
                         }
                     }
-                    if (V) BM.Victory();
+                    die();
+                    if (V&&!BM.isV) BM.Victory();
                     Hp = 0;
                     Color color = new Color(0.3f, 0.3f, 0.3f);
                     myImage.color = color;
@@ -143,6 +146,7 @@ public class Enemy : MonoBehaviour
         }
         HpImage[0].fillAmount = Hp / (float)maxHp;
     }
+
     public void GetArmorStat(int arm)
     {
         Armor += arm;
@@ -229,6 +233,11 @@ public class Enemy : MonoBehaviour
         if (Hp >= maxHp)
             Hp = maxHp;
         HpImage[0].fillAmount = Hp / (float)maxHp;
+    }
+    public void die()
+    {
+        Hp = 0;
+        
     }
 }
 

@@ -24,20 +24,11 @@ public class Dagger001 : MonoBehaviour
         myEnemy.Name = "단검" + plusname;
         StartPattern();
     }
-    void Update()
+    private void Update()
     {
-        if (myEnemy.isDie)
-        {
-            myEnemy.Hp = 0;
-            if (anotherDagger.myEnemy.isDie)
-            {
-                BM.Victory();
-            }
-        }
-        if (curTurn != TM.t)
-        {
-            
-            StartPattern();
+        if (curTurn != TM.t) {
+         StartPattern();
+             
         }
     }
     void StartPattern()

@@ -100,6 +100,25 @@ public class NoBattleCard : MonoBehaviour
             }
           
         }
+    public void inReward()
+    {
+        if (select)
+        {
+            GameObject.Find("BattleManager").GetComponent<BattleManager>().SelectedRewardCount--;
+            transform.localScale /= 1.2f;
+            select = false;
+        }
+        else
+        {
+
+            if (GameObject.Find("BattleManager").GetComponent<BattleManager>().SelectedRewardCount<1)
+            {
+                GameObject.Find("BattleManager").GetComponent<BattleManager>().SelectedRewardCount++;
+                transform.localScale *= 1.2f;
+                select = true;
+            }
+        }
+    }
    
     public void setCardInfoInLobby(int i,int d)
     {

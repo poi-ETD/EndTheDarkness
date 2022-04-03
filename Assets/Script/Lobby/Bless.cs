@@ -35,6 +35,9 @@ public class Bless : MonoBehaviour
     List<int> blessList= new List<int>();
     [SerializeField] GameObject[] blessIcon;
     [SerializeField] GameObject blessRemovePopup;
+    [SerializeField] GameObject[] CancleRemove;
+    [SerializeField] GameObject SelectBless;
+
     private void Start()
     {
         setBlessIcon();
@@ -45,7 +48,21 @@ public class Bless : MonoBehaviour
         if (lobby.GD.isAct) return;
         if (lobby.canvasOn) return;
         blessRemovePopup.SetActive(true);
-        for(int i = 0; i < lobby.GD.blessbool.Length; i++)
+        CancleRemove[0].SetActive(true);
+        CancleRemove[1].SetActive(true);
+        CancleRemove[2].SetActive(true);
+        SelectBless.SetActive(false);
+        lobby.canvasOn = true;
+    }
+    public void SelectRemoveOn()
+    {if (lobby.GD.Ignum < 1000) return;
+        lobby.GD.Ignum -= 1000;
+
+        CancleRemove[0].SetActive(false);
+        CancleRemove[1].SetActive(false);
+        CancleRemove[2].SetActive(false);
+        SelectBless.SetActive(true);
+ for(int i = 0; i < lobby.GD.blessbool.Length; i++)
         {
             if (lobby.GD.blessbool[i])
             {
@@ -57,7 +74,21 @@ public class Bless : MonoBehaviour
                 blessRemovePopup.transform.GetChild(1).GetChild(i).gameObject.SetActive(false);
             }
         }
-        lobby.canvasOn = true;
+    }
+    public void RemoveRandom()
+    {
+        if (lobby.GD.Ignum < 50) return;
+        lobby.GD.Ignum -= 50;
+        List<int> curBlessList = new List<int>();
+        for(int i = 0; i < lobby.GD.blessbool.Length; i++)
+        {
+            if (lobby.GD.blessbool[i]) curBlessList.Add(i);
+        }
+        int rand = Random.Range(0, curBlessList.Count);
+        lobby.GD.blessbool[curBlessList[rand]] = false;
+        exitRemovePopup();
+        lobby.DayAct();
+        setBlessIcon();
     }
     public void blessRemoveButton(int i)
     {
@@ -122,7 +153,8 @@ public class Bless : MonoBehaviour
             blessNum = 0;
         }
         else
-        {
+        {if(lobby.ResetMaraCount!=5)
+             lobby.Resetmara(5);
             noIgn.SetActive(false);
             lobby.canvasOn = false;
             BlessPopup.SetActive(false);
@@ -205,7 +237,7 @@ public class Bless : MonoBehaviour
    
     public void GetBless()
     {
-        if (lobby.GD.Ignum < Ignum)
+        if (lobby.GD.Ignum < Ignum&&!lobby.resetmara)
         {
             noIgn.SetActive(true);
             return;
@@ -266,6 +298,7 @@ public class Bless : MonoBehaviour
         
         BlessApply(randList[rand]);//rand
     }
+
     public void b6()
     {
         BlessObj.SetActive(false);
@@ -310,7 +343,8 @@ public class Bless : MonoBehaviour
             lobby.CD.cardGet.RemoveAt(b5list[i]);
         }
         exitBlessPopup();
-        lobby.DayAct();
+        if (lobby.resetmara) lobby.Resetmara(5);
+        else lobby.DayAct();
         bless5.SetActive(false);
         b5list.Clear();
         b5cardList.Clear();
@@ -330,7 +364,8 @@ public class Bless : MonoBehaviour
             lobby.GD.bless12[i] = lobby.CD.cardGet[b5list[i]];
         }
         exitBlessPopup();
-        lobby.DayAct();
+        if (lobby.resetmara) lobby.Resetmara(5);
+        else lobby.DayAct();
         bless12.SetActive(false);
         b5list.Clear();
         b5cardList.Clear();
@@ -429,7 +464,8 @@ public class Bless : MonoBehaviour
           
             lobby.GD.blessbool[b] = true;
             But[2].SetActive(true); }
-        lobby.DayAct();
+        if (!lobby.resetmara) 
+       lobby.DayAct();
         setBlessIcon();
     }
  
@@ -438,9 +474,10 @@ public class Bless : MonoBehaviour
         lobby.ChD.characterDatas[i].Atk++;
         lobby.ChD.characterDatas[i].curHp = 1;
         exitBlessPopup();
-     
-       
-        lobby.DayAct();
+
+
+        if (lobby.resetmara) lobby.Resetmara(5);
+        else lobby.DayAct();
         bless14.SetActive(false);
         setBlessIcon();
 
@@ -451,7 +488,8 @@ public class Bless : MonoBehaviour
         bless6.SetActive(false);
         exitBlessPopup();
         lobby.ChD.characterDatas[i / 4].passive[i % 4]++;
-        lobby.DayAct();
+        if (lobby.resetmara) lobby.Resetmara(5);
+        else lobby.DayAct();
         setBlessIcon();
     }
 }

@@ -38,7 +38,8 @@ public class CardManager : MonoBehaviour
         deckT.text = "" + Deck.Count;
     }
     private void Awake()
-    { deckText[0] = "기본";
+    {
+        deckText[0] = "기본";
         deckText[1] = "Q";
         deckText[2] = "스파키";
         deckText[3] = "반가라";
@@ -54,7 +55,7 @@ public class CardManager : MonoBehaviour
         for (int i = 0; i < CD.cardNo.Count; i++)
         {
             GameObject newCard = Instantiate(CardPrefebs, CardCanvas.transform);
-            newCard.GetComponent<Card>().NoT.text= "NO." + cd.cd[CD.cardNo[i]].No.ToString("D3");//넘버
+            newCard.GetComponent<Card>().NoT.text = "NO." + cd.cd[CD.cardNo[i]].No.ToString("D3");//넘버
             newCard.GetComponent<Card>().cardNo = cd.cd[CD.cardNo[i]].No;
             newCard.GetComponent<Card>().DeckT.text = deckText[cd.cd[CD.cardNo[i]].Deck];
             newCard.GetComponent<Card>().Content.text = cd.cd[CD.cardNo[i]].Content;

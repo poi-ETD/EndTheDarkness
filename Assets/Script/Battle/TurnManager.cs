@@ -49,7 +49,7 @@ public class TurnManager : MonoBehaviour
     {
      
         t = 1;
-        turnText.text = "현재 턴 : " + t;
+        turnText.text = "" + t;
         PlayerTurn = false;       
         EndButton.SetActive(false);
     }
@@ -116,9 +116,11 @@ public class TurnManager : MonoBehaviour
                 }
             }
             t++;
+            
             for (int i = 0; i < BM.Enemys.Length; i++)
             {
                BM.Enemys[i].GetComponent<Enemy>().Board.text = "";
+              
             }
             BM.TurnCardCount = BM.CardCount;
             BM.allClear();

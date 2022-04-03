@@ -56,6 +56,10 @@ public class LobbyManager : MonoBehaviour
     [SerializeField] GameObject noIgnumInPassive;
     [SerializeField] GameObject noStackInPassive;
     [SerializeField] TextMeshProUGUI curStack;
+    [SerializeField] GameObject ResetCanvas;
+    public int ResetMaraCount;
+    [SerializeField] GameObject ResetBless;
+    [SerializeField] GameObject ResetItem;
     private void Awake()
     {
         string path = Path.Combine(Application.persistentDataPath, "CardData.json");
@@ -78,9 +82,8 @@ public class LobbyManager : MonoBehaviour
         }
         else
         {
-            GD.Day = 1;
-            save();
-            Resetmara();
+            GD.Day = 1; 
+            Resetmara(ResetMaraCount);
 
         }
         IgnumT.text = GD.Ignum + "";
@@ -110,9 +113,76 @@ public class LobbyManager : MonoBehaviour
         }
         setDay();
     }
-    void Resetmara()
+    public void Resetmara(int rc)
     {
-
+        if (rc < 4)
+        {
+            canvasOn = true;
+            ResetCanvas.SetActive(true);
+            resetmara = true;
+            for (int i = 1; i < CaInfo.cd.Length; i++)
+            {
+                if (CaInfo.cd[i].Deck == ChD.characterDatas[rc].No)
+                {
+                    if (CaInfo.cd[i].type != 2)
+                        RandomCardList.Add(i);//
+                }
+            }
+            int r = Random.Range(0, RandomCardList.Count);
+            GameObject newCard = Instantiate(ShopPrefebs, GameObject.Find("ResetShop").transform.GetChild(0).transform);
+            newCard.GetComponent<NoBattleCard>().setCardInfoInLobby(RandomCardList[r], 0);
+            int f = r;
+            while (r == f) r = Random.Range(0, RandomCardList.Count);
+            newCard = Instantiate(ShopPrefebs, GameObject.Find("ResetShop").transform.transform.GetChild(0).transform);
+            newCard.GetComponent<NoBattleCard>().setCardInfoInLobby(RandomCardList[r], 0);
+            int s = r;
+            while (r == f || s == r) r = Random.Range(0, RandomCardList.Count);
+            newCard = Instantiate(ShopPrefebs, GameObject.Find("ResetShop").transform.transform.GetChild(0).transform);
+            newCard.GetComponent<NoBattleCard>().setCardInfoInLobby(RandomCardList[r], 0);
+        }
+        else if (rc == 4)
+        {
+            canvasOn = false;
+            GameObject.Find("Bless").GetComponent<Bless>().BlessPopupOn();
+            GameObject.Find("Bless").GetComponent<Bless>().GetBless();
+        }
+        else if (rc == 5)
+        {
+            ResetMaraCount = 5;
+            ResetBless.SetActive(false);
+            ResetItem.SetActive(true);
+        }
+        else if (rc == 6)
+        {
+            GD.Ignum += 500;
+            IgnumT.text = "" + GD.Ignum;
+            resetmara = false;          
+            canvasOn = false;
+            ResetCanvas.SetActive(false);
+            save();
+        }
+    }
+    public bool resetmara;
+    public void CardSelectInReset(bool t)
+    {
+        if (ShopSelectedCard == null && t) return;
+        if (t)
+        {
+            CD.cardNo.Add(ShopSelectedCardNo);
+            CD.cardCost.Add(CaInfo.cd[ShopSelectedCardNo].Cost);
+            CD.cardGet.Add(CD.get);
+            CD.get++;
+        }
+            
+        Transform[] childList = GameObject.Find("ShopList").GetComponentsInChildren<Transform>();
+        for (int i = 1; i < childList.Length; i++)
+        {
+            Destroy(childList[i].gameObject);
+        }
+        RandomCardList.Clear();
+        if(ResetMaraCount>2)GameObject.Find("ResetShop").SetActive(false);    
+        ResetMaraCount++;
+        Resetmara(ResetMaraCount);
     }
     public void ShowCardList()
     {
@@ -429,6 +499,7 @@ public class LobbyManager : MonoBehaviour
         SelectCardCanvas.SetActive(false);
         DayAct();
     }
+
     public void SelectCardShop3(int c)
     {
         SelectedCharacter = c;
@@ -508,7 +579,7 @@ public class LobbyManager : MonoBehaviour
         }
     }
     public void NextTurn()
-    {
+    {if (canvasOn) return;
         if (!GD.isNight)
         {
 
@@ -704,4 +775,5 @@ public class LobbyManager : MonoBehaviour
             ByPassiveButtons[i * 4 + 3].text = ChaInfo.cd[ChD.characterDatas[i].No].passive[3];
         }
     }
+
 }
