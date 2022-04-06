@@ -172,8 +172,7 @@ public class LobbyManager : MonoBehaviour
             CD.cardCost.Add(CaInfo.cd[ShopSelectedCardNo].Cost);
             CD.cardGet.Add(CD.get);
             CD.get++;
-        }
-            
+        }            
         Transform[] childList = GameObject.Find("ShopList").GetComponentsInChildren<Transform>();
         for (int i = 1; i < childList.Length; i++)
         {
@@ -258,7 +257,6 @@ public class LobbyManager : MonoBehaviour
     public void clear()
     {
         Transform[] childList = cardContent.GetComponentsInChildren<Transform>();
-
         for (int i = 1; i < childList.Length; i++)
         {
             Destroy(childList[i].gameObject);
@@ -449,8 +447,6 @@ public class LobbyManager : MonoBehaviour
             isNoIgnum = true;
             return;
         }
-
-
         GD.Ignum -= ignum;
         IgnumT.text = GD.Ignum + "";
         PopUpCanvas.SetActive(false);
@@ -499,7 +495,6 @@ public class LobbyManager : MonoBehaviour
         SelectCardCanvas.SetActive(false);
         DayAct();
     }
-
     public void SelectCardShop3(int c)
     {
         SelectedCharacter = c;

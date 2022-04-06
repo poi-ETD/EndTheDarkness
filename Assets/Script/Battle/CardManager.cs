@@ -7,8 +7,7 @@ using Newtonsoft.Json;
 using System.Reflection;
 
 public class CardManager : MonoBehaviour
-{
-    
+{   
     public List<GameObject> Deck = new List<GameObject>();
     public List<GameObject> Grave = new List<GameObject>();
     public List<GameObject> field = new List<GameObject>();
