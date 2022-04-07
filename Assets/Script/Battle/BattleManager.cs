@@ -56,7 +56,6 @@ public class BattleManager : MonoBehaviour
     [SerializeField] Text StackT;
     [SerializeField] GameObject StackPopUp;
     public TextMeshProUGUI CardUseText;
-
     [SerializeField] GameObject CancleButton;
     public bool card20Activing;
     [SerializeField] GameObject ReviveCancle;
@@ -82,6 +81,25 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private GameObject go_Menus;
     public int SelectedRewardCount;
     [SerializeField] GameObject noSelect;
+    [SerializeField] GameObject Sless;
+    int toGraveCount = 0;
+
+    public int SelectDeckCount;
+    public bool DeckSelectMode;
+    public bool DeckSelect;
+    public bool DeckSelectCancle;
+
+    public GameObject c20;
+
+    public bool card22on;
+    public Character card22c;
+
+    int listlength = 3;
+    List<int> RandomCardList = new List<int>();
+    CardData2 data2 = new CardData2();
+    List<int> RancomSelectCard = new List<int>();
+    public TextMeshProUGUI curMessage;
+
     public void costUp(int i)
     {
         cost += i;
@@ -156,6 +174,10 @@ public class BattleManager : MonoBehaviour
             back[i - line].transform.position = new Vector2(-880 / 45f, (270 - 150 * characters.Count) / 45f);
             characters.Add(back[i - line]);
         }
+        for(int i = 1; i < CD.size; i++)
+        {
+            characters[i].curNo = i;
+        }
         otherCanvasOn = false;
         FormationCollapsePopup.SetActive(false);
         LineObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-820, 360 - 150 * line);
@@ -176,7 +198,7 @@ public class BattleManager : MonoBehaviour
             {
                 if (characters[i].characterNo == 1)
                 {
-                    StackT.text += "망자:" + characters[i].GetComponent<Q>().Ghost + "\n";
+                    StackT.text += "망자:" + characters[i].GetComponent<CharacterPassive>().ghost + "\n";
                     break;                  
                 }
             }
@@ -262,6 +284,10 @@ public class BattleManager : MonoBehaviour
             back[i -line].transform.position = new Vector2(-880 / 45f, (270 - 150 * characters.Count) / 45f);
             characters.Add(back[i-line]);
         }
+        for (int i = 1; i < CD.size; i++)
+        {
+            characters[i].curNo = i;
+        }
         if (gd.BattleNo == 3||gd.BattleNo==6) //폴리만 예외
         { 
             GameObject EnemySummon = Instantiate(Enemys[gd.BattleNo], new Vector2(0, 6), transform.rotation, GameObject.Find("CharacterCanvas").transform);
@@ -271,13 +297,16 @@ public class BattleManager : MonoBehaviour
             GameObject EnemySummon = Instantiate(Enemys[gd.BattleNo], new Vector2(-2, -2), transform.rotation, GameObject.Find("CharacterCanvas").transform);
         }
         Enemys = GameObject.FindGameObjectsWithTag("Enemy");
+        for(int i = 0; i < Enemys.Length; i++) {
+            Enemys[i].GetComponent<Enemy>().myNo = i;
+        }
         TurnCardCount = CardCount;
       
         LineObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-820, 360-150*line);
         HM = GameObject.Find("HandManager").GetComponent<HandManager>();
     }
 
-    public GameObject c20;
+ 
     private void Update()
     {
         if (Input.GetKey("escape"))
@@ -411,8 +440,6 @@ public class BattleManager : MonoBehaviour
             CM.Rebatch();
         }
     }
- 
-
 
 
     public void useCard()
@@ -420,10 +447,10 @@ public class BattleManager : MonoBehaviour
         CancleButton.SetActive(false);
         if (!EnemySelectMode)
         {
-           if (card != null)
-            {                
+            if (card != null)
+            {
                 card.GetComponent<Card>().useCard();
-            }           
+            }
         }
         else
         {
@@ -434,10 +461,12 @@ public class BattleManager : MonoBehaviour
                 otherCanvasOn = false;
             }
             CardUseText.text = "사용";
-                EnemySelectMode = false;            
+            EnemySelectMode = false;
         }
 
     }
+
+
     public void WarnOn()
     {
         Warn.SetActive(true);
@@ -484,7 +513,7 @@ public class BattleManager : MonoBehaviour
         EnemySelectMode = false;
         Debug.Log(E.Name);
         log.logContent.text += "\n"+E.Name+"에게 "+(dmg + character.turnAtk)+"의 데미지!";
-        enemy.onHit(dmg + character.turnAtk);
+        enemy.onHit(dmg + character.turnAtk,character.curNo);
     }
     public void getArmor(int armor)
     {
@@ -494,6 +523,10 @@ public class BattleManager : MonoBehaviour
     public void specialDrow(int drow)
     {
         log.logContent.text += "\n 카드를 통해 드로우 " + drow + "장!";
+        for(int i = 0; i < CD.size; i++)
+        {
+            characters[i].myPassive.SpecialDrow(drow);
+        }
         StartCoroutine("specialDrowC", drow);
     }
     IEnumerator specialDrowC(int drow)
@@ -507,18 +540,18 @@ public class BattleManager : MonoBehaviour
     public void ghostRevive(int ghostCount)
     {
         log.logContent.text += "\n망자부활 : " + ghostCount + "!";
-        Q q=null;
+        CharacterPassive q=null;
         for(int i = 0; i < characters.Count; i++)
         {
             if (characters[i].characterNo == 1)
             {
-                q = characters[i].GetComponent<Q>();
+                q = characters[i].GetComponent<CharacterPassive>();
             }
             
         }
         if (q != null)
         {
-            q.Ghost+=ghostCount;
+            q.GhostRevive(ghostCount);
         }
     } //한번 손 봐야 함
     public void CopyCard(int CopyCount)
@@ -568,7 +601,7 @@ public class BattleManager : MonoBehaviour
         character.Atk += atk;
         character.turnAtk += atk;
     }
-    int toGraveCount = 0;
+    
     public void card12()
     {
         condition.SetActive(true);
@@ -722,10 +755,7 @@ public class BattleManager : MonoBehaviour
     {
         character.reflect+=r;
     }
-    int listlength = 3;
-    List<int> RandomCardList = new List<int>();
-    CardData2 data2 = new CardData2();
-    List<int> RancomSelectCard = new List<int>();
+   
     public void Victory()
     {
         otherCanvasOn = true;
@@ -1136,8 +1166,7 @@ public class BattleManager : MonoBehaviour
             }
         }
     }
-    public bool card22on;
-    public Character card22c;
+
     public void card22()
     {
         card22c = character;
@@ -1161,9 +1190,9 @@ public class BattleManager : MonoBehaviour
             if (!Enemys[i].GetComponent<Enemy>().isDie)
             {
                 character.AttackCount+=3;
-                Enemys[i].GetComponent<Enemy>().onHit(1 + character.turnAtk);
-                Enemys[i].GetComponent<Enemy>().onHit(1 + character.turnAtk);
-                Enemys[i].GetComponent<Enemy>().onHit(1 + character.turnAtk);
+                Enemys[i].GetComponent<Enemy>().onHit(1 + character.turnAtk,character.characterNo);
+                Enemys[i].GetComponent<Enemy>().onHit(1 + character.turnAtk, character.characterNo);
+                Enemys[i].GetComponent<Enemy>().onHit(1 + character.turnAtk, character.characterNo);
             }
         }
         CM.TM.turnAtk += 2;
@@ -1184,7 +1213,6 @@ public class BattleManager : MonoBehaviour
 
     }
 
-    public int SelectDeckCount;
     public void SelectDeckCard(int count)
     {
         DeckOn();  
@@ -1197,9 +1225,7 @@ public class BattleManager : MonoBehaviour
         DeckSelectCancle = true;
         DeckSelectMode = false;
     }
-    public bool DeckSelectMode;
-    public bool DeckSelect;
-    public bool DeckSelectCancle;
+   
     public void DeckComplete()
     {
         if (SelectDeckCount == CM.SelectedCard.Count)
@@ -1221,6 +1247,6 @@ public class BattleManager : MonoBehaviour
     {
         Sless.SetActive(false);
     }
-    [SerializeField] GameObject Sless;
+    
     
 }

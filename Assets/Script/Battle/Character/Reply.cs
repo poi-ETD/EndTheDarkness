@@ -80,7 +80,7 @@ public class Reply : MonoBehaviour
                     for (int j = 0; j < myCharacter.passive[1]; j++)
                     {
                         myCharacter.AttackCount++;
-                        enemyScript[i].onHit(myCharacter.turnAtk);                  
+                       // enemyScript[i].onHit(myCharacter.turnAtk);                  
                         EnemyStack[i]++;
                         BM.log.logContent.text += "\n독단적인 팀플레이!" + enemyScript[i].Name + "에게 " + myCharacter.turnAtk + "의 데미지가 주어집니다.";
                     } 

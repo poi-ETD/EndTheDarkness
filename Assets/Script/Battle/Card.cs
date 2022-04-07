@@ -185,18 +185,17 @@ public class Card : MonoBehaviour
         }
         if (cardNo == 14)
         {
-            Q q=null;
+            CharacterPassive q = null;
             for(int i = 0; i < BM.characters.Count; i++)
             {
                 if (BM.characters[i].characterNo == 1)
                 {
-                    q = BM.characters[i].GetComponent<Q>();
+                    q = BM.characters[i].GetComponent<CharacterPassive>();
                 }
             }
-            BM.OnDmgOneTarget(q.Ghost, BM.enemy);
-            BM.ghostRevive(-1 * q.Ghost);
-            q.turnStartGhost = 0;
-            BM.ghostRevive(30);
+            BM.OnDmgOneTarget(q.ghost, BM.enemy);
+            BM.ghostRevive(-1 * q.ghost);
+           BM.ghostRevive(30);
         }
         if (cardNo == 15)
         {

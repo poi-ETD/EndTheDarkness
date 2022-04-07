@@ -22,7 +22,6 @@ public class Character : MonoBehaviour
     public int[] passive;
     public List<DMGboard> DMGboards=new List<DMGboard>();
     public string enemyName;
-    public int StartNo;
     public int AttackCount;
     public bool[] bless = new bool[20];
     public GameObject SelectBox;
@@ -68,6 +67,8 @@ public class Character : MonoBehaviour
     public int reflect;
     public int[] Status=new int[20];
     public int[] nextStatus = new int[20];
+    public int curNo;
+    public CharacterPassive myPassive;
     //0 -> 중독
     public void useAct(int i)
     {
@@ -116,6 +117,7 @@ public class Character : MonoBehaviour
         Act = 1;
         actT.text = "" + Act;
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
+        myPassive = GetComponent<CharacterPassive>();
         if (Hp <= 0) die();
         if (Hp > maxHp) Hp = maxHp;
     }
@@ -212,6 +214,11 @@ public class Character : MonoBehaviour
     }
     public void onDamage(int dmg,string enemyname)
     {
+       
+        for (int i = 0; i < BM.CD.size; i++)
+        {   if (i == curNo) myPassive.MyHit();
+            else { BM.characters[i].myPassive.TeamHit(curNo); }
+        }
         BM.log.logContent.text += "\n"+Name + "(가)이 " + enemyname + "에게 " + dmg + "의 피해를 입었다!";
         if (reflect > 0)
         {
@@ -219,7 +226,7 @@ public class Character : MonoBehaviour
             {
                 if (BM.Enemys[i].GetComponent<Enemy>().Name == enemyname)
                 {
-                    BM.Enemys[i].GetComponent<Enemy>().onHit(reflect);
+                    //BM.Enemys[i].GetComponent<Enemy>().onHit(reflect);
                     BM.log.logContent.text+="\n"+Name+"에게 데미지가 주어져서 " + enemyname + "에게 " + reflect + "의 데미지!";
                 }
             }
@@ -262,7 +269,7 @@ public class Character : MonoBehaviour
                 {
                     for(int i = 0; i < BM.Enemys.Length; i++)
                     {
-                        if (!BM.Enemys[i].GetComponent<Enemy>().isDie) BM.Enemys[i].GetComponent<Enemy>().onHit(dmg);
+                       if (!BM.Enemys[i].GetComponent<Enemy>().isDie) BM.Enemys[i].GetComponent<Enemy>().onHit(dmg,curNo);
                     }
                 }
             }

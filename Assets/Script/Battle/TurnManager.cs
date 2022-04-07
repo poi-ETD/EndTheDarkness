@@ -80,16 +80,7 @@ public class TurnManager : MonoBehaviour
             }
             turnCard = 0;
             PlayerTurn = false;
-            for (int i = 0; i < enemy.Length; i++)
-            {
-                if (!enemy[i].isDie)
-                {
-                    enemy[i].EnemyStartTurn();
-                    enemy[i].HpUp();
-                    enemy[i].GetArmorStat(enemy[i].nextTurnArmor);
-                    enemy[i].nextTurnArmor = 0;
-                }
-            }
+   
             EndButton.SetActive(false);
             BM.CharacterSelectMode = false;
             BM.EnemySelectMode = false;
@@ -115,7 +106,7 @@ public class TurnManager : MonoBehaviour
                     BM.characters[i].BoardClear();
                 }
             }
-            t++;
+           
             
             for (int i = 0; i < BM.Enemys.Length; i++)
             {
@@ -123,9 +114,9 @@ public class TurnManager : MonoBehaviour
               
             }
             BM.TurnCardCount = BM.CardCount;
-            BM.allClear();
-            CM.FieldOff();
-            turnText.text = "" + t;
+            BM.allClear();      
+            StartCoroutine("TurnEnd");
+           
         }
         else
         {
@@ -134,6 +125,34 @@ public class TurnManager : MonoBehaviour
         }
     }
     public int turnAtk;
+    IEnumerator TurnEnd()
+    {
+        BM.otherCanvasOn =true;
+        for (int i = 0; i < BM.CD.size; i++)
+        {if (i > 0) BM.characters[i - 1].transform.localScale = new Vector3(1, 1, 1);
+            int a = BM.characters[i].myPassive.TurnEndTimeCount();
+            
+                yield return new WaitForSeconds(a);
+           
+        }
+        CM.FieldOff();
+        BM.characters[BM.CD.size-1].transform.localScale= new Vector3(1, 1, 1);
+        BM.otherCanvasOn = false;
+        for (int i = 0; i < enemy.Length; i++)
+        {
+            if (!enemy[i].isDie)
+            {
+                enemy[i].EnemyStartTurn();
+                enemy[i].HpUp();
+                enemy[i].GetArmorStat(enemy[i].nextTurnArmor);
+                enemy[i].nextTurnArmor = 0;
+            }
+        }
+        t++;
+        turnText.text = "" + t;
+        BM.curMessage.text = "";
+
+    }
     void PSoff()
     {
         pleaseSelect.SetActive(false);
@@ -141,6 +160,7 @@ public class TurnManager : MonoBehaviour
     public void PlayerTurnStart()
     {
         GameObject.Find("HandManager").GetComponent<HandManager>().isInited = false;
+     
         BM.log.logContent.text += "\n" + t + "턴 시작!";
         BM.cost = BM.startCost+BM.nextTurnStartCost;
         BM.useCost(0);
@@ -182,7 +202,12 @@ public class TurnManager : MonoBehaviour
             BM.card22c.getArmor(ArmorSum);
             BM.card22on = false;
         }
+
         CM.TurnStartCardSet();
+        for (int i = 0; i < BM.CD.size; i++)
+        {
+            BM.characters[i].myPassive.TurnStart();
+        }
     }
   
 }

@@ -101,7 +101,7 @@ public class Vangara : MonoBehaviour
                     {
                         for (int j = 0; j < myCharacter.passive[2]; j++)
                         {
-                            enemyScript[i].onHit(myCharacter.armorBreak[armorcount].dmg);
+                           // enemyScript[i].onHit(myCharacter.armorBreak[armorcount].dmg);
                             BM.log.logContent.text += "\n무장!" + enemyScript[i].Name + "에게 추가 데미지!";
                         }
                     }

@@ -490,7 +490,7 @@ GameObject:
   - component: {fileID: 2347601005813970014}
   - component: {fileID: 2347601005813970011}
   - component: {fileID: 4962371682850648136}
-  - component: {fileID: 3710128793459130335}
+  - component: {fileID: 7437254774849487399}
   m_Layer: 0
   m_Name: Q
   m_TagString: Character
@@ -554,7 +554,6 @@ MonoBehaviour:
   board: {fileID: 2347601005463500816}
   passive: 00000000000000000000000000000000
   enemyName: 
-  StartNo: 0
   AttackCount: 0
   bless: 0000000000000000000000000000000000000000
   SelectBox: {fileID: 4933892919090107615}
@@ -573,6 +572,8 @@ MonoBehaviour:
   reflect: 0
   Status: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
   nextStatus: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  curNo: 0
+  myPassive: {fileID: 0}
 --- !u!61 &2347601005813970014
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -635,7 +636,7 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
---- !u!114 &3710128793459130335
+--- !u!114 &7437254774849487399
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -644,15 +645,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 2347601005813970015}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 361013e6468e11d46bddaec267b5f173, type: 3}
+  m_Script: {fileID: 11500000, guid: 5f337c7279b59e6438b23bb8eebe75bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ghostT: {fileID: 2347601005785499624}
-  Ghost: 0
-  myCharacter: {fileID: 2347601005813970009}
-  turnStartGhost: 0
-  GhostPlus: 0
-  awakeQ: {fileID: 21300000, guid: 03d954929911ad7458295e8a27497d60, type: 3}
+  ghost: 0
+  ghostText: {fileID: 2347601005785499624}
+  upQ: {fileID: 21300000, guid: 03d954929911ad7458295e8a27497d60, type: 3}
 --- !u!1 &2347601005822650731
 GameObject:
   m_ObjectHideFlags: 0

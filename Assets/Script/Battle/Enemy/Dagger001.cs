@@ -27,8 +27,7 @@ public class Dagger001 : MonoBehaviour
     private void Update()
     {
         if (curTurn != TM.t) {
-         StartPattern();
-             
+         StartPattern();        
         }
     }
     void StartPattern()
@@ -74,10 +73,9 @@ public class Dagger001 : MonoBehaviour
             }
         }
       
-        if (plusname == 1)
-        {
+       
             myEnemy.EnemyEndTurn();         
-        }
+        
         curTurn++;
     }
 }

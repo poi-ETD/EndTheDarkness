@@ -28,6 +28,9 @@ public class Enemy : MonoBehaviour
     EnemyInfo ei;
     public Image[] HpImage;
     public Image myImage;
+    ActManager AM;
+    public int myNo;
+    
     public bool CanShadow()
     {
         bool can = false;
@@ -48,7 +51,8 @@ public class Enemy : MonoBehaviour
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         Hp = maxHp;
         ei = GameObject.Find("SelectEnemyInformation").GetComponent<EnemyInfo>();
-      
+        AM = GameObject.Find("ActManager").GetComponent<ActManager>();
+       
     }        
     public void onClickEvent()
 {
@@ -84,17 +88,21 @@ public class Enemy : MonoBehaviour
     }
     public void EnemyEndTurn()
     {
-        power = false;
-  
+        power = false;  
         immortal = false;
-        Invoke("TurnStart", 0.5f);
+        AM.EarlyAct();
     }
     void TurnStart()
     {
         TM.PlayerTurnStart();
     }    
-    public void onHit(int dmg)
-    {   
+    public void onHit(int dmg,int no)
+    {
+        BM.characters[no].myPassive.MyAttack();
+        for (int i = 0; i < BM.CD.size; i++)
+        {
+            BM.characters[i].myPassive.EnemyHit(myNo);
+        }
         if (!power)
         {        
             dmgStack++;

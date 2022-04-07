@@ -490,6 +490,7 @@ GameObject:
   - component: {fileID: 6535696080571773972}
   - component: {fileID: 5487373201092571331}
   - component: {fileID: 5862069484411159173}
+  - component: {fileID: 5530646832553707404}
   m_Layer: 0
   m_Name: Reply
   m_TagString: Character
@@ -648,6 +649,18 @@ MonoBehaviour:
   myCharacter: {fileID: 6535696080571773962}
   passive: 
   EnemyStack: 
+--- !u!114 &5530646832553707404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6535696080571773960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f337c7279b59e6438b23bb8eebe75bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6535696080571968689
 GameObject:
   m_ObjectHideFlags: 0

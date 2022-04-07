@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-public class Q : MonoBehaviour
+public class Q2 : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI ghostT;
     public int Ghost;
