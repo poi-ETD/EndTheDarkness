@@ -41,10 +41,11 @@ public class BlackWhite : MonoBehaviour
     }   
     public void onDamage()
     {
-        BM.log.logContent.text += "\n흑백의 효과로 모든 적에게 " + BlackWhiteStack + "의 데미지!"; 
-        for (int i = 0; i < enemyScript.Length; i++)
-        {            if(!enemyScript[i].isDie)
-            enemyScript[i].onHit(BlackWhiteStack+BM.character.turnAtk,BM.character.curNo);
-        }
+        BM.log.logContent.text += "\n흑백의 효과로 모든 적에게 " + (BlackWhiteStack+ BM.character.turnAtk) + "의 데미지!";
+        BM.curMessage.text = "흑백의 효과로 모든 적에게 " + (BlackWhiteStack + BM.character.turnAtk) + "의 데미지!";
+        Debug.Log(BlackWhiteStack);
+        BM.AllAttack(BlackWhiteStack, BM.character, 1);
+           
+       
     }
 }

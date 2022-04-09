@@ -54,7 +54,7 @@ public class Bless : MonoBehaviour
         SelectBless.SetActive(false);
         lobby.canvasOn = true;
     }
-    public void SelectRemoveOn()
+    public void SelectRemoveOn()  //선택해서 삭제하기
     {if (lobby.GD.Ignum < 1000) return;
         lobby.GD.Ignum -= 1000;
 
@@ -75,7 +75,7 @@ public class Bless : MonoBehaviour
             }
         }
     }
-    public void RemoveRandom()
+    public void RemoveRandom() //랜덤으로 삭제하기
     {
         if (lobby.GD.Ignum < 50) return;
         lobby.GD.Ignum -= 50;
@@ -85,15 +85,36 @@ public class Bless : MonoBehaviour
             if (lobby.GD.blessbool[i]) curBlessList.Add(i);
         }
         int rand = Random.Range(0, curBlessList.Count);
+        if (curBlessList[rand] == 12)
+        {
+            for(int i = 0; i < lobby.CD.cardCost.Count; i++)
+            {
+                if(lobby.CD.cardGet[i]==lobby.GD.bless12[0]|| lobby.CD.cardGet[i] == lobby.GD.bless12[1]|| lobby.CD.cardGet[i] == lobby.GD.bless12[2])
+                {
+                    CardData2 carddata = new CardData2();
+                    lobby.CD.cardCost[i] = carddata.cd[lobby.CD.cardNo[i]].Cost;
+                }
+            }
+        }
         lobby.GD.blessbool[curBlessList[rand]] = false;
         exitRemovePopup();
         lobby.DayAct();
         setBlessIcon();
     }
-    public void blessRemoveButton(int i)
+    public void blessRemoveButton(int a)
     {
-        lobby.GD.blessbool[i] = false;
-     
+        lobby.GD.blessbool[a] = false;
+        if (a == 12)
+        {
+            for (int i = 0; i < lobby.CD.cardCost.Count; i++)
+            {
+                if (lobby.CD.cardGet[i] == lobby.GD.bless12[0] || lobby.CD.cardGet[i] == lobby.GD.bless12[1] || lobby.CD.cardGet[i] == lobby.GD.bless12[2])
+                {
+                    CardData2 carddata = new CardData2();
+                    lobby.CD.cardCost[i] = carddata.cd[lobby.CD.cardNo[i]].Cost;
+                }
+            }
+        }
         exitRemovePopup();
         lobby.DayAct();
         setBlessIcon();
@@ -145,7 +166,7 @@ public class Bless : MonoBehaviour
     {
         if (blessNum >0)
         {
-          if(  blessNum==6)
+          if(blessNum==6)
             b6();
             if (blessNum == 5)
                 b5();
@@ -298,6 +319,7 @@ public class Bless : MonoBehaviour
         
         BlessApply(randList[rand]);//rand
     }
+    /*randList[rand]*/
 
     public void b6()
     {

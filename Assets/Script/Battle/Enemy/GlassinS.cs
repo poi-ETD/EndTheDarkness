@@ -98,16 +98,16 @@ public class GlassinS : MonoBehaviour
                         if (rand == 2)
                         {
                             randCount[2] = true;
-                            BM.HitFront(5, 0, myEnemy.Name, false);                   
+                            BM.HitFront(5, 0, myEnemy, false);                   
                                 if (myEnemy.Hp < Ifrin.Hp)
                                 {
                                  
-                                    myEnemy.GetHp(5, myEnemy.Name);
+                                    //myEnemy.GetHp(5, myEnemy.Name);
                                 }
                                 else if(myEnemy.Hp>Ifrin.Hp)
                                 {
                                  
-                                    Ifrin.GetHp(5, myEnemy.Name);
+                                   // Ifrin.GetHp(5, myEnemy.Name);
                                 }
                                
                                
@@ -122,12 +122,12 @@ public class GlassinS : MonoBehaviour
                         if (myEnemy.Hp < Ifrin.Hp)
                         {
                             lessHp = myEnemy;
-                            lessHp.GetHp(Mathf.FloorToInt((lessHp.maxHp - lessHp.Hp) * 0.3f), myEnemy.Name);
+                            //lessHp.GetHp(Mathf.FloorToInt((lessHp.maxHp - lessHp.Hp) * 0.3f), myEnemy.Name);
                         }
                         else if(myEnemy.Hp > Ifrin.Hp)
                         {
                             lessHp = Ifrin;
-                            lessHp.GetHp(Mathf.FloorToInt((lessHp.maxHp - lessHp.Hp) * 0.3f), myEnemy.Name);
+                            //lessHp.GetHp(Mathf.FloorToInt((lessHp.maxHp - lessHp.Hp) * 0.3f), myEnemy.Name);
                         }
                        
                         randCount[0] = false;
@@ -138,7 +138,7 @@ public class GlassinS : MonoBehaviour
                 }
                 else
                 {
-                    Ifrin.GetHp(myEnemy.Hp / 10, myEnemy.Name);
+                    //Ifrin.GetHp(myEnemy.Hp / 10, myEnemy.Name);
                     myEnemy.onEnemyHit(myEnemy.Hp / 10, myEnemy.Name);
                 }
             }

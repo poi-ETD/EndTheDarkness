@@ -52,8 +52,8 @@ public class GlassinZim : MonoBehaviour
                     if (rand == 1)
                     {
                         if (z != null)
-                            z.myEnemy.GetHp(8 + z.n * 2, myEnemy.Name);
-                        BM.HitAll(1 + z.n, 0, myEnemy.Name, false);
+                           // z.myEnemy.GetHp(8 + z.n * 2, myEnemy.Name);
+                        BM.HitAll(1 + z.n, 0, myEnemy, false);
                     }
                 }
                 else

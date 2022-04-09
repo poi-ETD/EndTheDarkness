@@ -128,7 +128,7 @@ public class glassin : MonoBehaviour
                                 int rand2 = Random.Range(0, BM.forward.Count);
                                 while (BM.characters[rand2].isDie)
                                     rand2 = Random.Range(0, BM.forward.Count);
-                                BM.characters[rand2].onHit(5, myEnemy.Name);
+                               // BM.characters[rand2].onHit(5, myEnemy.Name);
 
                             }
                             else
@@ -136,7 +136,7 @@ public class glassin : MonoBehaviour
                                 int rand2 = Random.Range(0, BM.characters.Count);
                                 while (BM.characters[rand2].isDie)
                                     rand2 = Random.Range(0, BM.characters.Count);
-                                BM.characters[rand2].onHit(5, myEnemy.Name);
+                                //BM.characters[rand2].onHit(5, myEnemy.Name);
                             }
                         }
                     }
@@ -150,11 +150,11 @@ public class glassin : MonoBehaviour
                         randCount[2] = false;
                         if (myHp < IfrininHp)
                         {
-                            myEnemy.GetHp(Mathf.Abs(myHp - IfrininHp), myEnemy.Name);
+                        //    myEnemy.GetHp(Mathf.Abs(myHp - IfrininHp), myEnemy.Name);
                         }
                         else
                         {
-                            Ifrin.GetHp(Mathf.Abs(myHp - IfrininHp), myEnemy.Name);
+                        //    Ifrin.GetHp(Mathf.Abs(myHp - IfrininHp), myEnemy.Name);
                         }
                     }
                 }
@@ -164,7 +164,7 @@ public class glassin : MonoBehaviour
                     {
                         if (!BM.characters[i].isDie)
                         {
-                            BM.characters[i].onHit(10, myEnemy.Name);
+                           // BM.characters[i].onHit(10, myEnemy.Name);
                             BM.characters[i].NextTurnMinusAct++;
                         }
                     }

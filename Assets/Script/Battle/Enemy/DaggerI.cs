@@ -54,13 +54,13 @@ public class DaggerI : MonoBehaviour
                 }
                 if (pattern == 0)
                 {
-                    BM.HitAll(1, 4, myEnemy.Name, false);
+                    BM.HitAll(1, 4, myEnemy, false);
                 }
                 if (pattern == 1)
                 {
-                    BM.HitFront(3, 0, myEnemy.Name, false);
-                    BM.HitFront(3, 0, myEnemy.Name, false);
-                    BM.HitBack(1, 0, myEnemy.Name, false);
+                    BM.HitFront(3, 0, myEnemy, false);
+                    BM.HitFront(3, 0, myEnemy, false);
+                    BM.HitBack(1, 0, myEnemy, false);
                 }
                 if (pattern == 2)
                 {
@@ -70,10 +70,10 @@ public class DaggerI : MonoBehaviour
                     }
                     else
                     {
-                        BM.HitFront(3, 0, myEnemy.Name, false);
-                        BM.HitFront(3, 0, myEnemy.Name, false);
+                        BM.HitFront(3, 0, myEnemy, false);
+                        BM.HitFront(3, 0, myEnemy, false);
                     }
-                    BM.HitBack(0, 0, myEnemy.Name, true);
+                    BM.HitBack(0, 0, myEnemy, true);
                 }
 
 

@@ -49,18 +49,18 @@ public class Zimmy : MonoBehaviour
                         p[1] = true;
                         for (int i = 0; i < 3 + n; i++)
                         {
-                            BM.HitFront(1, 0, myEnemy.Name, false);
+                            BM.HitFront(1, 0, myEnemy, false);
                         }
                         for (int i = 0; i <  n; i++)
                         {
-                            BM.HitBack(1, 0, myEnemy.Name, false);
+                            BM.HitBack(1, 0, myEnemy, false);
                         }
                     }
                     else if (p[1]) {
                         p[0] = true;
                         for (int i = 0; i < 5 + 2 * n; i++)
                         {
-                            BM.HitFront(1, 0, myEnemy.Name, false);
+                            BM.HitFront(1, 0, myEnemy, false);
                         }
                     }
                     else
@@ -71,18 +71,18 @@ public class Zimmy : MonoBehaviour
                         {
                             for(int i = 0; i < 5 + 2 * n; i++)
                             {
-                                BM.HitFront(1, 0, myEnemy.Name, false);
+                                BM.HitFront(1, 0, myEnemy, false);
                             }
                         }
                         if (rand == 1)
                         {
                             for (int i = 0; i < 3 +   n; i++)
                             {
-                                BM.HitFront(1, 0, myEnemy.Name, false);
+                                BM.HitFront(1, 0, myEnemy, false);
                             }
                             for (int i = 0; i <  n; i++)
                             {
-                                BM.HitBack(1, 0, myEnemy.Name, false);
+                                BM.HitBack(1, 0, myEnemy, false);
                             }
                         }
                     }
@@ -96,7 +96,7 @@ public class Zimmy : MonoBehaviour
                         n++;
                         for(int i = 0; i < n; i++)
                         {
-                            BM.HitAll(atk, 0, myEnemy.Name, false);
+                            BM.HitAll(atk, 0, myEnemy, false);
                         }
                     }
                     else if (p[0])
@@ -104,7 +104,7 @@ public class Zimmy : MonoBehaviour
                         p[1] = true;
                         for (int i = 0; i < (3*n)/2; i++)
                         {
-                            BM.HitAll(atk, 0, myEnemy.Name, false);
+                            BM.HitAll(atk, 0, myEnemy, false);
                         }
                         
                     }
@@ -113,7 +113,7 @@ public class Zimmy : MonoBehaviour
                         p[0] = true;
                         for (int i = 0; i < 3*n; i++)
                         {
-                            BM.HitFront(atk, 0, myEnemy.Name, false);
+                            BM.HitFront(atk, 0, myEnemy, false);
                         }
                     }
                     else
@@ -124,14 +124,14 @@ public class Zimmy : MonoBehaviour
                         {
                             for (int i = 0; i < 3 * n; i++)
                             {
-                                BM.HitFront(atk, 0, myEnemy.Name, false);
+                                BM.HitFront(atk, 0, myEnemy, false);
                             }
                         }
                         if (rand == 1)
                         {
                             for (int i = 0; i < (3 * n) / 2; i++)
                             {
-                                BM.HitAll(atk, 0, myEnemy.Name, false);
+                                BM.HitAll(atk, 0, myEnemy, false);
                             }
                         }
                     }

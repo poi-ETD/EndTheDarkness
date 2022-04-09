@@ -51,7 +51,7 @@ public class Ranger : MonoBehaviour
                    
                         for (int i = 0; i < 2; i++)
                         {
-                        BM.HitFront(3, 0, myEnemy.Name, false);
+                        BM.HitFront(3, 0, myEnemy, false);
                         }
                   
                 }
@@ -83,7 +83,7 @@ public class Ranger : MonoBehaviour
                     else
                     {
 
-                        BM.HitFront(3, 0, myEnemy.Name, false);
+                        BM.HitFront(3, 0, myEnemy, false);
 
                     }
                  

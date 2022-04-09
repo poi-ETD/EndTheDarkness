@@ -40,9 +40,8 @@ public class Poly0 : MonoBehaviour
                 int rand = Random.Range(0, 3);
                 if (rand == 0)
                 {
-                    BM.HitFront(4
-                        , 0, myEnemy.Name, false);
-                    BM.HitFront(4, 0, myEnemy.Name, false);
+                    BM.HitFront(4 , 0, myEnemy, false);
+                    BM.HitFront(4, 0, myEnemy, false);
                 }
                 else if (rand == 1)
                 {
@@ -50,7 +49,7 @@ public class Poly0 : MonoBehaviour
                 }
                 else if (rand == 2)
                 {
-                    BM.HitFront(3, 0, myEnemy.Name, false);
+                    BM.HitFront(3, 0, myEnemy, false);
                     myEnemy.GetArmor(5, myEnemy.Name);
                 }      
             }
@@ -71,7 +70,7 @@ public class Poly0 : MonoBehaviour
                     phase2++;
                     if (phase2 % 2 == 0)
                     {
-                        BM.HitFront(myEnemy.Armor*2, 0, myEnemy.Name, false);
+                        BM.HitFront(myEnemy.Armor*2, 0, myEnemy, false);
                         myEnemy.Armor = 0;
                         myEnemy.GetArmor((myEnemy.Hp)/10,myEnemy.Name);
                     }
@@ -80,8 +79,8 @@ public class Poly0 : MonoBehaviour
                         int k = (myEnemy.maxHp - myEnemy.Hp) / 10;
                         int n = Random.Range(1, k);
                         int m = k - n;
-                        BM.HitFront(n, 0, myEnemy.Name, false);
-                        BM.HitFront(m, 0, myEnemy.Name, false);
+                        BM.HitFront(n, 0, myEnemy, false);
+                        BM.HitFront(m, 0, myEnemy, false);
                     }
                 }
             }

@@ -12,7 +12,7 @@ public class Enemy : MonoBehaviour
     public TurnManager TM;
     public BattleManager BM;
     [SerializeField] TextMeshProUGUI HpT;
-   public TextMeshProUGUI Board;
+    public TextMeshProUGUI Board;
     [SerializeField] TextMeshProUGUI ArmorT;
     public int hitStack;
     public int dmgStack;
@@ -26,10 +26,11 @@ public class Enemy : MonoBehaviour
     public bool Shadow;
     int EndTurnDmg;
     EnemyInfo ei;
-    public Image[] HpImage;
+    public Slider hpSlider;
     public Image myImage;
     ActManager AM;
     public int myNo;
+    public bool goingShadow;
     
     public bool CanShadow()
     {
@@ -38,7 +39,7 @@ public class Enemy : MonoBehaviour
         {
             if (BM.Enemys[i] == gameObject)
                 continue;
-            if (!BM.Enemys[i].GetComponent<Enemy>().isDie && !BM.Enemys[i].GetComponent<Enemy>().Shadow)
+            if (!BM.Enemys[i].GetComponent<Enemy>().isDie && !BM.Enemys[i].GetComponent<Enemy>().goingShadow)
             {
                 can = true;
             }
@@ -58,10 +59,11 @@ public class Enemy : MonoBehaviour
 {
     if (isDie) return;
     if (BM.SelectMode) return;
+        if (Shadow) return;
     if (BM.EnemySelectMode)
     {
        
-            BM.EnemySelect(gameObject);
+        BM.EnemySelect(gameObject);
     
     }
    
@@ -84,28 +86,51 @@ public class Enemy : MonoBehaviour
     }
     public void EnemyStartTurn()
     {
-        Shadow = false;
+        if (Shadow&&!isDie)
+        {
+            Shadow = false;
+            myImage.color = new Color(1, 1, 1, 1);
+        }
+        power = false;
+        immortal = false;
     }
     public void EnemyEndTurn()
-    {
-        power = false;  
-        immortal = false;
+    {             
         AM.EarlyAct();
     }
     void TurnStart()
     {
         TM.PlayerTurnStart();
-    }    
-    public void onHit(int dmg,int no)
+    }
+    float curalpha;
+    public void Hit()
     {
-        BM.characters[no].myPassive.MyAttack();
-        for (int i = 0; i < BM.CD.size; i++)
+        curalpha = myImage.color.a;
+        Color color = new Color(1, 0, 0,curalpha);
+        myImage.color = color;
+    }
+    public void HitEnd()
+    {
+        Color color = new Color(1, 1, 1, curalpha);
+        if (isDie)
         {
-            BM.characters[i].myPassive.EnemyHit(myNo);
+          color = new Color(0.3f, 0.3f, 0.3f);
         }
+        myImage.color = color;
+    }
+    
+    public float onHit(int dmg,int no)
+    {      
+        float t = 0;
+        t += BM.characters[no].myPassive.MyAttack();
+        for (int i = 0; i < BM.CD.size; i++)
+        {           
+            t += BM.characters[i].myPassive.EnemyHit(this);
+        }
+      
         if (!power)
         {        
-            dmgStack++;
+            
             if (Armor > 0)
             {
                 Armor -= dmg;
@@ -148,17 +173,20 @@ public class Enemy : MonoBehaviour
                     Hp = 0;
                     Color color = new Color(0.3f, 0.3f, 0.3f);
                     myImage.color = color;
-
+                    hpSlider.transform.Find("Fill Area").gameObject.SetActive(false);
                 }
             }
         }
-        HpImage[0].fillAmount = Hp / (float)maxHp;
+        hpSlider.value= Hp / (float)maxHp;
+        return t;
     }
 
     public void GetArmorStat(int arm)
     {
         Armor += arm;
     }
+
+
     public void GetArmor(int arm,string enemyname)
     {
         
@@ -168,15 +196,21 @@ public class Enemy : MonoBehaviour
     }
     List<int> HpI = new List<int>();
     List<string> HpS = new List<string>();
-    public void GetHp(int amount,string enemyname)
+
+
+    public void GetHp(int amount)
     {
-        
-        HpS.Add(enemyname);
-        HpI.Add(amount);
-        string newstring = "<sprite name=" + enemyname + "><sprite name=recover>" + amount + "\n";
-        RecoverHp = amount;
-        Board.text += newstring;
+
+
+
+        Hp += amount;
+        if (Hp > maxHp) Hp = maxHp;
+        hpSlider.value = Hp / (float)maxHp;
+
     }
+
+
+
     public void GetDynamicHp(int amount,string enemyname)
     {
         
@@ -218,11 +252,14 @@ public class Enemy : MonoBehaviour
         }
         Board.text = newstring;
     }
+
+
     public void onShadow()
     {
-        Shadow = true;
-        Board.text += "은신\n";
+        Shadow = true;      
     }
+
+
     public void onEnemyHit(int dmg, string Name)
     {
         EndTurnDmg += dmg;
@@ -230,6 +267,8 @@ public class Enemy : MonoBehaviour
         string newstring = "<sprite name=" + Name+ "><sprite name=dmg>" + dmg + "\n";
         Board.text += newstring;
     }
+
+
     public void HpUp()
     {
         HpI.Clear();
@@ -240,7 +279,7 @@ public class Enemy : MonoBehaviour
         RecoverHp = 0;
         if (Hp >= maxHp)
             Hp = maxHp;
-        HpImage[0].fillAmount = Hp / (float)maxHp;
+        hpSlider.value = Hp / (float)maxHp;
     }
     public void die()
     {

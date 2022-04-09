@@ -20,7 +20,9 @@ public class BlessManager : MonoBehaviour
             bless = GD.blessbool;
         if (bless[2])
         {
-            int rand = Random.Range(BM.line, 4);
+            
+            int rand = Random.Range(BM.line, BM.CD.size);
+            Debug.Log(BM.characters[rand]);
             BM.characters[rand].bless[2] = true;
             BM.characters[rand].Atk += 2;
         }
@@ -31,11 +33,11 @@ public class BlessManager : MonoBehaviour
         }
         if (bless[4])
         {
-            BM.BlessBM[4] = true;
+            BM.gd.blessbool[4] = true;
         }
         if (bless[7])
         {
-            BM.BlessBM[7] = true;
+            BM.gd.blessbool[7] = true;
         }
     }
 }

@@ -557,6 +557,7 @@ MonoBehaviour:
   AttackCount: 0
   bless: 0000000000000000000000000000000000000000
   SelectBox: {fileID: 4933892919090107615}
+  myImage: {fileID: 0}
   cost: 2
   isSet: 0
   isTurnStart: 0

@@ -164,23 +164,23 @@ public class Card : MonoBehaviour
     {     
         if (cardNo == 1)
         {          
-            BM.OnDmgOneTarget(5,BM.enemy);         
+            BM.OnDmgOneTarget(5,BM.enemy,1);         
         }
         if (cardNo == 3)
         {                
-            BM.OnDmgOneTarget(7, BM.enemy);
+            BM.OnDmgOneTarget(7, BM.enemy,1);
             BM.specialDrow(1);          
         }
         if (cardNo == 6)
         {
             BM.nextTurnStartCost++;
             BM.ghostRevive(3);
-            BM.OnDmgOneTarget(7, BM.enemy);
-            BM.OnDmgOneTarget(7, BM.enemy);
+            BM.OnDmgOneTarget(7, BM.enemy,2);
+           
         }
         if (cardNo == 11)
         {
-            BM.OnDmgOneTarget(5, BM.enemy);
+            BM.OnDmgOneTarget(5, BM.enemy,1);
             BM.TurnAtkUp(1);
         }
         if (cardNo == 14)
@@ -193,23 +193,23 @@ public class Card : MonoBehaviour
                     q = BM.characters[i].GetComponent<CharacterPassive>();
                 }
             }
-            BM.OnDmgOneTarget(q.ghost, BM.enemy);
+            BM.OnDmgOneTarget(q.ghost, BM.enemy,1);
             BM.ghostRevive(-1 * q.ghost);
            BM.ghostRevive(30);
         }
         if (cardNo == 15)
         {
-            BM.OnDmgOneTarget(CM.Grave.Count, BM.enemy);
+            BM.OnDmgOneTarget(CM.Grave.Count, BM.enemy,1);
             BM.ghostRevive(CM.Grave.Count);
         }
         if (cardNo == 18)
         {
-            BM.OnDmgOneTarget(2, BM.enemy);
+            BM.OnDmgOneTarget(2, BM.enemy,1);
         }
         if (cardNo == 19)
         {
-            BM.OnDmgOneTarget(6, BM.enemy);
-            BM.OnDmgOneTarget(6, BM.enemy);
+            BM.OnDmgOneTarget(6, BM.enemy,2);
+           
             BM.ActUpCharacter(2);
             BM.specialDrow(1);
         }
@@ -267,6 +267,7 @@ public class Card : MonoBehaviour
        
         if (GetComponent<BlackWhite>() != null)
         {
+            Debug.Log("흑백사용");
             GetComponent<BlackWhite>().onDamage();
         }  
         if (iscard20Mode)
@@ -290,7 +291,7 @@ public class Card : MonoBehaviour
     private bool isOnMouse;
     private void OnMouseDown()
     {
-      
+        if (BM.otherCor) return;
         if (!BM.EnemySelectMode && !BM.otherCanvasOn)
         {
 

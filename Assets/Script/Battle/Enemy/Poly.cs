@@ -46,13 +46,13 @@ public class Poly : MonoBehaviour
                 phase1++;
                 if (phase1 % 2 == 1)
                 {
-                    BM.HitFront(8, 1, myEnemy.Name, false);
-                    BM.HitFront(8, 1, myEnemy.Name, false);
+                    BM.HitFront(8, 1, myEnemy, false);
+                    BM.HitFront(8, 1, myEnemy, false);
                 }
                 else if (phase1 % 2 == 0)
                 {
                     myEnemy.GetArmor(5, myEnemy.Name);
-                    BM.HitFront(3, 1, myEnemy.Name, false);
+                    BM.HitFront(3, 1, myEnemy, false);
                 }
             }
             else if (myEnemy.Hp <= 150 && myEnemy.Hp > 50)
@@ -73,7 +73,7 @@ public class Poly : MonoBehaviour
                 else if (phase2 % 2 == 0)
                 {
 
-                    BM.HitFront(10, 1, myEnemy.Name, true);
+                    BM.HitFront(10, 1, myEnemy, true);
 
                 }
                 else if (phase2 % 2 == 1)
@@ -109,14 +109,14 @@ public class Poly : MonoBehaviour
                     {
                         if (!BM.characters[i].isDie)
                         {
-                            BM.characters[i].onHit(myEnemy.Armor, myEnemy.Name);
+                          //  BM.characters[i].onHit(myEnemy.Armor, myEnemy.Name);
                         }
                     }
                 }
                 else
                 {
                     myEnemy.GetArmor(10, myEnemy.Name);
-                    BM.HitFront(13, 1, myEnemy.Name, false);
+                    BM.HitFront(13, 1, myEnemy, false);
                 }
             }
             myEnemy.EnemyEndTurn();

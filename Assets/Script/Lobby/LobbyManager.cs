@@ -115,7 +115,7 @@ public class LobbyManager : MonoBehaviour
     }
     public void Resetmara(int rc)
     {
-        if (rc < 4)
+        if (rc < ChD.size)
         {
             canvasOn = true;
             ResetCanvas.SetActive(true);
@@ -140,19 +140,19 @@ public class LobbyManager : MonoBehaviour
             newCard = Instantiate(ShopPrefebs, GameObject.Find("ResetShop").transform.transform.GetChild(0).transform);
             newCard.GetComponent<NoBattleCard>().setCardInfoInLobby(RandomCardList[r], 0);
         }
-        else if (rc == 4)
+        else if (rc == ChD.size)
         {
             canvasOn = false;
             GameObject.Find("Bless").GetComponent<Bless>().BlessPopupOn();
             GameObject.Find("Bless").GetComponent<Bless>().GetBless();
         }
-        else if (rc == 5)
+        else if (rc == ChD.size+1)
         {
             ResetMaraCount = 5;
             ResetBless.SetActive(false);
             ResetItem.SetActive(true);
         }
-        else if (rc == 6)
+        else if (rc == ChD.size+2)
         {
             GD.Ignum += 500;
             IgnumT.text = "" + GD.Ignum;
@@ -179,7 +179,7 @@ public class LobbyManager : MonoBehaviour
             Destroy(childList[i].gameObject);
         }
         RandomCardList.Clear();
-        if(ResetMaraCount>2)GameObject.Find("ResetShop").SetActive(false);    
+        if(ResetMaraCount>ChD.size-2)GameObject.Find("ResetShop").SetActive(false);    
         ResetMaraCount++;
         Resetmara(ResetMaraCount);
     }

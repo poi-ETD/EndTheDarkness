@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
+
 public class ActManager : MonoBehaviour
 {
     BattleManager BM;
@@ -10,44 +12,134 @@ public class ActManager : MonoBehaviour
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
     }
-    public struct EnemyAct
-    {
-        public int type; /*
-                    0->데미지 1->데미지+행감 2->방어도 3->체력 회복 4->상태이상 5->은신/무적 
-        그 외 는 해당 스크립트 가 아닌 각각 개별 스크립트에서 즉발로 처리 ex)공격력 증가
-        */
-       public int mount; //데미지 , 방어도, 회복 량,상태이상 종류*10+상태이상 양(여기는 변경가능성 多,0>은신 1>무적 2>불사)
-       public int target; //10일 시 모든 타겟
-       public int myEnemy;
-        public EnemyAct(int type, int mount, int target, int myEnemy)
-        {
-            this.type = type;
-            this.mount = mount;
-            this.target = target;
-            this.myEnemy = myEnemy;
-        }
-    }
-   public struct CharacterAct
-    {
-        public int type;
-        public int mount;
-        public int target;
-        public int myCharacer;
-    }
-    List<EnemyAct> enemyAct = new List<EnemyAct>();
+   
+   
     int earlyCount;
+ 
     public void EarlyAct()
     {
         earlyCount++;
         if (earlyCount == BM.Enemys.Length)
-        {
+        {           
             TM.PlayerTurnStart();
+           
             earlyCount = 0;
         }
     }
+    public void EarlyActCorStart()
+    {
+        StartCoroutine("EarlyActCor");
+    }
+    IEnumerator EarlyActCor()
+    {
+        
+        while (BM.earlyActList.Count != 0)
+        {
+            bool notPop = false;
+            if (BM.earlyActList[0].type == 1)
+            {
+               
+                BM.earlyActList[0].myEnemy.transform.DOMove(BM.earlyActList[0].myEnemy.transform.position+new Vector3(0, -0.5f,0), 0.3f);
+                BM.earlyActList[0].target.myImage.color = Color.blue;
+                yield return new WaitForSeconds(0.5f);
+                BM.earlyActList[0].myEnemy.transform.DOMove(BM.earlyActList[0].myEnemy.transform.position + new Vector3(0, 0.5f, 0), 0.2f);
+                int t = BM.earlyActList[0].target.myPassive.ActMinus(BM.earlyActList[0].mount);
+                yield return new WaitForSeconds(0.3f + t);
+                BM.earlyActList[0].target.myImage.color = Color.white;
+            }
+            if (BM.earlyActList[0].type == 4)
+            { //0은신 1무적 2불사
+                if (BM.earlyActList[0].mount == 0) {
+                    BM.earlyActList[0].myEnemy.onShadow();
+                    for (int i = 0; i < 10; i++)
+                    {
+                        BM.earlyActList[0].myEnemy.myImage.color -= new Color(0, 0, 0, 0.07f);
+                       yield return new WaitForSeconds(0.05f);
+                    }
+                }
+                
+
+            }
+            if (BM.earlyActList[0].type == 6)
+            {
+                if (BM.earlyActList.Count == 1)
+                {
+                    BM.FormationCollapse(BM.earlyActList[0].myEnemy.Name);
+                }
+                else
+                {
+                    BM.earlyActList.Reverse();
+                    notPop = true;
+                }
+            }
+            if(!notPop)
+            BM.earlyActList.RemoveAt(0);
+        }
+
+
+        
+        BM.turnStarting = false;
+        TM.turnEndImage.color = new Color(1, 1, 1);
+        if (BM.porte3mode)
+            BM.Porte3On();
+        yield return null;
+    }
     public void LateAct()
     {
-
+        StartCoroutine(LateActCor());
     }
-   
+   IEnumerator LateActCor()
+    {
+        while (BM.lateActList.Count != 0)
+        {
+            if (BM.lateActList[0].myEnemy.isDie)
+            {
+                BM.lateActList.RemoveAt(0);
+                yield return null;
+            }
+            else
+            {
+                if (BM.lateActList[0].type == 0)
+                {
+                    float t = 0;
+                    BM.lateActList[0].myEnemy.transform.DOMove(BM.lateActList[0].myEnemy.transform.position + new Vector3(0, -0.5f, 0), 0.3f);
+                    BM.lateActList[0].target.myImage.color = Color.red;
+                    yield return new WaitForSeconds(0.5f);
+                    BM.lateActList[0].myEnemy.transform.DOMove(BM.lateActList[0].myEnemy.transform.position + new Vector3(0, 0.5f, 0), 0.2f);
+                    t = BM.lateActList[0].target.onDamage(BM.lateActList[0].mount, BM.lateActList[0].myEnemy);
+                    yield return new WaitForSeconds(0.3f + t);
+                    if (!BM.lateActList[0].target.isDie)
+                    {
+                        BM.lateActList[0].target.myImage.color = Color.white;
+                    }
+                    else BM.lateActList[0].target.myImage.color = new Color(0.3f, 0.3f, 0.3f);
+                }
+                else if (BM.lateActList[0].type == 2)
+                {
+                    BM.lateActList[0].myEnemy.transform.DOMove(BM.lateActList[0].myEnemy.transform.position + new Vector3(0, -0.5f, 0), 0.3f);
+
+                    yield return new WaitForSeconds(0.5f);
+                    BM.lateActList[0].myEnemy.transform.DOMove(BM.lateActList[0].myEnemy.transform.position + new Vector3(0, 0.5f, 0), 0.2f);
+                    BM.lateActList[0].targetEnemy.GetArmorStat(BM.lateActList[0].mount);
+                    yield return new WaitForSeconds(0.3f);
+
+                }
+
+                else if (BM.lateActList[0].type == 3)
+                {
+                    BM.lateActList[0].myEnemy.transform.DOMove(BM.lateActList[0].myEnemy.transform.position + new Vector3(0, -0.5f, 0), 0.3f);
+
+                    yield return new WaitForSeconds(0.5f);
+                    BM.lateActList[0].myEnemy.transform.DOMove(BM.lateActList[0].myEnemy.transform.position + new Vector3(0, 0.5f, 0), 0.2f);
+                    BM.lateActList[0].targetEnemy.GetHp(BM.lateActList[0].mount);
+
+                    yield return new WaitForSeconds(0.3f);
+
+                }
+                BM.lateActList.RemoveAt(0);
+            }
+        }
+        yield return null;
+        TM.PlayerTurnEnd();
+    }
 }

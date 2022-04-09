@@ -1236,7 +1236,6 @@ GameObject:
   - component: {fileID: 7610119031415292889}
   - component: {fileID: 7610119031415292891}
   - component: {fileID: 614027323067954459}
-  - component: {fileID: 530357133896915740}
   - component: {fileID: 5838654686051547916}
   m_Layer: 0
   m_Name: Vangara
@@ -1300,7 +1299,6 @@ MonoBehaviour:
   board: {fileID: 7610119031739073823}
   passive: 00000000000000000000000000000000
   enemyName: 
-  StartNo: 0
   AttackCount: 0
   bless: 0000000000000000000000000000000000000000
   SelectBox: {fileID: 5662799699541840815}
@@ -1319,6 +1317,8 @@ MonoBehaviour:
   reflect: 0
   Status: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
   nextStatus: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  curNo: 0
+  myPassive: {fileID: 0}
 --- !u!61 &7610119031415292889
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1381,22 +1381,6 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
---- !u!114 &530357133896915740
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7610119031415292893}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe51fd41372c4244aa5ecbd3bb611e32, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  myCharacter: {fileID: 7610119031415292890}
-  passive: 
-  TeamStack: 000000000000000000000000
-  EnemyStack: 
 --- !u!114 &5838654686051547916
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1409,6 +1393,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f337c7279b59e6438b23bb8eebe75bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ghost: 49
+  ghostText: {fileID: 0}
+  upQ: {fileID: 0}
 --- !u!1 &7610119031739073808
 GameObject:
   m_ObjectHideFlags: 0

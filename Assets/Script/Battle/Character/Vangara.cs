@@ -91,7 +91,7 @@ public class Vangara : MonoBehaviour
     void passive3()
     {
        
-        if (armorcount !=myCharacter.armorBreak.Count)
+      /*  if (armorcount !=myCharacter.armorBreak.Count)
         {      
             for(int i = 0; i < enemyScript.Length; i++)
             {
@@ -109,7 +109,7 @@ public class Vangara : MonoBehaviour
             }
 
             armorcount++;
-        }
+        }*/
     }
     void passive4()
     {

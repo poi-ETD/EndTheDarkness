@@ -2138,7 +2138,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1818976532}
-        m_MethodName: PlayerTurnEnd
+        m_MethodName: PlayerTurnEndButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2604,6 +2604,7 @@ MonoBehaviour:
   startCost: 3
   CardCount: 5
   CM: {fileID: 2043666056}
+  AM: {fileID: 1494894260}
   TurnCardCount: 0
   Warn: {fileID: 759816071}
   warntext: {fileID: 129511392}
@@ -2632,6 +2633,7 @@ MonoBehaviour:
   victory: {fileID: 109399635}
   defeated: {fileID: 1756809415}
   SelectMode: 0
+  porte3mode: 0
   condition: {fileID: 1336579352}
   conditionText: {fileID: 695960801}
   GraveReviveMode: 0
@@ -2657,7 +2659,6 @@ MonoBehaviour:
   - {fileID: 624004766}
   - {fileID: 669565424}
   - {fileID: 693459412}
-  BlessBM: 0000000000000000000000000000000000000000
   porte3count: 0
   rect_HandCanvas: {fileID: 1483911197}
   rewardIgnum: {fileID: 37241271}
@@ -2677,6 +2678,9 @@ MonoBehaviour:
   card22on: 0
   card22c: {fileID: 0}
   curMessage: {fileID: 1815148277}
+  otherCor: 0
+  sparkyPassive2: 0
+  turnStarting: 0
   card20done: 0
 --- !u!1 &401889908
 GameObject:
@@ -3242,7 +3246,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 3
   m_TargetDisplay: 0
 --- !u!224 &462632773
 RectTransform:
@@ -3263,7 +3267,7 @@ RectTransform:
   - {fileID: 1336579353}
   - {fileID: 1645946793}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -3449,14 +3453,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 0.6392157, g: 0.62352943, b: 1, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: c65524e9ecf0afb4a8b797896dbbe165, type: 3}
+    m_Font: {fileID: 12800000, guid: 2798b39e108b79b4c88976f0b4fbf55a, type: 3}
     m_FontSize: 30
     m_FontStyle: 0
     m_BestFit: 0
@@ -3743,7 +3747,7 @@ RectTransform:
   - {fileID: 1410360467}
   - {fileID: 207546905}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -4197,7 +4201,7 @@ RectTransform:
   - {fileID: 109399636}
   - {fileID: 1815148276}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -7123,7 +7127,7 @@ RectTransform:
   m_Children:
   - {fileID: 1483911197}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -7580,7 +7584,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 350, y: -300}
+  m_AnchoredPosition: {x: 532, y: -41}
   m_SizeDelta: {x: 400, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1336579354
@@ -8963,8 +8967,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 245, y: -150}
-  m_SizeDelta: {x: 160, y: 80}
+  m_AnchoredPosition: {x: 245, y: -50}
+  m_SizeDelta: {x: 140, y: 46}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1741072193
 MonoBehaviour:
@@ -9039,8 +9043,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: 954c388ae9e1f284bb34b1ae7398f525, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -9570,6 +9574,7 @@ MonoBehaviour:
   CM: {fileID: 2043666056}
   leftCost: 0
   pleaseSelect: {fileID: 2117834230}
+  turnEndImage: {fileID: 326126831}
   turnAtk: 0
 --- !u!1 &1838379439
 GameObject:

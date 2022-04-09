@@ -45,25 +45,25 @@ public class Dagger003 : MonoBehaviour
                     int rand = Random.Range(0, pattern);
                     if (rand == 0)
                     {
-                        BM.HitFront(Dmg, 1, myEnemy.Name, false);
-                        BM.HitFront(Dmg, 1, myEnemy.Name, false);
-                        BM.HitFront(Dmg, 1, myEnemy.Name, false);
+                        BM.HitFront(Dmg, 1, myEnemy, false);
+                        BM.HitFront(Dmg, 1, myEnemy, false);
+                        BM.HitFront(Dmg, 1, myEnemy, false);
                     }
                     if (rand == 1)
                     {
-                        BM.HitBack(Dmg, 0, myEnemy.Name, false);
+                        BM.HitBack(Dmg, 0, myEnemy, false);
                     }
                     if (rand == 2)
                     {
-                        BM.HitFront(Dmg, 0, myEnemy.Name, false);
-                        BM.HitBack(Dmg, 0, myEnemy.Name, false);
+                        BM.HitFront(Dmg, 0, myEnemy, false);
+                        BM.HitBack(Dmg, 0, myEnemy, false);
                         if(myEnemy.CanShadow())
                         myEnemy.onShadow();
                         else
                         {
                             for(int i = 0; i < BM.characters.Count; i++)
                             {if (!BM.characters[i].isDie)
-                                    BM.characters[i].onHit(2,myEnemy.Name);
+                                    BM.HitAll(2, 4, myEnemy, false);
                             }
                         }
                     }

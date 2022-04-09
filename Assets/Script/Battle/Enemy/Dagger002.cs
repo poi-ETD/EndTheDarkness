@@ -17,60 +17,55 @@ public class Dagger002 : MonoBehaviour
     {
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
-        myEnemy.Name = "단검" +1;
+        myEnemy.Name = "단검";
         StartPattern();
     }
-    void Update()
+    private void Update()
     {
-        if (myEnemy.isDie)
-        {
-            myEnemy.Hp = 0;
-            if (another.isDie)
-            {
-                BM.Victory();
-            }
-        }
         if (curTurn != TM.t)
         {
             StartPattern();
         }
     }
+
     void StartPattern()
     {
         if (BM.diecount < BM.characters.Count)
         {
+            myEnemy.goingShadow = false;
             if (!myEnemy.isDie)
             {
                 if (pattern)
                 {
-                    myEnemy.Shadow = false;
+                    
                     pattern = false;
-                    myEnemy.GetArmor(5,myEnemy.Name);
+                    BM.EnemyGetAromor(5, myEnemy, myEnemy);
                 }
                 else
                 {
                     int rand = Random.Range(0, 2);
                     if (rand == 0)
                     {
-                        BM.HitFront(3, 1, myEnemy.Name, true);
-                        BM.HitFront(3, 1, myEnemy.Name, true);
+                        BM.HitFront(3, 1, myEnemy, true);
+                        BM.HitFront(3, 1, myEnemy, true);
                     }
                     if (rand == 1)
-                    {if(myEnemy.CanShadow())
-                        myEnemy.onShadow();
+                    {if (myEnemy.CanShadow())
+                            BM.EnemyStateChange(myEnemy, 0);
                         else
                         {
-                            BM.HitFront(3, 0, myEnemy.Name, true);
-                            BM.HitFront(3, 0, myEnemy.Name, true);
-                            BM.HitFront(3, 0, myEnemy.Name, true);
+                            BM.HitFront(3, 0, myEnemy, false);
+                            BM.HitFront(3, 0, myEnemy, false);
+                            BM.HitFront(3, 0, myEnemy, false);
 
                         }
-                        BM.HitBack(1, 0, myEnemy.Name, false);
+                        BM.HitBack(1, 0, myEnemy, false);
                         pattern = true;
                     }
                 }
             }                
-        }                
+        }
+        myEnemy.EnemyEndTurn();
         curTurn++;
     }
 }

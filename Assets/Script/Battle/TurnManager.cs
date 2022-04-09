@@ -16,6 +16,7 @@ public class TurnManager : MonoBehaviour
     public CardManager CM;
     public int leftCost;
     [SerializeField] GameObject pleaseSelect;
+   public Image turnEndImage;
     public void turnCardPlus()
     {
         turnCard++;
@@ -46,8 +47,7 @@ public class TurnManager : MonoBehaviour
         }
     }
     private void Awake()
-    {
-     
+    {   
         t = 1;
         turnText.text = "" + t;
         PlayerTurn = false;       
@@ -57,16 +57,22 @@ public class TurnManager : MonoBehaviour
     {
         enemys = GameObject.FindGameObjectsWithTag("Enemy");
         enemy = new Enemy[enemys.Length];
+      
         for (int i = 0; i < enemys.Length; i++)
         {
             enemy[i] = enemys[i].GetComponent<Enemy>();
             enemy[i].EnemyStartTurn();
         }
     }
-
     public void PlayerTurnEnd()
-    {
-        if (!BM.SelectMode&&!BM.EnemySelectMode)
+    {   for(int i = 0; i < BM.Enemys.Length; i++)
+        {
+            if (!BM.Enemys[i].GetComponent<Enemy>().isDie)
+            {
+                BM.Enemys[i].GetComponent<Enemy>().EnemyStartTurn();
+            }
+        }
+        if (!BM.SelectMode && !BM.EnemySelectMode)
         {
             leftCost = BM.cost;
             for (int i = 0; i < BM.characters.Count; i++)
@@ -80,43 +86,22 @@ public class TurnManager : MonoBehaviour
             }
             turnCard = 0;
             PlayerTurn = false;
-   
+
             EndButton.SetActive(false);
             BM.CharacterSelectMode = false;
             BM.EnemySelectMode = false;
-            for (int i = 0; i < BM.characters.Count; i++)
-            {
-                if (!BM.characters[i].isDie)
-                {
-                    for (int j = 0; j < BM.characters[i].DMGboards.Count; j++)
-                    {
-                        int count = -1;
-                        while (BM.characters[i].DMGboards[j].count != count)
-                        {
-                            BM.characters[i].onDamage(BM.characters[i].DMGboards[j].dmg, BM.characters[i].DMGboards[j].name);
-                            count++;
-                        }
-                    }
-                    for(int j = 0; j < 20; j++) //상태이상 처리
-                    {
-                        BM.characters[i].Status[j] += BM.characters[i].nextStatus[j];
-                        BM.characters[i].nextStatus[j] = 0;
-                    }
-                    BM.characters[i].DMGboards.Clear();
-                    BM.characters[i].BoardClear();
-                }
-            }
-           
-            
+
+
+
             for (int i = 0; i < BM.Enemys.Length; i++)
             {
-               BM.Enemys[i].GetComponent<Enemy>().Board.text = "";
-              
+                BM.Enemys[i].GetComponent<Enemy>().Board.text = "";
+
             }
             BM.TurnCardCount = BM.CardCount;
-            BM.allClear();      
+            BM.allClear();
             StartCoroutine("TurnEnd");
-           
+
         }
         else
         {
@@ -124,10 +109,16 @@ public class TurnManager : MonoBehaviour
             Invoke("PSoff", 1f);
         }
     }
+    public void PlayerTurnEndButton()
+    {if (BM.otherCor || BM.turnStarting) return;
+        turnEndImage.color = new Color(0.3f, 0.3f, 0.3f);
+        GameObject.Find("ActManager").GetComponent<ActManager>().LateAct();
+    }
     public int turnAtk;
     IEnumerator TurnEnd()
     {
         BM.otherCanvasOn =true;
+        
         for (int i = 0; i < BM.CD.size; i++)
         {if (i > 0) BM.characters[i - 1].transform.localScale = new Vector3(1, 1, 1);
             int a = BM.characters[i].myPassive.TurnEndTimeCount();
@@ -138,16 +129,6 @@ public class TurnManager : MonoBehaviour
         CM.FieldOff();
         BM.characters[BM.CD.size-1].transform.localScale= new Vector3(1, 1, 1);
         BM.otherCanvasOn = false;
-        for (int i = 0; i < enemy.Length; i++)
-        {
-            if (!enemy[i].isDie)
-            {
-                enemy[i].EnemyStartTurn();
-                enemy[i].HpUp();
-                enemy[i].GetArmorStat(enemy[i].nextTurnArmor);
-                enemy[i].nextTurnArmor = 0;
-            }
-        }
         t++;
         turnText.text = "" + t;
         BM.curMessage.text = "";
@@ -159,25 +140,29 @@ public class TurnManager : MonoBehaviour
     }
     public void PlayerTurnStart()
     {
+        BM.turnStarting = true;
         GameObject.Find("HandManager").GetComponent<HandManager>().isInited = false;
      
         BM.log.logContent.text += "\n" + t + "턴 시작!";
         BM.cost = BM.startCost+BM.nextTurnStartCost;
+
         BM.useCost(0);
         BM.nextTurnStartCost = 0;
         PlayerTurn =true;
+
         BM.CharacterSelectMode = true;
+
         EndButton.SetActive(true);
+
         for(int i = 0; i < BM.characters.Count; i++)
         {
             if (!BM.characters[i].isDie)
             {
-             
-               
-                if (BM.BlessBM[4] && t == 1) BM.characters[i].Act = 0;
-                if (BM.BlessBM[12] && t == 1) BM.characters[i].Act = 0;
                 BM.characters[i].Act = 1;
-                if (BM.BlessBM[4]) BM.characters[i].Act++;
+                if (BM.gd.blessbool[4] && t == 1) BM.characters[i].Act = 0;
+                if (BM.gd.blessbool[12] && t == 1)BM.characters[i].Act = 0; 
+               
+                if (BM.gd.blessbool[4]) BM.characters[i].Act++;
                 BM.characters[i].onMinusAct(BM.characters[i].NextTurnMinusAct);
                 BM.characters[i].turnAtk = BM.characters[i].Atk;
                 BM.characters[i].AtkUp(turnAtk);          
@@ -187,7 +172,9 @@ public class TurnManager : MonoBehaviour
               
             }
         }
+
         turnAtk = 0;      
+
         if (BM.card22on)
         {
             int ArmorSum = 0;
@@ -204,10 +191,23 @@ public class TurnManager : MonoBehaviour
         }
 
         CM.TurnStartCardSet();
+       
+        
+    }
+    public void TurnStartPassive()
+    {
+        StartCoroutine("TurnStartCor");
+    }
+  IEnumerator TurnStartCor()
+    {
+       
+        int t=0;
         for (int i = 0; i < BM.CD.size; i++)
         {
-            BM.characters[i].myPassive.TurnStart();
+            t=BM.characters[i].myPassive.TurnStart();
+            yield return new WaitForSeconds(t);
         }
+        GameObject.Find("ActManager").GetComponent<ActManager>().EarlyActCorStart();
+        
     }
-  
 }

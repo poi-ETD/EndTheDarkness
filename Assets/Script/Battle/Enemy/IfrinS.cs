@@ -62,7 +62,7 @@ public class IfrinS : MonoBehaviour
                             randCount[0] = true;
                             for (int i = 0; i < 2; i++)
                             {
-                                BM.HitFront(5, 0, myEnemy.Name, false);
+                                BM.HitFront(5, 0, myEnemy, false);
                         
 
                             }
@@ -70,7 +70,7 @@ public class IfrinS : MonoBehaviour
                         if (rand == 1)
                         {
                             randCount[1] = true;
-                            BM.HitAll(3, 4, myEnemy.Name, false);
+                            BM.HitAll(3, 4, myEnemy, false);
                         }
                         if (rand == 2)
                         {
@@ -93,8 +93,8 @@ public class IfrinS : MonoBehaviour
                     }
                     else
                     {
-                        BM.HitFront((myEnemy.maxHp - myEnemy.Hp) / 10, 4, myEnemy.Name, false);
-                        BM.HitBack((myEnemy.maxHp - myEnemy.Hp) / 20, 4, myEnemy.Name, false);
+                        BM.HitFront((myEnemy.maxHp - myEnemy.Hp) / 10, 4, myEnemy, false);
+                        BM.HitBack((myEnemy.maxHp - myEnemy.Hp) / 20, 4, myEnemy, false);
                         randCount[0] = false;
                         randCount[1] = false;
                         randCount[2] = false;

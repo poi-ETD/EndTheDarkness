@@ -183,6 +183,7 @@ public class CardManager : MonoBehaviour
         if (Deck.Count > 0)
         {
             int rand = Random.Range(0, Deck.Count);
+          
             field.Add(Deck[rand]);
             HM.AddCard(Deck[rand]);
             Deck.RemoveAt(rand);           
@@ -209,13 +210,18 @@ public class CardManager : MonoBehaviour
     }
     IEnumerator turnStartDrow()
     {
+        BM.otherCor = true;
         for (int i = 0; i < BM.TurnCardCount; i++)
         {
             CardToField();
             yield return new WaitForSeconds(0.25f);
         }
         yield return new WaitForSeconds(1.2f);
+
         GameObject.Find("HandManager").GetComponent<HandManager>().InitCard();
+        TM.TurnStartPassive();
+        BM.otherCor = false;
+        
     }
     public void SpecialCardToField()
     {
@@ -271,14 +277,29 @@ public class CardManager : MonoBehaviour
         usingCard.GetComponent<Card>().isGrave = true;
         usingCard.SetActive(false);
         TM.BM.cancleCard();
-            TM.BM.pcard = usingCard;
+        TM.BM.pcard = usingCard;
         TM.BM.penemy = TM.BM.enemy;
+        StartCoroutine("CardUseCor");
         if (usingCard.GetComponent<Card>().Name.text != "스케치 반복")
         {
             BM.allClear();
             TM.turnCardPlus();
         }
         Rebatch();
+      
+    }
+    IEnumerator CardUseCor()
+    {
+        BM.otherCanvasOn = true;
+        int t = 0;
+        t = BM.character.GetComponent<CharacterPassive>().myAct();
+        yield return t;
+        for(int i = 0; i < BM.CD.size; i++)
+        {
+            t = BM.characters[i].myPassive.CardUse();
+            yield return t;
+        }
+        BM.otherCanvasOn = false;
     }
     public void FieldToGrave(GameObject c)
     {
@@ -381,7 +402,7 @@ public class CardManager : MonoBehaviour
             }
         }
    
-        Rebatch();
+        
 
     }
     public void FieldToDeck(GameObject FieldCard)

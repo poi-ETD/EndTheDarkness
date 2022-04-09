@@ -61,7 +61,7 @@ public class Gimmy : MonoBehaviour
             {
                 for (int i = 0; i < TM.t; i++)
                 {
-                    BM.HitFront(1, 0, myEnemy.Name, false);
+                    BM.HitFront(1, 0, myEnemy, false);
                 }
             }
             else
@@ -81,11 +81,9 @@ public class Gimmy : MonoBehaviour
                     done[2] = false;
                     onecounter = 0;
 
-                    for (int i = 0; i < BM.characters.Count; i++)
-                    {
-                        if (!BM.characters[i].isDie)
-                            BM.characters[i].onHit(PhaseTurn / 2, myEnemy.Name);
-                    }
+                   
+                            BM.HitAll(PhaseTurn / 2,4, myEnemy,false);
+                    
 
                 }
                 else
@@ -113,13 +111,13 @@ public class Gimmy : MonoBehaviour
                     {
                         for (int i = 0; i < 4; i++)
                         {
-                            BM.HitFront(2, 0, myEnemy.Name, false);
+                            BM.HitFront(2, 0, myEnemy, false);
                         }
                     }
                     else
                     {
                         for (int i = 0; i < 2; i++)
-                            BM.HitFront(3, 0, myEnemy.Name, false);
+                            BM.HitFront(3, 0, myEnemy, false);
 
                     }
                     onecounter++;

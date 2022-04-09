@@ -51,7 +51,7 @@ public class ifrin : MonoBehaviour
             {
                 if (!BM.characters[i].isDie)
                 {
-                    BM.characters[i].onDynamicHit(Mathf.Abs(myHp - Glassin.Hp), myEnemy.Name);
+                   // BM.characters[i].onDynamicHit(Mathf.Abs(myHp - Glassin.Hp), myEnemy.Name);
                 }
             }
         }
@@ -84,7 +84,7 @@ public class ifrin : MonoBehaviour
                                     int rand2 = Random.Range(0, BM.forward.Count);
                                     while (BM.characters[rand2].isDie)
                                         rand2 = Random.Range(0, BM.forward.Count);
-                                    BM.characters[rand2].onHit(5, myEnemy.Name);
+                                  //  BM.characters[rand2].onHit(5, myEnemy.Name);
 
                                 }
                                 else
@@ -92,7 +92,7 @@ public class ifrin : MonoBehaviour
                                     int rand2 = Random.Range(0, BM.characters.Count);
                                     while (BM.characters[rand2].isDie)
                                         rand2 = Random.Range(0, BM.characters.Count);
-                                    BM.characters[rand2].onHit(5, myEnemy.Name);
+                                  //  BM.characters[rand2].onHit(5, myEnemy.Name);
 
                                 }
                             }
@@ -104,7 +104,7 @@ public class ifrin : MonoBehaviour
                             {
                                 if (!BM.characters[i].isDie)
                                 {
-                                    BM.characters[i].onHit(3, myEnemy.Name);
+                                   // BM.characters[i].onHit(3, myEnemy.Name);
                                 }
                             }
                         }
@@ -137,7 +137,7 @@ public class ifrin : MonoBehaviour
                         {
                             if (!BM.characters[i].isDie)
                             {
-                                BM.characters[i].onHit(Mathf.Abs(Glassin.Hp - myHp), myEnemy.Name);
+                               // BM.characters[i].onHit(Mathf.Abs(Glassin.Hp - myHp), myEnemy.Name);
                             }
                         }
                         randCount[0] = false;
@@ -152,7 +152,7 @@ public class ifrin : MonoBehaviour
                     {
                         if (!BM.characters[i].isDie)
                         {
-                            BM.characters[i].onHit(20, myEnemy.Name);
+                          //  BM.characters[i].onHit(20, myEnemy.Name);
                             BM.characters[i].NextTurnMinusAct+=5;
                         }
                     }

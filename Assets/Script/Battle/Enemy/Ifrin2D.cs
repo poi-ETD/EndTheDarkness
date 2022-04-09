@@ -50,7 +50,7 @@ public class Ifrin2D : MonoBehaviour
                     {
                         for(int i = 0; i < curTurn+1; i++)
                         {
-                            BM.HitFront(3, 0, myEnemy.Name, false);
+                            BM.HitFront(3, 0, myEnemy, false);
                         }
                     }
                     if (rand == 1)
@@ -79,8 +79,8 @@ public class Ifrin2D : MonoBehaviour
                     }
                     if (rand == 2)
                     {
-                        BM.HitFront(5, 0, myEnemy.Name, false);
-                        BM.HitFront(5, 0, myEnemy.Name, false);
+                        BM.HitFront(5, 0, myEnemy, false);
+                        BM.HitFront(5, 0, myEnemy, false);
                         posionCount++;
                         for (int i = 0; i < BM.characters.Count; i++)
                         {
@@ -100,7 +100,7 @@ public class Ifrin2D : MonoBehaviour
                             BM.characters[i].Status[0] = 0;
                         }
                     }
-                    BM.HitAll(posionCount, 4, myEnemy.Name, false);
+                    BM.HitAll(posionCount, 4, myEnemy, false);
                     posionCount = 0;
                 }
          

@@ -83,22 +83,29 @@ public class HandManager : MonoBehaviour
     {
         if (!isInited)
         {
+            newCard.transform.position = new Vector3(18,-7, 0);
+       
             newCard.SetActive(true);
             int random_Rotation_Z = Random.Range(-10, 10);
             float random_Position_X = Random.Range(-0.2f, 0.2f);
             float random_Position_Y = Random.Range(-0.2f, 0.2f);
             newCard.transform.parent = GameObject.Find("HandCardCanvas").transform;
-            newCard.transform.position = new Vector3(18,-7, 0);
+         
             newCard.transform.rotation = Quaternion.Euler(new Vector3(0, 0, random_Rotation_Z));
-            newCard.GetComponent<RectTransform>().localScale = new Vector3(0.5f, 0.5f, 0.5f);
+            //newCard.GetComponent<RectTransform>().localScale = new Vector3(0.5f, 0.5f, 0.5f);
             newCard.transform.DOMove(new Vector2(random_Position_X, random_Position_Y - 7f), 1);
             newCard.transform.DOScale(new Vector3(1f, 1f, 1f), 1).SetEase(Ease.OutExpo);
             newCard.GetComponent<Image>().DOFade(1f, 1).SetEase(Ease.OutExpo); // TODO:non action function -> action function
+              
+             
+            
+             
             list_Card.Add(newCard);
             count_Card++;
         }
         else
         {
+           
             //card = Instantiate(cardSample, new Vector3(8f, 0f, 0f), Quaternion.identity);
             // card.GetComponent<HandCard>().handNumber = count_Card;
             newCard.SetActive(true);
@@ -107,6 +114,7 @@ public class HandManager : MonoBehaviour
             newCard.transform.rotation = Quaternion.identity;       
             newCard.GetComponent<Image>().DOFade(1f, 1).SetEase(Ease.OutExpo);
             ArrangeCard();
+           
         }
     }
    
@@ -178,6 +186,8 @@ public class HandManager : MonoBehaviour
 
     public void CardMouseEnter(Card card)
     {
+        if (BM.turnStarting) return;
+       
         if (selectedCardStack <= 2&&isInited)
         {           
             go_SelectedCard.SetActive(true);
