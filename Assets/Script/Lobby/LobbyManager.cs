@@ -591,6 +591,11 @@ public class LobbyManager : MonoBehaviour
             SceneManager.LoadScene("battle");
         }
     }
+    public void getMoney()
+    {
+        GD.Ignum += 50000;
+        IgnumT.text = GD.Ignum + "";
+    }
     public void setDay()
     {
         string n = "DAY";

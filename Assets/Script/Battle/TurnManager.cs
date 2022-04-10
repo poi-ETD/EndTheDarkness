@@ -159,10 +159,10 @@ public class TurnManager : MonoBehaviour
             if (!BM.characters[i].isDie)
             {
                 BM.characters[i].Act = 1;
-                if (BM.gd.blessbool[4] && t == 1) BM.characters[i].Act = 0;
+                if (BM.gd.blessbool[4] && t == 1)  BM.characters[i].Act = 0; 
                 if (BM.gd.blessbool[12] && t == 1)BM.characters[i].Act = 0; 
                
-                if (BM.gd.blessbool[4]) BM.characters[i].Act++;
+                if (BM.gd.blessbool[4]&&t!=1) BM.characters[i].Act++;
                 BM.characters[i].onMinusAct(BM.characters[i].NextTurnMinusAct);
                 BM.characters[i].turnAtk = BM.characters[i].Atk;
                 BM.characters[i].AtkUp(turnAtk);          

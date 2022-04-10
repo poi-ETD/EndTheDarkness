@@ -498,7 +498,7 @@ public class Bless : MonoBehaviour
         exitBlessPopup();
 
 
-        if (lobby.resetmara) lobby.Resetmara(5);
+        if (lobby.resetmara) lobby.Resetmara(lobby.ChD.size + 1);
         else lobby.DayAct();
         bless14.SetActive(false);
         setBlessIcon();
@@ -542,9 +542,9 @@ public class blessData
         new BData(2,"과도한 영접","전투 동안 , 임의의 후방 아군 한명의 공격력을 2올린다.\n해당 아군의 방어도는 올라가지 않는다.",1,true),
         new BData(3,"숨겨진 약점","시작 드로우를 8장 한다.\n전투가 2번 끝나고 해당 축복은 사라진다.",1,true),
         new BData(4,"은밀한 준비","전투의 첫 턴동안 모든 아군의 행동력이 0이 된다.\n그 이후 모든 아군의 행동력이 2로 고정된다.",2,true),
-        new BData(5,"가벼운 몸짓","(패시브 빈칸이 있는) 아군 한명을 선택해 패시브를 고른다. \n	해당 아군의 공격력을 -2로 감소시킨다.",3,false),
-        new BData(6,"인위적인 극복","전방에 있는 아군의 체력이 감소할 때마다 그 수치만큼 적 전체에게 데미지를 준다.",3,false),
-        new BData(7,"역류하는 고통","덱이 절반 소멸된다.",3,true),
+        new BData(5,"가벼운 몸짓","소지하고 있는 카드의 6장을 선택해 소멸시킨다.",3,false),
+        new BData(6,"인위적인 극복","아군 한명을 선택해 패시브를 늘린다. \n	해당 아군의 공격력을 -2로 감소시킨다.",3,false),
+        new BData(7,"역류하는 고통","전방에 있는 아군의 체력이 감소할 때마다 그 수치만큼 적 전체에게 데미지를 준다.",3,true),
         new BData(8,"a","덱이 절반 소멸된다.",1,false),
         new BData(9,"b","카드 선택 중 취소버튼이 생긴다.\n	이그넘의 절반을 잃는다.",1,true),
         new BData(10,"c","아군 회복시 2명을 선택할 수 있다.",1,true),

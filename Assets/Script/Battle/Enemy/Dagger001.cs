@@ -37,9 +37,8 @@ public class Dagger001 : MonoBehaviour
         {
             if (!myEnemy.isDie)
             {
-                BM.EnemyGetHp(5, myEnemy, myEnemy);
-
-                /*   if ((curTurn + 1) % 5 != 0)
+            
+                  if ((curTurn + 1) % 5 != 0)
                    {
                        pattern = Random.Range(0, 3);
                        if (plusname == 2)
@@ -72,7 +71,7 @@ public class Dagger001 : MonoBehaviour
                        BM.HitFront(3, 0, myEnemy, false);
                        BM.HitBack(1, 0, myEnemy, false);
                    }
-               }*/
+               }
             }
 
 
@@ -81,4 +80,3 @@ public class Dagger001 : MonoBehaviour
             curTurn++;
         }
     }
-}
