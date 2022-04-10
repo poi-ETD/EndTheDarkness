@@ -19,8 +19,10 @@ public class ActManager : MonoBehaviour
     public void EarlyAct()
     {
         earlyCount++;
+       
         if (earlyCount == BM.Enemys.Length)
-        {           
+        {
+           
             TM.PlayerTurnStart();
            
             earlyCount = 0;

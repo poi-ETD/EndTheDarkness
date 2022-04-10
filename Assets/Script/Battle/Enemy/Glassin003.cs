@@ -13,6 +13,7 @@ public class Glassin003 : MonoBehaviour
     [SerializeField] int plusname;
     public int pattern = 2;
     public Dagger003[] Daggers;
+    bool dieCheck;
 
     private void Start()
     {
@@ -23,14 +24,18 @@ public class Glassin003 : MonoBehaviour
     }
     void Update()
     {
-        if (myEnemy.isDie)
-        {
-            myEnemy.Hp = 0;
-            Daggers[0].Dmg=1;
+        if (myEnemy.isDie&&!dieCheck)
+        {           
+            Daggers[0].Dmg =  1;
             Daggers[1].Dmg = 1;
             Daggers[0].pattern++;
-            Daggers[1].pattern++;
+            Daggers[1].pattern++;           
             gameObject.SetActive(false);
+            GameObject b1 = BM.Enemys[0];
+            GameObject b2 = BM.Enemys[2];
+            BM.Enemys = new GameObject[2];
+            BM.Enemys[0] = b1;
+            BM.Enemys[1] = b2;
         }
         if (curTurn != TM.t)
         {
@@ -48,22 +53,25 @@ public class Glassin003 : MonoBehaviour
                 {
                     Daggers[0].pattern++;
                     Daggers[1].pattern++;
+                    myEnemy.EnemyEndTurn();
                     gameObject.SetActive(false);
+                    GameObject b1 = BM.Enemys[0];
+                    GameObject b2 = BM.Enemys[2];
+                    BM.Enemys = new GameObject[2];
+                    BM.Enemys[0] = b1;
+                    BM.Enemys[1] = b2;
                 }
                 if (curTurn == 0)
                 {
-                  for(int i = 0; i < BM.characters.Count; i++)
-                    {
-                        if (!BM.characters[i].isDie)
-                            BM.characters[i].NextTurnMinusAct+=5;
-                    }
-                    myEnemy.GetArmor(10, myEnemy.Name);
+
+                    BM.HitAll(5, 5, myEnemy, true);
+                    BM.EnemyGetAromor(10, myEnemy, myEnemy);
                 }
                 else
                 {
                     for(int i = 0; i < BM.forward.Count; i++)
                     {
-                        BM.forward[i].NextTurnMinusAct++;
+                        BM.HitFront(1, 5, myEnemy, true);
                     }
                     if (curTurn != 3)
                     {
@@ -73,6 +81,8 @@ public class Glassin003 : MonoBehaviour
                 }
             }
             curTurn++;
+            myEnemy.EnemyEndTurn();
         }
+      
     }
 }

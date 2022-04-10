@@ -1072,6 +1072,14 @@ public class BattleManager : MonoBehaviour
                     }
                 }
             }
+            if (type == 5)
+            {
+                for (int i = 0; i < line; i++)
+                {
+                    EnemyAct enemyAct2 = new EnemyAct(1, dmg, characters[i], enemy, null);
+                    earlyActList.Add(enemyAct2);
+                }
+            }
         }
     }
     public void HitAll(int dmg,int type,Enemy enemy,bool ActM)
@@ -1185,6 +1193,14 @@ public class BattleManager : MonoBehaviour
                 }
             }
         }
+        if (type == 5)
+        {
+            for (int i = 0; i < characters.Count; i++)
+            {
+                EnemyAct enemyAct2 = new EnemyAct(1, dmg, characters[i], enemy, null);
+                earlyActList.Add(enemyAct2);
+            }
+        }
     }
     public void HitBack(int dmg,int type,Enemy enemy,bool ActM)
     {
@@ -1295,7 +1311,7 @@ public class BattleManager : MonoBehaviour
                     }
                 }
             }
-            if (type == characters.Count)
+            if (type == 4)
             {
                 for (int i = line; i < characters.Count; i++)
                 {
@@ -1307,6 +1323,14 @@ public class BattleManager : MonoBehaviour
                         EnemyAct enemyAct2 = new EnemyAct(1, 1, characters[i], enemy, null);
                         earlyActList.Add(enemyAct2);
                     }
+                }
+            }
+            if (type == 5)
+            {
+                for (int i = line; i < characters.Count; i++)
+                {
+                    EnemyAct enemyAct2 = new EnemyAct(1, dmg, characters[i], enemy, null);
+                    earlyActList.Add(enemyAct2);
                 }
             }
         }

@@ -12,8 +12,7 @@ public class Dagger003 : MonoBehaviour
     [SerializeField] Text t;
     [SerializeField] int plusname;
     public int pattern = 2;
-    public int Dmg=1;
-  
+    public int Dmg=2; 
     private void Start()
     {
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
@@ -23,11 +22,7 @@ public class Dagger003 : MonoBehaviour
     }
     void Update()
     {
-        if (myEnemy.isDie)
-        {
-            myEnemy.Hp = 0;
-
-        }
+        
         if (curTurn != TM.t)
         {
             StartPattern();
@@ -41,7 +36,8 @@ public class Dagger003 : MonoBehaviour
             if (!myEnemy.isDie)
             {
                 if (curTurn != 0)
-                {if (myEnemy.Shadow) myEnemy.Shadow = false;
+                {
+                   
                     int rand = Random.Range(0, pattern);
                     if (rand == 0)
                     {
@@ -52,19 +48,20 @@ public class Dagger003 : MonoBehaviour
                     if (rand == 1)
                     {
                         BM.HitBack(Dmg, 0, myEnemy, false);
+                        BM.HitBack(Dmg, 0, myEnemy, false);
                     }
                     if (rand == 2)
                     {
                         BM.HitFront(Dmg, 0, myEnemy, false);
                         BM.HitBack(Dmg, 0, myEnemy, false);
-                        if(myEnemy.CanShadow())
-                        myEnemy.onShadow();
+                        if (myEnemy.CanShadow())
+                            BM.EnemyStateChange(myEnemy, 0);
                         else
                         {
-                            for(int i = 0; i < BM.characters.Count; i++)
-                            {if (!BM.characters[i].isDie)
+                           
+                              
                                     BM.HitAll(2, 4, myEnemy, false);
-                            }
+                            
                         }
                     }
                 }
@@ -72,6 +69,6 @@ public class Dagger003 : MonoBehaviour
             }
             curTurn++;
         }
-        if (plusname == 1) myEnemy.EnemyEndTurn();
+        myEnemy.EnemyEndTurn();
     }
 }

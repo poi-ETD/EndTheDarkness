@@ -577,7 +577,6 @@ public class LobbyManager : MonoBehaviour
     {if (canvasOn) return;
         if (!GD.isNight)
         {
-
             day.SetActive(false);
             night.SetActive(true);
             GD.isAct = false;
@@ -587,9 +586,9 @@ public class LobbyManager : MonoBehaviour
         }
         else
         {
+            GD.isAct = true;
             save();
             SceneManager.LoadScene("battle");
-
         }
     }
     public void setDay()

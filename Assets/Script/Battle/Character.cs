@@ -167,7 +167,7 @@ public class Character : MonoBehaviour
         actT.text = "" + Act;
     }
     public float onDamage(int dmg,Enemy E)
-    {
+    {   if (dmg == 0) return 0;
         float t=0; 
         for (int i = 0; i < BM.CD.size; i++)
         {   if (i == curNo)t+= myPassive.MyHit(E);
