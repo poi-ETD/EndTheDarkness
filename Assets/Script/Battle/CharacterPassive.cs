@@ -104,8 +104,7 @@ public class CharacterPassive : MonoBehaviour
           
             ReplyAttackCount++;
             if (ReplyAttackCount >20)
-            {
-               
+            {              
                 timeCount += myPassvie[3];
             }
         }
