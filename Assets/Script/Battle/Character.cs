@@ -12,45 +12,29 @@ public class Character : MonoBehaviour
     public int Armor;
     public int Act;
     public int turnAtk;
+    public int endur;
+    public int turnEndur;
     public TurnManager TM;
     public BattleManager BM;
     public TextMeshProUGUI hpT;
     public TextMeshProUGUI atkT;
     public TextMeshProUGUI armorT;
     public TextMeshProUGUI actT;
+    public TextMeshProUGUI endurT;
     public TextMeshProUGUI board;
+
     public int[] passive;
-    public List<DMGboard> DMGboards=new List<DMGboard>();
+
+
     public string enemyName;
     public int AttackCount;
     public bool[] bless = new bool[20];
     public GameObject SelectBox;
     public Image myImage;
   
-    
-    public class DMGboard
-    {      
-       public int dmg;
-       public string name;
-       public int count;
-        public void countup()
-        {
-            count++;
-        }
-        public void setDmg(int dmg)
-        {
-            this.dmg = dmg;
-        }
-        public void setName(string name)
-        {
-            this.name = name;
-        }
-
-    }
+ 
     public int cost;
-    public bool isSet;
-    public bool isTurnStart;
-    public bool isTurnEnd;
+
     public int hitStack;
     public int dmgStack;
     public int NextTurnMinusAct;
@@ -58,6 +42,8 @@ public class Character : MonoBehaviour
     public int nextarmor;
     public bool card8;
     public int card8point;
+
+
     public string Name;
     public int reflect;
     public int[] Status=new int[20];
@@ -65,6 +51,8 @@ public class Character : MonoBehaviour
     public int curNo;
     public CharacterPassive myPassive;
     //0 -> 중독
+
+    public int beforeArmor;
     public void useAct(int i)
     {
         Act -= i;
@@ -76,7 +64,7 @@ public class Character : MonoBehaviour
     {
         if (Status[0] > 0)
         {
-            onDamage(Status[0],null);
+            //onDamage(Status[0],null);
         }
     }
     public void getArmor(int a)
@@ -97,6 +85,7 @@ public class Character : MonoBehaviour
 
     public void onClickEvent()
     {
+      
         if (!isDie && !BM.SelectMode && !BM.EnemySelectMode)
         {
             if (BM.character != this)
@@ -111,6 +100,8 @@ public class Character : MonoBehaviour
     {
         Act = 1;
         actT.text = "" + Act;
+        //endurT.text = "" + endur;
+
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         myPassive = GetComponent<CharacterPassive>();
         myImage = transform.GetChild(7).GetComponent<Image>();
@@ -147,8 +138,9 @@ public class Character : MonoBehaviour
             turnAtk = 1;
         }
         atkT.text = turnAtk + "";
-
     }
+
+
     public void RealAtkUp(int i)
     {
         Atk += i;
@@ -161,18 +153,19 @@ public class Character : MonoBehaviour
         atkT.text = turnAtk + "";
     }
     public void ActUp(int i)
-    {
-      
+    {      
         Act += i;
         actT.text = "" + Act;
     }
-    public float onDamage(int dmg,Enemy E)
-    {   if (dmg == 0) return 0;
-        float t=0; 
+
+    public void onHit(int dmg,Enemy E)
+    {
+        if (dmg == 0) return;
         for (int i = 0; i < BM.CD.size; i++)
-        {   if (i == curNo)t+= myPassive.MyHit(E);
-            else {t+= BM.characters[i].myPassive.TeamHit(curNo); }
-        }          
+        {
+            if (i == curNo) myPassive.MyHit(E);
+            else { BM.characters[i].myPassive.TeamHit(curNo);}
+        }
         if (Armor > 0)
         {
             int startArmor = Armor;
@@ -182,12 +175,22 @@ public class Character : MonoBehaviour
                 Hp += Armor;
                 Armor = 0;
             }
-            t += myPassive.MyArmorHit((startArmor-Armor)/2,E);
+            if (startArmor > dmg)
+            {
+                myPassive.MyArmorHit((Armor) / 2, E);
+            }
+            else
+            {
+                myPassive.MyArmorHit((dmg) / 2, E);
+            }          
         }
         else
-        {                
+        {
             Hp -= dmg;
         }
+    }
+    public void onDamage()
+    {                                
         if (Hp <= 0)
         {
             if (!isDie)
@@ -198,8 +201,7 @@ public class Character : MonoBehaviour
         }
         if (Hp < 0) Hp = 0;
         armorT.text = Armor + "";
-        hpT.text = "<color=purple><b>" + Hp + "</color></b><size=15>/" + maxHp + "</size>";
-        return t;
+        hpT.text = "<color=purple><b>" + Hp + "</color></b><size=15>/" + maxHp + "</size>";   
     }
     void die()
     {

@@ -372,18 +372,18 @@ public class BattleManager : MonoBehaviour
     }
     public void CancleCharacter()
     {
-        if (!otherCanvasOn)
-        {
-           
+                   
             if(character!=null)
             character.SelectBox.SetActive(false);
             character = null;
-        }
+        
     }
     public void CharacterSelect(GameObject c)
     {
+     
         if (!otherCanvasOn)
         {
+         
             CancleCharacter();
             for (int i = 0; i < characters.Count; i++)
             {
@@ -531,13 +531,12 @@ public class BattleManager : MonoBehaviour
     IEnumerator PlayerAttack(int dmg, Enemy enemy, Character c,int n)
     {
         for (int k = 0; k < n; k++)
-        {
-            enemy.Hit(); 
-            float t = enemy.onHit(dmg + c.turnAtk, c.curNo);
-            yield return new WaitForSeconds(t+0.5f);
-
-            enemy.HitEnd();
-            yield return new WaitForSeconds(0.2f);
+        {          
+            enemy.onHit(dmg + c.turnAtk, c.curNo);          
+            while (otherCor)
+            {
+                yield return new WaitForSeconds(0.5f);
+            }           
         }
       
     }
@@ -561,9 +560,9 @@ public class BattleManager : MonoBehaviour
                 {
                     Enemys[i].GetComponent<Enemy>().Hit();
 
-                    float t = Enemys[i].GetComponent<Enemy>().onHit(dmg + c.turnAtk, c.curNo);
+                    Enemys[i].GetComponent<Enemy>().onHit(dmg + c.turnAtk, c.curNo);
 
-                    yield return new WaitForSeconds(t + 0.5f);
+                    yield return new WaitForSeconds(0.5f);
 
                     Enemys[i].GetComponent<Enemy>().HitEnd();
                     
@@ -578,28 +577,44 @@ public class BattleManager : MonoBehaviour
         log.logContent.text += "\n" + character.Name + "이(가) " + armor + "의 방어도 획득!";
         character.getArmor(armor);
     }
+    List<GameObject> specialDrowList = new List<GameObject>();
     public void specialDrow(int drow) //카드를 통한 드로우
     {
-        log.logContent.text += "\n 카드를 통해 드로우 " + drow + "장!";     
-        StartCoroutine("specialDrowC", drow);
-    }
-    IEnumerator specialDrowC(int drow) 
-    {
-
-        float t = 0;
-        for (int i = 0; i < drow; i++)
+        log.logContent.text += "\n 카드를 통해 드로우 " + drow + "장!";
+      
+        int c = 0;
+        while (c != drow)
         {
-           
-            CM.SpecialCardToField();
-
-
-            yield return new WaitForSeconds(0.25f);
+            c++;
+            if (CM.Deck.Count > 0)
+            {
+             
+               int rand = Random.Range(0,CM.Deck.Count);
+               CM.field.Add(CM.Deck[rand]);
+                specialDrowList.Add(CM.Deck[rand]);
+                CM.Deck.RemoveAt(rand);
+               
+            }
         }
         for (int i = 0; i < CD.size; i++)
         {
-            t += characters[i].myPassive.SpecialDrow(drow);
-            yield return new WaitForSeconds(t);
+            characters[i].myPassive.SpecialDrow(drow);
         }
+        StartCoroutine("specialDrowC");
+    }
+    IEnumerator specialDrowC() 
+    {
+
+        while (specialDrowList.Count != 0)
+        {
+            CM.SpecialCardToField(specialDrowList[0]);
+            specialDrowList.RemoveAt(0);
+        }
+        
+            yield return new WaitForSeconds(0.25f);
+       
+        
+      
     }
     public void ghostRevive(int ghostCount) //망자부활 + ghostCount
     {
@@ -1084,6 +1099,7 @@ public class BattleManager : MonoBehaviour
     }
     public void HitAll(int dmg,int type,Enemy enemy,bool ActM)
     {
+      
         int rand2 = 0;
         if (type == 0)
         {
@@ -1094,6 +1110,7 @@ public class BattleManager : MonoBehaviour
             lateActList.Add(enemyAct);
             if (ActM)
             {
+               
                 EnemyAct enemyAct2 = new EnemyAct(1, 1, characters[rand2], enemy, null);
                 earlyActList.Add(enemyAct2);
             }
