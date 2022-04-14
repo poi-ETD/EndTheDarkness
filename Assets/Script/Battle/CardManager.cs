@@ -279,28 +279,30 @@ public class CardManager : MonoBehaviour
         BM.character.SelectBox.SetActive(false);
         Character curC = BM.character;
 
-
+        curC.GetComponent<CharacterPassive>().myAct();     
+        for(int i = 0; i < BM.CD.size; i++)
+        {
+            BM.characters[i].myPassive.CardUse();        
+        }   
       
         if (usingCard.GetComponent<Card>().Name.text != "스케치 반복")
         {
             BM.allClear();
             TM.turnCardPlus();
         }
-         StartCoroutine("CardUseCor",curC);
+        StartCoroutine("CardUseCor",curC);
         Rebatch();
       
     }
     IEnumerator CardUseCor(Character curC)
     {
-       
-        curC.GetComponent<CharacterPassive>().myAct();
-      
-        for(int i = 0; i < BM.CD.size; i++)
+        while (BM.otherCor)
         {
-            BM.characters[i].myPassive.CardUse();        
+            yield return new WaitForSeconds(0.1f);
         }
         AM.MyAct();
         yield return null;
+       
     }
     public void FieldToGrave(GameObject c)
     {

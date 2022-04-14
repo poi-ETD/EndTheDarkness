@@ -69,6 +69,12 @@ public class Character : MonoBehaviour
     }
     public void getArmor(int a)
     {
+        if (a != 0)
+        {
+            GameObject Dmg = Instantiate(BM.DmgPrefebs, transform);
+            Dmg.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+            Dmg.GetComponent<DMGtext>().GetType(2, a);
+        }
         Armor += a;
         if (Armor < 0) Armor = 0;
         if (bless[2])
@@ -163,7 +169,7 @@ public class Character : MonoBehaviour
         if (dmg == 0) return;
         for (int i = 0; i < BM.CD.size; i++)
         {
-            if (i == curNo) myPassive.MyHit(E);
+            if (i == curNo) myPassive.MyHit(E,dmg);
             else { BM.characters[i].myPassive.TeamHit(curNo);}
         }
         if (Armor > 0)

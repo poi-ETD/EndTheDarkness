@@ -44,12 +44,12 @@ public class ActManager : MonoBehaviour
             {
                
                 BM.earlyActList[0].myEnemy.transform.DOMove(BM.earlyActList[0].myEnemy.transform.position+new Vector3(0, -0.5f,0), 0.3f);
-                BM.earlyActList[0].target.myImage.color = Color.blue;
+            
                 yield return new WaitForSeconds(0.5f);
                 BM.earlyActList[0].myEnemy.transform.DOMove(BM.earlyActList[0].myEnemy.transform.position + new Vector3(0, 0.5f, 0), 0.2f);
                 BM.earlyActList[0].target.myPassive.ActMinus(BM.earlyActList[0].mount,BM.earlyActList[0].myEnemy);
                 yield return new WaitForSeconds(0.3f);
-                BM.earlyActList[0].target.myImage.color = Color.white;
+                
             }
             if (BM.earlyActList[0].type == 4)
             { //0은신 1무적 2불사
@@ -135,6 +135,7 @@ public class ActManager : MonoBehaviour
                     yield return new WaitForSeconds(0.3f);
 
                 }
+                if(BM.lateActList.Count>0)
                 BM.lateActList.RemoveAt(0);
             }
             MyAct();
@@ -175,7 +176,7 @@ public class ActManager : MonoBehaviour
        myActList.Add(newActStruct);
     }
     public void MyAct()
-    {   Debug.Log("a");
+    { 
         sum = 1;
         StartCoroutine(MyActCo());
     }
@@ -185,7 +186,8 @@ public class ActManager : MonoBehaviour
         while (BM.otherCor)
         {
             yield return new WaitForSeconds(0.1f);
-        }     
+        }
+        yield return new WaitForSeconds(0.5f);
         BM.otherCor = true;       
         while (myActList.Count != 0)
         {
@@ -268,7 +270,7 @@ public class ActManager : MonoBehaviour
                 myActList[0].myC.SelectBox.SetActive(false);
                 yield return new WaitForSeconds(0.25f/sum);
             }
-            myActList[0].myC.myPassive.ReplyAttackDone = false;
+          
             c = 0;
             myActList.RemoveAt(0);
           

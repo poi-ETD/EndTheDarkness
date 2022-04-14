@@ -16,7 +16,7 @@ public class CharacterPassive : MonoBehaviour
     [SerializeField] TextMeshProUGUI ghostText;//큐 전용 변수
     [SerializeField] Sprite upQ;//큐 전용 변수
     int turnGhost;//큐 전용 변수
-
+    [SerializeField] GameObject DMGtext;
 
 
     bool isAct1;//포르테 전용 변수
@@ -42,9 +42,12 @@ public class CharacterPassive : MonoBehaviour
     }
 
 
-    public void MyHit(Enemy e)
+    public void MyHit(Enemy e,int dmg)
     {
-         
+        GameObject dmgText = Instantiate(DMGtext,gameObject.transform);
+
+        dmgText.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
+        dmgText.GetComponent<DMGtext>().GetType(0, dmg);
         if (myCharacter.reflect > 0)
         {
             
@@ -265,16 +268,12 @@ public class CharacterPassive : MonoBehaviour
     
     
     public void EnemyHit(Enemy e)
-    {
-     
-     
+    {          
         if (myNo == 2 && myPassvie[1] > 0)
         { 
-            if (!ReplyAttackDone)
-            {              
-                ReplyAttackDone = true;
+           
                 AM.MakeAct(6, myCharacter.turnAtk, e, myCharacter, null, myPassvie[1]);
-            }         
+                    
         }
         if (myNo == 3 && myPassvie[0] > 0)
         {
@@ -283,10 +282,22 @@ public class CharacterPassive : MonoBehaviour
        
        
     }
+    public void EnemyHitByReply(Enemy e)
+    {
+      
+        if (myNo == 3 && myPassvie[0] > 0)
+        {
+            AM.MakeAct(9, 0, null, myCharacter, null, myPassvie[0]);
+        }
+
+
+    }
+
+
     public void Sparky2(int dmg,Enemy e)
-    {    
-       e.onHit(dmg, myCharacter.curNo);
-       
+    {
+     
+       e.onHit(dmg, myCharacter.curNo,true);   
     }
 
 
@@ -418,10 +429,13 @@ public class CharacterPassive : MonoBehaviour
   
     public void ActMinus(int m,Enemy e)
     {
+        myCharacter.onMinusAct(m);
+        GameObject dmgText = Instantiate(DMGtext, gameObject.transform);
 
-         AM.MakeAct(100, m, e, myCharacter, null, 0);
+        dmgText.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
+        dmgText.GetComponent<DMGtext>().GetType(1, m);
 
-      
+
         if (myNo == 1 && myPassvie[3] > 0 && CM.Grave.Count > 0)
         {
             AM.MakeAct(4, 1, null, myCharacter, null, myPassvie[3]);

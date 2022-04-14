@@ -119,13 +119,22 @@ public class Enemy : MonoBehaviour
         myImage.color = color;
     }
     
-    public void onHit(int dmg,int no)
+    public void onHit(int dmg,int no,bool reply)
     {
-        Debug.Log(dmg);
+        GameObject Dmg = Instantiate(BM.DmgPrefebs, transform);
+        Dmg.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+        Dmg.GetComponent<DMGtext>().GetType(0, dmg);
         BM.characters[no].myPassive.MyAttack();
         for (int i = 0; i < BM.CD.size; i++)
-        {           
-             BM.characters[i].myPassive.EnemyHit(this);
+        {
+            if (!reply)
+            {
+                BM.characters[i].myPassive.EnemyHit(this);
+            }
+            else
+            {
+                BM.characters[i].myPassive.EnemyHitByReply(this);
+            }
         }
       
         if (!power)

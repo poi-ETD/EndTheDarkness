@@ -106,6 +106,8 @@ public class BattleManager : MonoBehaviour
     public bool sparkyPassive2;
     public bool turnStarting;
 
+    public GameObject DmgPrefebs;
+
     public void costUp(int i)
     {
         cost += i;
@@ -532,7 +534,7 @@ public class BattleManager : MonoBehaviour
     {
         for (int k = 0; k < n; k++)
         {          
-            enemy.onHit(dmg + c.turnAtk, c.curNo);          
+            enemy.onHit(dmg + c.turnAtk, c.curNo,false);          
             while (otherCor)
             {
                 yield return new WaitForSeconds(0.5f);
@@ -550,26 +552,18 @@ public class BattleManager : MonoBehaviour
 
     IEnumerator AllAttackCo(int dmg, Character c,int n)
     {
+        otherCor = true;
         for (int k = 0; k < n; k++)
-        {
-        
+        {      
             for (int i = 0; i < Enemys.Length; i++)
             {
-                if (Enemys[i].GetComponent<Enemy>().isDie) yield return null;
-                else
-                {
-                    Enemys[i].GetComponent<Enemy>().Hit();
-
-                    Enemys[i].GetComponent<Enemy>().onHit(dmg + c.turnAtk, c.curNo);
-
-                    yield return new WaitForSeconds(0.5f);
-
-                    Enemys[i].GetComponent<Enemy>().HitEnd();
-                    
-                }
-            }
-            yield return new WaitForSeconds(0.2f);
+                Enemys[i].GetComponent<Enemy>().onHit(dmg + c.turnAtk, c.curNo,false);
+               
+            }            
+            yield return new WaitForSeconds(0.5f);          
+            
         }
+        otherCor = false;
     }
 
     public void getArmor(int armor) //방어도 획득
