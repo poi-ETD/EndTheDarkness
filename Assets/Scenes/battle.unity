@@ -2479,7 +2479,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.49019608}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.34901962}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -2583,7 +2583,7 @@ MonoBehaviour:
   ReviveCount: 0
   card7mode: 0
   Enemys:
-  - {fileID: 8526652786934175351, guid: c47a2c53f9e5149429e525136a7d0f41, type: 3}
+  - {fileID: 8526652786934175351, guid: 97414c795e2149a43a018fd8de173a23, type: 3}
   - {fileID: 4683036356863319242, guid: 0b358fe23b42c514fb7e1e211c9351d8, type: 3}
   - {fileID: 3104608646525041465, guid: af64e7082df220545ae667f664153da1, type: 3}
   - {fileID: 1233573338231355905, guid: f5632c08302212b439772558243ed323, type: 3}
@@ -2759,7 +2759,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -852.5, y: -426}
-  m_SizeDelta: {x: 175, y: 250}
+  m_SizeDelta: {x: 141, y: 166.8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &418044575
 MonoBehaviour:
@@ -3500,7 +3500,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 856, y: -407.4}
-  m_SizeDelta: {x: 150, y: 220}
+  m_SizeDelta: {x: 176.25, y: 208.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &558421467
 MonoBehaviour:
@@ -7504,7 +7504,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 2d21bea6af83f144c97d99ce68ed601f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: eca6e26a3c8b5824db39e0ad14927a42, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

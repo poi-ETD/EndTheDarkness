@@ -17,6 +17,11 @@ public class Dagger001 : MonoBehaviour
     int pattern;
     bool[] done = new bool[3];
 
+    // YH
+    public Image image_character;
+    public Sprite sprite_idle;
+    public Sprite sprite_highlight;
+
     private void Start()
     {
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();

@@ -93,7 +93,7 @@ public class HandManager : MonoBehaviour
          
             newCard.transform.rotation = Quaternion.Euler(new Vector3(0, 0, random_Rotation_Z));
             //newCard.GetComponent<RectTransform>().localScale = new Vector3(0.5f, 0.5f, 0.5f);
-            newCard.transform.DOMove(new Vector2(random_Position_X, random_Position_Y - 7f), 1);
+            newCard.transform.DOMove(new Vector2(random_Position_X, random_Position_Y - 8f), 1);
             newCard.transform.DOScale(new Vector3(1f, 1f, 1f), 1).SetEase(Ease.OutExpo);
             newCard.GetComponent<Image>().DOFade(1f, 1).SetEase(Ease.OutExpo); // TODO:non action function -> action function
               
@@ -161,8 +161,8 @@ public class HandManager : MonoBehaviour
 
         foreach (GameObject card in CM.field)
         {
-            card.GetComponent<Card>().SavePosition(list_XPosition[index], FindY_CircleEquation(list_XPosition[index]) - 7f, -(index / 10f));         
-            card.transform.DOMove(new Vector3(list_XPosition[index], FindY_CircleEquation(list_XPosition[index]) - 7f, -(index / 10f)), 0.3f)
+            card.GetComponent<Card>().SavePosition(list_XPosition[index], FindY_CircleEquation(list_XPosition[index]) - 8f, -(index / 10f));         
+            card.transform.DOMove(new Vector3(list_XPosition[index], FindY_CircleEquation(list_XPosition[index]) - 8f, -(index / 10f)), 0.3f)
                 .SetEase(Ease.OutExpo);
             card.transform.DORotate(new Vector3(0f, 0f, list_Rotation[index]), 0.3f).SetEase(Ease.OutExpo);
             index++;
