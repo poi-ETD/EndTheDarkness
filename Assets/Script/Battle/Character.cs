@@ -117,7 +117,7 @@ public class Character : MonoBehaviour
    
         if (Hp <= 0) die();
         if (Hp > maxHp) Hp = maxHp;
-        hpT.text = "<color=purple><b>" + Hp + "</color></b><size=15>/" + maxHp + "</size>";
+        hpT.text = "<color=#a39fff><b>" + Hp + "</color></b><size=15>/" + maxHp + "</size>";
     }
     
     public void BoardClear()
@@ -198,7 +198,7 @@ public class Character : MonoBehaviour
         }
         if (Hp < 0) Hp = 0;
         armorT.text = Armor + "";
-        hpT.text = "<color=purple><b>" + Hp + "</color></b><size=15>/" + maxHp + "</size>";
+        hpT.text = "<color=#a39fff><b>" + Hp + "</color></b><size=15>/" + maxHp + "</size>";
         return t;
     }
     void die()
