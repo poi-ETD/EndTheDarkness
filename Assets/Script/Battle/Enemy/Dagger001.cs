@@ -42,46 +42,47 @@ public class Dagger001 : MonoBehaviour
         {
             if (!myEnemy.isDie)
             {
-            
-                  if ((curTurn + 1) % 5 != 0)
-                   {
-                       pattern = Random.Range(0, 3);
-                       if (plusname == 2)
-                       {
-                           while (pattern == anotherDagger.pattern)
-                           {
-                               pattern = Random.Range(0, 3);
-                           }
-                       }
+              
+               if ((curTurn + 1) % 5 != 0)
+                  {
+                      pattern = Random.Range(0, 3);
+                      if (plusname == 2)
+                      {
+                          while (pattern == anotherDagger.pattern)
+                          {
+                              pattern = Random.Range(0, 3);
+                          }
+                      }
 
-                       if (pattern == 0)
-                       {
-                           BM.HitFront(3, 0, myEnemy, false);
-                           BM.HitFront(3, 0, myEnemy, false);
-                       }
-                       if (pattern == 1)
-                       {
-                           BM.EnemyGetAromor(3, myEnemy, myEnemy);
-                           BM.HitFront(3, 0, myEnemy, false);
-                       }
-                       if (pattern == 2)
-                       {
-                           BM.HitBack(1, 0, myEnemy, true);
-                       }
-                   }
-                   else
-                   {
-                       BM.HitFront(3, 0, myEnemy, false);
-                       BM.HitFront(3, 0, myEnemy, false);
-                       BM.HitFront(3, 0, myEnemy, false);
-                       BM.HitBack(1, 0, myEnemy, false);
-                   }
-               }
+                      if (pattern == 0)
+                      {
+                          BM.HitFront(3, 0, myEnemy, false);
+                          BM.HitFront(3, 0, myEnemy, false);
+                      }
+                      if (pattern == 1)
+                      {
+                          BM.EnemyGetAromor(3, myEnemy, myEnemy);
+                          BM.HitFront(3, 0, myEnemy, false);
+                      }
+                      if (pattern == 2)
+                      {
+                          BM.HitBack(1, 0, myEnemy, true);
+                      }
+                  }
+                  else
+                  {
+                      BM.HitFront(3, 0, myEnemy, false);
+                      BM.HitFront(3, 0, myEnemy, false);
+                      BM.HitFront(3, 0, myEnemy, false);
+                      BM.HitBack(1, 0, myEnemy, false);
+                  }
+              }
+           }
+
+               
+                myEnemy.EnemyEndTurn();
+
+                curTurn++;
             }
-
-
-            myEnemy.EnemyEndTurn();
-
-            curTurn++;
         }
-    }
+    
