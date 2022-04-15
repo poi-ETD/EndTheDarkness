@@ -320,7 +320,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -423,8 +423,7 @@ MonoBehaviour:
   m_text: "\uC774\uB984"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: bdd8e55fa09c5274b894488795262bec, type: 2}
-  m_sharedMaterial: {fileID: 9221766285591583883, guid: bdd8e55fa09c5274b894488795262bec,
-    type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 0e0d0ac2056ea104db537d7174f35252, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -454,7 +453,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -992,7 +991,7 @@ GameObject:
   - component: {fileID: 1832990781560244375}
   m_Layer: 0
   m_Name: Dagger1
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

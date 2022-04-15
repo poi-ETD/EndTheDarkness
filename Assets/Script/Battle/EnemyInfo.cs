@@ -14,7 +14,7 @@ public class EnemyInfo : MonoBehaviour
     {
         if (SelectedEnemy != null)
         {
-            t[1].text = SelectedEnemy.Hp + "/<size=24><color=#7d7d7d>" + SelectedEnemy.maxHp + "</color></size>";
+            t[1].text = "<b>" + SelectedEnemy.Hp + "/</b><size=24><color=#7d7d7d>" + SelectedEnemy.maxHp + "</color></size>";
             t[2].text = SelectedEnemy.Armor + "";
             HpSlider.value = SelectedEnemy.Hp / (float)SelectedEnemy.maxHp;
         }
