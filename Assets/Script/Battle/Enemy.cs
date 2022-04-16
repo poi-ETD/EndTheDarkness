@@ -119,13 +119,22 @@ public class Enemy : MonoBehaviour
         myImage.color = color;
     }
     
-    public float onHit(int dmg,int no)
-    {      
-        float t = 0;
-        t += BM.characters[no].myPassive.MyAttack();
+    public void onHit(int dmg,int no,bool reply)
+    {
+        GameObject Dmg = Instantiate(BM.DmgPrefebs, transform);
+        Dmg.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+        Dmg.GetComponent<DMGtext>().GetType(0, dmg);
+        BM.characters[no].myPassive.MyAttack();
         for (int i = 0; i < BM.CD.size; i++)
-        {           
-            t += BM.characters[i].myPassive.EnemyHit(this);
+        {
+            if (!reply)
+            {
+                BM.characters[i].myPassive.EnemyHit(this);
+            }
+            else
+            {
+                BM.characters[i].myPassive.EnemyHitByReply(this);
+            }
         }
       
         if (!power)
@@ -178,7 +187,7 @@ public class Enemy : MonoBehaviour
             }
         }
         hpSlider.value= Hp / (float)maxHp;
-        return t;
+       
     }
 
     public void GetArmorStat(int arm)

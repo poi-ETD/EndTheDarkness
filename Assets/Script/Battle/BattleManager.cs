@@ -106,6 +106,8 @@ public class BattleManager : MonoBehaviour
     public bool sparkyPassive2;
     public bool turnStarting;
 
+    public GameObject DmgPrefebs;
+
     public void costUp(int i)
     {
         cost += i;
@@ -374,18 +376,22 @@ public class BattleManager : MonoBehaviour
     }
     public void CancleCharacter()
     {
+
         if (!otherCanvasOn)
         {
 
             if (character != null)
                 character.SelectBox.SetActive(false);
+
             character = null;
-        }
+        
     }
     public void CharacterSelect(GameObject c)
     {
+     
         if (!otherCanvasOn)
         {
+         
             CancleCharacter();
             for (int i = 0; i < characters.Count; i++)
             {
@@ -445,10 +451,13 @@ public class BattleManager : MonoBehaviour
         if (!otherCanvasOn)
         {
             EnemySelectMode = false;
+
             card = null;
 
             useButton.SetActive(false);
+
             CM.Rebatch();
+
         }
     }
 
@@ -533,13 +542,14 @@ public class BattleManager : MonoBehaviour
     IEnumerator PlayerAttack(int dmg, Enemy enemy, Character c, int n)
     {
         for (int k = 0; k < n; k++)
-        {
-            enemy.Hit();
-            float t = enemy.onHit(dmg + c.turnAtk, c.curNo);
-            yield return new WaitForSeconds(t + 0.5f);
 
-            enemy.HitEnd();
-            yield return new WaitForSeconds(0.2f);
+        {          
+            enemy.onHit(dmg + c.turnAtk, c.curNo,false);          
+            while (otherCor)
+            {
+                yield return new WaitForSeconds(0.5f);
+            }           
+
         }
 
     }
@@ -553,26 +563,20 @@ public class BattleManager : MonoBehaviour
 
     IEnumerator AllAttackCo(int dmg, Character c, int n)
     {
+        otherCor = true;
         for (int k = 0; k < n; k++)
-        {
 
+        {      
             for (int i = 0; i < Enemys.Length; i++)
             {
-                if (Enemys[i].GetComponent<Enemy>().isDie) yield return null;
-                else
-                {
-                    Enemys[i].GetComponent<Enemy>().Hit();
+                Enemys[i].GetComponent<Enemy>().onHit(dmg + c.turnAtk, c.curNo,false);
+               
+            }            
+            yield return new WaitForSeconds(0.5f);          
+            
 
-                    float t = Enemys[i].GetComponent<Enemy>().onHit(dmg + c.turnAtk, c.curNo);
-
-                    yield return new WaitForSeconds(t + 0.5f);
-
-                    Enemys[i].GetComponent<Enemy>().HitEnd();
-
-                }
-            }
-            yield return new WaitForSeconds(0.2f);
         }
+        otherCor = false;
     }
 
     public void getArmor(int armor) //방어도 획득
@@ -580,28 +584,46 @@ public class BattleManager : MonoBehaviour
         log.logContent.text += "\n" + character.Name + "이(가) " + armor + "의 방어도 획득!";
         character.getArmor(armor);
     }
+    List<GameObject> specialDrowList = new List<GameObject>();
     public void specialDrow(int drow) //카드를 통한 드로우
     {
         log.logContent.text += "\n 카드를 통해 드로우 " + drow + "장!";
-        StartCoroutine("specialDrowC", drow);
-    }
-    IEnumerator specialDrowC(int drow)
-    {
 
-        float t = 0;
-        for (int i = 0; i < drow; i++)
+      
+        int c = 0;
+        while (c != drow)
         {
-
-            CM.SpecialCardToField();
-
-
-            yield return new WaitForSeconds(0.25f);
+            c++;
+            if (CM.Deck.Count > 0)
+            {
+             
+               int rand = Random.Range(0,CM.Deck.Count);
+                CM.field.Add(CM.Deck[rand]);
+                specialDrowList.Add(CM.Deck[rand]);
+                CM.Deck.RemoveAt(rand);
+               
+            }
         }
         for (int i = 0; i < CD.size; i++)
         {
-            t += characters[i].myPassive.SpecialDrow(drow);
-            yield return new WaitForSeconds(t);
+            characters[i].myPassive.SpecialDrow(drow);
         }
+        StartCoroutine("specialDrowC");
+    }
+    IEnumerator specialDrowC() 
+
+    {
+
+        while (specialDrowList.Count != 0)
+        {
+
+            CM.SpecialCardToField(specialDrowList[0]);
+            specialDrowList.RemoveAt(0);
+
+            yield return new WaitForSeconds(0.25f);
+        }
+      
+       // CM.Rebatch();           
     }
     public void ghostRevive(int ghostCount) //망자부활 + ghostCount
     {
@@ -1089,6 +1111,7 @@ public class BattleManager : MonoBehaviour
     }
     public void HitAll(int dmg, int type, Enemy enemy, bool ActM)
     {
+      
         int rand2 = 0;
         if (type == 0)
         {
@@ -1099,6 +1122,7 @@ public class BattleManager : MonoBehaviour
             lateActList.Add(enemyAct);
             if (ActM)
             {
+               
                 EnemyAct enemyAct2 = new EnemyAct(1, 1, characters[rand2], enemy, null);
                 earlyActList.Add(enemyAct2);
             }

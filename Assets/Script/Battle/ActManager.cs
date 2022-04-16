@@ -15,7 +15,7 @@ public class ActManager : MonoBehaviour
    
    
     int earlyCount;
- 
+    public int sum;
     public void EarlyAct()
     {
         earlyCount++;
@@ -24,12 +24,13 @@ public class ActManager : MonoBehaviour
         {
            
             TM.PlayerTurnStart();
-           
+
             earlyCount = 0;
         }
     }
     public void EarlyActCorStart()
     {
+      
         StartCoroutine("EarlyActCor");
     }
     IEnumerator EarlyActCor()
@@ -37,17 +38,18 @@ public class ActManager : MonoBehaviour
         
         while (BM.earlyActList.Count != 0)
         {
+           
             bool notPop = false;
             if (BM.earlyActList[0].type == 1)
             {
                
                 BM.earlyActList[0].myEnemy.transform.DOMove(BM.earlyActList[0].myEnemy.transform.position+new Vector3(0, -0.5f,0), 0.3f);
-                BM.earlyActList[0].target.myImage.color = Color.blue;
+            
                 yield return new WaitForSeconds(0.5f);
                 BM.earlyActList[0].myEnemy.transform.DOMove(BM.earlyActList[0].myEnemy.transform.position + new Vector3(0, 0.5f, 0), 0.2f);
-                int t = BM.earlyActList[0].target.myPassive.ActMinus(BM.earlyActList[0].mount);
-                yield return new WaitForSeconds(0.3f + t);
-                BM.earlyActList[0].target.myImage.color = Color.white;
+                BM.earlyActList[0].target.myPassive.ActMinus(BM.earlyActList[0].mount,BM.earlyActList[0].myEnemy);
+                yield return new WaitForSeconds(0.3f);
+                
             }
             if (BM.earlyActList[0].type == 4)
             { //0은신 1무적 2불사
@@ -76,24 +78,28 @@ public class ActManager : MonoBehaviour
             }
             if(!notPop)
             BM.earlyActList.RemoveAt(0);
-        }
-
-
-        
+           
+        }       
         BM.turnStarting = false;
+      
         TM.turnEndImage.color = new Color(1, 1, 1);
         if (BM.porte3mode)
             BM.Porte3On();
+        MyAct();
         yield return null;
     }
     public void LateAct()
     {
         StartCoroutine(LateActCor());
     }
-   IEnumerator LateActCor()
+    IEnumerator LateActCor()
     {
         while (BM.lateActList.Count != 0)
         {
+            while (BM.otherCor)
+            {
+                yield return new WaitForSeconds(0.1f);
+            }
             if (BM.lateActList[0].myEnemy.isDie)
             {
                 BM.lateActList.RemoveAt(0);
@@ -102,24 +108,16 @@ public class ActManager : MonoBehaviour
             else
             {
                 if (BM.lateActList[0].type == 0)
-                {
-                    float t = 0;
-                    BM.lateActList[0].myEnemy.transform.DOMove(BM.lateActList[0].myEnemy.transform.position + new Vector3(0, -0.5f, 0), 0.3f);
-                    BM.lateActList[0].target.myImage.color = Color.red;
+                {                 
+                    BM.lateActList[0].myEnemy.transform.DOMove(BM.lateActList[0].myEnemy.transform.position + new Vector3(0, -0.5f, 0), 0.3f);                   
                     yield return new WaitForSeconds(0.5f);
                     BM.lateActList[0].myEnemy.transform.DOMove(BM.lateActList[0].myEnemy.transform.position + new Vector3(0, 0.5f, 0), 0.2f);
-                    t = BM.lateActList[0].target.onDamage(BM.lateActList[0].mount, BM.lateActList[0].myEnemy);
-                    yield return new WaitForSeconds(0.3f + t);
-                    if (!BM.lateActList[0].target.isDie)
-                    {
-                        BM.lateActList[0].target.myImage.color = Color.white;
-                    }
-                    else BM.lateActList[0].target.myImage.color = new Color(0.3f, 0.3f, 0.3f);
+                    BM.lateActList[0].target.onHit(BM.lateActList[0].mount, BM.lateActList[0].myEnemy);
+                    yield return new WaitForSeconds(0.3f);             
                 }
                 else if (BM.lateActList[0].type == 2)
                 {
                     BM.lateActList[0].myEnemy.transform.DOMove(BM.lateActList[0].myEnemy.transform.position + new Vector3(0, -0.5f, 0), 0.3f);
-
                     yield return new WaitForSeconds(0.5f);
                     BM.lateActList[0].myEnemy.transform.DOMove(BM.lateActList[0].myEnemy.transform.position + new Vector3(0, 0.5f, 0), 0.2f);
                     BM.lateActList[0].targetEnemy.GetArmorStat(BM.lateActList[0].mount);
@@ -130,7 +128,6 @@ public class ActManager : MonoBehaviour
                 else if (BM.lateActList[0].type == 3)
                 {
                     BM.lateActList[0].myEnemy.transform.DOMove(BM.lateActList[0].myEnemy.transform.position + new Vector3(0, -0.5f, 0), 0.3f);
-
                     yield return new WaitForSeconds(0.5f);
                     BM.lateActList[0].myEnemy.transform.DOMove(BM.lateActList[0].myEnemy.transform.position + new Vector3(0, 0.5f, 0), 0.2f);
                     BM.lateActList[0].targetEnemy.GetHp(BM.lateActList[0].mount);
@@ -138,10 +135,152 @@ public class ActManager : MonoBehaviour
                     yield return new WaitForSeconds(0.3f);
 
                 }
+                if(BM.lateActList.Count>0)
                 BM.lateActList.RemoveAt(0);
             }
-        }
-        yield return null;
+            MyAct();
+            for (int i = 0; i < BM.CD.size; i++) BM.characters[i].onDamage();
+        }              
         TM.PlayerTurnEnd();
+    }
+
+
+    public struct ActStruct
+    {
+        public int no;
+        //1~4 -> 큐 패시브 5~8 스파키  101~120->축복 1~20번 201~220 아이템 100->행동력감소
+
+        public int mount;//mount가 필요한 패시브만 적용
+        public Enemy E;
+        public Character myC;
+        public Character targetC;
+        public int count;
+
+        public ActStruct(int no, int mount, Enemy e, Character myC, Character targetC, int count)
+        {
+            this.no = no;
+            this.mount = mount;
+            E = e;
+            this.myC = myC;
+            this.targetC = targetC;
+            this.count = count;
+        }
+    };
+
+    List<ActStruct> myActList = new List<ActStruct>();
+
+    public void MakeAct(int no, int mount, Enemy e, Character myC, Character targetC, int count) 
+    {
+        sum++;
+       ActStruct newActStruct = new ActStruct(no, mount, e, myC, targetC, count);
+       myActList.Add(newActStruct);
+    }
+    public void MyAct()
+    { 
+        sum = 1;
+        StartCoroutine(MyActCo());
+    }
+
+    IEnumerator MyActCo()
+    {
+        while (BM.otherCor)
+        {
+            yield return new WaitForSeconds(0.1f);
+        }
+        yield return new WaitForSeconds(0.5f);
+        BM.otherCor = true;       
+        while (myActList.Count != 0)
+        {
+            Debug.Log(myActList[0].myC); 
+            int c = 0;
+            while (myActList[0].count != c)
+            {           
+                c++;
+                myActList[0].myC.SelectBox.SetActive(true);
+                if (myActList[0].no == 1)
+                {
+                    myActList[0].myC.myPassive.Q1();
+                }
+                if (myActList[0].no == 2)
+                {
+                  
+                    myActList[0].myC.myPassive.Q2(myActList[0].mount);
+                }
+                if (myActList[0].no == 3)
+                {
+                    myActList[0].myC.myPassive.Q3(myActList[0].mount);
+                }
+                if (myActList[0].no == 4)
+                {
+                    myActList[0].myC.myPassive.Q4();
+                }
+                if (myActList[0].no == 5)
+                {
+                    myActList[0].myC.myPassive.Sparky1();
+                }
+                if (myActList[0].no == 6)
+                {
+                  
+                 myActList[0].myC.myPassive.Sparky2(myActList[0].mount,myActList[0].E);
+                }
+                if (myActList[0].no == 7)
+                {
+                    myActList[0].myC.myPassive.Sparky3();
+                }
+                if (myActList[0].no == 8)
+                {
+                    myActList[0].myC.myPassive.Sparky4();
+                }
+                if (myActList[0].no == 9)
+                {
+                    myActList[0].myC.myPassive.Vangara1();
+                }
+                if (myActList[0].no == 10)
+                {
+                    myActList[0].myC.myPassive.Vangara2(myActList[0].mount);
+                }
+
+                if (myActList[0].no == 11)
+                {
+                    myActList[0].myC.myPassive.Vangara3(myActList[0].mount,myActList[0].E);
+                }
+                if (myActList[0].no == 12)
+                {
+                    myActList[0].myC.myPassive.Vangara4();
+                }
+                if (myActList[0].no == 13)
+                {
+                    myActList[0].myC.myPassive.Porte1();
+                    
+                }
+                if (myActList[0].no == 14)
+                {
+                    myActList[0].myC.myPassive.Porte2();
+                }
+                if (myActList[0].no == 15)
+                {
+                   // myActList[0].myC.myPassive.Porte3();
+                }
+                if (myActList[0].no == 16)
+                {                    
+                    myActList[0].myC.myPassive.Porte4();
+                }               
+                
+                yield return new WaitForSeconds(1f/sum);
+                myActList[0].myC.SelectBox.SetActive(false);
+                yield return new WaitForSeconds(0.25f/sum);
+            }
+          
+            c = 0;
+            myActList.RemoveAt(0);
+          
+        }
+        if (BM.turnStarting)
+        {
+            EarlyActCorStart();
+        }
+        BM.turnStarting = false;
+        BM.otherCor = false;
+        yield return null;
     }
 }

@@ -28,6 +28,7 @@ public class CardManager : MonoBehaviour
     CardData CD;
     BattleManager BM;
     HandManager HM;
+    ActManager AM;
     CardData2 cd = new CardData2();
     string[] deckText = new string[5];
     public ScriptableObject scrip;
@@ -71,6 +72,7 @@ public class CardManager : MonoBehaviour
         }
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         HM = GameObject.Find("HandManager").GetComponent<HandManager>();
+        AM = GameObject.Find("ActManager").GetComponent<ActManager>();
     }
     void addComponent(GameObject obj,int i)
     {/*
@@ -196,7 +198,7 @@ public class CardManager : MonoBehaviour
             Deck[i].SetActive(true);
             Deck[i].GetComponent<Card>().cardcost = Deck[i].GetComponent<Card>().realcost;
             Deck[i].GetComponent<Card>().costT.text=Deck[i].GetComponent<Card>().cardcost+ "";
-          Deck[i].SetActive(false);
+            Deck[i].SetActive(false);
           
         }
         for (int i = 0; i < Grave.Count; i++)
@@ -211,6 +213,7 @@ public class CardManager : MonoBehaviour
     IEnumerator turnStartDrow()
     {
         BM.otherCor = true;
+     
         for (int i = 0; i < BM.TurnCardCount; i++)
         {
             CardToField();
@@ -223,22 +226,15 @@ public class CardManager : MonoBehaviour
         BM.otherCor = false;
         
     }
-    public void SpecialCardToField()
-    {
-
-        if (Deck.Count > 0)
-        {
-            specialDrow++;
-            int rand = Random.Range(0, Deck.Count);
-            field.Add(Deck[rand]);
-            HM.AddCard(Deck[rand]);
-            Deck.RemoveAt(rand);
-            Rebatch();
-        }
+    public void SpecialCardToField(GameObject card)
+    {     
+        HM.AddCard(card);
+        //Rebatch();   
     }
     public void PlusCard(int i)
     {
         GameObject newCard = Instantiate(CardPrefebs, CardCanvas.transform);
+
         newCard.GetComponent<Card>().NoT.text = "NO." + cd.cd[i].No.ToString("D3");//넘버
         newCard.GetComponent<Card>().cardNo = cd.cd[i].No;
         newCard.GetComponent<Card>().DeckT.text = deckText[cd.cd[i].Deck];
@@ -279,27 +275,33 @@ public class CardManager : MonoBehaviour
         TM.BM.cancleCard();
         TM.BM.pcard = usingCard;
         TM.BM.penemy = TM.BM.enemy;
-        StartCoroutine("CardUseCor");
+        BM.character.SelectBox.SetActive(false);
+        Character curC = BM.character;
+
+        curC.GetComponent<CharacterPassive>().myAct();     
+        for(int i = 0; i < BM.CD.size; i++)
+        {
+            BM.characters[i].myPassive.CardUse();        
+        }   
+      
         if (usingCard.GetComponent<Card>().Name.text != "스케치 반복")
         {
             BM.allClear();
             TM.turnCardPlus();
         }
+        StartCoroutine("CardUseCor",curC);
         Rebatch();
       
     }
-    IEnumerator CardUseCor()
+    IEnumerator CardUseCor(Character curC)
     {
-        BM.otherCanvasOn = true;
-        int t = 0;
-        t = BM.character.GetComponent<CharacterPassive>().myAct();
-        yield return t;
-        for(int i = 0; i < BM.CD.size; i++)
+        while (BM.otherCor)
         {
-            t = BM.characters[i].myPassive.CardUse();
-            yield return t;
+            yield return new WaitForSeconds(0.1f);
         }
-        BM.otherCanvasOn = false;
+        AM.MyAct();
+        yield return null;
+       
     }
     public void FieldToGrave(GameObject c)
     {

@@ -66,6 +66,7 @@ public class Dagger001 : MonoBehaviour
                       }
                       if (pattern == 2)
                       {
+                          
                           BM.HitBack(1, 0, myEnemy, true);
                       }
                   }
