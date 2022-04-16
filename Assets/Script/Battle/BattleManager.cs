@@ -445,10 +445,13 @@ public class BattleManager : MonoBehaviour
         if (!otherCanvasOn)
         {
             EnemySelectMode = false;
+
             card = null;
            
             useButton.SetActive(false);
+
             CM.Rebatch();
+
         }
     }
 
@@ -584,7 +587,7 @@ public class BattleManager : MonoBehaviour
             {
              
                int rand = Random.Range(0,CM.Deck.Count);
-               CM.field.Add(CM.Deck[rand]);
+                CM.field.Add(CM.Deck[rand]);
                 specialDrowList.Add(CM.Deck[rand]);
                 CM.Deck.RemoveAt(rand);
                
@@ -603,12 +606,10 @@ public class BattleManager : MonoBehaviour
         {
             CM.SpecialCardToField(specialDrowList[0]);
             specialDrowList.RemoveAt(0);
-        }
-        
             yield return new WaitForSeconds(0.25f);
-       
-        
+        }
       
+       // CM.Rebatch();           
     }
     public void ghostRevive(int ghostCount) //망자부활 + ghostCount
     {

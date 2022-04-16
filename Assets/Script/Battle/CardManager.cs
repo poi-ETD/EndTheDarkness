@@ -227,15 +227,14 @@ public class CardManager : MonoBehaviour
         
     }
     public void SpecialCardToField(GameObject card)
-    {
-
-      
+    {     
         HM.AddCard(card);
-        Rebatch();
+        //Rebatch();   
     }
     public void PlusCard(int i)
     {
         GameObject newCard = Instantiate(CardPrefebs, CardCanvas.transform);
+
         newCard.GetComponent<Card>().NoT.text = "NO." + cd.cd[i].No.ToString("D3");//넘버
         newCard.GetComponent<Card>().cardNo = cd.cd[i].No;
         newCard.GetComponent<Card>().DeckT.text = deckText[cd.cd[i].Deck];
