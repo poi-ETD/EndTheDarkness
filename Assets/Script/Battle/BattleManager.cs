@@ -710,7 +710,7 @@ public class BattleManager : MonoBehaviour
 
         }
         CM.GraveOn();
-        graveView.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
+        graveView.SetActive(true);
     }
     public void DeckOn()
     {
@@ -762,7 +762,7 @@ public class BattleManager : MonoBehaviour
             cancleCard();
             CancleCharacter();
             CancleEnemy();
-            graveView.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 2000, 0);
+            graveView.SetActive(false);
         }
     }
     public void ReviveToField(int r)
