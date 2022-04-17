@@ -18,6 +18,8 @@ public class CardManager : MonoBehaviour
     [SerializeField] GameObject graveWarn;
     [SerializeField] GameObject selectedWarn;
     [SerializeField] GameObject CardPrefebs;
+    [SerializeField] GameObject GravePopup;
+    [SerializeField] GameObject GraveContent;
     public TurnManager TM;
     public int FiledCardCount;
     public int specialDrow;
@@ -266,8 +268,9 @@ public class CardManager : MonoBehaviour
                 break;
             }
         }
+        
         if (!InGrave) Grave.Add(usingCard);
-        usingCard.transform.parent = GameObject.Find("GraveContent").transform;      
+        usingCard.transform.parent = GraveContent.transform;      
         if(BM.character!=null)
         BM.character.Acting();
         usingCard.GetComponent<Card>().isGrave = true;

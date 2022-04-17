@@ -384,7 +384,7 @@ public class BattleManager : MonoBehaviour
                 character.SelectBox.SetActive(false);
 
             character = null;
-        
+        }
     }
     public void CharacterSelect(GameObject c)
     {
