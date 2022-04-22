@@ -24,6 +24,10 @@ public class Card : MonoBehaviour
     public int cardNo;
     public int selectType;
     public bool iscard20Mode;
+
+    //YH
+    [HideInInspector] public bool isSelected = false;
+
     public void useCard()
     {
         BM.otherCanvasOn = false;
@@ -295,6 +299,8 @@ public class Card : MonoBehaviour
         if (BM.otherCor) return;
 
         BM.isSelectedCardinHand = true; //YH
+        isSelected = true; //YH
+        HandManager.Instance.SelectCard(this);
 
         HandManager.Instance.InputToOriginText(this); //YH
 

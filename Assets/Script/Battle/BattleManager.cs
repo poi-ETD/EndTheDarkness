@@ -467,10 +467,6 @@ public class BattleManager : MonoBehaviour
 
             if (!isSelectedCardinHand)
                 CM.Rebatch();
-
-            CM.Rebatch();
-
-
         }
     }
 

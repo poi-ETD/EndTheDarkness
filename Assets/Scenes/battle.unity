@@ -2506,7 +2506,7 @@ MonoBehaviour:
   ReviveCount: 0
   card7mode: 0
   Enemys:
-  - {fileID: 8526652786934175351, guid: c47a2c53f9e5149429e525136a7d0f41, type: 3}
+  - {fileID: 8526652786934175351, guid: 97414c795e2149a43a018fd8de173a23, type: 3}
   - {fileID: 4683036356863319242, guid: 0b358fe23b42c514fb7e1e211c9351d8, type: 3}
   - {fileID: 3104608646525041465, guid: af64e7082df220545ae667f664153da1, type: 3}
   - {fileID: 1233573338231355905, guid: f5632c08302212b439772558243ed323, type: 3}
@@ -2566,6 +2566,8 @@ MonoBehaviour:
   otherCor: 0
   sparkyPassive2: 0
   turnStarting: 0
+  isPointerinHand: 0
+  isSelectedCardinHand: 0
   DmgPrefebs: {fileID: 3516283684887914833, guid: dd90e8f3edae7fc489918575a58fd894,
     type: 3}
   card20done: 0

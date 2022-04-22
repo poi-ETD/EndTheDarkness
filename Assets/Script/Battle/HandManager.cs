@@ -40,6 +40,8 @@ public class HandManager : MonoBehaviour
     BattleManager BM;
     private int selectedCardStack = 0; // prevent to too much fast select error between cards
 
+    private Card selectedCard;
+
     private void Awake()
     {
         if (instance == null)
@@ -55,6 +57,8 @@ public class HandManager : MonoBehaviour
         list_XPosition = new List<float>();
         list_Rotation = new List<float>();
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
+
+        selectedCard = new Card();
     }
 
     void Start()
@@ -217,8 +221,11 @@ public class HandManager : MonoBehaviour
 
             if (!card.isGrave && !card.isDeck)
             {
-                card.transform.DOMove(new Vector3(card.gameObject.transform.position.x, card.gameObject.transform.position.y + 0.5f,
-                card.gameObject.transform.position.z), 0.3f).SetEase(Ease.OutExpo);
+                if (card != selectedCard)
+                {
+                    card.transform.DOMove(new Vector3(card.gameObject.transform.position.x, card.gameObject.transform.position.y + 0.5f,
+                        card.gameObject.transform.position.z), 0.3f).SetEase(Ease.OutExpo);
+                }
                 selectedCardStack++;
                 if (selectedCardStack == 1)
                     Invoke("initStack", 0.15f);
@@ -230,13 +237,16 @@ public class HandManager : MonoBehaviour
 
     public void CardMouseExit(Card card)
     {
+        BM.isPointerinHand = false; //YH
+
         //Debug.Log(card.origin_Position);
+
         if (!card.isGrave && !card.isDeck && isInited)
         {
-            card.transform.DOMove(card.origin_Position, 0.3f).SetEase(Ease.OutExpo);
+            if (card != selectedCard)
+                card.transform.DOMove(card.origin_Position, 0.3f).SetEase(Ease.OutExpo);
         }
-
-        BM.isPointerinHand = false; //YH
+            
 
         if (!BM.isSelectedCardinHand)
             go_SelectedCard.SetActive(false); // if be unpleasant because of too much fast flicker of selected card, add below
@@ -262,10 +272,16 @@ public class HandManager : MonoBehaviour
         text_CardContext.text = originCardContext;
     }
 
-    public void cancelToUse()
+    private void cancelToUse()
     {
+        selectedCard = null;
         BM.isSelectedCardinHand = false;
         BM.cancleCard();
         go_SelectedCard.SetActive(false);
+    }
+
+    public void SelectCard(Card card)
+    {
+        selectedCard = card;
     }
 }
