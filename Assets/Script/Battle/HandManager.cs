@@ -32,8 +32,15 @@ public class HandManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI text_CardName;
     [SerializeField] private TextMeshProUGUI text_CardNo;
     [SerializeField] private TextMeshProUGUI text_CardContext;
+
+    private string originCardName;
+    private string originCardNo;
+    private string originCardContext;
+
     BattleManager BM;
     private int selectedCardStack = 0; // prevent to too much fast select error between cards
+
+    private Card selectedCard;
 
     private void Awake()
     {
@@ -50,6 +57,8 @@ public class HandManager : MonoBehaviour
         list_XPosition = new List<float>();
         list_Rotation = new List<float>();
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
+
+        selectedCard = new Card();
     }
 
     void Start()
@@ -76,6 +85,14 @@ public class HandManager : MonoBehaviour
                 CM.FieldToGrave(CM.field[CM.field.Count - 1]);
                 CM.Rebatch();
             }
+        }
+
+        if (!BM.isPointerinHand)
+            InputToCardText();
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            cancelToUse();
         }
     }
 
@@ -191,17 +208,24 @@ public class HandManager : MonoBehaviour
     public void CardMouseEnter(Card card)
     {
         if (BM.turnStarting) return;
-       
-        if (selectedCardStack <= 2&&isInited)
-        {           
+
+        BM.isPointerinHand = true; //YH
+
+        if (selectedCardStack <= 2 && isInited)
+        {
             go_SelectedCard.SetActive(true);
+
             text_CardName.text = card.Name.text;
             text_CardNo.text = card.NoT.text;
             text_CardContext.text = card.Content.text;
+
             if (!card.isGrave && !card.isDeck)
             {
-                card.transform.DOMove(new Vector3(card.gameObject.transform.position.x, card.gameObject.transform.position.y + 0.5f,
-                card.gameObject.transform.position.z), 0.3f).SetEase(Ease.OutExpo);
+                if (card != selectedCard)
+                {
+                    card.transform.DOMove(new Vector3(card.gameObject.transform.position.x, card.gameObject.transform.position.y + 0.5f,
+                        card.gameObject.transform.position.z), 0.3f).SetEase(Ease.OutExpo);
+                }
                 selectedCardStack++;
                 if (selectedCardStack == 1)
                     Invoke("initStack", 0.15f);
@@ -213,17 +237,51 @@ public class HandManager : MonoBehaviour
 
     public void CardMouseExit(Card card)
     {
+        BM.isPointerinHand = false; //YH
+
         //Debug.Log(card.origin_Position);
+
         if (!card.isGrave && !card.isDeck && isInited)
         {
-            card.transform.DOMove(card.origin_Position, 0.3f).SetEase(Ease.OutExpo);
+            if (card != selectedCard)
+                card.transform.DOMove(card.origin_Position, 0.3f).SetEase(Ease.OutExpo);
         }
-        go_SelectedCard.SetActive(false); // if be unpleasant because of too much fast flicker of selected card, add below
-        // 1. add polygon collider -> 2. if mouse pointer in collider go_SelectedCard.SetActive(true), else go_SelectedCard.SetActive(false)
+            
+
+        if (!BM.isSelectedCardinHand)
+            go_SelectedCard.SetActive(false); // if be unpleasant because of too much fast flicker of selected card, add below
+                                              // 1. add polygon collider -> 2. if mouse pointer in collider go_SelectedCard.SetActive(true), else go_SelectedCard.SetActive(false)
     }
 
     private void initStack()
     {
         selectedCardStack = 0;
+    }
+
+    public void InputToOriginText(Card card)
+    {
+        originCardName = card.Name.text;
+        originCardNo = card.NoT.text;
+        originCardContext = card.Content.text;
+    }
+
+    private void InputToCardText()
+    {
+        text_CardName.text = originCardName;
+        text_CardNo.text = originCardNo;
+        text_CardContext.text = originCardContext;
+    }
+
+    private void cancelToUse()
+    {
+        selectedCard = null;
+        BM.isSelectedCardinHand = false;
+        BM.cancleCard();
+        go_SelectedCard.SetActive(false);
+    }
+
+    public void SelectCard(Card card)
+    {
+        selectedCard = card;
     }
 }

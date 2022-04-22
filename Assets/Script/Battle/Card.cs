@@ -24,6 +24,10 @@ public class Card : MonoBehaviour
     public int cardNo;
     public int selectType;
     public bool iscard20Mode;
+
+    //YH
+    [HideInInspector] public bool isSelected = false;
+
     public void useCard()
     {
         BM.otherCanvasOn = false;
@@ -289,9 +293,17 @@ public class Card : MonoBehaviour
     }
     [HideInInspector] public Vector3 origin_Position;
     private bool isOnMouse;
+
     private void OnMouseDown()
     {
         if (BM.otherCor) return;
+
+        BM.isSelectedCardinHand = true; //YH
+        isSelected = true; //YH
+        HandManager.Instance.SelectCard(this);
+
+        HandManager.Instance.InputToOriginText(this); //YH
+
         if (!BM.EnemySelectMode && !BM.otherCanvasOn)
         {
 
@@ -309,15 +321,14 @@ public class Card : MonoBehaviour
             CM.ClickInGrave(gameObject); }
     }
 
- private void OnMouseEnter()
+    private void OnMouseEnter()
     {
-       
         isOnMouse = true;
-        if(BM.otherCanvasOn&&isGrave||BM.otherCanvasOn&&isDeck)
-        HandManager.Instance.CardMouseEnter(this);
+        if (BM.otherCanvasOn && isGrave || BM.otherCanvasOn && isDeck)
+            HandManager.Instance.CardMouseEnter(this);
         if (!BM.otherCanvasOn)
         {
-            if(!isGrave&&!isDeck) HandManager.Instance.CardMouseEnter(this);
+            if (!isGrave && !isDeck) HandManager.Instance.CardMouseEnter(this);
         }
     }
 
