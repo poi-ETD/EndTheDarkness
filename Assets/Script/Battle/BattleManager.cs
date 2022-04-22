@@ -106,6 +106,10 @@ public class BattleManager : MonoBehaviour
     public bool sparkyPassive2;
     public bool turnStarting;
 
+    //YH
+    [HideInInspector] public bool isPointerinHand = false;
+    [HideInInspector] public bool isSelectedCardinHand = false;
+
     public void costUp(int i)
     {
         cost += i;
@@ -425,6 +429,7 @@ public class BattleManager : MonoBehaviour
     {
         if (SelectMode)
         {
+            
             cancleCard();
             card = c;
             return;
@@ -437,6 +442,7 @@ public class BattleManager : MonoBehaviour
             tra2.localScale = new Vector2(1.5f, 1.5f);       
             c.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, -230, 0);*/
             useButton.SetActive(true);
+            
             card = c;
         }
     }
@@ -448,7 +454,9 @@ public class BattleManager : MonoBehaviour
             card = null;
 
             useButton.SetActive(false);
-            CM.Rebatch();
+
+            if (!isSelectedCardinHand)
+                CM.Rebatch();
         }
     }
 

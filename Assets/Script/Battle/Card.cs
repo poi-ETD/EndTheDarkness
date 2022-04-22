@@ -289,9 +289,15 @@ public class Card : MonoBehaviour
     }
     [HideInInspector] public Vector3 origin_Position;
     private bool isOnMouse;
+
     private void OnMouseDown()
     {
         if (BM.otherCor) return;
+
+        BM.isSelectedCardinHand = true; //YH
+
+        HandManager.Instance.InputToOriginText(this); //YH
+
         if (!BM.EnemySelectMode && !BM.otherCanvasOn)
         {
 
@@ -309,15 +315,14 @@ public class Card : MonoBehaviour
             CM.ClickInGrave(gameObject); }
     }
 
- private void OnMouseEnter()
+    private void OnMouseEnter()
     {
-       
         isOnMouse = true;
-        if(BM.otherCanvasOn&&isGrave||BM.otherCanvasOn&&isDeck)
-        HandManager.Instance.CardMouseEnter(this);
+        if (BM.otherCanvasOn && isGrave || BM.otherCanvasOn && isDeck)
+            HandManager.Instance.CardMouseEnter(this);
         if (!BM.otherCanvasOn)
         {
-            if(!isGrave&&!isDeck) HandManager.Instance.CardMouseEnter(this);
+            if (!isGrave && !isDeck) HandManager.Instance.CardMouseEnter(this);
         }
     }
 

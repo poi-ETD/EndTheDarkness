@@ -201,7 +201,7 @@ MonoBehaviour:
   m_text: Q
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: bdd8e55fa09c5274b894488795262bec, type: 2}
-  m_sharedMaterial: {fileID: -2599079595931806960, guid: bdd8e55fa09c5274b894488795262bec,
+  m_sharedMaterial: {fileID: 9221766285591583883, guid: bdd8e55fa09c5274b894488795262bec,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -605,7 +605,7 @@ MonoBehaviour:
   m_text: "\uAE30\uBCF8 \uACF5\uACA9"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: bdd8e55fa09c5274b894488795262bec, type: 2}
-  m_sharedMaterial: {fileID: -2599079595931806960, guid: bdd8e55fa09c5274b894488795262bec,
+  m_sharedMaterial: {fileID: 9221766285591583883, guid: bdd8e55fa09c5274b894488795262bec,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
