@@ -96,14 +96,17 @@ public class HandManager : MonoBehaviour
     {
         if (!isInited)
         {
+         
             newCard.transform.position = new Vector3(18,-7, 0);
        
+
             newCard.SetActive(true);
             int random_Rotation_Z = Random.Range(-10, 10);
             float random_Position_X = Random.Range(-0.2f, 0.2f);
             float random_Position_Y = Random.Range(-0.2f, 0.2f);
             newCard.transform.parent = GameObject.Find("HandCardCanvas").transform;
          
+
             newCard.transform.rotation = Quaternion.Euler(new Vector3(0, 0, random_Rotation_Z));
             //newCard.GetComponent<RectTransform>().localScale = new Vector3(0.5f, 0.5f, 0.5f);
             newCard.transform.DOMove(new Vector2(random_Position_X, random_Position_Y - 8f), 1);
@@ -118,7 +121,7 @@ public class HandManager : MonoBehaviour
         }
         else
         {
-           
+            
             //card = Instantiate(cardSample, new Vector3(8f, 0f, 0f), Quaternion.identity);
             // card.GetComponent<HandCard>().handNumber = count_Card;
             newCard.SetActive(true);
@@ -154,6 +157,7 @@ public class HandManager : MonoBehaviour
 
     public void InitCard()
     {
+        
         ArrangeCard();
 
         isInited = true;

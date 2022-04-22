@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using TMPro;
 public class Dagger001 : MonoBehaviour
 {
     public TurnManager TM;
@@ -22,11 +22,14 @@ public class Dagger001 : MonoBehaviour
     public Sprite sprite_idle;
     public Sprite sprite_highlight;
 
+    [SerializeField] TextMeshProUGUI NameT;
+
     private void Start()
     {
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         myEnemy.Name = "단검" + plusname;
+        NameT.text = myEnemy.Name;
         StartPattern();
     }
     private void Update()
@@ -66,6 +69,7 @@ public class Dagger001 : MonoBehaviour
                       }
                       if (pattern == 2)
                       {
+                          
                           BM.HitBack(1, 0, myEnemy, true);
                       }
                   }

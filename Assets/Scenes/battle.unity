@@ -2506,7 +2506,7 @@ MonoBehaviour:
   ReviveCount: 0
   card7mode: 0
   Enemys:
-  - {fileID: 8526652786934175351, guid: 97414c795e2149a43a018fd8de173a23, type: 3}
+  - {fileID: 8526652786934175351, guid: c47a2c53f9e5149429e525136a7d0f41, type: 3}
   - {fileID: 4683036356863319242, guid: 0b358fe23b42c514fb7e1e211c9351d8, type: 3}
   - {fileID: 3104608646525041465, guid: af64e7082df220545ae667f664153da1, type: 3}
   - {fileID: 1233573338231355905, guid: f5632c08302212b439772558243ed323, type: 3}
@@ -2566,6 +2566,8 @@ MonoBehaviour:
   otherCor: 0
   sparkyPassive2: 0
   turnStarting: 0
+  DmgPrefebs: {fileID: 3516283684887914833, guid: dd90e8f3edae7fc489918575a58fd894,
+    type: 3}
   card20done: 0
 --- !u!1 &404220092
 GameObject:
@@ -8015,6 +8017,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ba34aa4db9040c4280e4b2e8279dd4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sum: 0
 --- !u!1 &1514610026
 GameObject:
   m_ObjectHideFlags: 0
@@ -10533,6 +10536,8 @@ MonoBehaviour:
   selectedWarn: {fileID: 1734387433}
   CardPrefebs: {fileID: 9053282550429952276, guid: a830569d89a842046baa0b763ba790d8,
     type: 3}
+  GravePopup: {fileID: 777824206}
+  GraveContent: {fileID: 445548252}
   TM: {fileID: 1818976532}
   FiledCardCount: 0
   specialDrow: 0

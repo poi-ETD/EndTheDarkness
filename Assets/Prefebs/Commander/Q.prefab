@@ -545,12 +545,15 @@ MonoBehaviour:
   Armor: 0
   Act: 1
   turnAtk: 0
+  endur: 0
+  turnEndur: 0
   TM: {fileID: 0}
   BM: {fileID: 0}
   hpT: {fileID: 2347601006634643601}
   atkT: {fileID: 1537922853815473025}
   armorT: {fileID: 5464620002080002855}
   actT: {fileID: 5514166535073443567}
+  endurT: {fileID: 0}
   board: {fileID: 2347601005463500816}
   passive: 00000000000000000000000000000000
   enemyName: 
@@ -559,9 +562,6 @@ MonoBehaviour:
   SelectBox: {fileID: 4933892919090107615}
   myImage: {fileID: 765933055175993415}
   cost: 2
-  isSet: 0
-  isTurnStart: 0
-  isTurnEnd: 0
   hitStack: 0
   dmgStack: 0
   NextTurnMinusAct: 0
@@ -575,6 +575,7 @@ MonoBehaviour:
   nextStatus: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
   curNo: 0
   myPassive: {fileID: 0}
+  beforeArmor: 0
 --- !u!61 &2347601005813970014
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -652,6 +653,8 @@ MonoBehaviour:
   ghost: 0
   ghostText: {fileID: 2347601005785499624}
   upQ: {fileID: 21300000, guid: 03d954929911ad7458295e8a27497d60, type: 3}
+  DMGtext: {fileID: 3516283684887914833, guid: dd90e8f3edae7fc489918575a58fd894, type: 3}
+  ReplyAttackDone: 0
 --- !u!1 &2347601005822650731
 GameObject:
   m_ObjectHideFlags: 0
