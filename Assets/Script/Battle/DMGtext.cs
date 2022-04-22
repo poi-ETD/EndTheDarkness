@@ -39,7 +39,7 @@ public class DMGtext : MonoBehaviour
         {
            
             t.color = new Color(t.color.r,t.color.g,t.color.b,t.color.a-0.01f);
-            transform.position += new Vector3(0, 0.01f);
+            transform.position += new Vector3(0, 0.02f);
             yield return new WaitForSeconds(0.01f);
         }
         Destroy(gameObject);

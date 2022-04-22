@@ -118,11 +118,15 @@ public class TurnManager : MonoBehaviour
             yield return null;
 
         }
+
         AM.MyAct();
+
         while (BM.otherCor)
         {
             yield return new WaitForSeconds(0.1f);
         }
+
+
 
         CM.FieldOff();
 

@@ -16,7 +16,7 @@ public class CharacterPassive : MonoBehaviour
     [SerializeField] TextMeshProUGUI ghostText;//큐 전용 변수
     [SerializeField] Sprite upQ;//큐 전용 변수
     int turnGhost;//큐 전용 변수
-    [SerializeField] GameObject DMGtext;
+   public GameObject DMGtext;
 
 
     bool isAct1;//포르테 전용 변수
@@ -47,7 +47,11 @@ public class CharacterPassive : MonoBehaviour
         GameObject dmgText = Instantiate(DMGtext,gameObject.transform);
 
         dmgText.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
+
         dmgText.GetComponent<DMGtext>().GetType(0, dmg);
+
+
+
         if (myCharacter.reflect > 0)
         {
             
@@ -369,6 +373,7 @@ public class CharacterPassive : MonoBehaviour
     }
     public void Vangara1()
     {
+     
         myCharacter.getArmor(1);
     }
    

@@ -53,7 +53,7 @@ public class Enemy : MonoBehaviour
         Hp = maxHp;
         ei = GameObject.Find("SelectEnemyInformation").GetComponent<EnemyInfo>();
         AM = GameObject.Find("ActManager").GetComponent<ActManager>();
-       
+        
     }        
     public void onClickEvent()
 {

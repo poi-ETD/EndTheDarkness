@@ -317,7 +317,7 @@ public class CardManager : MonoBehaviour
             }
         }
         Grave.Add(c);
-        c.transform.parent = GameObject.Find("GraveContent").transform;
+        c.transform.parent = GraveContent.transform;
         c.GetComponent<Card>().isGrave = true;
         c.SetActive(false);
     }
@@ -373,7 +373,7 @@ public class CardManager : MonoBehaviour
     }
     public void ToGrave(GameObject Fcard)
     {
-        Fcard.transform.parent = GameObject.Find("GraveContent").transform;
+        Fcard.transform.parent =GraveContent.transform;
         Fcard.SetActive(false);
     }
     public void GraveToField(GameObject Gcard)
@@ -577,7 +577,7 @@ public class CardManager : MonoBehaviour
                 c.GetComponent<Card>().use = false;
                 c.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0.5f);
                 c.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0.5f);
-                c.transform.parent = GameObject.Find("GraveContent").transform;
+                c.transform.parent = GraveContent.transform;
                 c.GetComponent<Card>().isGrave = true;
                 c.SetActive(false);
                 Deck.RemoveAt(i);

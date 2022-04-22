@@ -69,7 +69,8 @@ public class Character : MonoBehaviour
     }
     public void getArmor(int a)
     {
-        if (a != 0)
+       
+        if (a > 0)
         {
             GameObject Dmg = Instantiate(BM.DmgPrefebs, transform);
             Dmg.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;

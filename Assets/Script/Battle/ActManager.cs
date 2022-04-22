@@ -35,7 +35,11 @@ public class ActManager : MonoBehaviour
     }
     IEnumerator EarlyActCor()
     {
-        
+        while (BM.otherCor)
+        {
+            yield return new WaitForSeconds(0.1f);
+        }
+        yield return new WaitForSeconds(0.5f);
         while (BM.earlyActList.Count != 0)
         {
            
@@ -93,13 +97,13 @@ public class ActManager : MonoBehaviour
         StartCoroutine(LateActCor());
     }
     IEnumerator LateActCor()
-    {
-        while (BM.lateActList.Count != 0)
-        {
-            while (BM.otherCor)
+    {      while (BM.otherCor)
             {
                 yield return new WaitForSeconds(0.1f);
             }
+        while (BM.lateActList.Count != 0)
+        {
+           
             if (BM.lateActList[0].myEnemy.isDie)
             {
                 BM.lateActList.RemoveAt(0);
@@ -138,7 +142,7 @@ public class ActManager : MonoBehaviour
                 if(BM.lateActList.Count>0)
                 BM.lateActList.RemoveAt(0);
             }
-            MyAct();
+          
             for (int i = 0; i < BM.CD.size; i++) BM.characters[i].onDamage();
         }              
         TM.PlayerTurnEnd();
@@ -171,13 +175,13 @@ public class ActManager : MonoBehaviour
 
     public void MakeAct(int no, int mount, Enemy e, Character myC, Character targetC, int count) 
     {
-        sum++;
+       sum+=count;
        ActStruct newActStruct = new ActStruct(no, mount, e, myC, targetC, count);
        myActList.Add(newActStruct);
     }
     public void MyAct()
-    { 
-        sum = 1;
+    {
+      
         StartCoroutine(MyActCo());
     }
 
@@ -188,11 +192,14 @@ public class ActManager : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
         }
         yield return new WaitForSeconds(0.5f);
-        BM.otherCor = true;       
+        BM.otherCor = true;  
+        
         while (myActList.Count != 0)
         {
-            Debug.Log(myActList[0].myC); 
+          
             int c = 0;
+
+
             while (myActList[0].count != c)
             {           
                 c++;
@@ -202,8 +209,7 @@ public class ActManager : MonoBehaviour
                     myActList[0].myC.myPassive.Q1();
                 }
                 if (myActList[0].no == 2)
-                {
-                  
+                {                  
                     myActList[0].myC.myPassive.Q2(myActList[0].mount);
                 }
                 if (myActList[0].no == 3)
@@ -266,9 +272,9 @@ public class ActManager : MonoBehaviour
                     myActList[0].myC.myPassive.Porte4();
                 }               
                 
-                yield return new WaitForSeconds(1f/sum);
+                yield return new WaitForSeconds(2f/sum);
                 myActList[0].myC.SelectBox.SetActive(false);
-                yield return new WaitForSeconds(0.25f/sum);
+                yield return new WaitForSeconds(0.5f/sum);
             }
           
             c = 0;
@@ -279,8 +285,10 @@ public class ActManager : MonoBehaviour
         {
             EarlyActCorStart();
         }
+        sum = 1;
         BM.turnStarting = false;
         BM.otherCor = false;
         yield return null;
+     
     }
 }
