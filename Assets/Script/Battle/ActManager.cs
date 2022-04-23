@@ -45,8 +45,7 @@ public class ActManager : MonoBehaviour
            
             bool notPop = false;
             if (BM.earlyActList[0].type == 1)
-            {
-               
+            {               
                 BM.earlyActList[0].myEnemy.transform.DOMove(BM.earlyActList[0].myEnemy.transform.position+new Vector3(0, -0.5f,0), 0.3f);
             
                 yield return new WaitForSeconds(0.5f);
@@ -181,24 +180,35 @@ public class ActManager : MonoBehaviour
     }
     public void MyAct()
     {
-      
         StartCoroutine(MyActCo());
     }
-
+    string SetPassiveName(int i) //패시브 번호에 따라 로그 출력을 위한 함수
+    {
+        string s = "";
+        CharacterData2 chD=new CharacterData2();
+        int k = i % 4;
+        if (k == 0) k = 3;
+        s = chD.cd[(i / 4)+1].passive[(i % 4)-1];
+        return s;
+    }
     IEnumerator MyActCo()
     {
         while (BM.otherCor)
         {
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.01f);
         }
-        yield return new WaitForSeconds(0.5f);
         BM.otherCor = true;  
         
+        yield return new WaitForSeconds(0.2f);
+
+      
         while (myActList.Count != 0)
         {
           
             int c = 0;
-
+            string passiveName="";
+            passiveName = SetPassiveName(myActList[0].no);
+            BM.log.logContent.text += "\n" + myActList[0].myC.Name + "이(가) " + passiveName + " 발동(" + myActList[0].count + ")";
 
             while (myActList[0].count != c)
             {           
@@ -273,6 +283,7 @@ public class ActManager : MonoBehaviour
                 }               
                 
                 yield return new WaitForSeconds(2f/sum);
+              
                 myActList[0].myC.SelectBox.SetActive(false);
                 yield return new WaitForSeconds(0.5f/sum);
             }

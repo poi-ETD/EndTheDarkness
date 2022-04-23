@@ -44,10 +44,10 @@ public class CharacterPassive : MonoBehaviour
 
     public void MyHit(Enemy e,int dmg)
     {
+        if (myCharacter.isDie) return;
         GameObject dmgText = Instantiate(DMGtext,gameObject.transform);
 
         dmgText.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
-
         dmgText.GetComponent<DMGtext>().GetType(0, dmg);
 
 
@@ -95,7 +95,8 @@ public class CharacterPassive : MonoBehaviour
 
 
     public void MyAttack()
-    {      
+    {
+        if (myCharacter.isDie) return;
         if (myNo == 2 && myPassvie[3] > 0 && !ReplyIsUp)
         {
 
@@ -109,11 +110,12 @@ public class CharacterPassive : MonoBehaviour
     }
     public void Sparky4()
     {
+        if (myCharacter.isDie) return;
         myCharacter.RealAtkUp(2);
     }
     public void SpecialDrow(int drow)
     {
-
+        if (myCharacter.isDie) return;
         if (myNo == 1 && myPassvie[2] > 0 && !isKing)
         {
             AM.MakeAct(3, drow, null, myCharacter, null, myPassvie[2]); //흑백       
@@ -127,10 +129,11 @@ public class CharacterPassive : MonoBehaviour
     }
     public void Q3(int drow)
     {
+        if (myCharacter.isDie) return;
         int d = 0;
         while (d != drow)
         {
-            Debug.Log("a");
+       
             d++;
             GameObject newCard = CM.field[CM.field.Count -  d];
             if (newCard.GetComponent<BlackWhite>() == null)
@@ -146,6 +149,7 @@ public class CharacterPassive : MonoBehaviour
     }
     public void Porte2()
     {
+        if (myCharacter.isDie) return;
         isAct1 = true;
         BM.costUp(1);
         myCharacter.ActUp(1);
@@ -153,6 +157,7 @@ public class CharacterPassive : MonoBehaviour
 
     public void TurnStart()
     {
+        if (myCharacter.isDie) return;
         if (myNo == 1 && isKing)
         {
             myCharacter.ActUp(myPassvie[0]);
@@ -197,6 +202,7 @@ public class CharacterPassive : MonoBehaviour
 
     public void Vangara2(int type)
     {
+        if (myCharacter.isDie) return;
         if (type ==0)
         {
             BM.costUp(1);          
@@ -208,11 +214,13 @@ public class CharacterPassive : MonoBehaviour
     }
     public void Vangara4()
     {
+        if (myCharacter.isDie) return;
         myCharacter.getArmor(7);
         myCharacter.ActUp(1);
     }
     public void Porte4()
     {
+        if (myCharacter.isDie) return;
         if (CM.Deck.Count > CM.Grave.Count)
         {
             
@@ -228,8 +236,8 @@ public class CharacterPassive : MonoBehaviour
 
     public void TurnEndTimeCount() //개편완
     {
-      
-       
+
+        if (myCharacter.isDie) return;
         if (myNo== 1 && myPassvie[0] > 0&&!isKing&&ghost>50)
         {
             AM.MakeAct(1, 0, null, myCharacter, null, myPassvie[0]);
@@ -244,8 +252,8 @@ public class CharacterPassive : MonoBehaviour
     }
   
     public void Q1()
-    { 
-        
+    {
+        if (myCharacter.isDie) return;
         myCharacter.maxHp = 100;//진화 후 체력은?
         myCharacter.hpT.text = myCharacter.Hp + "/" + myCharacter.maxHp;
             CM.PlusCard(13);
@@ -264,7 +272,7 @@ public class CharacterPassive : MonoBehaviour
     }
     public void Porte1()
     {
-
+        if (myCharacter.isDie) return;
         BM.TurnCardCount += 2;
     }
 
@@ -272,7 +280,8 @@ public class CharacterPassive : MonoBehaviour
     
     
     public void EnemyHit(Enemy e)
-    {          
+    {
+        if (myCharacter.isDie) return;
         if (myNo == 2 && myPassvie[1] > 0)
         { 
            
@@ -288,7 +297,7 @@ public class CharacterPassive : MonoBehaviour
     }
     public void EnemyHitByReply(Enemy e)
     {
-      
+        if (myCharacter.isDie) return;
         if (myNo == 3 && myPassvie[0] > 0)
         {
             AM.MakeAct(9, 0, null, myCharacter, null, myPassvie[0]);
@@ -300,69 +309,16 @@ public class CharacterPassive : MonoBehaviour
 
     public void Sparky2(int dmg,Enemy e)
     {
-     
-       e.onHit(dmg, myCharacter.curNo,true);   
+        if (myCharacter.isDie) return;
+        e.onHit(dmg, myCharacter.curNo,true);   
     }
 
 
-    IEnumerator EnemyHitCor(Enemy e)
-    {
-        while (BM.otherCor)
-        {
-            yield return new WaitForSeconds(0.1f);
-        }
-        BM.otherCor = true;
-        yield return new WaitForSeconds(0.5f);
-        if (myNo == 2 && myPassvie[1] > 0 && ReplyAttackDone)
-        {
-            int c = 0;
-            while (c < myPassvie[1])
-            {
-                             
-                transform.localScale *= 1.2f;
-                if (!e.isDie)
-                {
-                    
-                  
-                    BM.log.logContent.text += "\n독단적인 팀플레이!" + e.Name + "에게 " + myCharacter.turnAtk + "의 데미지가 주어집니다.";
-                    BM.curMessage.text = "독단적인 팀플레이!" + e.Name + "에게 " + myCharacter.turnAtk + "의 데미지가 주어집니다.";
-                }
-                c++;
-                yield return new WaitForSeconds(0.7f);
-                transform.localScale /= 1.2f;
-                BM.curMessage.text = "";
-                yield return new WaitForSeconds(0.3f);
-            }
-          
-        }
-        if (myNo == 3 && myPassvie[0] > 0)
-        {
-            int c = 0;
-            while (c < myPassvie[0])
-            {
-
-
-                    transform.localScale *= 1.2f;
-
-                    myCharacter.getArmor(1);
-                    BM.log.logContent.text += "\n굳건한 위치! 자신에게 방어도가 1 추가됩니다.";
-                    BM.curMessage.text += "\n굳건한 위치! 자신에게 방어도가 1 추가됩니다.";
-               
-                c++;
-                yield return new WaitForSeconds(0.7f);
-                transform.localScale /= 1.2f;
-                BM.curMessage.text = "";
-                yield return new WaitForSeconds(0.3f);
-            }
-        }
-
-        BM.otherCor = false;
-        yield return null;
-    }
+   
 
     public void TeamHit(int no)
     {
-     
+        if (myCharacter.isDie) return;
         if (myNo == 3 && myPassvie[0] > 0)
         {
             
@@ -373,13 +329,13 @@ public class CharacterPassive : MonoBehaviour
     }
     public void Vangara1()
     {
-     
+        if (myCharacter.isDie) return;
         myCharacter.getArmor(1);
     }
    
     public void MyArmorHit(int armor,Enemy e)
     {
-      
+        if (myCharacter.isDie) return;
         if (myNo == 3 && myPassvie[2] > 0)
         {
             AM.MakeAct(11, armor, e, myCharacter, null, myPassvie[2]);
@@ -389,6 +345,7 @@ public class CharacterPassive : MonoBehaviour
     }
     public void Vangara3(int dmg,Enemy E)
     {
+        if (myCharacter.isDie) return;
         if (!E.isDie)
         {
             BM.OnAttack(dmg, E, myCharacter, 1);
@@ -396,7 +353,8 @@ public class CharacterPassive : MonoBehaviour
    }
   
     public void CardUse()
-    { 
+    {
+        if (myCharacter.isDie) return;
         if (myNo == 2 && myPassvie[0] > 0)
         {
             ReplyCardDrow++;
@@ -408,14 +366,15 @@ public class CharacterPassive : MonoBehaviour
     }
     public void Sparky1()
     {
+        if (myCharacter.isDie) return;
         myCharacter.ActUp(1);
     }
     
 
     public void myAct()
     {
+        if (myCharacter.isDie) return;
 
-      
         if (myNo == 2 && myPassvie[2]>0&&myCharacter.Act == 0&& CM.field.Count > 0)
         {
             AM.MakeAct(7, 1, null, myCharacter, null, myPassvie[2]);
@@ -424,6 +383,7 @@ public class CharacterPassive : MonoBehaviour
     }
     public void Sparky3()
     {
+        if (myCharacter.isDie) return;
         if (CM.field.Count > 0)
         {
             int rand = Random.Range(0, CM.field.Count);
@@ -434,6 +394,8 @@ public class CharacterPassive : MonoBehaviour
   
     public void ActMinus(int m,Enemy e)
     {
+        if (myCharacter.isDie) return;
+        BM.log.logContent.text += "\n" + myCharacter.Name + "이(가) " +e.Name + "에게 " +m + "의 행동력 감소를 받았다.";
         myCharacter.onMinusAct(m);
         GameObject dmgText = Instantiate(DMGtext, gameObject.transform);
 
@@ -450,6 +412,7 @@ public class CharacterPassive : MonoBehaviour
     }
     public void Q4()
     {
+        if (myCharacter.isDie) return;
         if (CM.Grave.Count > 0)
         {
             int rand = Random.Range(0, CM.Grave.Count);
@@ -473,6 +436,7 @@ public class CharacterPassive : MonoBehaviour
   
     public void GhostRevive(int ghostplus)
     {
+        if (myCharacter.isDie) return;
         ghost += ghostplus;        
         ghostText.text = ghost+"";
         int x = turnGhost + ghostplus;
@@ -493,6 +457,7 @@ public class CharacterPassive : MonoBehaviour
 
     public void Q2(int g)
     {
+        if (myCharacter.isDie) return;
         myCharacter.ActUp(g);
     }
 

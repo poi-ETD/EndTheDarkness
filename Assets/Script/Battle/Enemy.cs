@@ -121,6 +121,7 @@ public class Enemy : MonoBehaviour
     
     public void onHit(int dmg,int no,bool reply)
     {
+       
         GameObject Dmg = Instantiate(BM.DmgPrefebs, transform);
         Dmg.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
         Dmg.GetComponent<DMGtext>().GetType(0, dmg);

@@ -347,7 +347,7 @@ public class BattleManager : MonoBehaviour
         completeButton.SetActive(false);
         if (porte3mode)
         {
-            Debug.Log(porte3count);
+           
             if (card != null)
             {
                 card.transform.localScale = new Vector3(1, 1, 1);
@@ -357,7 +357,6 @@ public class BattleManager : MonoBehaviour
                 if (CM.field[CM.field.Count - 1].GetComponent<Card>().cardcost < 0)
                     CM.field[CM.field.Count - 1].GetComponent<Card>().cardcost = 0;
                 CM.field[CM.field.Count - 1].GetComponent<Card>().costT.text = CM.field[CM.field.Count - 1].GetComponent<Card>().cardcost + "";
-
                 log.logContent.text += "\n스타카티시모!" + CM.field[CM.field.Count - 1].GetComponent<Card>().Name.text + "의 코스트가 감소하였습니다.";
                 porte3count--;
                 card = null;
@@ -537,10 +536,9 @@ public class BattleManager : MonoBehaviour
     }
     public void OnDmgOneTarget(int dmg, Enemy E, int n)
     {
-
         CardUseText.text = "사용";
         EnemySelectMode = false;
-        log.logContent.text += "\n" + E.Name + "에게 " + (dmg + character.turnAtk) + "의 데미지!";
+        log.logContent.text += "\n" + E.Name + "에게 " + (dmg + character.turnAtk) + "의 데미지!("+n+")";
         OnAttack(dmg, E, character, n);
     }
     public void OnAttack(int dmg, Enemy enemy, Character c, int n)
@@ -551,41 +549,45 @@ public class BattleManager : MonoBehaviour
     IEnumerator PlayerAttack(int dmg, Enemy enemy, Character c, int n)
     {
         for (int k = 0; k < n; k++)
-
         {          
-            enemy.onHit(dmg + c.turnAtk, c.curNo,false);          
+            enemy.onHit(dmg + c.turnAtk, c.curNo,false);
+            yield return new WaitForSeconds(0.1f);
+            AM.MyAct();
             while (otherCor)
             {
-                yield return new WaitForSeconds(0.5f);
+                yield return new WaitForSeconds(0.1f);
             }           
 
         }
-
+        
     }
+
 
     public void AllAttack(int dmg, Character c, int n)
     {
-
+        log.logContent.text += "\n적 전체에게 " + dmg + c.turnAtk + "의 데미지!(" + n + ")";
         StartCoroutine(AllAttackCo(dmg, c, n));
 
     }
 
     IEnumerator AllAttackCo(int dmg, Character c, int n)
     {
-        otherCor = true;
         for (int k = 0; k < n; k++)
-
-        {      
+        {
             for (int i = 0; i < Enemys.Length; i++)
             {
-                Enemys[i].GetComponent<Enemy>().onHit(dmg + c.turnAtk, c.curNo,false);
-               
-            }            
-            yield return new WaitForSeconds(0.5f);          
-            
+                Enemys[i].GetComponent<Enemy>().onHit(dmg + c.turnAtk, c.curNo, false);
 
+            }
+            yield return new WaitForSeconds(0.1f);
+            AM.MyAct();
+            while (otherCor)
+            {
+                yield return new WaitForSeconds(0.1f);
+            }
         }
-        otherCor = false;
+      
+
     }
 
     public void getArmor(int armor) //방어도 획득
