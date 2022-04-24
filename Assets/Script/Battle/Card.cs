@@ -295,6 +295,7 @@ public class Card : MonoBehaviour
 
     public void textSet()
     {
+       
         if (cardNo != 8)
             costT.text = cardcost + "";
         else costT.text = "N";
