@@ -1418,7 +1418,7 @@ public class BattleManager : MonoBehaviour
         for (int i = 0; i < characters.Count; i++)
         {
             if (!characters[i].isDie)
-            {
+            {       
                 characters[i].getArmor(4+characters[i].endur);
             }
         }
