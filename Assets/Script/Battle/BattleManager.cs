@@ -25,7 +25,7 @@ public class BattleManager : MonoBehaviour
     public int CardCount;
 
     [SerializeField] CardManager CM;
-    [SerializeField] ActManager AM;
+    public ActManager AM;
 
     public int TurnCardCount;
     [SerializeField] GameObject Warn;
@@ -106,6 +106,8 @@ public class BattleManager : MonoBehaviour
     public bool sparkyPassive2;
     public bool turnStarting;
 
+    public int turnEndu;
+    public int endu;
 
     //YH
     [HideInInspector] public bool isPointerinHand = false;
@@ -284,6 +286,7 @@ public class BattleManager : MonoBehaviour
             characterOriginal.Add(CharacterC.GetComponent<Character>());
             CharacterC.GetComponent<Character>().Atk = CD.characterDatas[i].Atk;
             CharacterC.GetComponent<Character>().Hp = CD.characterDatas[i].curHp;
+            CharacterC.GetComponent<Character>().endur = CD.characterDatas[i].Endur;
             startCost += CD.characterDatas[i].Cost;
             CharacterC.GetComponent<Character>().passive = CD.characterDatas[i].passive;
             CharacterC.GetComponent<Character>().Name = CD.characterDatas[i].Name;
@@ -347,7 +350,7 @@ public class BattleManager : MonoBehaviour
         completeButton.SetActive(false);
         if (porte3mode)
         {
-            Debug.Log(porte3count);
+           
             if (card != null)
             {
                 card.transform.localScale = new Vector3(1, 1, 1);
@@ -357,7 +360,6 @@ public class BattleManager : MonoBehaviour
                 if (CM.field[CM.field.Count - 1].GetComponent<Card>().cardcost < 0)
                     CM.field[CM.field.Count - 1].GetComponent<Card>().cardcost = 0;
                 CM.field[CM.field.Count - 1].GetComponent<Card>().costT.text = CM.field[CM.field.Count - 1].GetComponent<Card>().cardcost + "";
-
                 log.logContent.text += "\n스타카티시모!" + CM.field[CM.field.Count - 1].GetComponent<Card>().Name.text + "의 코스트가 감소하였습니다.";
                 porte3count--;
                 card = null;
@@ -537,10 +539,9 @@ public class BattleManager : MonoBehaviour
     }
     public void OnDmgOneTarget(int dmg, Enemy E, int n)
     {
-
         CardUseText.text = "사용";
         EnemySelectMode = false;
-        log.logContent.text += "\n" + E.Name + "에게 " + (dmg + character.turnAtk) + "의 데미지!";
+        log.logContent.text += "\n" + E.Name + "에게 " + (dmg + character.turnAtk) + "의 데미지!("+n+")";
         OnAttack(dmg, E, character, n);
     }
     public void OnAttack(int dmg, Enemy enemy, Character c, int n)
@@ -551,41 +552,45 @@ public class BattleManager : MonoBehaviour
     IEnumerator PlayerAttack(int dmg, Enemy enemy, Character c, int n)
     {
         for (int k = 0; k < n; k++)
-
         {          
-            enemy.onHit(dmg + c.turnAtk, c.curNo,false);          
+            enemy.onHit(dmg + c.turnAtk, c.curNo,false);
+            yield return new WaitForSeconds(0.1f);
+         
             while (otherCor)
             {
-                yield return new WaitForSeconds(0.5f);
+                yield return new WaitForSeconds(0.1f);
             }           
 
         }
-
+        AM.MyAct();
     }
+
 
     public void AllAttack(int dmg, Character c, int n)
     {
-
+        log.logContent.text += "\n적 전체에게 " + dmg + c.turnAtk + "의 데미지!(" + n + ")";
         StartCoroutine(AllAttackCo(dmg, c, n));
 
     }
 
     IEnumerator AllAttackCo(int dmg, Character c, int n)
     {
-        otherCor = true;
         for (int k = 0; k < n; k++)
-
-        {      
+        {
             for (int i = 0; i < Enemys.Length; i++)
             {
-                Enemys[i].GetComponent<Enemy>().onHit(dmg + c.turnAtk, c.curNo,false);
-               
-            }            
-            yield return new WaitForSeconds(0.5f);          
-            
+                Enemys[i].GetComponent<Enemy>().onHit(dmg + c.turnAtk, c.curNo, false);
 
+            }
+            yield return new WaitForSeconds(0.1f);
+           
+            while (otherCor)
+            {
+                yield return new WaitForSeconds(0.1f);
+            }
         }
-        otherCor = false;
+        AM.MyAct();
+
     }
 
     public void getArmor(int armor) //방어도 획득
@@ -620,7 +625,6 @@ public class BattleManager : MonoBehaviour
         StartCoroutine("specialDrowC");
     }
     IEnumerator specialDrowC() 
-
     {
 
         while (specialDrowList.Count != 0)
@@ -631,8 +635,8 @@ public class BattleManager : MonoBehaviour
 
             yield return new WaitForSeconds(0.25f);
         }
-      
-       // CM.Rebatch();           
+        AM.MyAct();
+        // CM.Rebatch();           
     }
     public void ghostRevive(int ghostCount) //망자부활 + ghostCount
     {
@@ -736,12 +740,28 @@ public class BattleManager : MonoBehaviour
         otherCanvasOn = true;
         if (GraveReviveMode)
         {
+            graveClose.transform.parent.gameObject.SetActive(true);
             graveClose.text = "부활";
             ReviveCancle.SetActive(true);
 
         }
+        else
+        {
+            graveClose.transform.parent.gameObject.SetActive(false);
+        }
         CM.GraveOn();
         graveView.SetActive(true);
+    }
+    public void Click_ReviveGrave()
+    {
+        log.logContent.text += "\n" + character.Name + "이(가) " + card.GetComponent<Card>().Name.text + " 발동!";
+        ReviveMode = true;
+       
+        GraveReviveMode = false;
+       
+        ReviveCount = 0;
+        CM.Revive();
+        card.GetComponent<Card>().SelectRevive();
     }
     public void DeckOn()
     {
@@ -771,20 +791,13 @@ public class BattleManager : MonoBehaviour
         card7mode = false;
         CM.GraveOff();
         otherCanvasOn = false;
-        graveView.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 2000, 0);
+        graveView.SetActive(false);
     }
     public void GraveOff()
     {
         if (GraveReviveMode)
         {
-            card.GetComponent<Card>().SelectRevive();
-            ReviveMode = true;
-            graveClose.text = "닫기";
-            GraveReviveMode = false;
-            ReviveCancle.SetActive(false);
-            ReviveCount = 0;
-            CM.Revive();
-
+            ReviveCancleUse();
         }
         else
         {
@@ -1401,26 +1414,31 @@ public class BattleManager : MonoBehaviour
     }
     public void card22()
     {
-        card22c = character;
-        card22on = true;
+      
         for (int i = 0; i < characters.Count; i++)
         {
             if (!characters[i].isDie)
-            {
-                characters[i].getArmor(6);
+            {       
+                characters[i].getArmor(4+characters[i].endur);
             }
         }
     }
     public void card23()
     {
+        
         for (int i = 0; i < characters.Count; i++)
         {
+            if(characters[i].characterNo!=2)
             characters[i].onMinusAct(characters[i].Act);
+            else
+            {
+                characters[i].AtkUp(3);
+            }
         }
 
-        AllAttack(1, character, 3);
+      
 
-        CM.TM.turnAtk += 2;
+       
     }
     public void card24()
     {
@@ -1430,7 +1448,6 @@ public class BattleManager : MonoBehaviour
     {
         while (CM.field.Count > 1)
         {
-
             CM.FieldToGrave(CM.field[0]);
             HM.InitCard();
             yield return new WaitForSeconds(0.2f);

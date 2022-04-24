@@ -27,24 +27,24 @@ public class TurnManager : MonoBehaviour
             {
                 if (CM.Grave[i].GetComponent<Card>().cardNo == 11)
                 {
-                    CM.Grave[i].GetComponent<Card>().decreaseCost(2);
+                    CM.Grave[i].GetComponent<Card>().decreaseCost(3);
                 }
             }
             for (int i = 0; i < CM.field.Count; i++)
             {
                 if (CM.field[i].GetComponent<Card>().cardNo == 11)
                 {
-                    CM.field[i].GetComponent<Card>().decreaseCost(2);
+                    CM.field[i].GetComponent<Card>().decreaseCost(3);
                 }
             }
             for (int i = 0; i < CM.Deck.Count; i++)
             {
                 if (CM.Deck[i].GetComponent<Card>().cardNo == 11)
                 {
-                    CM.Deck[i].GetComponent<Card>().decreaseCost(2);
+                    CM.Deck[i].GetComponent<Card>().decreaseCost(3);
                 }
             }
-            BM.log.logContent.text += "\n모든 스트레이트 펀치의 코스트가 2 감소합니다.";
+            BM.log.logContent.text += "\n모든 스트레이트 펀치의 코스트가 3 감소합니다.";
         }
     }
     private void Awake()
@@ -179,7 +179,8 @@ public class TurnManager : MonoBehaviour
                 if (BM.gd.blessbool[4]&&t!=1) BM.characters[i].Act++;
                 BM.characters[i].onMinusAct(BM.characters[i].NextTurnMinusAct);
                 BM.characters[i].turnAtk = BM.characters[i].Atk;
-                BM.characters[i].AtkUp(turnAtk);          
+                BM.characters[i].AtkUp(turnAtk);
+                BM.characters[i].turnEndur = BM.characters[i].endur;
                 BM.characters[i].getArmor(BM.characters[i].nextarmor);
                 if (BM.characters[i].Armor < 0) BM.characters[i].Armor = 0;
                 BM.characters[i].nextarmor = 0;

@@ -115,7 +115,7 @@ public class Character : MonoBehaviour
    
         if (Hp <= 0) die();
         if (Hp > maxHp) Hp = maxHp;
-        hpT.text = "<color=#a39fff><b>" + Hp + "</color></b><size=15>/" + maxHp + "</size>";
+        hpT.text = "<color=purple><b>" + Hp + "</color></b><size=15>/" + maxHp + "</size>";
     }
     
     public void BoardClear()
@@ -168,6 +168,7 @@ public class Character : MonoBehaviour
     public void onHit(int dmg,Enemy E)
     {
         if (dmg == 0) return;
+        BM.log.logContent.text+="\n"+Name+"이(가) "+E.Name+"에게 "+dmg+"의 피해를 입었다.";
         for (int i = 0; i < BM.CD.size; i++)
         {
             if (i == curNo) myPassive.MyHit(E,dmg);
@@ -216,7 +217,7 @@ public class Character : MonoBehaviour
     {
         isDie = true;
         Hp = 0;
-        hpT.text = Hp + "/" + maxHp;
+        hpT.text = "<color=purple><b>" + Hp + "</color></b><size=15>/" + maxHp + "</size>";
         Color color = new Color(0.3f, 0.3f, 0.3f);
         myImage.color = color;
         Act = 0;
