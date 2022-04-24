@@ -61,11 +61,11 @@ public class Card : MonoBehaviour
                 {
                   
                     BM.ReviveToField(2);
-                    BM.card7mode = true;
+                  
                 }
                 if (cardNo == 13)
                 {
-                    BM.ReviveToField(2);
+                    BM.ReviveToField(1);
                 }
             }
            else if (selectType == 3)
@@ -96,7 +96,7 @@ public class Card : MonoBehaviour
                 BM.log.logContent.text += "\n" + BM.character.Name + "이(가) " + Name.text + " 발동!";
                 if (cardNo == 2)
                 {                 
-                    BM.getArmor(8);                 
+                    BM.getArmor(10+BM.character.turnEndur);                 
                 }
                 if (cardNo == 4)
                 {                
@@ -104,17 +104,25 @@ public class Card : MonoBehaviour
                 }
                 if (cardNo == 5)
                 {
-                    BM.ghostRevive(6);
+                    BM.ghostRevive(8);
                     BM.CopyCard(1);
+                }
+                if (cardNo == 6)
+                {
+                    BM.nextTurnStartCost+=2;
+                    BM.ghostRevive(6);
+                    BM.specialDrow(1);
+
                 }
                 if (cardNo == 8)
                 {
-                    BM.getArmor(5);
-                    BM.card8(10);
+                    cardcost = BM.cost;
+                    BM.getArmor(BM.cost*12+BM.character.turnEndur);
+                   
                 }
                 if (cardNo == 9)
                 {
-                    BM.NextTurnArmor(16);
+                    BM.NextTurnArmor(20 + BM.character.turnEndur);
                 }
                 if (cardNo == 10)
                 {
@@ -126,17 +134,18 @@ public class Card : MonoBehaviour
                     BM.useCost(cardcost);
                     BM.character.useAct(1);
                     BM.card12remake();
+
                     return;
                 }
                 if (cardNo == 16)
                 {
                     BM.reflectUp(1);
-                    BM.getArmor(3);
+                   
                 }
                 if (cardNo == 17)
                 {
-                    BM.getArmor(15);
-                    BM.NextTurnArmor(-15);
+                    BM.getArmor(20 + BM.character.turnEndur);
+                    BM.NextTurnArmor(-30);
                 }
                 if (cardNo == 21)
                 {
@@ -155,6 +164,7 @@ public class Card : MonoBehaviour
                 BM.character.useAct(1);               
                 CardUse();
             }
+            BM.AM.MyAct();
         }
         else
         {
@@ -169,24 +179,18 @@ public class Card : MonoBehaviour
         BM.log.logContent.text += "\n" + BM.character.Name + "이(가) " + Name.text + " 발동!";
         if (cardNo == 1)
         {          
-            BM.OnDmgOneTarget(5,BM.enemy,1);         
+            BM.OnDmgOneTarget(7,BM.enemy,1);         
         }
         if (cardNo == 3)
         {                
             BM.OnDmgOneTarget(7, BM.enemy,1);
             BM.specialDrow(1);          
         }
-        if (cardNo == 6)
-        {
-            BM.nextTurnStartCost++;
-            BM.ghostRevive(3);
-            BM.OnDmgOneTarget(7, BM.enemy,2);
-           
-        }
+     
         if (cardNo == 11)
         {
             BM.OnDmgOneTarget(5, BM.enemy,1);
-            BM.TurnAtkUp(1);
+       
         }
         if (cardNo == 14)
         {
@@ -213,10 +217,7 @@ public class Card : MonoBehaviour
         }
         if (cardNo == 19)
         {
-            BM.OnDmgOneTarget(6, BM.enemy,2);
-           
-            BM.ActUpCharacter(2);
-            BM.specialDrow(1);
+            BM.OnDmgOneTarget(4, BM.enemy,7);                      
         }
       
         BM.useCost(cardcost);       
@@ -229,19 +230,19 @@ public class Card : MonoBehaviour
     }
     public void SelectRevive()
     {
-        BM.log.logContent.text += "\n" + BM.character.Name + "이(가) " + Name.text + " 발동!";
+        
+
         if (cardNo == 7)
         {            
-            BM.ghostRevive(4); }
-        if (cardNo == 13)
-        {
-            BM.specialDrow(1);
+            BM.ghostRevive(4);
         }
      
+        
         BM.character.useAct(1);
         BM.useCost(cardcost);
         CardUse();
-       
+        BM.AM.MyAct();
+        BM.GraveOff();
     }
     public void SelectDeck()
     {
@@ -249,17 +250,17 @@ public class Card : MonoBehaviour
         if (cardNo == 24)
         {
             BM.card24();
-        }
-     
+        }     
         BM.character.useAct(1);
         BM.useCost(cardcost);
         CardUse();
-
+        BM.AM.MyAct();
     }
     public void decreaseCost(int i)
     {
         cardcost -= i;
         if (cardcost < 0) cardcost = 0;
+        if(cardNo!=8)
         costT.text = cardcost + "";
     }
     private void Awake()
@@ -294,7 +295,9 @@ public class Card : MonoBehaviour
 
     public void textSet()
     {
-        costT.text = cardcost + "";
+        if (cardNo != 8)
+            costT.text = cardcost + "";
+        else costT.text = "N";
     }
     [HideInInspector] public Vector3 origin_Position;
     private bool isOnMouse;

@@ -184,11 +184,13 @@ public class ActManager : MonoBehaviour
     }
     string SetPassiveName(int i) //패시브 번호에 따라 로그 출력을 위한 함수
     {
+        Debug.Log(i);
         string s = "";
         CharacterData2 chD=new CharacterData2();
-        int k = i % 4;
-        if (k == 0) k = 3;
-        s = chD.cd[(i / 4)+1].passive[(i % 4)-1];
+        int k = i % 4-1;
+        int m = i / 4 + 1;
+        if (k == -1) { k = 3; m--; }
+        s = chD.cd[m].passive[k];
         return s;
     }
     IEnumerator MyActCo()

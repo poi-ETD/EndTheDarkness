@@ -76,106 +76,7 @@ public class CardManager : MonoBehaviour
         HM = GameObject.Find("HandManager").GetComponent<HandManager>();
         AM = GameObject.Find("ActManager").GetComponent<ActManager>();
     }
-    void addComponent(GameObject obj,int i)
-    {/*
-        if (i == 1)
-        {
-           obj.AddComponent<Card1>();
-        }
-        if (i == 2)
-        {
-            obj.AddComponent<Card2>();
-        }
-        if (i == 3)
-        {
-            obj.AddComponent<Card3>();
-        }
-        if (i == 4)
-        {
-            obj.AddComponent<Card4>();
-        }
-        if (i == 5)
-        {
-            obj.AddComponent<Card5>();
-        }
-        if (i == 6)
-        {
-            obj.AddComponent<Card6>();
-        }
-        if (i == 7)
-        {
-            obj.AddComponent<Card7>();
-        }
-        if (i == 8)
-        {
-            obj.AddComponent<Card8>();
-        }
-        if (i == 9)
-        {
-            obj.AddComponent<Card9>();
-        }
-        if (i == 10)
-        {
-            obj.AddComponent<Card10>();
-        }
-         if (i == 11)
-        {
-            obj.AddComponent<Card11>();
-        }
-        if (i == 12)
-        {
-            obj.AddComponent<Card12>();
-        }
-        if (i == 13)
-        {
-            obj.AddComponent<Card13>();
-        }
-        if (i == 14)
-        {
-            obj.AddComponent<Card14>();
-        }
-        if (i == 15)
-        {
-            obj.AddComponent<Card15>();
-        }
-        if (i == 16)
-        {
-            obj.AddComponent<Card16>();
-        }
-        if (i == 17)
-        {
-            obj.AddComponent<Card17>();
-        }
-        if (i == 18)
-        {
-            obj.AddComponent<Card18>();
-        }
-        if (i == 19)
-        {
-            obj.AddComponent<Card19>();
-        }
-        if (i == 20)
-        {
-            obj.AddComponent<Card20>();
-        }
-        if (i == 21)
-        {
-            obj.AddComponent<Card21>();
-        }
-        if (i == 22)
-        {
-            obj.AddComponent<Card22>();
-        }
-        if (i == 23)
-        {
-            obj.AddComponent<Card23>();
-        }
-        if (i == 24)
-        {
-            obj.AddComponent<Card24>();
-        }*/
-    
-    }
+  
     public void Rebatch()
     {
         HM.InitCard();
@@ -245,7 +146,7 @@ public class CardManager : MonoBehaviour
         newCard.GetComponent<Card>().cardcost = cd.cd[i].Cost;
         newCard.GetComponent<Card>().realcost = cd.cd[i].Cost;
         newCard.GetComponent<Card>().selectType = cd.cd[CD.cardNo[i]].select;
-        addComponent(newCard, i);
+      
         Deck.Add(newCard);
         newCard.SetActive(false);
     }
@@ -292,7 +193,7 @@ public class CardManager : MonoBehaviour
             BM.allClear();
             TM.turnCardPlus();
         }
-        StartCoroutine("CardUseCor",curC);
+       // StartCoroutine("CardUseCor",curC);
         Rebatch();
       
     }

@@ -27,7 +27,7 @@ public class CharacterSetting :EventTrigger
       
     }
     //0->이름 1->내용 2->위치 3->패시브
-    public void SetCharacterInLobby(int i, Sprite s,int atk,int cost,int curHp,int maxHp,int formation,int[] passive)
+    public void SetCharacterInLobby(int i, Sprite s,int atk,int endur,int cost,int curHp,int maxHp,int formation,int[] passive)
     {
         myImage.sprite = s;
         no = i;
