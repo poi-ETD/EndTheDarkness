@@ -306,15 +306,18 @@ public class Card : MonoBehaviour
     {
         if (BM.otherCor) return;
 
+        if (isSelected) return;
+
         BM.isSelectedCardinHand = true; //YH
         isSelected = true; //YH
         HandManager.Instance.SelectCard(this);
 
-        HandManager.Instance.InputToOriginText(this); //YH
+        HandManager.Instance.InputToOriginText(this); //YH  
+
+        HandManager.Instance.CardMouseEnter(this); //YH
 
         if (!BM.EnemySelectMode && !BM.otherCanvasOn)
         {
-
             if (BM.card != gameObject)
             {
                 BM.SetCard(gameObject);
@@ -331,26 +334,17 @@ public class Card : MonoBehaviour
 
     private void OnMouseEnter()
     {
-        isOnMouse = true;
-        if (BM.otherCanvasOn && isGrave || BM.otherCanvasOn && isDeck)
-            HandManager.Instance.CardMouseEnter(this);
-        if (!BM.otherCanvasOn)
-        {
-            if (!isGrave && !isDeck) HandManager.Instance.CardMouseEnter(this);
-        }
+        HandManager.Instance.CardMouseEnter(this);
     }
 
     private void OnMouseOver()
     {
-     
-        if (transform.position.y == origin_Position.y && !isOnMouse)
+        isOnMouse = true;
+
+        if (HandManager.Instance.isEnableCardPointerOver)
         {
-            if (BM.otherCanvasOn && isGrave || BM.otherCanvasOn && isDeck)
-                HandManager.Instance.CardMouseEnter(this);
-            if (!BM.otherCanvasOn)
-            {
-                if (!isGrave && !isDeck) HandManager.Instance.CardMouseEnter(this);
-            }
+            HandManager.Instance.isEnableCardPointerOver = false;
+            HandManager.Instance.CardMouseEnter(this);
         }
     }
 

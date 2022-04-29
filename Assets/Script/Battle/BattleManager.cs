@@ -476,6 +476,8 @@ public class BattleManager : MonoBehaviour
     public void useCard()
     {
         CancleButton.SetActive(false);
+        HandManager.Instance.go_SelectedCardTooltip.SetActive(false);
+
         if (!EnemySelectMode)
         {
             if (card != null)

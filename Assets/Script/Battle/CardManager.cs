@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using System.IO;
 using Newtonsoft.Json;
 using System.Reflection;
+using TMPro;
 
 public class CardManager : MonoBehaviour
 {   
@@ -34,6 +35,7 @@ public class CardManager : MonoBehaviour
     CardData2 cd = new CardData2();
     string[] deckText = new string[5];
     public ScriptableObject scrip;
+
     private void Update()
     {
         graveT.text = "" + Grave.Count;

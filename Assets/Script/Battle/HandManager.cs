@@ -28,10 +28,10 @@ public class HandManager : MonoBehaviour
 
     //[SerializeField] private InputField inputField_RemoveCard;
 
-    [SerializeField] private GameObject go_SelectedCard;
-    [SerializeField] private TextMeshProUGUI text_CardName;
-    [SerializeField] private TextMeshProUGUI text_CardNo;
-    [SerializeField] private TextMeshProUGUI text_CardContext;
+    public GameObject go_SelectedCardTooltip;
+    public TextMeshProUGUI text_TooltipCardName;
+    public TextMeshProUGUI text_TooltipCardNo;
+    public TextMeshProUGUI text_TooltipCardContext;
 
     private string originCardName;
     private string originCardNo;
@@ -41,6 +41,8 @@ public class HandManager : MonoBehaviour
     private int selectedCardStack = 0; // prevent to too much fast select error between cards
 
     private Card selectedCard;
+
+    [HideInInspector] public bool isEnableCardPointerOver = false;
 
     private void Awake()
     {
@@ -92,7 +94,7 @@ public class HandManager : MonoBehaviour
 
         if (Input.GetMouseButtonDown(1))
         {
-            cancelToUse();
+            CancelToUse();
         }
     }
 
@@ -213,23 +215,18 @@ public class HandManager : MonoBehaviour
 
         if (selectedCardStack <= 2 && isInited)
         {
-            go_SelectedCard.SetActive(true);
+            CardTooltipOn(card);
 
-            text_CardName.text = card.Name.text;
-            text_CardNo.text = card.NoT.text;
-            text_CardContext.text = card.Content.text;
-
-            if (!card.isGrave && !card.isDeck)
+            if (card != selectedCard)
             {
-                if (card != selectedCard)
-                {
-                    card.transform.DOMove(new Vector3(card.gameObject.transform.position.x, card.gameObject.transform.position.y + 0.5f,
-                        card.gameObject.transform.position.z), 0.3f).SetEase(Ease.OutExpo);
-                }
-                selectedCardStack++;
-                if (selectedCardStack == 1)
-                    Invoke("initStack", 0.15f);
+                card.transform.DOMove(new Vector3(card.gameObject.transform.position.x, card.gameObject.transform.position.y + 0.5f,
+                    card.gameObject.transform.position.z), 0.3f).SetEase(Ease.OutExpo);
             }
+            selectedCardStack++;
+
+            if (selectedCardStack == 1)
+                Invoke("initStack", 0.15f);
+
             // TODO:if first card select too much fast, add below
             // if (firstcard) -> Invoke("initStack", 1f~);
         }
@@ -237,19 +234,16 @@ public class HandManager : MonoBehaviour
 
     public void CardMouseExit(Card card)
     {
-        BM.isPointerinHand = false; //YH
+        BM.isPointerinHand = false;
 
-        //Debug.Log(card.origin_Position);
-
-        if (!card.isGrave && !card.isDeck && isInited)
+        if (isInited)
         {
             if (card != selectedCard)
                 card.transform.DOMove(card.origin_Position, 0.3f).SetEase(Ease.OutExpo);
-        }
-            
+        }       
 
         if (!BM.isSelectedCardinHand)
-            go_SelectedCard.SetActive(false); // if be unpleasant because of too much fast flicker of selected card, add below
+            go_SelectedCardTooltip.SetActive(false); // if be unpleasant because of too much fast flicker of selected card, add below
                                               // 1. add polygon collider -> 2. if mouse pointer in collider go_SelectedCard.SetActive(true), else go_SelectedCard.SetActive(false)
     }
 
@@ -267,21 +261,47 @@ public class HandManager : MonoBehaviour
 
     private void InputToCardText()
     {
-        text_CardName.text = originCardName;
-        text_CardNo.text = originCardNo;
-        text_CardContext.text = originCardContext;
+        text_TooltipCardName.text = originCardName;
+        text_TooltipCardNo.text = originCardNo;
+        text_TooltipCardContext.text = originCardContext;
     }
 
-    private void cancelToUse()
+    private void CancelToUse()
     {
+        if (selectedCard == null)
+            return;
+
+        selectedCard.isSelected = false;
         selectedCard = null;
         BM.isSelectedCardinHand = false;
         BM.cancleCard();
-        go_SelectedCard.SetActive(false);
+        go_SelectedCardTooltip.SetActive(false);
+
+        Invoke("EnableCardPointerOver", 0.1f);
+    }
+
+    private void EnableCardPointerOver()
+    {
+        isEnableCardPointerOver = true;
     }
 
     public void SelectCard(Card card)
     {
+        if (selectedCard != null)
+        {
+            selectedCard.transform.DOMove(selectedCard.origin_Position, 0.3f).SetEase(Ease.OutExpo);
+            selectedCard.isSelected = false;
+        }
+
         selectedCard = card;
+    }
+
+    private void CardTooltipOn(Card card)
+    {
+        text_TooltipCardName.text = card.Name.text;
+        text_TooltipCardNo.text = card.NoT.text;
+        text_TooltipCardContext.text = card.Content.text;
+
+        go_SelectedCardTooltip.SetActive(true);
     }
 }

@@ -115,7 +115,7 @@ public class Character : MonoBehaviour
    
         if (Hp <= 0) die();
         if (Hp > maxHp) Hp = maxHp;
-        hpT.text = "<color=purple><b>" + Hp + "</color></b><size=15>/" + maxHp + "</size>";
+        hpT.text = "<color=#8f93ff><b>" + Hp + "</color></b><size=15>/" + maxHp + "</size>";
     }
     
     public void BoardClear()
