@@ -50,6 +50,9 @@ public class Character : MonoBehaviour
     public int[] nextStatus = new int[20];
     public int curNo;
     public CharacterPassive myPassive;
+
+    public int stringHp;
+    public int stringArmor;
     //0 -> 중독
 
     public int beforeArmor;
@@ -82,6 +85,7 @@ public class Character : MonoBehaviour
         {
             Armor = 0;
         }
+        stringArmor = Armor;
         armorT.text = "" + Armor;
     }
     public void StatusAbnom(int status,int count)
@@ -112,9 +116,10 @@ public class Character : MonoBehaviour
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         myPassive = GetComponent<CharacterPassive>();
         myImage = transform.GetChild(7).GetComponent<Image>();
-   
+      
         if (Hp <= 0) die();
         if (Hp > maxHp) Hp = maxHp;
+        stringHp = Hp;
         hpT.text = "<color=purple><b>" + Hp + "</color></b><size=15>/" + maxHp + "</size>";
     }
     
@@ -133,6 +138,12 @@ public class Character : MonoBehaviour
     public void onMinusAct(int i)
     {
         Act -= i;
+        if (i > 0)
+        {
+            GameObject dmgText = Instantiate(BM.DmgPrefebs, gameObject.transform);
+            dmgText.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
+            dmgText.GetComponent<DMGtext>().GetType(1, i);
+        }
         if (Act < 0) Act = 0;
         actT.text = "" + Act;
         NextTurnMinusAct = 0;
@@ -195,28 +206,47 @@ public class Character : MonoBehaviour
         else
         {
             Hp -= dmg;
+          
         }
     }
-    public void onDamage()
-    {                                
-        if (Hp <= 0)
+    public void onDamage(int dmg)
+    {
+        GameObject dmgText = Instantiate(BM.DmgPrefebs, gameObject.transform);
+        dmgText.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
+        dmgText.GetComponent<DMGtext>().GetType(0, dmg);
+      
+        if (stringArmor > 0)
+        {
+            stringArmor -= dmg;
+            if (stringArmor < 0)
+            {
+                stringHp += stringArmor;
+                stringArmor = 0;
+                
+            }
+        }
+        else
+        {
+            stringHp -= dmg;
+        }
+        armorT.text = stringArmor + "";
+        if (stringHp <= 0)
         {
             if (!isDie)
             {
-                Hp = 0;
+                stringHp = 0;
                 die();
             }
         }
         if (Hp < 0) Hp = 0;
-        armorT.text = Armor + "";
-
-        hpT.text = "<color=purple><b>" + Hp + "</color></b><size=15>/" + maxHp + "</size>";   
+        hpT.text = "<color=purple><b>" + stringHp + "</color></b><size=15>/" + maxHp + "</size>";   
 
     }
     void die()
     {
         isDie = true;
         Hp = 0;
+        
         hpT.text = "<color=purple><b>" + Hp + "</color></b><size=15>/" + maxHp + "</size>";
         Color color = new Color(0.3f, 0.3f, 0.3f);
         myImage.color = color;

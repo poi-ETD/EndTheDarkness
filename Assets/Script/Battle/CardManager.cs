@@ -197,16 +197,7 @@ public class CardManager : MonoBehaviour
         Rebatch();
       
     }
-    IEnumerator CardUseCor(Character curC)
-    {
-        while (BM.otherCor)
-        {
-            yield return new WaitForSeconds(0.1f);
-        }
-        AM.MyAct();
-        yield return null;
-       
-    }
+
     public void FieldToGrave(GameObject c)
     {
         for (int i = field.Count - 1; i >= 0; i--)

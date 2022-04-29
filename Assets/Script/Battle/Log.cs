@@ -11,6 +11,7 @@ public class Log : MonoBehaviour
     [SerializeField] GameObject logTextPosition;
     [SerializeField] GameObject logText;
     bool done;
+    int[] passive = new int[30];
     private void Update()
     {
         if (done)
@@ -40,5 +41,31 @@ public class Log : MonoBehaviour
         OnButton.SetActive(true);
         BM.otherCanvasOn = false;       
         gameObject.SetActive(false);
+    }
+    public void setPassive(int i,int count)
+    {
+        passive[i] += count;
+    }
+    public void writePassiveInLog()
+    {
+        for(int i = 0; i < passive.Length; i++)
+        {
+            if (passive[i] > 0)
+            {
+          
+                logContent.text += SetPassiveName(i, passive[i]);
+                passive[i] = 0;
+            }
+        }
+    }
+    string SetPassiveName(int i,int c) //패시브 번호에 따라 로그 출력을 위한 함수
+    {
+        string s = "";
+        CharacterData2 chD = new CharacterData2();
+        int k = i % 4 - 1;
+        int m = i / 4 + 1;
+        if (k == -1) { k = 3; m--; }
+        s ="\n"+ chD.cd[m].Name+"이 "+chD.cd[m].passive[k]+" 발동("+c+")";
+        return s;
     }
 }

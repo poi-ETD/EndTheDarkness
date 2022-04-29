@@ -164,7 +164,7 @@ public class Card : MonoBehaviour
                 BM.character.useAct(1);               
                 CardUse();
             }
-            BM.AM.MyAct();
+            BM.AM.Act();
         }
         else
         {
@@ -223,6 +223,8 @@ public class Card : MonoBehaviour
         BM.useCost(cardcost);       
         BM.character.useAct(1);
         CardUse();
+    
+        BM.AM.Act();
     }
     public void CancleRevive()
     {
@@ -241,8 +243,8 @@ public class Card : MonoBehaviour
         BM.character.useAct(1);
         BM.useCost(cardcost);
         CardUse();
-        BM.AM.MyAct();
-        BM.GraveOff();
+        BM.AM.Act();
+        BM.Click_GraveOff();
     }
     public void SelectDeck()
     {
@@ -254,7 +256,7 @@ public class Card : MonoBehaviour
         BM.character.useAct(1);
         BM.useCost(cardcost);
         CardUse();
-        BM.AM.MyAct();
+        BM.AM.Act();
     }
     public void decreaseCost(int i)
     {

@@ -17,7 +17,8 @@ public class TurnManager : MonoBehaviour
     public CardManager CM;
     public int leftCost;
     [SerializeField] GameObject pleaseSelect;
-   public Image turnEndImage;
+    public Image turnEndImage;
+    public int turnAtk;
     public void turnCardPlus()
     {
         turnCard++;
@@ -53,6 +54,7 @@ public class TurnManager : MonoBehaviour
         turnText.text = "" + t;
         PlayerTurn = false;       
         EndButton.SetActive(false);
+        turnEndImage.color = new Color(0.3f, 0.3f, 0.3f);
         AM = GameObject.Find("ActManager").GetComponent<ActManager>();
     }
     private void Start()
@@ -119,7 +121,7 @@ public class TurnManager : MonoBehaviour
 
         }
 
-        AM.MyAct();
+        AM.Act();
 
         while (BM.otherCor)
         {
@@ -140,12 +142,12 @@ public class TurnManager : MonoBehaviour
 
 
 
-    public void PlayerTurnEndButton()
-    {if (BM.otherCor || BM.turnStarting) return;
+    public void Click_PlayerTurnEndButton()
+    {   if (BM.otherCor || BM.turnStarting||AM.isEarlyActing) return; //위의 3 경우에는 내 턴이 아니므로 눌러도 반응 x
         turnEndImage.color = new Color(0.3f, 0.3f, 0.3f);
         GameObject.Find("ActManager").GetComponent<ActManager>().LateAct();
     }
-    public int turnAtk;
+
    
     void PSoff()
     {
@@ -215,7 +217,7 @@ public class TurnManager : MonoBehaviour
         {
             BM.characters[i].myPassive.TurnStart();
         }
-        AM.MyAct();
+        AM.Act();
       
     }
 

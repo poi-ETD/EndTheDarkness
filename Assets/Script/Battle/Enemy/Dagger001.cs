@@ -44,9 +44,8 @@ public class Dagger001 : MonoBehaviour
         if (BM.diecount < BM.characters.Count)
         {
             if (!myEnemy.isDie)
-            {
-              
-               if ((curTurn + 1) % 5 != 0)
+            {               
+                if ((curTurn + 1) % 5 != 0)
                   {
                       pattern = Random.Range(0, 3);
                       if (plusname == 2)
