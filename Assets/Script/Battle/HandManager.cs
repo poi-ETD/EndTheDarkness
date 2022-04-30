@@ -28,6 +28,8 @@ public class HandManager : MonoBehaviour
 
     //[SerializeField] private InputField inputField_RemoveCard;
 
+    public GameObject go_UseButton;
+
     public GameObject go_SelectedCardTooltip;
     public TextMeshProUGUI text_TooltipCardName;
     public TextMeshProUGUI text_TooltipCardNo;
@@ -40,9 +42,8 @@ public class HandManager : MonoBehaviour
     BattleManager BM;
     private int selectedCardStack = 0; // prevent to too much fast select error between cards
 
-    private Card selectedCard;
-
-    [HideInInspector] public bool isEnableCardPointerOver = false;
+    private Card onPointerCard = null; // this field have script<Card> on mouse pointer
+    private Card selectedCard = null; // this field have script<Card> selected
 
     private void Awake()
     {
@@ -71,21 +72,19 @@ public class HandManager : MonoBehaviour
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Keypad1))
-        {
             BM.specialDrow(1);
-        }
 
         if (Input.GetKeyDown(KeyCode.Keypad2))
         {
-           
-        }
+
+        } 
 
         if (Input.GetKeyDown(KeyCode.Keypad3))
         {
             if (CM.field.Count > 0)
             {
                 CM.FieldToGrave(CM.field[CM.field.Count - 1]);
-                CM.Rebatch();
+                ArrangeCard();
             }
         }
 
@@ -93,41 +92,32 @@ public class HandManager : MonoBehaviour
             InputToCardText();
 
         if (Input.GetMouseButtonDown(1))
-        {
             CancelToUse();
-        }
     }
 
     public void AddCard(GameObject newCard)
     {
         if (!isInited)
-        {
-         
+        {       
             newCard.transform.position = new Vector3(18,-7, 0);
-       
 
             newCard.SetActive(true);
             int random_Rotation_Z = Random.Range(-10, 10);
             float random_Position_X = Random.Range(-0.2f, 0.2f);
             float random_Position_Y = Random.Range(-0.2f, 0.2f);
-            newCard.transform.parent = GameObject.Find("HandCardCanvas").transform;
-         
+            newCard.transform.parent = GameObject.Find("HandCardCanvas").transform;       
 
             newCard.transform.rotation = Quaternion.Euler(new Vector3(0, 0, random_Rotation_Z));
             //newCard.GetComponent<RectTransform>().localScale = new Vector3(0.5f, 0.5f, 0.5f);
             newCard.transform.DOMove(new Vector2(random_Position_X, random_Position_Y - 8f), 1);
             newCard.transform.DOScale(new Vector3(1f, 1f, 1f), 1).SetEase(Ease.OutExpo);
-            newCard.GetComponent<Image>().DOFade(1f, 1).SetEase(Ease.OutExpo); // TODO:non action function -> action function
-              
-             
-            
+            newCard.GetComponent<Image>().DOFade(1f, 1).SetEase(Ease.OutExpo); // TODO:non action function -> action function           
              
             list_Card.Add(newCard);
             count_Card++;
         }
         else
         {
-            
             //card = Instantiate(cardSample, new Vector3(8f, 0f, 0f), Quaternion.identity);
             // card.GetComponent<HandCard>().handNumber = count_Card;
             newCard.SetActive(true);
@@ -135,11 +125,9 @@ public class HandManager : MonoBehaviour
             newCard.transform.position = new Vector3(18f, -10f, 0f);
             newCard.transform.rotation = Quaternion.identity;       
             newCard.GetComponent<Image>().DOFade(1f, 1).SetEase(Ease.OutExpo);
-            ArrangeCard();
-           
+            ArrangeCard(); 
         }
     }
-   
 
     private void RemoveCard()
     {
@@ -162,14 +150,13 @@ public class HandManager : MonoBehaviour
     }
 
     public void InitCard()
-    {
-        
+    { 
         ArrangeCard();
 
         isInited = true;
     }
 
-    private void ArrangeCard()
+    public void ArrangeCard()
     {
         float x = 16 / (float)CM.field.Count;
         float initX = -8f + x / 2;
@@ -211,7 +198,8 @@ public class HandManager : MonoBehaviour
     {
         if (BM.turnStarting) return;
 
-        BM.isPointerinHand = true; //YH
+        onPointerCard = card;
+        BM.isPointerinHand = true;
 
         if (selectedCardStack <= 2 && isInited)
         {
@@ -234,6 +222,7 @@ public class HandManager : MonoBehaviour
 
     public void CardMouseExit(Card card)
     {
+        onPointerCard = null;
         BM.isPointerinHand = false;
 
         if (isInited)
@@ -271,18 +260,17 @@ public class HandManager : MonoBehaviour
         if (selectedCard == null)
             return;
 
+        if (selectedCard != onPointerCard)
+        {
+            SelectCardToOriginPosition();
+            go_SelectedCardTooltip.SetActive(false);
+        }
+
         selectedCard.isSelected = false;
-        selectedCard = null;
         BM.isSelectedCardinHand = false;
         BM.cancleCard();
-        go_SelectedCardTooltip.SetActive(false);
 
-        Invoke("EnableCardPointerOver", 0.1f);
-    }
-
-    private void EnableCardPointerOver()
-    {
-        isEnableCardPointerOver = true;
+        selectedCard = null;
     }
 
     public void SelectCard(Card card)
@@ -303,5 +291,11 @@ public class HandManager : MonoBehaviour
         text_TooltipCardContext.text = card.Content.text;
 
         go_SelectedCardTooltip.SetActive(true);
+    }
+
+    public void SelectCardToOriginPosition()
+    {
+        if (selectedCard != null)
+            selectedCard.transform.DOMove(selectedCard.origin_Position, 0.3f).SetEase(Ease.OutExpo);
     }
 }

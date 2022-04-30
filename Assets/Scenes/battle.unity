@@ -1017,6 +1017,7 @@ MonoBehaviour:
   cardSample: {fileID: 7875333497063062054, guid: 03badff49bd047140976503668ebaa81,
     type: 3}
   isInited: 0
+  go_UseButton: {fileID: 1927824414}
   go_SelectedCardTooltip: {fileID: 9053282550138055830}
   text_TooltipCardName: {fileID: 9053282549421450790}
   text_TooltipCardNo: {fileID: 9053282548953910597}
@@ -2622,7 +2623,6 @@ MonoBehaviour:
   TurnCardCount: 0
   Warn: {fileID: 759816071}
   warntext: {fileID: 129511392}
-  useButton: {fileID: 1927824414}
   forward: []
   back: []
   line: 1
@@ -10056,7 +10056,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4287795858
+    rgba: 4294967295
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
