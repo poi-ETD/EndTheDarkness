@@ -1017,10 +1017,11 @@ MonoBehaviour:
   cardSample: {fileID: 7875333497063062054, guid: 03badff49bd047140976503668ebaa81,
     type: 3}
   isInited: 0
-  go_SelectedCard: {fileID: 9053282550138055830}
-  text_CardName: {fileID: 9053282549421450790}
-  text_CardNo: {fileID: 9053282548953910597}
-  text_CardContext: {fileID: 9053282549770701055}
+  go_UseButton: {fileID: 1927824414}
+  go_SelectedCardTooltip: {fileID: 9053282550138055830}
+  text_TooltipCardName: {fileID: 9053282549421450790}
+  text_TooltipCardNo: {fileID: 9053282548953910597}
+  text_TooltipCardContext: {fileID: 9053282549770701055}
 --- !u!4 &131153709
 Transform:
   m_ObjectHideFlags: 0
@@ -2622,7 +2623,6 @@ MonoBehaviour:
   TurnCardCount: 0
   Warn: {fileID: 759816071}
   warntext: {fileID: 129511392}
-  useButton: {fileID: 1927824414}
   forward: []
   back: []
   line: 1
@@ -2635,7 +2635,7 @@ MonoBehaviour:
   ReviveCount: 0
   card7mode: 0
   Enemys:
-  - {fileID: 8526652786934175351, guid: c47a2c53f9e5149429e525136a7d0f41, type: 3}
+  - {fileID: 8526652786934175351, guid: 97414c795e2149a43a018fd8de173a23, type: 3}
   - {fileID: 4683036356863319242, guid: 0b358fe23b42c514fb7e1e211c9351d8, type: 3}
   - {fileID: 3104608646525041465, guid: af64e7082df220545ae667f664153da1, type: 3}
   - {fileID: 1233573338231355905, guid: f5632c08302212b439772558243ed323, type: 3}
@@ -2695,6 +2695,8 @@ MonoBehaviour:
   otherCor: 0
   sparkyPassive2: 0
   turnStarting: 0
+  turnEndu: 0
+  endu: 0
   isPointerinHand: 0
   isSelectedCardinHand: 0
   DmgPrefebs: {fileID: 3516283684887914833, guid: dd90e8f3edae7fc489918575a58fd894,
@@ -10046,15 +10048,16 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\uC0AC\uC6A9"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 0}
-  m_sharedMaterial: {fileID: 0}
+  m_fontAsset: {fileID: 11400000, guid: ac331e2b3e2c3a24a9ec45c76cc09727, type: 2}
+  m_sharedMaterial: {fileID: 8932091365885868036, guid: ac331e2b3e2c3a24a9ec45c76cc09727,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294942627
-  m_fontColor: {r: 0.6392157, g: 0.62352943, b: 1, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -10157,7 +10160,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 245, y: -50}
+  m_AnchoredPosition: {x: 0, y: -120}
   m_SizeDelta: {x: 140, y: 46}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1927824416
@@ -10233,7 +10236,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 954c388ae9e1f284bb34b1ae7398f525, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c4cd3f15add190e4a805dd4a1f8c2743, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -11878,7 +11881,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9053282550138055831}
   m_Layer: 5
-  m_Name: Card1
+  m_Name: Card Tooltip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

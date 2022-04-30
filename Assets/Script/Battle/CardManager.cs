@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using System.IO;
 using Newtonsoft.Json;
 using System.Reflection;
+using TMPro;
 
 public class CardManager : MonoBehaviour
 {   
@@ -34,6 +35,7 @@ public class CardManager : MonoBehaviour
     CardData2 cd = new CardData2();
     string[] deckText = new string[5];
     public ScriptableObject scrip;
+
     private void Update()
     {
         graveT.text = "" + Grave.Count;
@@ -75,12 +77,6 @@ public class CardManager : MonoBehaviour
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         HM = GameObject.Find("HandManager").GetComponent<HandManager>();
         AM = GameObject.Find("ActManager").GetComponent<ActManager>();
-    }
-  
-    public void Rebatch()
-    {
-        HM.InitCard();
-     
     }
 
     public void CardToField()
@@ -193,8 +189,8 @@ public class CardManager : MonoBehaviour
             BM.allClear();
             TM.turnCardPlus();
         }
-       // StartCoroutine("CardUseCor",curC);
-        Rebatch();
+        // StartCoroutine("CardUseCor",curC);
+        HandManager.Instance.ArrangeCard();
       
     }
     IEnumerator CardUseCor(Character curC)
@@ -270,7 +266,7 @@ public class CardManager : MonoBehaviour
             Deck.Add(field[i]);
             field.RemoveAt(i);
         }
-        Rebatch();
+        HandManager.Instance.ArrangeCard();
     }
     public void ToGrave(GameObject Fcard)
     {
@@ -324,8 +320,8 @@ public class CardManager : MonoBehaviour
                 break;
             }
         }
-   
-        Rebatch();
+
+        HandManager.Instance.ArrangeCard();
     }
     public void Revive()
     {
@@ -443,7 +439,7 @@ public class CardManager : MonoBehaviour
                 }
             }
         }
-        Rebatch();
+        HandManager.Instance.ArrangeCard();
     }
     public void GraveToDeck(GameObject c)
     {
@@ -464,7 +460,7 @@ public class CardManager : MonoBehaviour
                 break;
             }
         }
-        Rebatch();
+        HandManager.Instance.ArrangeCard();
     }
     public void DeckToGrave(GameObject c)
     {
@@ -485,6 +481,6 @@ public class CardManager : MonoBehaviour
                 break;
             }
         }
-        Rebatch();
+        HandManager.Instance.ArrangeCard();
     }
 }
