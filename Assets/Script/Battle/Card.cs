@@ -309,52 +309,33 @@ public class Card : MonoBehaviour
     {
         if (BM.otherCor) return;
 
+        if (isSelected) return;
+
         BM.isSelectedCardinHand = true; //YH
         isSelected = true; //YH
         HandManager.Instance.SelectCard(this);
-
-        HandManager.Instance.InputToOriginText(this); //YH
+        HandManager.Instance.InputToOriginText(this); //YH  
+        HandManager.Instance.CardMouseEnter(this); //YH
 
         if (!BM.EnemySelectMode && !BM.otherCanvasOn)
         {
-
             if (BM.card != gameObject)
-            {
                 BM.SetCard(gameObject);
-            }
             else
-            {
                 BM.cancleCard();
-            }
         }
         else if (isGrave || isDeck)
-        {
-            CM.ClickInGrave(gameObject); }
+            CM.ClickInGrave(gameObject);
     }
 
     private void OnMouseEnter()
     {
-        isOnMouse = true;
-        if (BM.otherCanvasOn && isGrave || BM.otherCanvasOn && isDeck)
-            HandManager.Instance.CardMouseEnter(this);
-        if (!BM.otherCanvasOn)
-        {
-            if (!isGrave && !isDeck) HandManager.Instance.CardMouseEnter(this);
-        }
+        HandManager.Instance.CardMouseEnter(this);
     }
 
     private void OnMouseOver()
     {
-     
-        if (transform.position.y == origin_Position.y && !isOnMouse)
-        {
-            if (BM.otherCanvasOn && isGrave || BM.otherCanvasOn && isDeck)
-                HandManager.Instance.CardMouseEnter(this);
-            if (!BM.otherCanvasOn)
-            {
-                if (!isGrave && !isDeck) HandManager.Instance.CardMouseEnter(this);
-            }
-        }
+        isOnMouse = true;
     }
 
     private void OnMouseExit()

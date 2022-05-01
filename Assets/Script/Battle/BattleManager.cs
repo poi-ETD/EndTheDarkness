@@ -30,7 +30,6 @@ public class BattleManager : MonoBehaviour
     public int TurnCardCount;
     [SerializeField] GameObject Warn;
     public Text warntext;
-    [SerializeField] GameObject useButton;
     public List<Character> forward = new List<Character>();
     public List<Character> back = new List<Character>();
     public int line;
@@ -452,7 +451,7 @@ public class BattleManager : MonoBehaviour
             /*tra2 = c.GetComponent<Transform>();
             tra2.localScale = new Vector2(1.5f, 1.5f);       
             c.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, -230, 0);*/
-            useButton.SetActive(true);
+            HandManager.Instance.go_UseButton.SetActive(true);
             
             card = c;
         }
@@ -465,11 +464,10 @@ public class BattleManager : MonoBehaviour
 
             card = null;
 
-            useButton.SetActive(false);
+            HandManager.Instance.go_UseButton.SetActive(false);
 
-
-            if (!isSelectedCardinHand)
-                CM.Rebatch();
+            if (!isPointerinHand)
+                HandManager.Instance.SelectCardToOriginPosition();
         }
     }
 
@@ -477,6 +475,8 @@ public class BattleManager : MonoBehaviour
     public void Click_useCard()
     {
         CancleButton.SetActive(false);
+        HandManager.Instance.go_SelectedCardTooltip.SetActive(false);
+
         if (!EnemySelectMode)
         {
             if (card != null)
@@ -834,7 +834,7 @@ public class BattleManager : MonoBehaviour
         copyCard.GetComponent<Card>().iscard20Mode = true;
         copyCard.GetComponent<Card>().cardcost = 0;
         card = copyCard;
-        useButton.SetActive(true);
+        HandManager.Instance.go_UseButton.SetActive(true);
     }
     public void Click_cancleButtonUse()
     {

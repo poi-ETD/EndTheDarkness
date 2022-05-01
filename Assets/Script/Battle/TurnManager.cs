@@ -69,8 +69,8 @@ public class TurnManager : MonoBehaviour
         }
     }
     public void PlayerTurnEnd()
-    {   
-        for(int i = 0; i < BM.Enemys.Length; i++)
+    {
+        for (int i = 0; i < BM.Enemys.Length; i++)
         {
             if (!BM.Enemys[i].GetComponent<Enemy>().isDie)
             {
@@ -142,9 +142,14 @@ public class TurnManager : MonoBehaviour
 
 
 
-    public void Click_PlayerTurnEndButton()
-    {   if (BM.otherCor || BM.turnStarting||AM.isEarlyActing) return; //위의 3 경우에는 내 턴이 아니므로 눌러도 반응 x
+
+    public void PlayerTurnEndButton()
+    {
+        if (BM.otherCor || BM.turnStarting) return; // 내 턴이 아니므로 눌러도 반응 x
         turnEndImage.color = new Color(0.3f, 0.3f, 0.3f);
+        HandManager.Instance.go_UseButton.SetActive(false); //YH
+        HandManager.Instance.go_SelectedCardTooltip.SetActive(false); //YH
+        HandManager.Instance.SelectCardToOriginPosition(); //YH
         GameObject.Find("ActManager").GetComponent<ActManager>().LateAct();
     }
 
