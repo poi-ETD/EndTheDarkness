@@ -96,7 +96,7 @@ public class CardManager : MonoBehaviour
         {
             Deck[i].SetActive(true);
             Deck[i].GetComponent<Card>().cardcost = Deck[i].GetComponent<Card>().realcost;
-            Deck[i].GetComponent<Card>().costT.text=Deck[i].GetComponent<Card>().cardcost+ "";
+            Deck[i].GetComponent<Card>().textSet();
             Deck[i].SetActive(false);
           
         }
@@ -104,7 +104,7 @@ public class CardManager : MonoBehaviour
         {
             Grave[i].SetActive(true);
             Grave[i].GetComponent<Card>().cardcost = Grave[i].GetComponent<Card>().realcost;
-            Grave[i].GetComponent<Card>().costT.text = Grave[i].GetComponent<Card>().realcost+"";
+            Grave[i].GetComponent<Card>().textSet();
             Grave[i].SetActive(false);
         }
         StartCoroutine("turnStartDrow");
@@ -193,16 +193,7 @@ public class CardManager : MonoBehaviour
         HandManager.Instance.ArrangeCard();
       
     }
-    IEnumerator CardUseCor(Character curC)
-    {
-        while (BM.otherCor)
-        {
-            yield return new WaitForSeconds(0.1f);
-        }
-        AM.MyAct();
-        yield return null;
-       
-    }
+
     public void FieldToGrave(GameObject c)
     {
         for (int i = field.Count - 1; i >= 0; i--)

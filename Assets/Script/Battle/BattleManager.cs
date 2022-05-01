@@ -164,7 +164,7 @@ public class BattleManager : MonoBehaviour
             }
         }
     }
-    public void SelectFormationCollapse(int c)
+    public void Click_SelectFormationCollapse(int c)
     {
         CD.line = line;
         if (MoveToForward)
@@ -195,10 +195,11 @@ public class BattleManager : MonoBehaviour
             characters[i].curNo = i;
         }
         otherCanvasOn = false;
+        otherCor = false;
         FormationCollapsePopup.SetActive(false);
         LineObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-820, 360 - 150 * line);
     }
-    public void StackPopUpOn()
+    public void Click_StackPopUpOn()
     {
         if (StackPopUp.activeSelf)
         {
@@ -222,7 +223,7 @@ public class BattleManager : MonoBehaviour
             StackPopUp.SetActive(true);
         }
     }
-    public void toMain()
+    public void Click_toMain()
     {
 
         for (int i = 0; i < characters.Count; i++)
@@ -342,7 +343,7 @@ public class BattleManager : MonoBehaviour
         completeButton.SetActive(true);
         SelectMode = true;
     }
-    public void Complete()
+    public void Click_Complete()
     {
         condition.SetActive(false);
         SelectMode = false;
@@ -471,7 +472,7 @@ public class BattleManager : MonoBehaviour
     }
 
 
-    public void useCard()
+    public void Click_useCard()
     {
         CancleButton.SetActive(false);
         HandManager.Instance.go_SelectedCardTooltip.SetActive(false);
@@ -537,61 +538,41 @@ public class BattleManager : MonoBehaviour
     {
         Warn.SetActive(false);
     }
-    public void OnDmgOneTarget(int dmg, Enemy E, int n)
+    public void OnDmgOneTarget(int dmg, Enemy E, int n) //카드를 사용해 데미지를 입힐 경우
     {
         CardUseText.text = "사용";
         EnemySelectMode = false;
         log.logContent.text += "\n" + E.Name + "에게 " + (dmg + character.turnAtk) + "의 데미지!("+n+")";
-        OnAttack(dmg, E, character, n);
-    }
-    public void OnAttack(int dmg, Enemy enemy, Character c, int n)
-    {
-        StartCoroutine(PlayerAttack(dmg, enemy, c, n));
+        for (int k = 0; k < n; k++)
+        {
+            enemy.OnHitCal(dmg + character.turnAtk, character.curNo, false);
+        }
+        
     }
 
-    IEnumerator PlayerAttack(int dmg, Enemy enemy, Character c, int n)
+    public void OnAttack(int dmg,Enemy E,Character c,int n) //패시브나 리플렉트로 인하여 데미지 입힐 경우
     {
         for (int k = 0; k < n; k++)
-        {          
-            enemy.onHit(dmg + c.turnAtk, c.curNo,false);
-            yield return new WaitForSeconds(0.1f);
-         
-            while (otherCor)
-            {
-                yield return new WaitForSeconds(0.1f);
-            }           
-
-        }
-        AM.MyAct();
+        {
+           E.OnHitCal(dmg, c.curNo, false);
+        }     
     }
 
-
-    public void AllAttack(int dmg, Character c, int n)
+    public void AllAttack(int dmg, Character c, int n) //흑백등을 이용해 데미지를 전체에게 입힐 경우
     {
         log.logContent.text += "\n적 전체에게 " + dmg + c.turnAtk + "의 데미지!(" + n + ")";
-        StartCoroutine(AllAttackCo(dmg, c, n));
-
-    }
-
-    IEnumerator AllAttackCo(int dmg, Character c, int n)
-    {
         for (int k = 0; k < n; k++)
         {
             for (int i = 0; i < Enemys.Length; i++)
             {
-                Enemys[i].GetComponent<Enemy>().onHit(dmg + c.turnAtk, c.curNo, false);
+                Enemys[i].GetComponent<Enemy>().OnHitCal(dmg + c.turnAtk, c.curNo, false);
 
-            }
-            yield return new WaitForSeconds(0.1f);
-           
-            while (otherCor)
-            {
-                yield return new WaitForSeconds(0.1f);
-            }
+            }        
         }
-        AM.MyAct();
-
+        
     }
+
+   
 
     public void getArmor(int armor) //방어도 획득
     {
@@ -635,7 +616,7 @@ public class BattleManager : MonoBehaviour
 
             yield return new WaitForSeconds(0.25f);
         }
-        AM.MyAct();
+        //AM.MyAct();
         // CM.Rebatch();           
     }
     public void ghostRevive(int ghostCount) //망자부활 + ghostCount
@@ -654,7 +635,7 @@ public class BattleManager : MonoBehaviour
         {
             q.GhostRevive(ghostCount);
         }
-    } //한번 손 봐야 함
+    } 
     public void CopyCard(int CopyCount) //덱에 카드 복사
     {
         log.logContent.text += "\n덱에" + card.GetComponent<Card>().Name.text + "(을)를 복사!";
@@ -730,12 +711,12 @@ public class BattleManager : MonoBehaviour
                 if (card != CM.field[i])
                     CM.FieldToDeck(CM.field[i]);
             }
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(0.25f);
         }
         specialDrow(g);
 
     }
-    public void GraveOn() //무덤 열기
+    public void Click_GraveOn() //무덤 열기 //특정 경우에는 클릭 안 해도 자동으로 열림
     {
         otherCanvasOn = true;
         if (GraveReviveMode)
@@ -776,7 +757,7 @@ public class BattleManager : MonoBehaviour
         CM.DeckOff();
         DeckView.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 2000, 0);
     }
-    public void ReviveCancleUse()
+    public void Click_ReviveCancleUse() //무덤에서 선택버튼 누를 때
     {
         card.GetComponent<Card>().CancleRevive();
         for (int i = 0; i < CM.ReviveCard.Count; i++)
@@ -793,11 +774,11 @@ public class BattleManager : MonoBehaviour
         otherCanvasOn = false;
         graveView.SetActive(false);
     }
-    public void GraveOff()
+    public void Click_GraveOff() //무덤에서 그냥 종료 버튼
     {
-        if (GraveReviveMode)
+        if (GraveReviveMode) //만약에 무덤에서 카드를 고르는 카드 사용 중일 때는 그 카드의 발동을 취소하는 함수 호출
         {
-            ReviveCancleUse();
+            Click_ReviveCancleUse();
         }
         else
         {
@@ -812,7 +793,7 @@ public class BattleManager : MonoBehaviour
     public void ReviveToField(int r)
     {
         GraveReviveMode = true;
-        GraveOn();
+        Click_GraveOn();
         ReviveCount += r;
     }
     public void RandomReviveToField(int n) //랜덤으로 무덤에서 필드로 카드 가져오기
@@ -827,7 +808,7 @@ public class BattleManager : MonoBehaviour
 
         }
     }
-    public void ActUpCharacter(int c) //특정 캐릭터의 행동력을 증가시킴
+    public void ActUpCharacter(int c) //특정 캐릭터(no가 c인)의 행동력을 증가시킴
     {
         for (int i = 0; i < characters.Count; i++)
         {
@@ -855,7 +836,7 @@ public class BattleManager : MonoBehaviour
         card = copyCard;
         HandManager.Instance.go_UseButton.SetActive(true);
     }
-    public void cancleButtonUse()
+    public void Click_cancleButtonUse()
     {
         Destroy(copyCard);
         otherCanvasOn = false;
@@ -907,7 +888,7 @@ public class BattleManager : MonoBehaviour
             RancomSelectCard.Add(RandomCardList[RandomCardList.Count - i]);
         }
     }
-    public void SelectReward()
+    public void Click_SelectReward()
     {
         CardData CardD;
         string path = Path.Combine(Application.persistentDataPath, "CardData.json");
@@ -928,9 +909,9 @@ public class BattleManager : MonoBehaviour
         cardData = JsonConvert.SerializeObject(CardD);
         path = Path.Combine(Application.persistentDataPath, "CardData.json");
         File.WriteAllText(path, cardData);
-        NoSelectAndMain();
+        Click_NoSelectAndMain();
     }
-    public void NoSelectAndMain()
+    public void Click_NoSelectAndMain()
     {
         for (int i = 0; i < characters.Count; i++)
         {
@@ -962,40 +943,18 @@ public class BattleManager : MonoBehaviour
         Time.timeScale = 1;
         SceneManager.LoadScene("Lobby");
     }
-    public void Defetead()
+    public void Defetead() //패배했을 시 패배 창 띄우기
     {
         defeated.SetActive(true);
     }
-    public void goEnemySelectMode()
+    public void goEnemySelectMode() //공격 카드 선택 시 어떤 적을 공격할지 고르는 모드
     {
-        EnemySelectMode = true;
+        EnemySelectMode = true; //이 상태로 들어가면 Enemy를 클릭시 선택이 된다.
         CardUseText.text = "취소";
     }
 
-    public struct EnemyAct
-    {
-        public int type; /*
-                    0->데미지 1->행감 2->방어도 3->체력 회복 4->상태이상 5->은신/무적
-        그 외 는 해당 스크립트 가 아닌 각각 개별 스크립트에서 즉발로 처리 ex)공격력 증가
-        행감,(은신 / 무적 ) 등은 선행동, 그 외에는 후 행동
-        */
-        public int mount; //데미지 , 방어도, 회복 량,상태이상 종류*10+상태이상 양(여기는 변경가능성 多,0>은신 1>무적 2>불사)
-        public Character target;
-        public Enemy myEnemy;
-        public Enemy targetEnemy;
-
-        public EnemyAct(int type, int mount, Character target, Enemy myEnemy, Enemy targetEnemy)
-        {
-            this.type = type;
-            this.mount = mount;
-            this.target = target;
-            this.myEnemy = myEnemy;
-            this.targetEnemy = targetEnemy;
-
-        }
-    }
-    public List<EnemyAct> earlyActList = new List<EnemyAct>();
-    public List<EnemyAct> lateActList = new List<EnemyAct>();
+ 
+   
 
     //type==0 랜덤 대상 type==1 방어도 높은 적 우선 type==2 체력 높은 적 우선 type==3 방어도 있는 적 우선
     //type==4 모든 대상
@@ -1020,12 +979,11 @@ public class BattleManager : MonoBehaviour
             {
                 rand2 = Random.Range(0, line);
                 while (characters[rand2].isDie) rand2 = Random.Range(0, line);
-                EnemyAct enemyAct = new EnemyAct(0, dmg, characters[rand2], enemy, null);
-                lateActList.Add(enemyAct);
+               AM.MakeLateAct(0, dmg, characters[rand2], enemy, null);
+             
                 if (ActM)
                 {
-                    EnemyAct enemyAct2 = new EnemyAct(1, 1, characters[rand2], enemy, null);
-                    earlyActList.Add(enemyAct2);
+                    AM.MakeEarlyAct(1, 1, characters[rand2], enemy, null);                   
                 }
             }
             if (type == 1)
@@ -1048,12 +1006,12 @@ public class BattleManager : MonoBehaviour
                 rand2 = Random.Range(0, MaxArmor.Count);
                 while (MaxArmor[rand2].isDie) rand2 = Random.Range(0, MaxArmor.Count);
 
-                EnemyAct enemyAct = new EnemyAct(0, dmg, MaxArmor[rand2], enemy, null);
-                lateActList.Add(enemyAct);
+               AM.MakeLateAct(0, dmg, MaxArmor[rand2], enemy, null);
+              
                 if (ActM)
                 {
-                    EnemyAct enemyAct2 = new EnemyAct(1, 1, MaxArmor[rand2], enemy, null);
-                    earlyActList.Add(enemyAct2);
+                  AM.MakeEarlyAct(1, 1, MaxArmor[rand2], enemy, null);
+                   
                 }
             }
             if (type == 2)
@@ -1077,12 +1035,12 @@ public class BattleManager : MonoBehaviour
                 while (MaxHp[rand2].isDie) rand2 = Random.Range(0, MaxHp.Count);
 
 
-                EnemyAct enemyAct = new EnemyAct(0, dmg, MaxHp[rand2], enemy, null);
-                lateActList.Add(enemyAct);
+              AM.MakeLateAct(0, dmg, MaxHp[rand2], enemy, null);
+             
                 if (ActM)
                 {
-                    EnemyAct enemyAct2 = new EnemyAct(1, 1, MaxHp[rand2], enemy, null);
-                    earlyActList.Add(enemyAct2);
+                    AM.MakeEarlyAct(1, 1, MaxHp[rand2], enemy, null);
+                   
                 }
             }
             if (type == 3)
@@ -1098,12 +1056,12 @@ public class BattleManager : MonoBehaviour
                     rand2 = Random.Range(0, HaveArmor.Count);
 
 
-                    EnemyAct enemyAct = new EnemyAct(0, dmg, HaveArmor[rand2], enemy, null);
-                    lateActList.Add(enemyAct);
+                   AM.MakeLateAct(0, dmg, HaveArmor[rand2], enemy, null);
+                    
                     if (ActM)
                     {
-                        EnemyAct enemyAct2 = new EnemyAct(1, 1, HaveArmor[rand2], enemy, null);
-                        earlyActList.Add(enemyAct2);
+                        AM.MakeEarlyAct(1, 1, HaveArmor[rand2], enemy, null);
+                   
                     }
                 }
             }
@@ -1112,12 +1070,11 @@ public class BattleManager : MonoBehaviour
                 for (int i = 0; i < line; i++)
                 {
 
-                    EnemyAct enemyAct = new EnemyAct(0, dmg, characters[i], enemy, null);
-                    lateActList.Add(enemyAct);
+                    AM.MakeLateAct(0, dmg, characters[i], enemy, null);
+
                     if (ActM)
                     {
-                        EnemyAct enemyAct2 = new EnemyAct(1, 1, characters[i], enemy, null);
-                        earlyActList.Add(enemyAct2);
+                        AM.MakeEarlyAct(1, 1, characters[i], enemy, null);
                     }
                 }
             }
@@ -1125,8 +1082,8 @@ public class BattleManager : MonoBehaviour
             {
                 for (int i = 0; i < line; i++)
                 {
-                    EnemyAct enemyAct2 = new EnemyAct(1, dmg, characters[i], enemy, null);
-                    earlyActList.Add(enemyAct2);
+                    AM.MakeEarlyAct(1, dmg, characters[i], enemy, null);
+                 
                 }
             }
         }
@@ -1140,13 +1097,11 @@ public class BattleManager : MonoBehaviour
             rand2 = Random.Range(0, characters.Count);
             while (characters[rand2].isDie) rand2 = Random.Range(0, characters.Count);
 
-            EnemyAct enemyAct = new EnemyAct(0, dmg, characters[rand2], enemy, null);
-            lateActList.Add(enemyAct);
+            AM.MakeLateAct(0, dmg, characters[rand2], enemy, null);
+
             if (ActM)
             {
-               
-                EnemyAct enemyAct2 = new EnemyAct(1, 1, characters[rand2], enemy, null);
-                earlyActList.Add(enemyAct2);
+                AM.MakeEarlyAct(1, 1, characters[rand2], enemy, null);
             }
         }
         if (type == 1)
@@ -1170,12 +1125,12 @@ public class BattleManager : MonoBehaviour
             while (MaxArmor[rand2].isDie) rand2 = Random.Range(0, MaxArmor.Count);
 
 
-            EnemyAct enemyAct = new EnemyAct(0, dmg, MaxArmor[rand2], enemy, null);
-            lateActList.Add(enemyAct);
+            AM.MakeLateAct(0, dmg, MaxArmor[rand2], enemy, null);
+
             if (ActM)
             {
-                EnemyAct enemyAct2 = new EnemyAct(1, 1, MaxArmor[rand2], enemy, null);
-                earlyActList.Add(enemyAct2);
+                AM.MakeEarlyAct(1, 1, MaxArmor[rand2], enemy, null);
+
             }
         }
         if (type == 2)
@@ -1199,12 +1154,13 @@ public class BattleManager : MonoBehaviour
             while (MaxHp[rand2].isDie) rand2 = Random.Range(0, MaxHp.Count);
 
 
-            EnemyAct enemyAct = new EnemyAct(0, dmg, MaxHp[rand2], enemy, null);
-            lateActList.Add(enemyAct);
+
+            AM.MakeLateAct(0, dmg, MaxHp[rand2], enemy, null);
+
             if (ActM)
             {
-                EnemyAct enemyAct2 = new EnemyAct(1, 1, MaxHp[rand2], enemy, null);
-                earlyActList.Add(enemyAct2);
+                AM.MakeEarlyAct(1, 1, MaxHp[rand2], enemy, null);
+
             }
         }
         if (type == 3)
@@ -1220,12 +1176,12 @@ public class BattleManager : MonoBehaviour
                 rand2 = Random.Range(0, HaveArmor.Count);
 
 
-                EnemyAct enemyAct = new EnemyAct(0, dmg, HaveArmor[rand2], enemy, null);
-                lateActList.Add(enemyAct);
+                AM.MakeLateAct(0, dmg, HaveArmor[rand2], enemy, null);
+
                 if (ActM)
                 {
-                    EnemyAct enemyAct2 = new EnemyAct(1, 1, HaveArmor[rand2], enemy, null);
-                    earlyActList.Add(enemyAct2);
+                    AM.MakeEarlyAct(1, 1, HaveArmor[rand2], enemy, null);
+
                 }
             }
         }
@@ -1235,12 +1191,11 @@ public class BattleManager : MonoBehaviour
             {
 
 
-                EnemyAct enemyAct = new EnemyAct(0, dmg, characters[i], enemy, null);
-                lateActList.Add(enemyAct);
+                AM.MakeLateAct(0, dmg, characters[i], enemy, null);
+
                 if (ActM)
                 {
-                    EnemyAct enemyAct2 = new EnemyAct(1, 1, characters[i], enemy, null);
-                    earlyActList.Add(enemyAct2);
+                    AM.MakeEarlyAct(1, 1, characters[i], enemy, null);
                 }
             }
         }
@@ -1248,8 +1203,7 @@ public class BattleManager : MonoBehaviour
         {
             for (int i = 0; i < characters.Count; i++)
             {
-                EnemyAct enemyAct2 = new EnemyAct(1, dmg, characters[i], enemy, null);
-                earlyActList.Add(enemyAct2);
+                AM.MakeEarlyAct(1, dmg, characters[i], enemy, null);
             }
         }
     }
@@ -1273,13 +1227,11 @@ public class BattleManager : MonoBehaviour
                 rand2 = Random.Range(line, characters.Count);
                 while (characters[rand2].isDie) rand2 = Random.Range(line, characters.Count);
 
-                EnemyAct enemyAct = new EnemyAct(0, dmg, characters[rand2], enemy, null);
-                lateActList.Add(enemyAct);
+                AM.MakeLateAct(0, dmg, characters[rand2], enemy, null);
 
                 if (ActM)
                 {
-                    EnemyAct enemyAct2 = new EnemyAct(1, 1, characters[rand2], enemy, null);
-                    earlyActList.Add(enemyAct2);
+                    AM.MakeEarlyAct(1, 1, characters[rand2], enemy, null);
                 }
             }
             if (type == 1)
@@ -1303,12 +1255,12 @@ public class BattleManager : MonoBehaviour
                 while (MaxArmor[rand2].isDie) rand2 = Random.Range(0, MaxArmor.Count);
 
 
-                EnemyAct enemyAct = new EnemyAct(0, dmg, MaxArmor[rand2], enemy, null);
-                lateActList.Add(enemyAct);
+                AM.MakeLateAct(0, dmg, MaxArmor[rand2], enemy, null);
+
                 if (ActM)
                 {
-                    EnemyAct enemyAct2 = new EnemyAct(1, 1, MaxArmor[rand2], enemy, null);
-                    earlyActList.Add(enemyAct2);
+                    AM.MakeEarlyAct(1, 1, MaxArmor[rand2], enemy, null);
+
                 }
             }
             if (type == 2)
@@ -1332,12 +1284,13 @@ public class BattleManager : MonoBehaviour
                 while (MaxHp[rand2].isDie) rand2 = Random.Range(0, MaxHp.Count);
 
 
-                EnemyAct enemyAct = new EnemyAct(0, dmg, MaxHp[rand2], enemy, null);
-                lateActList.Add(enemyAct);
+
+                AM.MakeLateAct(0, dmg, MaxHp[rand2], enemy, null);
+
                 if (ActM)
                 {
-                    EnemyAct enemyAct2 = new EnemyAct(1, 1, MaxHp[rand2], enemy, null);
-                    earlyActList.Add(enemyAct2);
+                    AM.MakeEarlyAct(1, 1, MaxHp[rand2], enemy, null);
+
                 }
             }
             if (type == 3)
@@ -1353,12 +1306,12 @@ public class BattleManager : MonoBehaviour
                     rand2 = Random.Range(0, HaveArmor.Count);
 
 
-                    EnemyAct enemyAct = new EnemyAct(0, dmg, HaveArmor[rand2], enemy, null);
-                    lateActList.Add(enemyAct);
+                    AM.MakeLateAct(0, dmg, HaveArmor[rand2], enemy, null);
+
                     if (ActM)
                     {
-                        EnemyAct enemyAct2 = new EnemyAct(1, 1, HaveArmor[rand2], enemy, null);
-                        earlyActList.Add(enemyAct2);
+                        AM.MakeEarlyAct(1, 1, HaveArmor[rand2], enemy, null);
+
                     }
                 }
             }
@@ -1367,12 +1320,11 @@ public class BattleManager : MonoBehaviour
                 for (int i = line; i < characters.Count; i++)
                 {
 
-                    EnemyAct enemyAct = new EnemyAct(0, dmg, characters[i], enemy, null);
-                    lateActList.Add(enemyAct);
+                  AM.MakeLateAct(0, dmg, characters[i], enemy, null);
+                 
                     if (ActM)
                     {
-                        EnemyAct enemyAct2 = new EnemyAct(1, 1, characters[i], enemy, null);
-                        earlyActList.Add(enemyAct2);
+                        AM.MakeEarlyAct(1, 1, characters[i], enemy, null);
                     }
                 }
             }
@@ -1380,8 +1332,7 @@ public class BattleManager : MonoBehaviour
             {
                 for (int i = line; i < characters.Count; i++)
                 {
-                    EnemyAct enemyAct2 = new EnemyAct(1, dmg, characters[i], enemy, null);
-                    earlyActList.Add(enemyAct2);
+                    AM.MakeEarlyAct(1, dmg, characters[i], enemy, null);
                 }
             }
         }
@@ -1389,41 +1340,39 @@ public class BattleManager : MonoBehaviour
 
     public void EnemyGetAromor(int mount, Enemy myEnemy, Enemy target)
     {
-        EnemyAct enemyAct = new EnemyAct(2, mount, null, myEnemy, target);
-        lateActList.Add(enemyAct);
+       AM.MakeLateAct(2, mount, null, myEnemy, target);
+     
     }
 
     public void EnemyGetHp(int mount, Enemy myEnemy, Enemy target)
     {
-        EnemyAct enemyAct = new EnemyAct(3, mount, null, myEnemy, target);
-        lateActList.Add(enemyAct);
+        AM.MakeLateAct(3, mount, null, myEnemy, target);
+     
     }
 
 
     public void EnemyStateChange(Enemy myEnemy, int mount) //0->은신 1->무적 2->불사
     {
         if (mount == 0) myEnemy.goingShadow = true;
-        EnemyAct enemyAct = new EnemyAct(4, mount, null, myEnemy, null);
-        earlyActList.Add(enemyAct);
+        AM.MakeEarlyAct(4, mount, null, myEnemy, null);
     }
 
-    public void EnemyFormationCollapse(Enemy myEnemy)
+    public void EnemyFormationCollapse(Enemy myEnemy) //적이 선 행동으로 진형붕괴를 선택했을 때
     {
-        EnemyAct enemyAct = new EnemyAct(6, 0, null, myEnemy, null);
-        earlyActList.Add(enemyAct);
+       AM.MakeEarlyAct(6, 0, null, myEnemy, null);
     }
-    public void card22()
+    public void card22() 
     {
       
         for (int i = 0; i < characters.Count; i++)
         {
             if (!characters[i].isDie)
             {       
-                characters[i].getArmor(4+characters[i].endur);
+                characters[i].getArmor(4+characters[i].endur); 
             }
         }
     }
-    public void card23()
+    public void card23() //매치포인트
     {
         
         for (int i = 0; i < characters.Count; i++)
@@ -1440,11 +1389,11 @@ public class BattleManager : MonoBehaviour
 
        
     }
-    public void card24()
+    public void card24() //사이코키네시스
     {
         StartCoroutine("card24c");
     }
-    IEnumerator card24c()
+    IEnumerator card24c() //덱에있는 모든 패를 무덤으로 보내는 과정
     {
         while (CM.field.Count > 1)
         {
@@ -1461,14 +1410,14 @@ public class BattleManager : MonoBehaviour
         SelectDeckCount = count;
         DeckSelectMode = true;
     }
-    public void DeckCancle()
+    public void Click_DeckCancle() //덱에서 선택을 취소하는 함수
     {
         DeckOff();
         DeckSelectCancle = true;
         DeckSelectMode = false;
     }
 
-    public void DeckComplete()
+    public void Click_DeckComplete() //덱에서 패로 가져올 카드 선택
     {
         if (SelectDeckCount == CM.SelectedCard.Count)
         {
@@ -1485,7 +1434,7 @@ public class BattleManager : MonoBehaviour
             Invoke("SlessOff", 1f);
         }
     }
-    void SlessOff()
+    void SlessOff() //선택된 카드가 적을 때
     {
         Sless.SetActive(false);
     }

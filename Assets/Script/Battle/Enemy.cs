@@ -102,29 +102,12 @@ public class Enemy : MonoBehaviour
     {
         TM.PlayerTurnStart();
     }
-    float curalpha;
-    public void Hit()
+   
+   
+    public void OnHitCal(int dmg, int no, bool reply)
     {
-        curalpha = myImage.color.a;
-        Color color = new Color(1, 0, 0,curalpha);
-        myImage.color = color;
-    }
-    public void HitEnd()
-    {
-        Color color = new Color(1, 1, 1, curalpha);
-        if (isDie)
-        {
-          color = new Color(0.3f, 0.3f, 0.3f);
-        }
-        myImage.color = color;
-    }
-    
-    public void onHit(int dmg,int no,bool reply)
-    {
-       
-        GameObject Dmg = Instantiate(BM.DmgPrefebs, transform);
-        Dmg.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
-        Dmg.GetComponent<DMGtext>().GetType(0, dmg);
+        if (isDie) return;
+        AM.MakeAct(2, 0, dmg, null, this, null, null, 1);
         BM.characters[no].myPassive.MyAttack();
         for (int i = 0; i < BM.CD.size; i++)
         {
@@ -134,13 +117,19 @@ public class Enemy : MonoBehaviour
             }
             else
             {
-                BM.characters[i].myPassive.EnemyHitByReply(this);
+                BM.characters[i].myPassive.EnemyHitBySparky(this);
             }
         }
-      
+
+    }
+    public void onHit(int dmg)
+    {
+        if (isDie) return;
+        GameObject Dmg = Instantiate(BM.DmgPrefebs, transform);
+        Dmg.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+        Dmg.GetComponent<DMGtext>().GetType(0, dmg);      
         if (!power)
-        {        
-            
+        {                   
             if (Armor > 0)
             {
                 Armor -= dmg;
@@ -154,7 +143,7 @@ public class Enemy : MonoBehaviour
             {
                 if (!power)
                 {
-                    hitStack++;
+                 
                     Hp -= dmg;
                     if (Hp > maxHp)
                         Hp = maxHp;
@@ -190,9 +179,11 @@ public class Enemy : MonoBehaviour
         hpSlider.value= Hp / (float)maxHp;
        
     }
-
     public void GetArmorStat(int arm)
     {
+        GameObject Dmg = Instantiate(BM.DmgPrefebs, transform);
+        Dmg.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+        Dmg.GetComponent<DMGtext>().GetType(2,arm);
         Armor += arm;
     }
 

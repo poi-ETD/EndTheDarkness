@@ -45,10 +45,7 @@ public class CharacterPassive : MonoBehaviour
     public void MyHit(Enemy e,int dmg)
     {
         if (myCharacter.isDie) return;
-        GameObject dmgText = Instantiate(DMGtext,gameObject.transform);
-
-        dmgText.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
-        dmgText.GetComponent<DMGtext>().GetType(0, dmg);
+      
 
 
 
@@ -103,7 +100,7 @@ public class CharacterPassive : MonoBehaviour
             ReplyAttackCount++;
             if (ReplyAttackCount > 20)
             {
-                AM.MakeAct(8, 0, null, myCharacter, null, myPassvie[3]);
+                AM.MakeAct(0,8, 0,null, null, myCharacter, null, myPassvie[3]);
             }
         }
        
@@ -118,11 +115,11 @@ public class CharacterPassive : MonoBehaviour
         if (myCharacter.isDie) return;
         if (myNo == 1 && myPassvie[2] > 0 && !isKing)
         {
-            AM.MakeAct(3, drow, null, myCharacter, null, myPassvie[2]); //흑백       
+            AM.MakeAct(0,3, drow, null,null, myCharacter, null, myPassvie[2]); //흑백       
         }
         if (myNo == 4 && myPassvie[1] > 0 && !isAct1)
         {
-            AM.MakeAct(14, 0, null, myCharacter, null, myPassvie[1]); //미라클 드로우
+            AM.MakeAct(0,14, 0, null,null, myCharacter, null, myPassvie[1]); //미라클 드로우
 
         }
        
@@ -168,17 +165,17 @@ public class CharacterPassive : MonoBehaviour
         }
         if (myNo == 3 && myPassvie[1] > 0)
         {
-            AM.MakeAct(10, 0, null, myCharacter, null, myPassvie[1]); //선봉의 호령
+            AM.MakeAct(0,10, 0,null, null, myCharacter, null, myPassvie[1]); //선봉의 호령
        
         }
         if (myNo == 3 && myPassvie[3] > 0)
         {
             if (BM.back.Count == 1 && BM.back[0] == myCharacter) {
-                AM.MakeAct(12, 0, null, myCharacter, null, myPassvie[3]);
+                AM.MakeAct(0,12, 0,null, null, myCharacter, null, myPassvie[3]);
            
             }
             if (BM.forward.Count == 1 && BM.forward[0] == myCharacter) {
-                AM.MakeAct(12, 1, null, myCharacter, null, myPassvie[3]);
+                AM.MakeAct(0,12, 1, null,null, myCharacter, null, myPassvie[3]);
                
             }
                     
@@ -194,7 +191,7 @@ public class CharacterPassive : MonoBehaviour
         }
         if (myNo == 4 && myPassvie[3] > 0)
         {
-            AM.MakeAct(16, 0, null, myCharacter, null, myPassvie[3]);
+            AM.MakeAct(0,16, 0, null, null, myCharacter, null, myPassvie[3]);
         }
         if (myNo == 2 && myPassvie[0] > 0) ReplyCardDrow = 0;
     } //개편완
@@ -240,12 +237,12 @@ public class CharacterPassive : MonoBehaviour
         if (myCharacter.isDie) return;
         if (myNo== 1 && myPassvie[0] > 0&&!isKing&&ghost>50)
         {
-            AM.MakeAct(1, 0, null, myCharacter, null, myPassvie[0]);
+            AM.MakeAct(0,1, 0,null, null, myCharacter, null, myPassvie[0]);
             //백옥의 왕         
         }
         if (myNo == 4 && myPassvie[0] > 0&& CM.field.Count > 3)
         {
-            AM.MakeAct(13, 0, null, myCharacter, null, myPassvie[0]); //창조의 잠재력
+            AM.MakeAct(0,13, 0,null, null, myCharacter, null, myPassvie[0]); //창조의 잠재력
         }
         
         
@@ -285,22 +282,22 @@ public class CharacterPassive : MonoBehaviour
         if (myNo == 2 && myPassvie[1] > 0)
         { 
            
-                AM.MakeAct(6, myCharacter.turnAtk, e, myCharacter, null, myPassvie[1]);
+                AM.MakeAct(0,6, myCharacter.turnAtk,null, e, myCharacter, null, myPassvie[1]);
                     
         }
         if (myNo == 3 && myPassvie[0] > 0)
         {
-            AM.MakeAct(9, 0, null, myCharacter, null, myPassvie[0]);
+            AM.MakeAct(0,9, 0,null, null, myCharacter, null, myPassvie[0]);
         }  
        
        
     }
-    public void EnemyHitByReply(Enemy e)
+    public void EnemyHitBySparky(Enemy e)
     {
         if (myCharacter.isDie) return;
         if (myNo == 3 && myPassvie[0] > 0)
         {
-            AM.MakeAct(9, 0, null, myCharacter, null, myPassvie[0]);
+            AM.MakeAct(0,9, 0,null, null, myCharacter, null, myPassvie[0]);
         }
 
 
@@ -310,7 +307,7 @@ public class CharacterPassive : MonoBehaviour
     public void Sparky2(int dmg,Enemy e)
     {
         if (myCharacter.isDie) return;
-        e.onHit(dmg, myCharacter.curNo,true);   
+        e.OnHitCal(dmg, myCharacter.curNo,true);   
     }
 
 
@@ -322,7 +319,7 @@ public class CharacterPassive : MonoBehaviour
         if (myNo == 3 && myPassvie[0] > 0)
         {
             
-               AM.MakeAct(9,1,null,myCharacter,null, myPassvie[0]);
+               AM.MakeAct(0,9,1,null,null,myCharacter,null, myPassvie[0]);
             
         }
       
@@ -338,7 +335,7 @@ public class CharacterPassive : MonoBehaviour
         if (myCharacter.isDie) return;
         if (myNo == 3 && myPassvie[2] > 0)
         {
-            AM.MakeAct(11, armor, e, myCharacter, null, myPassvie[2]);
+            AM.MakeAct(0,11, armor, null,e, myCharacter, null, myPassvie[2]);
         }
       
        
@@ -360,7 +357,7 @@ public class CharacterPassive : MonoBehaviour
             ReplyCardDrow++;
             if (ReplyCardDrow % 3 == 0)
             {
-               AM.MakeAct(5,1,null,myCharacter,null,myPassvie[0]);
+               AM.MakeAct(0,5,1,null,null,myCharacter,null,myPassvie[0]);
             }
         }    
     }
@@ -377,7 +374,7 @@ public class CharacterPassive : MonoBehaviour
 
         if (myNo == 2 && myPassvie[2]>0&&myCharacter.Act == 0&& CM.field.Count > 0)
         {
-            AM.MakeAct(7, 1, null, myCharacter, null, myPassvie[2]);
+            AM.MakeAct(0,7, 1, null,null, myCharacter, null, myPassvie[2]);
         }
       
     }
@@ -392,20 +389,12 @@ public class CharacterPassive : MonoBehaviour
         }
     }
   
-    public void ActMinus(int m,Enemy e)
+    public void ActMinus(int m)
     {
-        if (myCharacter.isDie) return;
-        BM.log.logContent.text += "\n" + myCharacter.Name + "이(가) " +e.Name + "에게 " +m + "의 행동력 감소를 받았다.";
-        myCharacter.onMinusAct(m);
-        GameObject dmgText = Instantiate(DMGtext, gameObject.transform);
-
-        dmgText.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
-        dmgText.GetComponent<DMGtext>().GetType(1, m);
-
-
+        if (myCharacter.isDie) return;                    
         if (myNo == 1 && myPassvie[3] > 0 && CM.Grave.Count > 0)
         {
-            AM.MakeAct(4, 1, null, myCharacter, null, myPassvie[3]);
+            AM.MakeAct(0,4, 1,null, null, myCharacter, null, myPassvie[3]);
         }
         
        
@@ -451,7 +440,7 @@ public class CharacterPassive : MonoBehaviour
                     q1Count++;
                 }
             }
-            AM.MakeAct(2, q1Count, null, myCharacter, null, myPassvie[1]);            
+            AM.MakeAct(0,2, q1Count,null, null, myCharacter, null, myPassvie[1]);            
         }
     }
 
