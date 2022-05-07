@@ -121,7 +121,7 @@ public class Character : MonoBehaviour
         if (Hp > maxHp) Hp = maxHp;
 
         stringHp = Hp;
-        hpT.text = "<color=purple><b>" + Hp + "</color></b><size=15>/" + maxHp + "</size>";
+        hpT.text = "<color=#a39fff><b>" + Hp + "</color></b><size=15>/" + maxHp + "</size>";
 
     }
     
@@ -241,7 +241,7 @@ public class Character : MonoBehaviour
             }
         }
         if (Hp < 0) Hp = 0;
-        hpT.text = "<color=purple><b>" + stringHp + "</color></b><size=15>/" + maxHp + "</size>";   
+        hpT.text = "<color=#a39fff><b>" + stringHp + "</color></b><size=15>/" + maxHp + "</size>";   
 
     }
     void die()
@@ -249,7 +249,7 @@ public class Character : MonoBehaviour
         isDie = true;
         Hp = 0;
         
-        hpT.text = "<color=purple><b>" + Hp + "</color></b><size=15>/" + maxHp + "</size>";
+        hpT.text = "<color=#a39fff><b>" + Hp + "</color></b><size=15>/" + maxHp + "</size>";
         Color color = new Color(0.3f, 0.3f, 0.3f);
         myImage.color = color;
         Act = 0;
