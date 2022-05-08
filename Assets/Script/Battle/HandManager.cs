@@ -255,7 +255,7 @@ public class HandManager : MonoBehaviour
         text_TooltipCardContext.text = originCardContext;
     }
 
-    private void CancelToUse()
+    public void CancelToUse()
     {
         if (selectedCard == null)
             return;

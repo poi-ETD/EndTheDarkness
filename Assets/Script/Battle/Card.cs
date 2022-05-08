@@ -50,7 +50,7 @@ public class Card : MonoBehaviour
                     BM.overAct();
                     return;
                 }
-            }     
+            }
             if (selectType==1)
             {
                 BM.goEnemySelectMode();
@@ -168,8 +168,6 @@ public class Card : MonoBehaviour
         }
         else
         {
-          
-           
             BM.CardUseText.text = "사용";
             BM.EnemySelectMode = false;
         }
