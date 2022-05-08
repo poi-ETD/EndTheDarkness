@@ -43,7 +43,7 @@ public class Log : MonoBehaviour
         gameObject.SetActive(false);
     }
     public void setPassive(int i,int count)
-    {
+    {if(i>0)
         passive[i] += count;
     }
     public void writePassiveInLog()

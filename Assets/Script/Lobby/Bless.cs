@@ -45,6 +45,12 @@ public class Bless : MonoBehaviour
     }
     public void blessRemovePopupOn()
     {
+        int c = 0;
+        for (int i = 0; i < lobby.GD.blessbool.Length; i++)
+        {
+            if (lobby.GD.blessbool[i]) c++;
+        }
+        if (c == 0) return; //삭제 할 축복이 없을 경우
         if (lobby.GD.isAct) return;
         if (lobby.canvasOn) return;
         blessRemovePopup.SetActive(true);
@@ -55,7 +61,8 @@ public class Bless : MonoBehaviour
         lobby.canvasOn = true;
     }
     public void SelectRemoveOn()  //선택해서 삭제하기
-    {if (lobby.GD.Ignum < 1000) return;
+    { 
+        if (lobby.GD.Ignum < 1000) return;
         lobby.GD.Ignum -= 1000;
 
         CancleRemove[0].SetActive(false);
@@ -319,8 +326,8 @@ public class Bless : MonoBehaviour
         blessT[0].text = bd.bd[randList[rand]].Name + "";
         blessT[1].text = bd.bd[randList[rand]].content + "";
 
-        //BlessApply(randList[rand]);
-        BlessApply(17);
+        BlessApply(randList[rand]);
+       // BlessApply(rand);
     }
     /*randList[rand]*/
 

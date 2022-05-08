@@ -45,50 +45,19 @@ public class CharacterPassive : MonoBehaviour
     public void MyHit(Enemy e,int dmg)
     {
         if (myCharacter.isDie) return;
-      
-
-
-
         if (myCharacter.reflect > 0)
         {
-            
+            AM.MakeAct(0, -1, myCharacter.reflect, null,e, myCharacter, null, 1); //반사 데미지    
         }
-     
+        if (BM.gd.blessbool[7] && myCharacter.curNo < BM.line)
+        {
+            AM.MakeAct(0, -2, dmg / 2, null, null, myCharacter, null, 1);//역류하는 고통
+        }
         
     }
 
 
-    IEnumerator MyHitCor(Enemy e)
-    {
-        while (BM.otherCor)
-        {
-            yield return new WaitForSeconds(0.1f);
-        }
-        BM.otherCor = true;
-
-        if (myCharacter.reflect > 0)
-        {
-
-            transform.localScale *= 1.2f;
-            if (!e.isDie)
-            {
-                BM.OnAttack(myCharacter.reflect, e, myCharacter, 1);
-                BM.log.logContent.text += "" + e.Name + "에게 반사데미지" + myCharacter.reflect + "이 주어집니다.";
-         
-            }
-
-            yield return new WaitForSeconds(0.7f);
-            transform.localScale /= 1.2f;
-          
-            yield return new WaitForSeconds(0.3f);
-        }
-
-
-
-
-        BM.otherCor = false;
-        yield return null;
-    }
+    
 
 
     public void MyAttack()

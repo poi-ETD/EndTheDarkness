@@ -465,7 +465,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterNo: 4
-  maxHp: 10
+  maxHp: 20
   Hp: 0
   Atk: 0
   Armor: 0
@@ -480,7 +480,6 @@ MonoBehaviour:
   armorT: {fileID: 3786735852539286966}
   actT: {fileID: 5038361911167505063}
   defT: {fileID: 6479760820816383566}
-  endurT: {fileID: 0}
   board: {fileID: 2849677773492152906}
   passive: 00000000000000000000000000000000
   enemyName: 

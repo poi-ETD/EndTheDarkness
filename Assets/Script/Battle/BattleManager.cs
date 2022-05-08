@@ -47,7 +47,7 @@ public class BattleManager : MonoBehaviour
     [SerializeField] GameObject window_Grave;
     public int ReviveCount;
     public bool card7mode;
-    public GameObject[] Enemys;
+
 
     public GameData gd;
     public CharacterData CD;
@@ -102,9 +102,9 @@ public class BattleManager : MonoBehaviour
     //승리 시 보상 선택하는 창에 들어갈 변수들
 
     [SerializeField] GameObject Sless;//덱에서 카드 선택할 때 아무것도 선택 안 되어 있으 면
-    
-   
 
+
+    public bool ReviveMode;
     public int SelectDeckCount;//덱에서 선택 할 카드 수
     public bool DeckSelectMode;
     public bool DeckSelect;
@@ -175,7 +175,7 @@ public class BattleManager : MonoBehaviour
             line += rand;
         }
         else if (forward.Count > back.Count)
-        {
+        { 
             MoveToForward = false;
             line--;
         }
@@ -360,7 +360,7 @@ public class BattleManager : MonoBehaviour
         }
         else
         {
-            GameObject EnemySummon = Instantiate(Enemys[gd.victory], new Vector2(-2, -2), transform.rotation, GameObject.Find("CharacterCanvas").transform);
+            GameObject EnemySummon = Instantiate(Enemys[0], new Vector2(-2, -2), transform.rotation, GameObject.Find("CharacterCanvas").transform);
         }
         Enemys = GameObject.FindGameObjectsWithTag("Enemy");
         for (int i = 0; i < Enemys.Length; i++)
@@ -514,15 +514,14 @@ public class BattleManager : MonoBehaviour
     {
         CancleButton.SetActive(false);
         //HandManager.Instance.go_SelectedCardTooltip.SetActive(false);
-
         if (!EnemySelectMode) 
         {
             if (card != null)
             {
-
+                
                 card.GetComponent<Card>().useCard();
-                HandManager.Instance.CancelToUse();
-
+   
+   //                 HandManager.Instance.CancelToUse(); 카드 사용 시 발동되게 옮깁니다.
             }
         }
         else
@@ -925,15 +924,24 @@ public class BattleManager : MonoBehaviour
             newCard.GetComponent<NoBattleCard>().setCardInfoInLobby(RandomCardList[RandomCardList.Count - i], 0);
             RancomSelectCard.Add(RandomCardList[RandomCardList.Count - i]);
         }
-        //랜덤함수를 반복 해서 맨 앞
+        //랜덤함수를 반복 해서 맨 앞 n장의 카드들을 중복되지 않는 카드들로
     }
     public void Click_SelectReward()//원하는 카드를 선택해서 카드 데이터에 저장하는 함수
     {
+        bool isSelect=false;
+        for (int i = 0; i < RancomSelectCard.Count; i++)
+        {
+
+            if (RewardCanvas.transform.GetChild(i).GetComponent<NoBattleCard>().select)
+            {
+                isSelect = true;
+            }
+        }
+        if (!isSelect) return;
         CardData CardD;
         string path = Path.Combine(Application.persistentDataPath, "CardData.json");
         string cardData = File.ReadAllText(path);
         CardD = JsonConvert.DeserializeObject<CardData>(cardData);
-
         for (int i = 0; i < RancomSelectCard.Count; i++)
         {
            
@@ -951,7 +959,8 @@ public class BattleManager : MonoBehaviour
         Click_NoSelectAndMain();
     }
     public void Click_NoSelectAndMain()//전투 정보를 모두 저장한 후 로비로 가는 함수
-    {
+    {if (gd.bless3count > 0) gd.bless3count--;
+        if (gd.bless3count == 0) gd.blessbool[3] = false;
         for (int i = 0; i < characters.Count; i++)
         {
             bool isForward = false;
@@ -988,7 +997,7 @@ public class BattleManager : MonoBehaviour
         defeated.SetActive(true);
     }
     public void goEnemySelectMode() //공격 카드 선택 시 어떤 적을 공격할지 고르는 모드
-    {
+    {   
         EnemySelectMode = true; //이 상태로 들어가면 Enemy를 클릭시 선택이 된다.
         CardUseText.text = "취소";
     }

@@ -53,6 +53,7 @@ public class Card : MonoBehaviour
             }
             if (selectType==1)
             {
+              
                 BM.goEnemySelectMode();
             }
            else if (selectType == 2) //무덤류
@@ -328,7 +329,14 @@ public class Card : MonoBehaviour
 
     private void OnMouseEnter()
     {
-        HandManager.Instance.CardMouseEnter(this);
+        if (!BM.EnemySelectMode && !BM.otherCanvasOn&&!isGrave&&!isDeck)
+        {
+            HandManager.Instance.CardMouseEnter(this);
+        }
+        if (BM.otherCanvasOn)
+        {
+           // if(isGrave||isDeck) HandManager.Instance.CardMouseEnter(this);
+        }
     }
 
     private void OnMouseOver()
@@ -338,8 +346,11 @@ public class Card : MonoBehaviour
 
     private void OnMouseExit()
     {
-        isOnMouse = false;
-        HandManager.Instance.CardMouseExit(this);
+        if (!BM.otherCanvasOn)
+        {
+            isOnMouse = false;
+            HandManager.Instance.CardMouseExit(this);
+        }
     }
 
     public void SavePosition(float x, float y, float z)

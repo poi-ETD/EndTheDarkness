@@ -146,13 +146,13 @@ public class LobbyManager : MonoBehaviour
             GameObject.Find("Bless").GetComponent<Bless>().BlessPopupOn();
             GameObject.Find("Bless").GetComponent<Bless>().GetBless();
         }
-        else if (rc == ChD.size+1)
+        else if (rc == 5)
         {
             ResetMaraCount = 5;
             ResetBless.SetActive(false);
             ResetItem.SetActive(true);
         }
-        else if (rc == ChD.size+2)
+        else if (rc == 6)
         {
             GD.Ignum += 500;
             IgnumT.text = "" + GD.Ignum;

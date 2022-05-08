@@ -50,7 +50,7 @@ public class ActManager : MonoBehaviour
         public Character targetC;
      
         public int count;
-
+        //no=>-1 리플렉트
         public ActStruct(int type, int no, int mount, Enemy myE, Enemy targetE, Character myC, Character targetC, int count)
         {
             this.type = type;
@@ -150,7 +150,7 @@ public class ActManager : MonoBehaviour
         while (ActList.Count != 0)
         {
           
-            int c = 0;          
+            int c = 0;
             if (ActList[0].type == 0) //아군 패시브 발동
             {
                 BM.log.setPassive(ActList[0].no, ActList[0].count); //패시브를 로그에 기록
@@ -226,8 +226,21 @@ public class ActManager : MonoBehaviour
                     {
                         ActList[0].myC.myPassive.Porte4();
                     }
-
-                    yield return new WaitForSeconds(2f / sum);
+                    if (ActList[0].no == -1)
+                    {
+                        ActList[0].targetE.OnHitCal(ActList[0].mount, ActList[0].myC.curNo, false);
+                    }
+                    if (ActList[0].no == -2)
+                    {
+                        for(int i=0;i<BM.Enemys.Length;i++)
+                        BM.Enemys[i].GetComponent<Enemy>().OnHitCal(ActList[0].mount, ActList[0].myC.curNo, false);
+                    }
+                    if (sum == 1)
+                    {
+                        yield return new WaitForSeconds(1);
+                    }
+                    else
+                        yield return new WaitForSeconds(2f / sum);
 
                     ActList[0].myC.SelectBox.SetActive(false);
                     yield return new WaitForSeconds(0.5f / sum);
@@ -235,58 +248,63 @@ public class ActManager : MonoBehaviour
 
                 c = 0;
             }
-            else if(ActList[0].type==1) //적의 행동
+            else if (ActList[0].type == 1) //적의 행동
             {
-                yield return new WaitForSeconds(0.2f);
-                if (ActList[0].no == 0) //적의 공격
+                if (ActList[0].myE.isDie) yield return null;
+                else
                 {
-                    ActList[0].targetC.onDamage(ActList[0].mount);
-                    ActList[0].myE.transform.DOMove(ActList[0].myE.transform.position + new Vector3(0, -0.5f, 0), 0.2f);
                     yield return new WaitForSeconds(0.2f);
-                    ActList[0].myE.transform.DOMove(ActList[0].myE.transform.position + new Vector3(0, 0.5f, 0), 0.2f);                 
-                    yield return new WaitForSeconds(0.2f);
-                }
-                if (ActList[0].no == 1) //적의 행동력 감소
-                {
-                    ActList[0].targetC.onMinusAct(ActList[0].mount);
-                    ActList[0].myE.transform.DOMove(ActList[0].myE.transform.position + new Vector3(0, -0.5f, 0), 0.2f);
-                    yield return new WaitForSeconds(0.2f);
-                    ActList[0].myE.transform.DOMove(ActList[0].myE.transform.position + new Vector3(0, 0.5f, 0), 0.2f);
-                    yield return new WaitForSeconds(0.2f);
-                }
-                if (ActList[0].no == 2) //적의 방어력 획득
-                {
-                    ActList[0].targetE.GetArmorStat(ActList[0].mount);
-                    ActList[0].myE.transform.DOMove(ActList[0].myE.transform.position + new Vector3(0, -0.5f, 0), 0.2f);
-                    yield return new WaitForSeconds(0.2f);
-                    ActList[0].myE.transform.DOMove(ActList[0].myE.transform.position + new Vector3(0, 0.5f, 0), 0.2f);
-                    yield return new WaitForSeconds(0.2f);
-                }
-                if (ActList[0].no == 3) //적의 체력 회복
-                {
-                    ActList[0].targetE.GetHp(ActList[0].mount);
-                    ActList[0].myE.transform.DOMove(ActList[0].myE.transform.position + new Vector3(0, -0.5f, 0), 0.2f);
-                    yield return new WaitForSeconds(0.2f);
-                    ActList[0].myE.transform.DOMove(ActList[0].myE.transform.position + new Vector3(0, 0.5f, 0), 0.2f);
-                    yield return new WaitForSeconds(0.2f);
-                }
-                if (ActList[0].no == 4) //적의 상태 변화
-                {
-                    if (ActList[0].mount == 0) //은신
+                    if (ActList[0].no == 0) //적의 공격
                     {
-                        ActList[0].myE.onShadow();
-                        for (int i = 0; i < 10; i++)
-                        {
-                          ActList[0].myE.myImage.color -= new Color(0, 0, 0, 0.07f);
-                            yield return new WaitForSeconds(0.05f);
-                        }
+                        ActList[0].targetC.onDamage(ActList[0].mount);
+                        ActList[0].myE.transform.DOMove(ActList[0].myE.transform.position + new Vector3(0, -0.5f, 0), 0.2f);
+                        yield return new WaitForSeconds(0.2f);
+                        ActList[0].myE.transform.DOMove(ActList[0].myE.transform.position + new Vector3(0, 0.5f, 0), 0.2f);
+                        yield return new WaitForSeconds(0.2f);
                     }
-                   
+                    if (ActList[0].no == 1) //적의 행동력 감소
+                    {
+                        ActList[0].targetC.onMinusAct(ActList[0].mount);
+                        ActList[0].myE.transform.DOMove(ActList[0].myE.transform.position + new Vector3(0, -0.5f, 0), 0.2f);
+                        yield return new WaitForSeconds(0.2f);
+                        ActList[0].myE.transform.DOMove(ActList[0].myE.transform.position + new Vector3(0, 0.5f, 0), 0.2f);
+                        yield return new WaitForSeconds(0.2f);
+                    }
+                    if (ActList[0].no == 2) //적의 방어력 획득
+                    {
+                        ActList[0].targetE.GetArmorStat(ActList[0].mount);
+                        ActList[0].myE.transform.DOMove(ActList[0].myE.transform.position + new Vector3(0, -0.5f, 0), 0.2f);
+                        yield return new WaitForSeconds(0.2f);
+                        ActList[0].myE.transform.DOMove(ActList[0].myE.transform.position + new Vector3(0, 0.5f, 0), 0.2f);
+                        yield return new WaitForSeconds(0.2f);
+                    }
+                    if (ActList[0].no == 3) //적의 체력 회복
+                    {
+                        ActList[0].targetE.GetHp(ActList[0].mount);
+                        ActList[0].myE.transform.DOMove(ActList[0].myE.transform.position + new Vector3(0, -0.5f, 0), 0.2f);
+                        yield return new WaitForSeconds(0.2f);
+                        ActList[0].myE.transform.DOMove(ActList[0].myE.transform.position + new Vector3(0, 0.5f, 0), 0.2f);
+                        yield return new WaitForSeconds(0.2f);
+                    }
+                    if (ActList[0].no == 4) //적의 상태 변화
+                    {
+                        if (ActList[0].mount == 0) //은신
+                        {
+                            ActList[0].myE.onShadow();
+                            for (int i = 0; i < 10; i++)
+                            {
+                                ActList[0].myE.myImage.color -= new Color(0, 0, 0, 0.07f);
+                                yield return new WaitForSeconds(0.05f);
+                            }
+                        }
+
+                    }
                 }
             }
             else if (ActList[0].type == 2)
             {
                 ActList[0].targetE.onHit(ActList[0].mount); //적이 데미지를 입는 모션(데미지 계산은 이미 적용)
+                yield return new WaitForSeconds(0.2f);
             }
             ActList.RemoveAt(0);
           

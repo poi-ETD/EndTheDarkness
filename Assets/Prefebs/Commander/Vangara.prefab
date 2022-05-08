@@ -1554,7 +1554,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterNo: 3
-  maxHp: 60
+  maxHp: 50
   Hp: 0
   Atk: 0
   Armor: 0

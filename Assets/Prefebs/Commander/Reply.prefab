@@ -672,7 +672,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterNo: 2
-  maxHp: 50
+  maxHp: 45
   Hp: 0
   Atk: 1
   Armor: 0

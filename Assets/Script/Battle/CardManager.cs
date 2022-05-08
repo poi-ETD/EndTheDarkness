@@ -173,7 +173,7 @@ public class CardManager : MonoBehaviour
         BM.character.Acting();
         usingCard.GetComponent<Card>().isGrave = true;
         usingCard.SetActive(false);
-        TM.BM.cancleCard();
+        HandManager.Instance.CancelToUse();
         TM.BM.pcard = usingCard; //스케치 반복을 위해 이전 카드를 기록함
  
         BM.character.SelectBox.SetActive(false);
