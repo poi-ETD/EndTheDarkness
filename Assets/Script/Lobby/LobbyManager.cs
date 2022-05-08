@@ -248,7 +248,7 @@ public class LobbyManager : MonoBehaviour
 
                 GameObject LC = Instantiate(LobbyCharacterPrefebs, CharacterView.transform);
                 LC.GetComponent<CharacterSetting>().SetCharacterInLobby(ChD.characterDatas[i].No, CharacterSprtie[ChD.characterDatas[i].No],
-                    ChD.characterDatas[i].Atk, ChD.characterDatas[i].Endur, ChD.characterDatas[i].Cost, ChD.characterDatas[i].curHp, ChD.characterDatas[i].maxHp,
+                    ChD.characterDatas[i].Atk, ChD.characterDatas[i].def, ChD.characterDatas[i].Cost, ChD.characterDatas[i].curHp, ChD.characterDatas[i].maxHp,
                     ChD.characterDatas[i].curFormation, ChD.characterDatas[i].passive
                     );
             }

@@ -11,17 +11,17 @@ public class CharacterData2
         public int Cost;
         public int Atk;
         public int maxHp;
-        public int Endur;
+        public int Def;
         public string[] passive;
         public string[] passiveContent;
 
-        public characterData(string name, int no, int cost, int atk,int endur, int maxHp, string[] passive, string[] passiveContent)
+        public characterData(string name, int no, int cost, int atk,int def, int maxHp, string[] passive, string[] passiveContent)
         {
             Name = name;
             No = no;
             Cost = cost;
             Atk = atk;
-            Endur = endur;
+            Def=def;
             this.maxHp = maxHp;
             this.passive = passive;
             this.passiveContent = passiveContent;

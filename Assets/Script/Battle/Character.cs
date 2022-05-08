@@ -12,15 +12,16 @@ public class Character : MonoBehaviour
     public int Armor;
     public int Act;
     public int turnAtk;
-    public int endur;
-    public int turnEndur;
+    public int def;
+    public int turnDef;
     public TurnManager TM;
     public BattleManager BM;
     public TextMeshProUGUI hpT;
     public TextMeshProUGUI atkT;
     public TextMeshProUGUI armorT;
     public TextMeshProUGUI actT;
-    public TextMeshProUGUI endurT;
+    public TextMeshProUGUI defT;
+
     public TextMeshProUGUI board;
 
     public int[] passive;
@@ -70,6 +71,17 @@ public class Character : MonoBehaviour
             //onDamage(Status[0],null);
         }
     }
+    public void DefUp(int i)
+    {
+        def += i;
+        turnDef += i;
+        defT.text = turnDef + "";
+    }
+    public void TurnDefUp(int i)
+    {
+        turnDef += i;
+        defT.text = turnDef + "";
+    }
     public void getArmor(int a)
     {
        
@@ -87,6 +99,7 @@ public class Character : MonoBehaviour
         }
         stringArmor = Armor;
         armorT.text = "" + Armor;
+        
     }
     public void StatusAbnom(int status,int count)
     {
@@ -111,6 +124,7 @@ public class Character : MonoBehaviour
     {
         Act = 1;
         actT.text = "" + Act;
+        defT.text = "" + def;
         //endurT.text = "" + endur;
 
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();

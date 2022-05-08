@@ -130,14 +130,16 @@ public class Bless : MonoBehaviour
         {if (blessIcon[i] == null) continue;
             if (lobby.GD.blessbool[i])
             {
-             
+               
                 blessIcon[i].SetActive(true);
             }
             else
             {
+               
                 blessIcon[i].SetActive(false);
             }
         }
+
     }
     public void IgnumSet(int i)
     {
@@ -316,8 +318,9 @@ public class Bless : MonoBehaviour
         }
         blessT[0].text = bd.bd[randList[rand]].Name + "";
         blessT[1].text = bd.bd[randList[rand]].content + "";
-        
-        BlessApply(randList[rand]);//rand
+
+        //BlessApply(randList[rand]);
+        BlessApply(17);
     }
     /*randList[rand]*/
 
@@ -483,11 +486,14 @@ public class Bless : MonoBehaviour
           
         }
        else {
-          
+            if (b == 3)
+            {
+                lobby.GD.bless3count = 2;
+            }
             lobby.GD.blessbool[b] = true;
             But[2].SetActive(true); }
         if (!lobby.resetmara) 
-       lobby.DayAct();
+        lobby.DayAct();
         setBlessIcon();
     }
  
@@ -535,7 +541,7 @@ public class blessData
             this.per = per; //지속이면 트루
         }
     }
-    public BData[] bd = new BData[17]
+    public BData[] bd = new BData[21]
     {
         new BData(0,"축복이름","축복내용",0,false),
         new BData(1,"찬란한 수확","1000 이그넘을 획득한다.\n모든 아군이 현재 체력의 30%를  잃는다.",1,false),
@@ -543,7 +549,7 @@ public class blessData
         new BData(3,"숨겨진 약점","시작 드로우를 8장 한다.\n전투가 2번 끝나고 해당 축복은 사라진다.",1,true),
         new BData(4,"은밀한 준비","전투의 첫 턴동안 모든 아군의 행동력이 0이 된다.\n그 이후 모든 아군의 행동력이 2로 고정된다.",2,true),
         new BData(5,"가벼운 몸짓","소지하고 있는 카드의 6장을 선택해 소멸시킨다.",3,false),
-        new BData(6,"인위적인 극복","아군 한명을 선택해 패시브를 늘린다. \n	해당 아군의 공격력을 -2로 감소시킨다.",3,false),
+        new BData(6,"인위적인 극복","아군 한명을 선택해 패시브를 늘린다. \n	해당 아군의 공격력을 2 감소시킨다.",3,false),
         new BData(7,"역류하는 고통","전방에 있는 아군의 체력이 감소할 때마다 그 수치만큼 적 전체에게 데미지를 준다.",3,true),
         new BData(8,"정제된 결정","덱이 절반 소멸된다.",1,false),
         new BData(9,"깊어진 생각","카드 선택 중 취소버튼이 생긴다.\n	이그넘의 절반을 잃는다.",1,true),
@@ -553,8 +559,11 @@ public class blessData
         new BData(13,"엮어낸 바늘","파티원 부활 비용이 0이그넘이 된다.",2,true),
         new BData(14,"합리적인 저울","아군 1명의 공격력을 1올린다.\n해당 아군의 현재 체력이 1이 된다.",1,false),
         new BData(15,"쏟아지는 금화","전투로 얻는 이그넘을 3배 받는다.	\n파티원 회복/부활 기능을 사용할 수 없다.",1,true),
-        new BData(16,"넓어진 시선","카드 선택시 보기가 최대 4장이 된다.",3,true)
-,
+        new BData(16,"넓어진 시선","카드 선택시 보기가 최대 4장이 된다.",3,true),
+        new BData(17,"무거운 어깨","모든 아군의 지구력이 1증가한다.",2,true),
+        new BData(18,"무거운 어깨","모든 아군의 지구력이 1증가한다.",2,true),
+        new BData(19,"무거운 어깨","모든 아군의 지구력이 1증가한다.",2,true),
+        new BData(20,"확실한 위치","전방의 아군의 공격력을 1 감소한다.\n후방의 아군의 공격력을 1올린다.",3,true),
     };
 
     

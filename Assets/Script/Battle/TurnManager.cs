@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 public class TurnManager : MonoBehaviour
 {
-    public bool PlayerTurn;
+    public bool PlayerTurn;//플레이어의 턴인지 확인용
     [SerializeField] GameObject[] enemys;
     [SerializeField] Enemy[] enemy;
     public int t;
@@ -13,16 +13,17 @@ public class TurnManager : MonoBehaviour
     public BattleManager BM;
     ActManager AM;
     public TextMeshProUGUI turnText;
-    public int turnCard;
+    public int turnCard;//이번턴에 사용한 카드의 수
     public CardManager CM;
     public int leftCost;
     [SerializeField] GameObject pleaseSelect;
     public Image turnEndImage;
     public int turnAtk;
-    public void turnCardPlus()
+    public void turnCardPlus() //카드를 사용 시 발동
     {
         turnCard++;
-        if (turnCard == 4)
+
+        if (turnCard == 4) //현재 턴에 카드를 4번 사용했다면, 모든 스트레이트 펀치의 코스트를 감소시켜야함.
         {
             for(int i = 0; i < CM.Grave.Count; i++)
             {
@@ -74,21 +75,14 @@ public class TurnManager : MonoBehaviour
         {
             if (!BM.Enemys[i].GetComponent<Enemy>().isDie)
             {
-                BM.Enemys[i].GetComponent<Enemy>().EnemyStartTurn();
+                BM.Enemys[i].GetComponent<Enemy>().EnemyStartTurn();//내 턴 종료시 상대의 턴 한정 은신이나 무적,불사를 해제한다.
             }
         }
         
-            leftCost = BM.cost;
-            for (int i = 0; i < BM.characters.Count; i++)
-            {
-                BM.characters[i].board.text = "";
-                if (!BM.characters[i].isDie && BM.characters[i].card8)
-                {
-                    BM.characters[i].card8 = false;
-                    BM.characters[i].getArmor(leftCost * BM.characters[i].card8point);
-                }
-            }
+           
+          
             turnCard = 0;
+
             PlayerTurn = false;
 
             EndButton.SetActive(false);
@@ -103,7 +97,7 @@ public class TurnManager : MonoBehaviour
 
             }
 
-            BM.TurnCardCount = BM.CardCount;
+            BM.TurnCardCount = BM.CardCount; //뽑아야 할 카드의 수를 디폴트로 변경
             BM.allClear();
             StartCoroutine("TurnEnd");
 
@@ -115,13 +109,13 @@ public class TurnManager : MonoBehaviour
         BM.otherCanvasOn = true;
         for (int i = 0; i < BM.CD.size; i++)
         {
+            BM.characters[i].myPassive.TurnEndTimeCount();//턴 종료시 발동할 패시브를 위해
 
-            BM.characters[i].myPassive.TurnEndTimeCount();
             yield return null;
 
         }
 
-        AM.Act();
+        AM.Act();//패시브 발동
 
         while (BM.otherCor)
         {
@@ -130,13 +124,12 @@ public class TurnManager : MonoBehaviour
 
 
 
-        CM.FieldOff();
+        CM.FieldOff();//코루틴이 끝나면 필드에 있는 카드들을 모두 덱으로 넣음
 
         BM.characters[BM.CD.size - 1].transform.localScale = new Vector3(1, 1, 1);
         BM.otherCanvasOn = false;
-        t++;
+        t++; //턴을 1 올림
         turnText.text = "" + t;
-        BM.curMessage.text = "";
 
     }
 
@@ -165,9 +158,10 @@ public class TurnManager : MonoBehaviour
      
         BM.log.logContent.text += "\n" + t + "턴 시작!";
 
-        BM.cost = BM.startCost+BM.nextTurnStartCost;
+        BM.cost = BM.startCost+BM.nextTurnStartCost;//턴 시작 시 전 턴에 코스트 증가하는 효과가 있었다면 적용.
 
-        BM.useCost(0);
+        BM.useCost(0);//코스트 글자 변경을 위함
+
         BM.nextTurnStartCost = 0;
         PlayerTurn =true;
 
@@ -187,36 +181,23 @@ public class TurnManager : MonoBehaviour
                 BM.characters[i].onMinusAct(BM.characters[i].NextTurnMinusAct);
                 BM.characters[i].turnAtk = BM.characters[i].Atk;
                 BM.characters[i].AtkUp(turnAtk);
-                BM.characters[i].turnEndur = BM.characters[i].endur;
+                BM.characters[i].turnDef = BM.characters[i].def;
                 BM.characters[i].getArmor(BM.characters[i].nextarmor);
                 if (BM.characters[i].Armor < 0) BM.characters[i].Armor = 0;
                 BM.characters[i].nextarmor = 0;
-              
+              //턴 시작 시 전 턴에 올라간 값들을 수정
             }
         }
 
         turnAtk = 0;      
 
-        if (BM.card22on)
-        {
-            int ArmorSum = 0;
-            for (int i = 0; i < BM.characters.Count; i++)
-            {
-                if (!BM.characters[i].isDie)
-                {
-                    ArmorSum += BM.characters[i].Armor;
-                    BM.characters[i].getArmor(-1 * BM.characters[i].Armor);
-                }
-            }
-            BM.card22c.getArmor(ArmorSum);
-            BM.card22on = false;
-        }
+       
 
         CM.TurnStartCardSet();
        
         
     }
-    public void TurnStartPassive()
+    public void TurnStartPassive()//턴 종료와 똑같이 구성
     {     
         for (int i = 0; i < BM.CD.size; i++)
         {

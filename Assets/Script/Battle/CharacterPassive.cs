@@ -74,12 +74,12 @@ public class CharacterPassive : MonoBehaviour
             {
                 BM.OnAttack(myCharacter.reflect, e, myCharacter, 1);
                 BM.log.logContent.text += "" + e.Name + "에게 반사데미지" + myCharacter.reflect + "이 주어집니다.";
-                BM.curMessage.text += "" + e.Name + "에게 반사데미지" + myCharacter.reflect + "이 주어집니다.";
+         
             }
 
             yield return new WaitForSeconds(0.7f);
             transform.localScale /= 1.2f;
-            BM.curMessage.text = "";
+          
             yield return new WaitForSeconds(0.3f);
         }
 
@@ -187,7 +187,7 @@ public class CharacterPassive : MonoBehaviour
         if (myNo == 4 && myPassvie[2] > 0)
         {
             BM.porte3count = myCharacter.passive[2];
-            BM.porte3();
+            BM.porte3mode = true;
         }
         if (myNo == 4 && myPassvie[3] > 0)
         {

@@ -9,9 +9,10 @@ public class GameData
     public bool isNight;
     public int Day;
     public int victory;
-    public bool[] blessbool=new bool[17];
+    public bool[] blessbool=new bool[21];
     public int BattleNo;
     public int[] bless12 = new int[3];
-   public bool isActInDay;
+    public int bless3count;
+    public bool isActInDay;
     public int Stack;
 }
