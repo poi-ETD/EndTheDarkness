@@ -335,7 +335,7 @@ public class Card : MonoBehaviour
         }
         if (BM.otherCanvasOn)
         {
-           // if(isGrave||isDeck) HandManager.Instance.CardMouseEnter(this);
+           // if(isGrave||isDeck) HandManager.Instance.CardMouseEnter(this); 
         }
     }
 
