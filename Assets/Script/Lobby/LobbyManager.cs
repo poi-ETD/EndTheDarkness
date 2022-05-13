@@ -60,6 +60,18 @@ public class LobbyManager : MonoBehaviour
     public int ResetMaraCount;
     [SerializeField] GameObject ResetBless;
     [SerializeField] GameObject ResetItem;
+
+
+    [SerializeField] GameObject GetEquipmentCanvas;
+    [SerializeField] TextMeshProUGUI[] equipStrings;
+    equipment curEquip;
+
+    [SerializeField] GameObject EquipmentView;
+    [SerializeField] GameObject EquipmentContent;
+    int curEquipNumber;
+    [SerializeField] GameObject EquipCharacterView;
+    bool equipmode;
+
     private void Awake()
     {
         string path = Path.Combine(Application.persistentDataPath, "CardData.json");
@@ -148,11 +160,15 @@ public class LobbyManager : MonoBehaviour
         }
         else if (rc == 5)
         {
+            GetRandomEquipment();
+        }
+        else if (rc == 6)
+        {
             ResetMaraCount = 5;
             ResetBless.SetActive(false);
             ResetItem.SetActive(true);
         }
-        else if (rc == 6)
+        else if (rc == 7)
         {
             GD.Ignum += 500;
             IgnumT.text = "" + GD.Ignum;
@@ -245,14 +261,109 @@ public class LobbyManager : MonoBehaviour
 
             for (int i = 0; i < ChD.size; i++)
             {
+                string s1 = "";
+                string s2 = "";
+                if (ChD.characterDatas[i].curEquip == -1)
+                {
+                    s1 = "장비 없음";
+                   
+                }
+                else
+                {
+                    equipment e = GD.EquipmentList[ChD.characterDatas[i].curEquip];
+                    List<string> sList = EquipmentManager.Instance.equipmentStrings(e);
+                    s1 = sList[0];
+                   s2 = sList[1] + '\n' + sList[2] + '\n' + sList[3];
 
-                GameObject LC = Instantiate(LobbyCharacterPrefebs, CharacterView.transform);
-                LC.GetComponent<CharacterSetting>().SetCharacterInLobby(ChD.characterDatas[i].No, CharacterSprtie[ChD.characterDatas[i].No],
+                }
+                CharacterView.transform.GetChild(i).gameObject.SetActive(true);
+                CharacterView.transform.GetChild(i).gameObject.GetComponent<CharacterSetting>().SetCharacterInLobby(ChD.characterDatas[i].No, CharacterSprtie[ChD.characterDatas[i].No],
                     ChD.characterDatas[i].Atk, ChD.characterDatas[i].def, ChD.characterDatas[i].Cost, ChD.characterDatas[i].curHp, ChD.characterDatas[i].maxHp,
-                    ChD.characterDatas[i].curFormation, ChD.characterDatas[i].passive
+                    ChD.characterDatas[i].curFormation, ChD.characterDatas[i].passive,s1,s2
                     );
             }
         }
+    }
+
+
+    public void ShowEquipment()
+    {
+        if (canvasOn) return;
+        canvasOn = true;
+        PopUpCanvas.SetActive(true);
+        EquipmentView.SetActive(true);
+        equipmode = false;
+        for(int i = 0; i < GD.EquipmentList.Count; i++)
+        {
+            equipment e = GD.EquipmentList[i];
+            List<string> sList = EquipmentManager.Instance.equipmentStrings(e);
+            EquipmentContent.transform.GetChild(i).gameObject.SetActive(true);
+            EquipmentContent.transform.GetChild(i).GetChild(1).GetComponent<TextMeshProUGUI>().text = sList[0];
+            EquipmentContent.transform.GetChild(i).GetChild(2).GetComponent<TextMeshProUGUI>().text = sList[1] + '\n'
+                + sList[2] + '\n' + sList[3];
+            EquipmentContent.transform.GetChild(i).GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>().text = "착용";
+        }
+        for(int i = GD.EquipmentList.Count; i < 50; i++)
+        {
+            EquipmentContent.transform.GetChild(i).gameObject.SetActive(false);
+        }
+        for (int i = 0; i < ChD.size; i++)
+        {
+            if (ChD.characterDatas[i].curEquip != -1)
+            {
+                EquipmentContent.transform.GetChild(ChD.characterDatas[i].curEquip).GetChild(3).GetChild(0).
+                    GetComponent<TextMeshProUGUI>().text = ChD.characterDatas[i].Name+" 착용 해제";
+            }
+        }
+    }
+    public void EquipThis(GameObject me)
+    {
+        int num = me.name[7]-48;
+        if (me.name[8] != 41)
+        {
+            num *= 10;
+            num += me.name[8] - 48;
+        }
+        if (equipmode) return;
+        bool isEquip = false;
+        for(int i = 0; i < ChD.size; i++)
+        {
+            if (ChD.characterDatas[i].curEquip == num) isEquip = true;
+        }
+        if (isEquip)
+        {
+            for (int i = 0; i < ChD.size; i++)
+            {
+                if (ChD.characterDatas[i].curEquip == num) {
+                    ChD.characterDatas[i].curEquip = -1;
+                }
+               
+            }
+            canvasOn = false;
+            ShowEquipment();
+        }
+        else
+        {
+            equipmode = true;
+            curEquipNumber = num;
+            EquipCharacterView.SetActive(true);
+            for (int i = 0; i < ChD.size; i++)
+            {
+                EquipCharacterView.transform.GetChild(0).GetChild(i).gameObject.SetActive(true);
+                EquipCharacterView.transform.GetChild(0).GetChild(i).GetChild(0).GetComponent<TextMeshProUGUI>().text = ChD.characterDatas[i].Name;
+            }
+        }
+    }
+    public void CancleEquip()
+    {
+        EquipCharacterView.SetActive(false);
+        canvasOn = false;
+        ShowEquipment();
+    }
+    public void EquipToThisCharacter(int num)
+    {
+        ChD.characterDatas[num].curEquip = curEquipNumber;
+        CancleEquip();
     }
     public void clear()
     {
@@ -261,12 +372,7 @@ public class LobbyManager : MonoBehaviour
         {
             Destroy(childList[i].gameObject);
         }
-        childList = CharacterView.GetComponentsInChildren<Transform>();
-
-        for (int i = 1; i < childList.Length; i++)
-        {
-            Destroy(childList[i].gameObject);
-        }
+        
     }
     public void ThisCardSee(int i)
     {
@@ -335,7 +441,7 @@ public class LobbyManager : MonoBehaviour
         GameObject.Find("PassiveView").SetActive(false);
         PopUpCanvas.SetActive(false);
         ChD.characterDatas[i / 4].passive[i % 4]++;
-        GD.Stack -= 15;
+        GD.passiveStack -= 15;
         canvasOn = false;
         DayAct();
     }
@@ -706,7 +812,7 @@ public class LobbyManager : MonoBehaviour
         canvasOn = true;
         PassivePopup.SetActive(true);
         PopUpCanvas.SetActive(true);
-        curStack.text = "현재스택:" + GD.Stack;
+        curStack.text = "현재스택:" + GD.passiveStack;
     }
     public void GetStack(int n)
     {
@@ -718,7 +824,7 @@ public class LobbyManager : MonoBehaviour
                 return;
             }
             GD.Ignum -= 300;
-            GD.Stack += n;
+            GD.passiveStack += n;
         }
         if (n == 3)
         {
@@ -728,7 +834,7 @@ public class LobbyManager : MonoBehaviour
                 return;
             }
             GD.Ignum -= 1000;
-            GD.Stack += n;
+            GD.passiveStack += n;
         }
         canvasOn = false;
         DayAct();
@@ -739,12 +845,12 @@ public class LobbyManager : MonoBehaviour
     }
     public void getRandomPassive()
     {
-        if (GD.Stack < 5)
+        if (GD.passiveStack < 5)
         {
             noStackInPassive.SetActive(true);
             return;
         }
-        GD.Stack -= 5;
+        GD.passiveStack -= 5;
         int rand = Random.Range(0, ChD.size * 4);
         ChD.characterDatas[rand / 4].passive[rand % 4]++;
         canvasOn = false;
@@ -754,9 +860,23 @@ public class LobbyManager : MonoBehaviour
         noStackInPassive.SetActive(false);
         noStackInPassive.SetActive(false);
     }
+    public void GetRandomEquipment()
+    {
+        GetEquipmentCanvas.SetActive(true);
+        curEquip=EquipmentManager.Instance.makeEquipment();
+        List<string> sList = EquipmentManager.Instance.equipmentStrings(curEquip);
+        equipStrings[0].text = sList[0];
+        equipStrings[1].text = sList[1] + '\n' + sList[2] + '\n' + sList[3];
+    }
+    public void CloseRandomEquipment()
+    {
+        GD.EquipmentList.Add(curEquip);
+        GetEquipmentCanvas.SetActive(false);
+        if (resetmara) Resetmara(6);
+    }
     public void GetSelectPassive() //개발용
     {
-        if (GD.Stack < 15)
+        if (GD.passiveStack < 15)
         {
             noStackInPassive.SetActive(true);
             return;

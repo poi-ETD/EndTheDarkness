@@ -99,6 +99,7 @@ public class BattleManager : MonoBehaviour
     List<int> RandomCardList = new List<int>();
     CardData2 data2 = new CardData2();
     List<int> RancomSelectCard = new List<int>();
+    [SerializeField] TextMeshProUGUI[] RewardEquipmentString;
     //승리 시 보상 선택하는 창에 들어갈 변수들
 
     [SerializeField] GameObject Sless;//덱에서 카드 선택할 때 아무것도 선택 안 되어 있으 면
@@ -925,6 +926,11 @@ public class BattleManager : MonoBehaviour
             RancomSelectCard.Add(RandomCardList[RandomCardList.Count - i]);
         }
         //랜덤함수를 반복 해서 맨 앞 n장의 카드들을 중복되지 않는 카드들로
+        equipment e=EquipmentManager.Instance.makeEquipment(); //새로운 장비를 생성함.
+        List<string> sList = EquipmentManager.Instance.equipmentStrings(e);
+        RewardEquipmentString[0].text = sList[0];
+        RewardEquipmentString[1].text = sList[1] + '\n' + sList[2] + '\n' + sList[3];
+        gd.EquipmentList.Add(e);
     }
     public void Click_SelectReward()//원하는 카드를 선택해서 카드 데이터에 저장하는 함수
     {
