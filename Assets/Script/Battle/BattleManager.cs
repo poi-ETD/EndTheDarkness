@@ -19,7 +19,6 @@ public class BattleManager : MonoBehaviour
     public GameObject pcard;//바로 이전에 사용한 카드
 
     [SerializeField] TextMeshProUGUI costT;
-    public int startCost;//턴이 시작 될 때마다 채워지는 코스트
     public int cost;//남은 코스트
     public int nextTurnStartCost;//다음 턴 시작 시 코스트를 올려주는 변수
 
@@ -50,7 +49,7 @@ public class BattleManager : MonoBehaviour
 
 
     public GameData gd;
-    public CharacterData CD;
+    public CharacterData ChD;
     [SerializeField] GameObject victory; //승리 시 나오는 팝업 창
     [SerializeField] GameObject defeated; //패배 시 나오는 팝업 창
 
@@ -128,27 +127,27 @@ public class BattleManager : MonoBehaviour
     [HideInInspector] public bool isSelectedCardinHand = false;
 
     public GameObject DmgPrefebs;//데미지 프리펩
-
+    
     public void SetBless20() //bless20이 켜져있다면 적용 될 함수
     {
         for(int i = 0; i < forward.Count; i++)
         {
-            forward[i].RealAtkUp(-1);
+            forward[i].AtkUp(-1);
         }
         for(int i = 0; i < back.Count; i++)
         {
-            back[i].RealAtkUp(1);
+            back[i].AtkUp(1);
         }
     }
     public void ResetBless20() //원래 공격력으로 돌려놓는 함수
     {
         for (int i = 0; i < forward.Count; i++)
         {
-            forward[i].RealAtkUp(1);
+            forward[i].AtkUp(1);
         }
         for (int i = 0; i < back.Count; i++)
         {
-            back[i].RealAtkUp(-1);
+            back[i].AtkUp(-1);
         }
     }
     public void costUp(int i) //현재 코스트를 올려주는 함수
@@ -207,7 +206,7 @@ public class BattleManager : MonoBehaviour
     }
     public void Click_SelectFormationCollapse(int c)//진형붕괴 팝업창에 뜬 버튼을 클릭했을 시
     {
-        CD.line = line;
+        ChD.line = line;
         if (MoveToForward)
         {
 
@@ -227,13 +226,13 @@ public class BattleManager : MonoBehaviour
             forward[i].transform.position = new Vector2(-880 / 45f, (300 - 150 * characters.Count) / 45f);
             characters.Add(forward[i]);
         }
-        for (int i = line; i < CD.size; i++)
+        for (int i = line; i < ChD.size; i++)
         {
             back[i - line].transform.position = new Vector2(-880 / 45f, (270 - 150 * characters.Count) / 45f);
             characters.Add(back[i - line]);
         }
         //캐릭터들의 위치 재설정
-        for (int i = 1; i < CD.size; i++)
+        for (int i = 1; i < ChD.size; i++)
         {
             characters[i].curNo = i;
         }
@@ -277,21 +276,21 @@ public class BattleManager : MonoBehaviour
         for (int i = 0; i < characters.Count; i++)
         {
             bool isForward = false;
-            CD.characterDatas[i].curHp = characterOriginal[i].Hp;
+            ChD.characterDatas[i].curHp = characterOriginal[i].Hp;
             for (int j = 0; j < forward.Count; j++)
             {
                 if (forward[j] == characterOriginal[i])
                 {
-                    CD.characterDatas[i].curFormation = 0;
+                    ChD.characterDatas[i].curFormation = 0;
                     isForward = true;
                     break;
                 }
             }
-            if (!isForward) CD.characterDatas[i].curFormation = 1;
+            if (!isForward) ChD.characterDatas[i].curFormation = 1;
         }
 
         string path4 = Path.Combine(Application.persistentDataPath, "CharacterData.json");
-        string CharacterData = JsonConvert.SerializeObject(CD);
+        string CharacterData = JsonConvert.SerializeObject(ChD);
         File.WriteAllText(path4, CharacterData);
         Time.timeScale = 1;
 
@@ -308,50 +307,51 @@ public class BattleManager : MonoBehaviour
 
     private void Awake()
     {
-        startCost = 0;
+       
         string path = Path.Combine(Application.persistentDataPath, "GameData.json");
         string gameData = File.ReadAllText(path);
         gd = JsonConvert.DeserializeObject<GameData>(gameData);
         path = Path.Combine(Application.persistentDataPath, "CharacterData.json");
         string characterData = File.ReadAllText(path);
-        CD = JsonConvert.DeserializeObject<CharacterData>(characterData);
-        line = CD.line;
-        for (int i = 0; i < CD.size; i++)
+        ChD = JsonConvert.DeserializeObject<CharacterData>(characterData);
+        line = ChD.line;
+        for (int i = 0; i < ChD.size; i++)
         {
             GameObject CharacterC = null;
 
-            if (CD.characterDatas[i].curFormation == 0) //전방
+            if (ChD.characterDatas[i].curFormation == 0) //전방
             {
-
-                CharacterC = Instantiate(CharacterPrefebs[CD.characterDatas[i].No], new Vector2(-880 / 45f, 375 / 45f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
+                
+                CharacterC = Instantiate(CharacterPrefebs[ChD.characterDatas[i].No], new Vector2(-880 / 45f, 375 / 45f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
                 forward.Add(CharacterC.GetComponent<Character>());
             }
             else //후방
             {
-                CharacterC = Instantiate(CharacterPrefebs[CD.characterDatas[i].No], new Vector2(-880 / 45f, (330 - 150 * characters.Count) / 45f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
+                CharacterC = Instantiate(CharacterPrefebs[ChD.characterDatas[i].No], new Vector2(-880 / 45f, (330 - 150 * characters.Count) / 45f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
                 back.Add(CharacterC.GetComponent<Character>());
             } //전방과 후방 목록에 각각 캐릭터를 넣음
             characterOriginal.Add(CharacterC.GetComponent<Character>());
-            CharacterC.GetComponent<Character>().Atk = CD.characterDatas[i].Atk;
-            CharacterC.GetComponent<Character>().Hp = CD.characterDatas[i].curHp;
-            CharacterC.GetComponent<Character>().def = CD.characterDatas[i].def;
-            startCost += CD.characterDatas[i].Cost;
-            CharacterC.GetComponent<Character>().passive = CD.characterDatas[i].passive;
-            CharacterC.GetComponent<Character>().Name = CD.characterDatas[i].Name;
+            CharacterC.GetComponent<Character>().Atk = ChD.characterDatas[i].Atk;
+            CharacterC.GetComponent<Character>().Hp = ChD.characterDatas[i].curHp;
+            CharacterC.GetComponent<Character>().def = ChD.characterDatas[i].def;
+            CharacterC.GetComponent<Character>().cost = ChD.characterDatas[i].Cost;
+            CharacterC.GetComponent<Character>().passive = ChD.characterDatas[i].passive;
+            CharacterC.GetComponent<Character>().Name = ChD.characterDatas[i].Name;
             //캐릭터들의 기본 스탯을 데이터와 같게 설정
+            CharacterC.GetComponent<Character>().lobbyNum = i; //로비에 있는 순서대로 불러오기 떄문에 미리 저장
         }
-
+       
         for (int i = 0; i < line; i++)
         {
             forward[i].transform.position = new Vector2(-880 / 45f, (300 - 150 * characters.Count) / 45f);
             characters.Add(forward[i]);
         }//위치가 전방인 캐릭터들을 목록에 넣음
-        for (int i = line; i < CD.size; i++)
+        for (int i = line; i < ChD.size; i++)
         {
             back[i - line].transform.position = new Vector2(-880 / 45f, (270 - 150 * characters.Count) / 45f);
             characters.Add(back[i - line]);
         }//위치가 후방인 캐릭터들을 목록에 넣음
-        for (int i = 1; i < CD.size; i++)
+        for (int i = 1; i < ChD.size; i++)
         {
             characters[i].curNo = i;
         }
@@ -375,6 +375,11 @@ public class BattleManager : MonoBehaviour
         if (gd.blessbool[20])
         {
             SetBless20();
+        }
+        if (gd.blessbool[4])
+        {
+            for (int i = 0; i < characters.Count; i++)
+                characters[i].turnAct++;
         }
     }
 
@@ -640,7 +645,7 @@ public class BattleManager : MonoBehaviour
                
             }
         }
-        for (int i = 0; i < CD.size; i++)
+        for (int i = 0; i < ChD.size; i++)
         {
             characters[i].myPassive.SpecialDrow(drow);
         }
@@ -708,14 +713,14 @@ public class BattleManager : MonoBehaviour
         {
             if (!characters[i].isDie)
             {
-                characters[i].AtkUp(atk);
+                characters[i].TurnAtkUp(atk);
             }
         }
     }
     public void TurnAtkUp(int atk) //해당 턴 동안 공격력 증가
     {
         log.logContent.text += "\n이번 턴 동안 " + character.Name + "의 공격력이 " + atk + "만큼 증가합니다.";
-        character.AtkUp(atk);
+        character.TurnAtkUp(atk);
     }
     public void AtkUp(int atk) //해당 전투동안 공격력 증가
     {
@@ -966,25 +971,25 @@ public class BattleManager : MonoBehaviour
     }
     public void Click_NoSelectAndMain()//전투 정보를 모두 저장한 후 로비로 가는 함수
     {if (gd.bless3count > 0) gd.bless3count--;
-        if (gd.bless3count == 0) gd.blessbool[3] = false;
+        if (gd.bless3count == 0) gd.blessbool[3] = false; //블레스3이 켜져있다면 1개씩 감소시킴.
         for (int i = 0; i < characters.Count; i++)
         {
             bool isForward = false;
-            CD.characterDatas[i].curHp = characterOriginal[i].Hp;
+            ChD.characterDatas[i].curHp = characterOriginal[i].Hp;
             for (int j = 0; j < forward.Count; j++)
             {
                 if (forward[j] == characterOriginal[i])
                 {
-                    CD.characterDatas[i].curFormation = 0;
+                    ChD.characterDatas[i].curFormation = 0;
                     isForward = true;
                     break;
                 }
             }
-            if (!isForward) CD.characterDatas[i].curFormation = 1;
+            if (!isForward) ChD.characterDatas[i].curFormation = 1; //진형붕괴를 통해 위치가 바꼈다면 저장
         }
 
         string path4 = Path.Combine(Application.persistentDataPath, "CharacterData.json");
-        string CharacterData = JsonConvert.SerializeObject(CD);
+        string CharacterData = JsonConvert.SerializeObject(ChD);
         File.WriteAllText(path4, CharacterData);
         gd.isAct = false;
         gd.Day++;
@@ -1433,10 +1438,10 @@ public class BattleManager : MonoBehaviour
         for (int i = 0; i < characters.Count; i++)
         {
             if(characters[i].characterNo!=2)
-            characters[i].onMinusAct(characters[i].Act);
+            characters[i].onMinusAct(characters[i].turnAct);
             else
             {
-                characters[i].AtkUp(3);
+                characters[i].TurnAtkUp(3);
             }
         }
 

@@ -77,7 +77,7 @@ public class CharacterPassive : MonoBehaviour
     public void Sparky4()
     {
         if (myCharacter.isDie) return;
-        myCharacter.RealAtkUp(2);
+        myCharacter.AtkUp(2);
     }
     public void SpecialDrow(int drow)
     {
@@ -228,13 +228,13 @@ public class CharacterPassive : MonoBehaviour
             CM.PlusCard(14);
         if (!isKing)
         {
-            myCharacter.myImage.sprite = upQ; 
-            
+            myCharacter.myImage.sprite = upQ;
+            myCharacter.cost += 1;
             isKing = true;
             myCharacter.Atk += 2;
-            myCharacter.AtkUp(2);
+            myCharacter.TurnAtkUp(2);
         }
-        BM.startCost++;
+        
     }
     public void Porte1()
     {
@@ -341,7 +341,7 @@ public class CharacterPassive : MonoBehaviour
     {
         if (myCharacter.isDie) return;
 
-        if (myNo == 2 && myPassvie[2]>0&&myCharacter.Act == 0&& CM.field.Count > 0)
+        if (myNo == 2 && myPassvie[2]>0&&myCharacter.turnAct == 0&& CM.field.Count > 0)
         {
             AM.MakeAct(0,7, 1, null,null, myCharacter, null, myPassvie[2]);
         }

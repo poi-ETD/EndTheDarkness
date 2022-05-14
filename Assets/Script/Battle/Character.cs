@@ -10,10 +10,11 @@ public class Character : MonoBehaviour
     public int Hp;
     public int Atk;
     public int Armor;
-    public int Act;
+    public int turnAct;
     public int turnAtk;
     public int def;
     public int turnDef;
+    public int Act=1;
     public TurnManager TM;
     public BattleManager BM;
     public TextMeshProUGUI hpT;
@@ -57,11 +58,15 @@ public class Character : MonoBehaviour
     //0 -> 중독
 
     public int beforeArmor;
+
+    public int lobbyNum;
+
+    
     public void useAct(int i)
     {
-        Act -= i;
-        if (Act < 0) Act = 0;
-        actT.text = "" + Act;
+        turnAct -= i;
+        if (turnAct < 0) turnAct = 0;
+        actT.text = "" + turnAct;
     }
  
     public void Acting()
@@ -73,6 +78,7 @@ public class Character : MonoBehaviour
     }
     public void DefUp(int i)
     {
+     
         def += i;
         turnDef += i;
         defT.text = turnDef + "";
@@ -122,12 +128,62 @@ public class Character : MonoBehaviour
     }
     private void Start()
     {
-        Act = 1;
-        actT.text = "" + Act;
+        BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
+        equipment myEquip = BM.gd.EquipmentList[BM.ChD.characterDatas[lobbyNum].curEquip];
+        bool cantEquip = false;
+        if(myEquip.type==1&& BM.ChD.characterDatas[lobbyNum].curFormation == 0)
+        {
+            cantEquip = true;
+        }
+        if (myEquip.type ==0&& BM.ChD.characterDatas[lobbyNum].curFormation == 1)
+        {
+            cantEquip = true;
+        }
+        
+        if (!cantEquip)
+        {
+            for(int i = 0; i < myEquip.improveMount.Count; i++)
+            {
+             
+                switch (myEquip.improveStat[i])
+                {
+                    case 0:AtkUp(myEquip.improveMount[i]);
+                        break;
+                    case 1:DefUp(myEquip.improveMount[i]);                      
+                        break;
+                    case 2:maxHp += myEquip.improveMount[i];
+                        break;
+                    case 3:cost += myEquip.improveMount[i];
+                        break;
+                    case 4:Act++;
+                        break;
+                }
+            }
+            switch (myEquip.degradeStat)
+            {
+                case 0:
+                    AtkUp(-myEquip.degradeMount);
+                    break;
+                case 1:
+                    DefUp(-myEquip.degradeMount);
+                    break;
+                case 2:
+                    maxHp -= myEquip.degradeMount;
+                    break;
+                case 3:
+                    cost -= myEquip.degradeMount;
+                   
+                    break;
+
+            }
+        }
+        
+        turnAct = Act;
+        actT.text = "" + turnAct;
         defT.text = "" + def;
         //endurT.text = "" + endur;
 
-        BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
+      
         myPassive = GetComponent<CharacterPassive>();
         myImage = transform.GetChild(7).GetComponent<Image>();
       
@@ -153,19 +209,20 @@ public class Character : MonoBehaviour
   
     public void onMinusAct(int i)
     {
-        Act -= i;
+        turnAct -= i;
         if (i > 0)
         {
             GameObject dmgText = Instantiate(BM.DmgPrefebs, gameObject.transform);
             dmgText.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
             dmgText.GetComponent<DMGtext>().GetType(1, i);
         }
-        if (Act < 0) Act = 0;
-        actT.text = "" + Act;
+        if (turnAct < 0) turnAct = 0;
+        actT.text = "" + turnAct;
         NextTurnMinusAct = 0;
     }
-    public void AtkUp(int i)
+    public void TurnAtkUp(int i)
     {
+        
         turnAtk += i;
         if (bless[6])
         {
@@ -175,7 +232,7 @@ public class Character : MonoBehaviour
     }
 
 
-    public void RealAtkUp(int i)
+    public void AtkUp(int i)
     {
         Atk += i;
         turnAtk += i;
@@ -188,15 +245,15 @@ public class Character : MonoBehaviour
     }
     public void ActUp(int i)
     {      
-        Act += i;
-        actT.text = "" + Act;
+        turnAct += i;
+        actT.text = "" + turnAct;
     }
 
     public void onHit(int dmg,Enemy E)
     {
         if (dmg == 0) return;
         BM.log.logContent.text+="\n"+Name+"이(가) "+E.Name+"에게 "+dmg+"의 피해를 입었다.";
-        for (int i = 0; i < BM.CD.size; i++)
+        for (int i = 0; i < BM.ChD.size; i++)
         {
             if (i == curNo) myPassive.MyHit(E,dmg);
             else { BM.characters[i].myPassive.TeamHit(curNo);}
@@ -266,7 +323,7 @@ public class Character : MonoBehaviour
         hpT.text = "<color=#a39fff><b>" + Hp + "</color></b><size=15>/" + maxHp + "</size>";
         Color color = new Color(0.3f, 0.3f, 0.3f);
         myImage.color = color;
-        Act = 0;
+        turnAct = 0;
         board.text = "";
         Armor = 0;
         BM.diecount++;

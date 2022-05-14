@@ -19,15 +19,30 @@ public class EquipmentManager : MonoBehaviour
             return instance;
         }
     }
+    public Sprite[] equipSpr = { Resources.Load<Sprite>("temporal/axe_001"),
+        Resources.Load<Sprite>("temporal/axe_002"),
+Resources.Load<Sprite>("temporal/axe_003"),
+Resources.Load<Sprite>("temporal/axe_004"),
+Resources.Load<Sprite>("temporal/axe_005"),
+Resources.Load<Sprite>("temporal/axe_006"),
+Resources.Load<Sprite>("temporal/axe_007"),
+Resources.Load<Sprite>("temporal/axe_008"),
+Resources.Load<Sprite>("temporal/axe_009"),
+Resources.Load<Sprite>("temporal/axe_010")
+        };
+    string[] prefix = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" };
+    string[] equipName = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
     public equipment makeEquipment()
     {
+       
+       
+        
+        
+        int degradeMount = 0;
+        int improveMount = 0;
         int rand1 = Random.Range(0, 5);
         int rand2 = Random.Range(0, 4);
         while (rand1 == rand2) rand2 = Random.Range(0, 4);
-        string[] prefix = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" };
-        string[] equipName = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
-        int degradeMount = 0;
-        int improveMount = 0;
         switch (rand1)
         {
             case (int)Enums.EquipmentStat.atk:
@@ -75,7 +90,7 @@ public class EquipmentManager : MonoBehaviour
         l1.Add(rand1);
         List<int> l2 = new List<int>();
         l2.Add(improveMount);
-        equipment e = new equipment(t, prefix[randPrefix]+" "+equipName[randEquip],l1,l2, rand2, degradeMount);
+        equipment e = new equipment(t, prefix[randPrefix]+" "+equipName[randEquip],l1,l2, rand2, degradeMount,randEquip);
         return e;
     }
     public List<string> equipmentStrings(equipment e)
@@ -137,5 +152,83 @@ public class EquipmentManager : MonoBehaviour
         }
         names.Add(s);
         return names;
+    }
+    public equipment ResetEquipment(equipment e)
+    {
+        int degradeMount = 0;
+        int improveMount = 0;
+        int rand1 = Random.Range(0, 5);
+        int rand2 = Random.Range(0, 4);
+        while (rand1 == rand2) rand2 = Random.Range(0, 4);
+        switch (rand1)
+        {
+            case (int)Enums.EquipmentStat.atk:
+                improveMount = Random.Range(1, 3);
+                break;
+            case (int)Enums.EquipmentStat.def:
+                improveMount = Random.Range(1, 4);
+                break;
+            case (int)Enums.EquipmentStat.maxHp:
+                improveMount = Random.Range(1, 5) * 5;
+                break;
+            case (int)Enums.EquipmentStat.cost:
+                improveMount = Random.Range(1, 3);
+                break;
+            case (int)Enums.EquipmentStat.act:
+                improveMount = 1;
+                break;
+        }
+        switch (rand2)
+        {
+            case (int)Enums.EquipmentStat.atk:
+                degradeMount = Random.Range(1, 3);
+                break;
+            case (int)Enums.EquipmentStat.def:
+                degradeMount = Random.Range(1, 4);
+                break;
+            case (int)Enums.EquipmentStat.maxHp:
+                degradeMount = Random.Range(2, 5) * 5;
+                break;
+            case (int)Enums.EquipmentStat.cost:
+                degradeMount = 1;
+                break;
+
+        }
+        int t = Random.Range(1, 101);
+        if (t <= 45)
+        {
+            t = 0;
+        }
+        else if (t <= 90) t = 1;
+        else t = 2;
+        List<int> l1 = new List<int>();
+        l1.Add(rand1);
+        List<int> l2 = new List<int>();
+        l2.Add(improveMount);
+        equipment newE = new equipment(t, e.equipName, l1, l2, rand2, degradeMount, e.equipNum);
+        return newE;
+    }
+    public equipment AddEquipments(equipment e1,equipment e2)
+    {
+        int randPrefix = Random.Range(0, 10);
+        int randEquip = Random.Range(0, 10);
+        int rand = Random.Range(0, 2);//0일시 e1이 상승 옵, e2가 하락 옵, 1일 시 반대
+        
+        
+        List<int> l1 = e1.improveStat; 
+        List<int> l2 = e1.improveMount; 
+        int rand2 = e2.degradeStat; 
+        int degradeMount = e2.degradeMount;
+        int t = e1.type;
+        if (Random.Range(0, 2) == 0) t = e2.type;
+        if (Random.Range(0, 100) <100)
+        {
+            l1.AddRange(e2.improveStat);
+            l2.AddRange(e2.improveMount);
+        }   
+
+        
+        equipment e = new equipment(t, prefix[randPrefix] + " " + equipName[randEquip], l1, l2, rand2, degradeMount, randEquip);
+        return e;
     }
 }

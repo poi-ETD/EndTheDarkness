@@ -10,7 +10,7 @@ public class CardData2
         public string Content;
         public int Cost;
         public int Deck;
-        public int type;
+        public int type;//기본&스타터,에디셔녈,토큰
         public int No;
         public int select; //0->선택X 1->적 선택2->묘지on,묘지 선택 3 ->덱 on,덱 선택 4->스케치반복
      
@@ -25,7 +25,7 @@ public class CardData2
             this.select = select;
         }
     }
-    public cardData[] cd = new cardData[25]
+    public cardData[] cd = new cardData[27]
     {  new cardData("이름자리입니다","내용입니다",0,0,0,0,0),
 
        new cardData("기본공격","-적 한명에게 데미지: <color=red><b>7</color></b>",1,0,0,1,1),
@@ -74,7 +74,9 @@ public class CardData2
     
        new cardData("매치 포인트","-스카리를 제외한 파티 전체의 행동력이 0이 된다.\n-턴 종료시까지 스파키의 공격력:+3",2,2,1,23,0),
 
-       new cardData("사이코키네시스","-패에있는 카드를 모두 묘지에 버린다.\n덱에 있는 카드를 1장 선택해 가지고 온다.",2,4,1,24,3)
+       new cardData("사이코키네시스","-패에있는 카드를 모두 묘지에 버린다.\n-덱에 있는 카드를 1장 선택해 가지고 온다.",2,4,1,24,3),
+       new cardData("들어낸 뼈갑옷","-망자부활:현재 남은 코스트.\n-다음 턴 시작 시 자신에게 방어도:7.",1,1,1,25,0),
+       new cardData("흩날리는 살더미","-망자부활:10.\n-적 전체에게 데미지:2 (3번).",2,1,1,26,0)
     };
     
 

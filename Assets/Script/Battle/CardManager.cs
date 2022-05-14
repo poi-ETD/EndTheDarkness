@@ -180,7 +180,7 @@ public class CardManager : MonoBehaviour
         Character curC = BM.character;
 
         curC.GetComponent<CharacterPassive>().myAct();     
-        for(int i = 0; i < BM.CD.size; i++)
+        for(int i = 0; i < BM.ChD.size; i++)
         {
             BM.characters[i].myPassive.CardUse();        
         }   

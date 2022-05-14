@@ -43,7 +43,7 @@ public class Card : MonoBehaviour
                 BM.costOver();
                 return;
             }
-            if (BM.character.Act <= 0)
+            if (BM.character.turnAct <= 0)
             {
                 if (cardNo != 18)
                 {
@@ -160,7 +160,16 @@ public class Card : MonoBehaviour
                 {
                     BM.card23();
                 }
-              
+                if (cardNo == 25)
+                {
+                    BM.ghostRevive(BM.cost);
+                    BM.NextTurnArmor(7 + BM.character.turnDef);
+                }
+                if (cardNo == 26)
+                {
+                    BM.ghostRevive(10);
+                    BM.AllAttack(2, BM.character,3);
+                }
                 BM.useCost(cardcost);
                 BM.character.useAct(1);               
                 CardUse();
@@ -218,7 +227,7 @@ public class Card : MonoBehaviour
         {
             BM.OnDmgOneTarget(4, BM.enemy,7);                      
         }
-      
+        
         BM.useCost(cardcost);       
         BM.character.useAct(1);
         CardUse();

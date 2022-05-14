@@ -27,7 +27,7 @@ public class CharacterSetting :EventTrigger
       
     }
     //0->이름 1->내용 2->위치 3->패시브
-    public void SetCharacterInLobby(int i, Sprite s,int atk,int endur,int cost,int curHp,int maxHp,int formation,int[] passive,string s1,string s2)
+    public void SetCharacterInLobby(int i, Sprite s,int atk,int endur,int cost,int curHp,int maxHp,int formation,int[] passive,string s1,string s2,Sprite equipSprite)
     {
         myImage.sprite = s;
         no = i;
@@ -71,6 +71,8 @@ public class CharacterSetting :EventTrigger
         counter = 0;
 
 
+        transform.GetChild(1).GetComponent<Image>().sprite = equipSprite;
+        
         transform.GetChild(1).GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().text = s1;
         transform.GetChild(1).GetChild(0).GetChild(1).GetComponent<TextMeshProUGUI>().text = s2;
     }

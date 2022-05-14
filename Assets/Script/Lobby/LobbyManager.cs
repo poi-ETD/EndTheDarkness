@@ -71,7 +71,11 @@ public class LobbyManager : MonoBehaviour
     int curEquipNumber;
     [SerializeField] GameObject EquipCharacterView;
     bool equipmode;
-
+    [SerializeField] GameObject EquipManageView;
+    [SerializeField] GameObject EquipManageContent;
+    [SerializeField] List<int> SelectedEquipList = new List<int>();
+    [SerializeField] GameObject[] SelectedEquipImage;
+    [SerializeField] GameObject EquipManageButton;
     private void Awake()
     {
         string path = Path.Combine(Application.persistentDataPath, "CardData.json");
@@ -263,6 +267,7 @@ public class LobbyManager : MonoBehaviour
             {
                 string s1 = "";
                 string s2 = "";
+                Sprite spr = Resources.Load<Sprite>("temporal/x_01");
                 if (ChD.characterDatas[i].curEquip == -1)
                 {
                     s1 = "장비 없음";
@@ -273,13 +278,13 @@ public class LobbyManager : MonoBehaviour
                     equipment e = GD.EquipmentList[ChD.characterDatas[i].curEquip];
                     List<string> sList = EquipmentManager.Instance.equipmentStrings(e);
                     s1 = sList[0];
-                   s2 = sList[1] + '\n' + sList[2] + '\n' + sList[3];
-
+                    s2 = sList[1] + '\n' + sList[2] + '\n' + sList[3];
+                    spr = EquipmentManager.Instance.equipSpr[e.equipNum];
                 }
                 CharacterView.transform.GetChild(i).gameObject.SetActive(true);
                 CharacterView.transform.GetChild(i).gameObject.GetComponent<CharacterSetting>().SetCharacterInLobby(ChD.characterDatas[i].No, CharacterSprtie[ChD.characterDatas[i].No],
                     ChD.characterDatas[i].Atk, ChD.characterDatas[i].def, ChD.characterDatas[i].Cost, ChD.characterDatas[i].curHp, ChD.characterDatas[i].maxHp,
-                    ChD.characterDatas[i].curFormation, ChD.characterDatas[i].passive,s1,s2
+                    ChD.characterDatas[i].curFormation, ChD.characterDatas[i].passive,s1,s2,spr
                     );
             }
         }
@@ -298,6 +303,7 @@ public class LobbyManager : MonoBehaviour
             equipment e = GD.EquipmentList[i];
             List<string> sList = EquipmentManager.Instance.equipmentStrings(e);
             EquipmentContent.transform.GetChild(i).gameObject.SetActive(true);
+            EquipmentContent.transform.GetChild(i).GetChild(0).GetComponent<Image>().sprite = EquipmentManager.Instance.equipSpr[e.equipNum];
             EquipmentContent.transform.GetChild(i).GetChild(1).GetComponent<TextMeshProUGUI>().text = sList[0];
             EquipmentContent.transform.GetChild(i).GetChild(2).GetComponent<TextMeshProUGUI>().text = sList[1] + '\n'
                 + sList[2] + '\n' + sList[3];
@@ -862,15 +868,18 @@ public class LobbyManager : MonoBehaviour
     }
     public void GetRandomEquipment()
     {
+        canvasOn = true;
         GetEquipmentCanvas.SetActive(true);
         curEquip=EquipmentManager.Instance.makeEquipment();
+        GetEquipmentCanvas.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = EquipmentManager.Instance.equipSpr[curEquip.equipNum];
         List<string> sList = EquipmentManager.Instance.equipmentStrings(curEquip);
         equipStrings[0].text = sList[0];
         equipStrings[1].text = sList[1] + '\n' + sList[2] + '\n' + sList[3];
+        GD.EquipmentList.Add(curEquip);
     }
     public void CloseRandomEquipment()
     {
-        GD.EquipmentList.Add(curEquip);
+        canvasOn = false;
         GetEquipmentCanvas.SetActive(false);
         if (resetmara) Resetmara(6);
     }
@@ -894,5 +903,140 @@ public class LobbyManager : MonoBehaviour
             ByPassiveButtons[i * 4 + 3].text = ChaInfo.cd[ChD.characterDatas[i].No].passive[3];
         }
     }
-
+    
+    public void EquipManageViewOn()
+    {
+        if (canvasOn) return;
+        if (GD.isAct) return;
+        canvasOn = true;
+        SelectedEquipList.Clear();
+        EquipManageView.SetActive(true);
+        PopUpCanvas.SetActive(true);
+        SetEquipListImage();
+        for (int i = 0; i < GD.EquipmentList.Count; i++)
+        {
+            equipment e = GD.EquipmentList[i];
+            List<string> sList = EquipmentManager.Instance.equipmentStrings(e);
+            EquipManageContent.transform.GetChild(i).gameObject.SetActive(true);
+            EquipManageContent.transform.GetChild(i).GetChild(0).GetComponent<Image>().sprite = EquipmentManager.Instance.equipSpr[e.equipNum];
+            EquipManageContent.transform.GetChild(i).GetChild(1).GetComponent<TextMeshProUGUI>().text = sList[0];
+            EquipManageContent.transform.GetChild(i).GetChild(2).GetComponent<TextMeshProUGUI>().text = sList[1] + '\n'
+                + sList[2] + '\n' + sList[3];
+            EquipManageContent.transform.GetChild(i).GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>().text = "선택";
+        }
+        for (int i = GD.EquipmentList.Count; i < 50; i++)
+        {
+            EquipManageContent.transform.GetChild(i).gameObject.SetActive(false);
+        }
+        for (int i = 0; i < ChD.size; i++)
+        {
+            if (ChD.characterDatas[i].curEquip != -1)
+            {
+                EquipManageContent.transform.GetChild(ChD.characterDatas[i].curEquip).GetChild(3).GetChild(0).
+                    GetComponent<TextMeshProUGUI>().text = ChD.characterDatas[i].Name + " 착용 중";
+            }
+        }
+    }
+    public void EquipmentManageSelect(GameObject me)
+    {
+        int num = me.name[7] - 48;
+        if (me.name[8] != 41)
+        {
+            num *= 10;
+            num += me.name[8] - 48;
+        }
+        bool isEquip = false;
+        for (int i = 0; i < ChD.size; i++)
+        {
+            if (ChD.characterDatas[i].curEquip == num) isEquip = true;
+        }
+        if (isEquip) return;
+        string myCondition = me.transform.GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>().text;
+        if (myCondition == "선택")
+        {
+            if (SelectedEquipList.Count > 1) return;
+            me.transform.GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>().text = "선택 됨";
+            SelectedEquipList.Add(num);
+        }
+        else
+        {
+            me.transform.GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>().text = "선택";
+            SelectedEquipList.Remove(num);
+        }
+        SetEquipListImage();
+    }
+    void SetEquipListImage()
+    {
+        if (SelectedEquipList.Count == 0)
+        {
+            SelectedEquipImage[0].SetActive(false);
+            SelectedEquipImage[1].SetActive(false);
+            EquipManageButton.SetActive(false);
+        }
+        else if (SelectedEquipList.Count == 1)
+        {
+            SelectedEquipImage[0].SetActive(true);
+            SelectedEquipImage[1].SetActive(false);
+            SelectedEquipImage[0].GetComponent<Image>().sprite = EquipmentManager.Instance.equipSpr[GD.EquipmentList[SelectedEquipList[0]].equipNum];
+            SelectedEquipImage[0].transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = GD.EquipmentList[SelectedEquipList[0]].equipName;
+            EquipManageButton.SetActive(true);
+            EquipManageButton.transform.GetChild(0).GetComponent<Text>().text = "초기화(700이그넘)";
+        }
+        else
+        {
+            SelectedEquipImage[0].SetActive(true);
+            SelectedEquipImage[1].SetActive(true);
+            SelectedEquipImage[0].GetComponent<Image>().sprite = EquipmentManager.Instance.equipSpr[GD.EquipmentList[SelectedEquipList[0]].equipNum];
+            SelectedEquipImage[0].transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = GD.EquipmentList[SelectedEquipList[0]].equipName;
+            SelectedEquipImage[1].GetComponent<Image>().sprite = EquipmentManager.Instance.equipSpr[GD.EquipmentList[SelectedEquipList[1]].equipNum];
+            SelectedEquipImage[1].transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = GD.EquipmentList[SelectedEquipList[1]].equipName;
+            EquipManageButton.SetActive(true);
+            EquipManageButton.transform.GetChild(0).GetComponent<Text>().text = "합성(300이그넘)";
+        }
+    }
+    public void SelectEquipManageButton()
+    {   
+        if (SelectedEquipList.Count == 1)
+        {
+            if (GD.Ignum < 700) return;
+            GD.Ignum -= 700;
+            equipment e = GD.EquipmentList[SelectedEquipList[0]];
+            e = EquipmentManager.Instance.ResetEquipment(e);
+            GD.EquipmentList[SelectedEquipList[0]] = e;
+            SelectedEquipList.Clear();
+            DayAct();
+            EquipManageView.SetActive(false);
+            PopUpCanvas.SetActive(false);
+            GetEquipmentCanvas.SetActive(true);           
+            GetEquipmentCanvas.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = EquipmentManager.Instance.equipSpr[e.equipNum];
+            List<string> sList = EquipmentManager.Instance.equipmentStrings(e);
+            equipStrings[0].text = sList[0];
+            equipStrings[1].text = sList[1] + '\n' + sList[2] + '\n' + sList[3];
+        }
+        if (SelectedEquipList.Count == 2)
+        {
+            if (GD.Ignum < 300) return;
+            GD.Ignum -= 300;
+            equipment e1 = GD.EquipmentList[SelectedEquipList[0]];
+            equipment e2 = GD.EquipmentList[SelectedEquipList[1]];
+            equipment newE = EquipmentManager.Instance.AddEquipments(e1,e2);
+            GD.EquipmentList.RemoveAt(SelectedEquipList[0]);
+            GD.EquipmentList.RemoveAt(SelectedEquipList[1]);
+            GD.EquipmentList.Add(newE);
+            for(int i = 0; i < ChD.size; i++)
+            {
+                if (ChD.characterDatas[i].curEquip > SelectedEquipList[0]) ChD.characterDatas[i].curEquip--;
+                if (ChD.characterDatas[i].curEquip > SelectedEquipList[1]) ChD.characterDatas[i].curEquip--;
+            }
+            SelectedEquipList.Clear();
+            DayAct();
+            EquipManageView.SetActive(false);
+            PopUpCanvas.SetActive(false);
+            GetEquipmentCanvas.SetActive(true);
+            GetEquipmentCanvas.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = EquipmentManager.Instance.equipSpr[newE.equipNum];
+            List<string> sList = EquipmentManager.Instance.equipmentStrings(newE);
+            equipStrings[0].text = sList[0];
+            equipStrings[1].text = sList[1] + '\n' + sList[2] + '\n' + sList[3];
+        }
+    }
 }

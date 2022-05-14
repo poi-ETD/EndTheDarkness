@@ -107,7 +107,7 @@ public class TurnManager : MonoBehaviour
     IEnumerator TurnEnd()
     {
         BM.otherCanvasOn = true;
-        for (int i = 0; i < BM.CD.size; i++)
+        for (int i = 0; i < BM.ChD.size; i++)
         {
             BM.characters[i].myPassive.TurnEndTimeCount();//턴 종료시 발동할 패시브를 위해
 
@@ -126,7 +126,7 @@ public class TurnManager : MonoBehaviour
 
         CM.FieldOff();//코루틴이 끝나면 필드에 있는 카드들을 모두 덱으로 넣음
 
-        BM.characters[BM.CD.size - 1].transform.localScale = new Vector3(1, 1, 1);
+        BM.characters[BM.ChD.size - 1].transform.localScale = new Vector3(1, 1, 1);
         BM.otherCanvasOn = false;
         t++; //턴을 1 올림
         turnText.text = "" + t;
@@ -158,8 +158,10 @@ public class TurnManager : MonoBehaviour
      
         BM.log.logContent.text += "\n" + t + "턴 시작!";
 
-        BM.cost = BM.startCost+BM.nextTurnStartCost;//턴 시작 시 전 턴에 코스트 증가하는 효과가 있었다면 적용.
-
+        int gameCost = 0;
+        for (int i = 0; i < BM.characters.Count; i++) gameCost += BM.characters[i].cost;
+        BM.cost = gameCost+BM.nextTurnStartCost;//턴 시작 시 전 턴에 코스트 증가하는 효과가 있었다면 적용.
+        
         BM.useCost(0);//코스트 글자 변경을 위함
 
         BM.nextTurnStartCost = 0;
@@ -173,14 +175,14 @@ public class TurnManager : MonoBehaviour
         {
             if (!BM.characters[i].isDie)
             {
-                BM.characters[i].Act = 1;
-                if (BM.gd.blessbool[4] && t == 1)  BM.characters[i].Act = 0; 
-                if (BM.gd.blessbool[12] && t == 1)BM.characters[i].Act = 0; 
+                BM.characters[i].turnAct = BM.characters[i].Act;
+                if (BM.gd.blessbool[4] && t == 1)  BM.characters[i].turnAct = 0; 
+                if (BM.gd.blessbool[12] && t == 1)BM.characters[i].turnAct = 0; 
                
-                if (BM.gd.blessbool[4]&&t!=1) BM.characters[i].Act++;
+               
                 BM.characters[i].onMinusAct(BM.characters[i].NextTurnMinusAct);
                 BM.characters[i].turnAtk = BM.characters[i].Atk;
-                BM.characters[i].AtkUp(turnAtk);
+                BM.characters[i].TurnAtkUp(turnAtk);
                 BM.characters[i].turnDef = BM.characters[i].def;
                 BM.characters[i].getArmor(BM.characters[i].nextarmor);
                 if (BM.characters[i].Armor < 0) BM.characters[i].Armor = 0;
@@ -199,7 +201,7 @@ public class TurnManager : MonoBehaviour
     }
     public void TurnStartPassive()//턴 종료와 똑같이 구성
     {     
-        for (int i = 0; i < BM.CD.size; i++)
+        for (int i = 0; i < BM.ChD.size; i++)
         {
             BM.characters[i].myPassive.TurnStart();
         }

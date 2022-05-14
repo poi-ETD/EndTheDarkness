@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class GameData
 {
     public int Ignum;
@@ -27,8 +27,9 @@ public struct equipment
     public List<int> improveMount; //증가시키는 스탯의 양
     public int degradeStat; //저하시키는 스탯의 종류
     public int degradeMount; //저하시키는 스탯의 양
+    public int equipNum;
 
-    public equipment(int type, string equipName, List<int> improveStat, List<int> improveMount, int degradeStat,int degradeMount)
+    public equipment(int type, string equipName, List<int> improveStat, List<int> improveMount, int degradeStat, int degradeMount, int equipNum)
     {
         this.type = type;
         this.equipName = equipName;
@@ -36,5 +37,6 @@ public struct equipment
         this.improveMount = improveMount;
         this.degradeStat = degradeStat;
         this.degradeMount = degradeMount;
+        this.equipNum = equipNum;
     }
 }
