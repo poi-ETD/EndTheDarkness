@@ -89,6 +89,7 @@ public class BattleManager : MonoBehaviour
     List<Character> characterOriginal = new List<Character>();
 
     [SerializeField] TextMeshProUGUI rewardIgnum;
+    [SerializeField] TextMeshProUGUI rewardTribute;
     [SerializeField] GameObject RewardCanvas;
     public bool isV;//승리 팝업이 켜져있을 때
     [SerializeField] GameObject RewardCardPrefebs;
@@ -899,8 +900,10 @@ public class BattleManager : MonoBehaviour
         victory.SetActive(true);
         isV = true;
         int ignum = Random.Range(15, 26) * 10 + gd.victory * 20;
+        int tribute = Random.Range(5, 11) * 10;
         if (gd.blessbool[15]) ignum *= 3;
         rewardIgnum.text = ignum + "이그넘 획득";
+        rewardTribute.text = tribute + "공물 획득";
         gd.Ignum += ignum;
         //정해진 공식에 따라 이그넘을 획득 후
         if (gd.blessbool[16]) listlength = 4; //축복 16번이 true라면 4개를 보여줘야함

@@ -129,55 +129,61 @@ public class Character : MonoBehaviour
     private void Start()
     {
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
-        equipment myEquip = BM.gd.EquipmentList[BM.ChD.characterDatas[lobbyNum].curEquip];
-        bool cantEquip = false;
-        if(myEquip.type==1&& BM.ChD.characterDatas[lobbyNum].curFormation == 0)
+        if (BM.ChD.characterDatas[lobbyNum].curEquip != -1)
         {
-            cantEquip = true;
-        }
-        if (myEquip.type ==0&& BM.ChD.characterDatas[lobbyNum].curFormation == 1)
-        {
-            cantEquip = true;
-        }
-        
-        if (!cantEquip)
-        {
-            for(int i = 0; i < myEquip.improveMount.Count; i++)
+            equipment myEquip = BM.gd.EquipmentList[BM.ChD.characterDatas[lobbyNum].curEquip];
+            bool cantEquip = false;
+            if (myEquip.type == 1 && BM.ChD.characterDatas[lobbyNum].curFormation == 0)
             {
-             
-                switch (myEquip.improveStat[i])
+                cantEquip = true;
+            }
+            if (myEquip.type == 0 && BM.ChD.characterDatas[lobbyNum].curFormation == 1)
+            {
+                cantEquip = true;
+            }
+
+            if (!cantEquip)
+            {
+                for (int i = 0; i < myEquip.improveMount.Count; i++)
                 {
-                    case 0:AtkUp(myEquip.improveMount[i]);
+
+                    switch (myEquip.improveStat[i])
+                    {
+                        case 0:
+                            AtkUp(myEquip.improveMount[i]);
+                            break;
+                        case 1:
+                            DefUp(myEquip.improveMount[i]);
+                            break;
+                        case 2:
+                            maxHp += myEquip.improveMount[i];
+                            break;
+                        case 3:
+                            cost += myEquip.improveMount[i];
+                            break;
+                        case 4:
+                            Act++;
+                            break;
+                    }
+                }
+                switch (myEquip.degradeStat)
+                {
+                    case 0:
+                        AtkUp(-myEquip.degradeMount);
                         break;
-                    case 1:DefUp(myEquip.improveMount[i]);                      
+                    case 1:
+                        DefUp(-myEquip.degradeMount);
                         break;
-                    case 2:maxHp += myEquip.improveMount[i];
+                    case 2:
+                        maxHp -= myEquip.degradeMount;
                         break;
-                    case 3:cost += myEquip.improveMount[i];
+                    case 3:
+                        cost -= myEquip.degradeMount;
                         break;
-                    case 4:Act++;
-                        break;
+
                 }
             }
-            switch (myEquip.degradeStat)
-            {
-                case 0:
-                    AtkUp(-myEquip.degradeMount);
-                    break;
-                case 1:
-                    DefUp(-myEquip.degradeMount);
-                    break;
-                case 2:
-                    maxHp -= myEquip.degradeMount;
-                    break;
-                case 3:
-                    cost -= myEquip.degradeMount;
-                   
-                    break;
-
-            }
         }
-        
         turnAct = Act;
         actT.text = "" + turnAct;
         defT.text = "" + def;

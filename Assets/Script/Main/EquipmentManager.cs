@@ -34,15 +34,14 @@ Resources.Load<Sprite>("temporal/axe_010")
     string[] equipName = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
     public equipment makeEquipment()
     {
-       
-       
-        
-        
+   
         int degradeMount = 0;
         int improveMount = 0;
         int rand1 = Random.Range(0, 5);
         int rand2 = Random.Range(0, 4);
+
         while (rand1 == rand2) rand2 = Random.Range(0, 4);
+
         switch (rand1)
         {
             case (int)Enums.EquipmentStat.atk:
@@ -194,7 +193,9 @@ Resources.Load<Sprite>("temporal/axe_010")
                 break;
 
         }
+
         int t = Random.Range(1, 101);
+        
         if (t <= 45)
         {
             t = 0;
@@ -221,7 +222,7 @@ Resources.Load<Sprite>("temporal/axe_010")
         int degradeMount = e2.degradeMount;
         int t = e1.type;
         if (Random.Range(0, 2) == 0) t = e2.type;
-        if (Random.Range(0, 100) <100)
+        if (Random.Range(0, 100) <3)
         {
             l1.AddRange(e2.improveStat);
             l2.AddRange(e2.improveMount);

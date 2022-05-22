@@ -75,12 +75,12 @@ public class Recover : MonoBehaviour
     public void Revive(int i)
     {if (!lobby.GD.blessbool[13])
         {
-            if (lobby.GD.Ignum < 800)
+            if (lobby.GD.tribute < 1700)
             {
                 Popup.SetActive(true);
                 return;
             }
-            lobby.GD.Ignum -= 800;
+            lobby.GD.tribute -= 1700;
         }
         lobby.ChD.characterDatas[i].curHp = 1;
         lobby.save();

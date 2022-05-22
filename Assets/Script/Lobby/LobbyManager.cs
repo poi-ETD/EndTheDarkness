@@ -34,6 +34,7 @@ public class LobbyManager : MonoBehaviour
     [SerializeField] Text[] ByPassiveButtons;
     Dictionary<int, int[]> CardList = new Dictionary<int, int[]>(); //key->넘버 value->코스트
     [SerializeField] TextMeshProUGUI IgnumT;
+    [SerializeField] TextMeshProUGUI TributeT;
     [SerializeField] TextMeshProUGUI GetItemIgnum;
     [SerializeField] GameObject ItemCanvas;
     [SerializeField] GameObject CardShopCanvas;
@@ -76,6 +77,9 @@ public class LobbyManager : MonoBehaviour
     [SerializeField] List<int> SelectedEquipList = new List<int>();
     [SerializeField] GameObject[] SelectedEquipImage;
     [SerializeField] GameObject EquipManageButton;
+
+
+    [SerializeField] GameObject tributeView;
     private void Awake()
     {
         string path = Path.Combine(Application.persistentDataPath, "CardData.json");
@@ -103,6 +107,7 @@ public class LobbyManager : MonoBehaviour
 
         }
         IgnumT.text = GD.Ignum + "";
+        TributeT.text = GD.tribute + "";
         if (GD.isAct && !GD.isNight)
         {
             for (int i = 0; i < mainDayAct.Length; i++)
@@ -164,17 +169,21 @@ public class LobbyManager : MonoBehaviour
         }
         else if (rc == 5)
         {
+            canvasOn = true;
             GetRandomEquipment();
         }
         else if (rc == 6)
         {
+            canvasOn = true;
             ResetMaraCount = 5;
             ResetBless.SetActive(false);
             ResetItem.SetActive(true);
         }
         else if (rc == 7)
         {
+            canvasOn = false;
             GD.Ignum += 500;
+            GD.tribute += 300;
             IgnumT.text = "" + GD.Ignum;
             resetmara = false;          
             canvasOn = false;
@@ -503,6 +512,7 @@ public class LobbyManager : MonoBehaviour
         path = Path.Combine(Application.persistentDataPath, "GameData.json");
         File.WriteAllText(path, gameData);
         IgnumT.text = GD.Ignum + "";
+        TributeT.text = GD.tribute + "";
     }
     public void PopupOff()
     {
@@ -824,22 +834,22 @@ public class LobbyManager : MonoBehaviour
     {
         if (n == 1)
         {
-            if (GD.Ignum < 300)
+            if (GD.tribute < 500)
             {
                 noIgnumInPassive.SetActive(true);
                 return;
             }
-            GD.Ignum -= 300;
+            GD.tribute-=500;
             GD.passiveStack += n;
         }
         if (n == 3)
         {
-            if (GD.Ignum < 1000)
+            if (GD.tribute < 1500)
             {
                 noIgnumInPassive.SetActive(true);
                 return;
             }
-            GD.Ignum -= 1000;
+            GD.tribute -= 1500;
             GD.passiveStack += n;
         }
         canvasOn = false;
@@ -1038,5 +1048,57 @@ public class LobbyManager : MonoBehaviour
             equipStrings[0].text = sList[0];
             equipStrings[1].text = sList[1] + '\n' + sList[2] + '\n' + sList[3];
         }
+    }
+
+
+
+    public void TributeViewOn()
+    {
+        if (canvasOn) return;
+        if (GD.isAct) return;
+        canvasOn = true;
+        tributeView.SetActive(true);
+        int cur = GD.tributeStack;
+        int ig = 0;
+        if (cur == 0) ig = 100;
+        else if (cur == 1) ig = 300;
+        else if (cur == 2) ig = 600;
+        tributeView.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "현재 공급로:" + cur;
+        if (cur == 3) tributeView.transform.GetChild(1).GetChild(1).gameObject.SetActive(false);
+        else tributeView.transform.GetChild(1).GetChild(1).GetComponent<TextMeshProUGUI>().text = "공급로 확보\n(" + ig + "이그넘 필요)";
+    }
+
+    public void TributeViewOff()
+    {
+        canvasOn = false;
+        tributeView.SetActive(false);
+    }
+
+    public void GetTributeStack()
+    {
+        int cur = GD.tributeStack;
+        int ig = 0;
+        if (cur == 0) ig = 100;
+        else if (cur == 1) ig = 300;
+        else if (cur == 2) ig = 600;
+        if (GD.Ignum < ig) return;
+        GD.Ignum -= ig;
+        GD.tributeStack++;
+        DayAct();
+        save();
+        TributeViewOff();
+    }
+    public void GetTribute()
+    {
+        int cur = GD.tributeStack;
+        int tri = 100;
+        if (cur == 1) tri = Random.Range(1, 4) * 100;
+        else if (cur == 2) tri = Random.Range(3, 6) * 100;
+        else if (cur == 3) tri = 500;
+        GD.tribute += tri;
+        DayAct();
+        save();
+        TributeViewOff();
+
     }
 }

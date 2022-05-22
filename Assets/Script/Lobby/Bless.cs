@@ -62,8 +62,8 @@ public class Bless : MonoBehaviour
     }
     public void SelectRemoveOn()  //선택해서 삭제하기
     { 
-        if (lobby.GD.Ignum < 1000) return;
-        lobby.GD.Ignum -= 1000;
+        if (lobby.GD.tribute<2000) return;
+        lobby.GD.tribute-=2000;
 
         CancleRemove[0].SetActive(false);
         CancleRemove[1].SetActive(false);
@@ -84,8 +84,8 @@ public class Bless : MonoBehaviour
     }
     public void RemoveRandom() //랜덤으로 삭제하기
     {
-        if (lobby.GD.Ignum < 50) return;
-        lobby.GD.Ignum -= 50;
+        if (lobby.GD.tribute<100) return;
+        lobby.GD.tribute -= 100;
         List<int> curBlessList = new List<int>();
         for(int i = 0; i < lobby.GD.blessbool.Length; i++)
         {
