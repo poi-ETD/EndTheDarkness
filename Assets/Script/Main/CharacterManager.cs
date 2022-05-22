@@ -133,7 +133,7 @@ public class CharacterManager : MonoBehaviour
             //int maxHp, int curHp, int passive1, int passive2, int passive3, int passive4, int curFormation)
             int[] passiveO = new int[4];
             CD.characterDatas[counter]=new CharacterData.curCharacterData(
-                CD2.cd[no].Name, no, CD2.cd[no].Cost, CD2.cd[no].Atk,CD2.cd[no].Endur, CD2.cd[no].maxHp, CD2.cd[no].maxHp,passiveO,curFormation);
+                CD2.cd[no].Name, no, CD2.cd[no].Cost, CD2.cd[no].Atk,CD2.cd[no].Def, CD2.cd[no].maxHp, CD2.cd[no].maxHp,passiveO,curFormation,-1);
             CD.characterDatas[counter].passive[curPassive]++;
            
         }
@@ -229,23 +229,26 @@ public class CharacterData
         public int Atk;
         public int maxHp;
         public int curHp;
-        public int Endur;
+        public int def;
         public int[] passive;
         public int curFormation; //0->전방 1->후방
-        public curCharacterData(string name, int no, int cost, int atk,int endur ,int maxHp, int curHp, int[] passive, int curFormation)
+        public int curEquip;
+        public curCharacterData(string name, int no, int cost, int atk,int def ,int maxHp, int curHp, int[] passive, int curFormation,int curEquip)
         {
             Name = name;
             No = no;
             Cost = cost;
             Atk = atk;
-            Endur = endur;
+            this.def = def;
             this.maxHp = maxHp;
             this.curHp = curHp;
             this.passive = passive;
             this.curFormation = curFormation;
+            this.curEquip = curEquip;
         }
     }
     public curCharacterData[] characterDatas = new curCharacterData[5];
     public int line;
     public int size;
+  
 }

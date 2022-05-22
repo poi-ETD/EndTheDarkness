@@ -34,6 +34,7 @@ public class LobbyManager : MonoBehaviour
     [SerializeField] Text[] ByPassiveButtons;
     Dictionary<int, int[]> CardList = new Dictionary<int, int[]>(); //key->넘버 value->코스트
     [SerializeField] TextMeshProUGUI IgnumT;
+    [SerializeField] TextMeshProUGUI TributeT;
     [SerializeField] TextMeshProUGUI GetItemIgnum;
     [SerializeField] GameObject ItemCanvas;
     [SerializeField] GameObject CardShopCanvas;
@@ -60,6 +61,25 @@ public class LobbyManager : MonoBehaviour
     public int ResetMaraCount;
     [SerializeField] GameObject ResetBless;
     [SerializeField] GameObject ResetItem;
+
+
+    [SerializeField] GameObject GetEquipmentCanvas;
+    [SerializeField] TextMeshProUGUI[] equipStrings;
+    equipment curEquip;
+
+    [SerializeField] GameObject EquipmentView;
+    [SerializeField] GameObject EquipmentContent;
+    int curEquipNumber;
+    [SerializeField] GameObject EquipCharacterView;
+    bool equipmode;
+    [SerializeField] GameObject EquipManageView;
+    [SerializeField] GameObject EquipManageContent;
+    [SerializeField] List<int> SelectedEquipList = new List<int>();
+    [SerializeField] GameObject[] SelectedEquipImage;
+    [SerializeField] GameObject EquipManageButton;
+
+
+    [SerializeField] GameObject tributeView;
     private void Awake()
     {
         string path = Path.Combine(Application.persistentDataPath, "CardData.json");
@@ -87,6 +107,7 @@ public class LobbyManager : MonoBehaviour
 
         }
         IgnumT.text = GD.Ignum + "";
+        TributeT.text = GD.tribute + "";
         if (GD.isAct && !GD.isNight)
         {
             for (int i = 0; i < mainDayAct.Length; i++)
@@ -146,15 +167,23 @@ public class LobbyManager : MonoBehaviour
             GameObject.Find("Bless").GetComponent<Bless>().BlessPopupOn();
             GameObject.Find("Bless").GetComponent<Bless>().GetBless();
         }
-        else if (rc == ChD.size+1)
+        else if (rc == 5)
         {
+            canvasOn = true;
+            GetRandomEquipment();
+        }
+        else if (rc == 6)
+        {
+            canvasOn = true;
             ResetMaraCount = 5;
             ResetBless.SetActive(false);
             ResetItem.SetActive(true);
         }
-        else if (rc == ChD.size+2)
+        else if (rc == 7)
         {
+            canvasOn = false;
             GD.Ignum += 500;
+            GD.tribute += 300;
             IgnumT.text = "" + GD.Ignum;
             resetmara = false;          
             canvasOn = false;
@@ -245,14 +274,111 @@ public class LobbyManager : MonoBehaviour
 
             for (int i = 0; i < ChD.size; i++)
             {
-
-                GameObject LC = Instantiate(LobbyCharacterPrefebs, CharacterView.transform);
-                LC.GetComponent<CharacterSetting>().SetCharacterInLobby(ChD.characterDatas[i].No, CharacterSprtie[ChD.characterDatas[i].No],
-                    ChD.characterDatas[i].Atk, ChD.characterDatas[i].Endur, ChD.characterDatas[i].Cost, ChD.characterDatas[i].curHp, ChD.characterDatas[i].maxHp,
-                    ChD.characterDatas[i].curFormation, ChD.characterDatas[i].passive
+                string s1 = "";
+                string s2 = "";
+                Sprite spr = Resources.Load<Sprite>("temporal/x_01");
+                if (ChD.characterDatas[i].curEquip == -1)
+                {
+                    s1 = "장비 없음";
+                   
+                }
+                else
+                {
+                    equipment e = GD.EquipmentList[ChD.characterDatas[i].curEquip];
+                    List<string> sList = EquipmentManager.Instance.equipmentStrings(e);
+                    s1 = sList[0];
+                    s2 = sList[1] + '\n' + sList[2] + '\n' + sList[3];
+                    spr = EquipmentManager.Instance.equipSpr[e.equipNum];
+                }
+                CharacterView.transform.GetChild(i).gameObject.SetActive(true);
+                CharacterView.transform.GetChild(i).gameObject.GetComponent<CharacterSetting>().SetCharacterInLobby(ChD.characterDatas[i].No, CharacterSprtie[ChD.characterDatas[i].No],
+                    ChD.characterDatas[i].Atk, ChD.characterDatas[i].def, ChD.characterDatas[i].Cost, ChD.characterDatas[i].curHp, ChD.characterDatas[i].maxHp,
+                    ChD.characterDatas[i].curFormation, ChD.characterDatas[i].passive,s1,s2,spr
                     );
             }
         }
+    }
+
+
+    public void ShowEquipment()
+    {
+        if (canvasOn) return;
+        canvasOn = true;
+        PopUpCanvas.SetActive(true);
+        EquipmentView.SetActive(true);
+        equipmode = false;
+        for(int i = 0; i < GD.EquipmentList.Count; i++)
+        {
+            equipment e = GD.EquipmentList[i];
+            List<string> sList = EquipmentManager.Instance.equipmentStrings(e);
+            EquipmentContent.transform.GetChild(i).gameObject.SetActive(true);
+            EquipmentContent.transform.GetChild(i).GetChild(0).GetComponent<Image>().sprite = EquipmentManager.Instance.equipSpr[e.equipNum];
+            EquipmentContent.transform.GetChild(i).GetChild(1).GetComponent<TextMeshProUGUI>().text = sList[0];
+            EquipmentContent.transform.GetChild(i).GetChild(2).GetComponent<TextMeshProUGUI>().text = sList[1] + '\n'
+                + sList[2] + '\n' + sList[3];
+            EquipmentContent.transform.GetChild(i).GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>().text = "착용";
+        }
+        for(int i = GD.EquipmentList.Count; i < 50; i++)
+        {
+            EquipmentContent.transform.GetChild(i).gameObject.SetActive(false);
+        }
+        for (int i = 0; i < ChD.size; i++)
+        {
+            if (ChD.characterDatas[i].curEquip != -1)
+            {
+                EquipmentContent.transform.GetChild(ChD.characterDatas[i].curEquip).GetChild(3).GetChild(0).
+                    GetComponent<TextMeshProUGUI>().text = ChD.characterDatas[i].Name+" 착용 해제";
+            }
+        }
+    }
+    public void EquipThis(GameObject me)
+    {
+        int num = me.name[7]-48;
+        if (me.name[8] != 41)
+        {
+            num *= 10;
+            num += me.name[8] - 48;
+        }
+        if (equipmode) return;
+        bool isEquip = false;
+        for(int i = 0; i < ChD.size; i++)
+        {
+            if (ChD.characterDatas[i].curEquip == num) isEquip = true;
+        }
+        if (isEquip)
+        {
+            for (int i = 0; i < ChD.size; i++)
+            {
+                if (ChD.characterDatas[i].curEquip == num) {
+                    ChD.characterDatas[i].curEquip = -1;
+                }
+               
+            }
+            canvasOn = false;
+            ShowEquipment();
+        }
+        else
+        {
+            equipmode = true;
+            curEquipNumber = num;
+            EquipCharacterView.SetActive(true);
+            for (int i = 0; i < ChD.size; i++)
+            {
+                EquipCharacterView.transform.GetChild(0).GetChild(i).gameObject.SetActive(true);
+                EquipCharacterView.transform.GetChild(0).GetChild(i).GetChild(0).GetComponent<TextMeshProUGUI>().text = ChD.characterDatas[i].Name;
+            }
+        }
+    }
+    public void CancleEquip()
+    {
+        EquipCharacterView.SetActive(false);
+        canvasOn = false;
+        ShowEquipment();
+    }
+    public void EquipToThisCharacter(int num)
+    {
+        ChD.characterDatas[num].curEquip = curEquipNumber;
+        CancleEquip();
     }
     public void clear()
     {
@@ -261,12 +387,7 @@ public class LobbyManager : MonoBehaviour
         {
             Destroy(childList[i].gameObject);
         }
-        childList = CharacterView.GetComponentsInChildren<Transform>();
-
-        for (int i = 1; i < childList.Length; i++)
-        {
-            Destroy(childList[i].gameObject);
-        }
+        
     }
     public void ThisCardSee(int i)
     {
@@ -335,7 +456,7 @@ public class LobbyManager : MonoBehaviour
         GameObject.Find("PassiveView").SetActive(false);
         PopUpCanvas.SetActive(false);
         ChD.characterDatas[i / 4].passive[i % 4]++;
-        GD.Stack -= 15;
+        GD.passiveStack -= 15;
         canvasOn = false;
         DayAct();
     }
@@ -391,6 +512,7 @@ public class LobbyManager : MonoBehaviour
         path = Path.Combine(Application.persistentDataPath, "GameData.json");
         File.WriteAllText(path, gameData);
         IgnumT.text = GD.Ignum + "";
+        TributeT.text = GD.tribute + "";
     }
     public void PopupOff()
     {
@@ -706,29 +828,29 @@ public class LobbyManager : MonoBehaviour
         canvasOn = true;
         PassivePopup.SetActive(true);
         PopUpCanvas.SetActive(true);
-        curStack.text = "현재스택:" + GD.Stack;
+        curStack.text = "현재스택:" + GD.passiveStack;
     }
     public void GetStack(int n)
     {
         if (n == 1)
         {
-            if (GD.Ignum < 300)
+            if (GD.tribute < 500)
             {
                 noIgnumInPassive.SetActive(true);
                 return;
             }
-            GD.Ignum -= 300;
-            GD.Stack += n;
+            GD.tribute-=500;
+            GD.passiveStack += n;
         }
         if (n == 3)
         {
-            if (GD.Ignum < 1000)
+            if (GD.tribute < 1500)
             {
                 noIgnumInPassive.SetActive(true);
                 return;
             }
-            GD.Ignum -= 1000;
-            GD.Stack += n;
+            GD.tribute -= 1500;
+            GD.passiveStack += n;
         }
         canvasOn = false;
         DayAct();
@@ -739,12 +861,12 @@ public class LobbyManager : MonoBehaviour
     }
     public void getRandomPassive()
     {
-        if (GD.Stack < 5)
+        if (GD.passiveStack < 5)
         {
             noStackInPassive.SetActive(true);
             return;
         }
-        GD.Stack -= 5;
+        GD.passiveStack -= 5;
         int rand = Random.Range(0, ChD.size * 4);
         ChD.characterDatas[rand / 4].passive[rand % 4]++;
         canvasOn = false;
@@ -754,9 +876,26 @@ public class LobbyManager : MonoBehaviour
         noStackInPassive.SetActive(false);
         noStackInPassive.SetActive(false);
     }
+    public void GetRandomEquipment()
+    {
+        canvasOn = true;
+        GetEquipmentCanvas.SetActive(true);
+        curEquip=EquipmentManager.Instance.makeEquipment();
+        GetEquipmentCanvas.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = EquipmentManager.Instance.equipSpr[curEquip.equipNum];
+        List<string> sList = EquipmentManager.Instance.equipmentStrings(curEquip);
+        equipStrings[0].text = sList[0];
+        equipStrings[1].text = sList[1] + '\n' + sList[2] + '\n' + sList[3];
+        GD.EquipmentList.Add(curEquip);
+    }
+    public void CloseRandomEquipment()
+    {
+        canvasOn = false;
+        GetEquipmentCanvas.SetActive(false);
+        if (resetmara) Resetmara(6);
+    }
     public void GetSelectPassive() //개발용
     {
-        if (GD.Stack < 15)
+        if (GD.passiveStack < 15)
         {
             noStackInPassive.SetActive(true);
             return;
@@ -774,5 +913,192 @@ public class LobbyManager : MonoBehaviour
             ByPassiveButtons[i * 4 + 3].text = ChaInfo.cd[ChD.characterDatas[i].No].passive[3];
         }
     }
+    
+    public void EquipManageViewOn()
+    {
+        if (canvasOn) return;
+        if (GD.isAct) return;
+        canvasOn = true;
+        SelectedEquipList.Clear();
+        EquipManageView.SetActive(true);
+        PopUpCanvas.SetActive(true);
+        SetEquipListImage();
+        for (int i = 0; i < GD.EquipmentList.Count; i++)
+        {
+            equipment e = GD.EquipmentList[i];
+            List<string> sList = EquipmentManager.Instance.equipmentStrings(e);
+            EquipManageContent.transform.GetChild(i).gameObject.SetActive(true);
+            EquipManageContent.transform.GetChild(i).GetChild(0).GetComponent<Image>().sprite = EquipmentManager.Instance.equipSpr[e.equipNum];
+            EquipManageContent.transform.GetChild(i).GetChild(1).GetComponent<TextMeshProUGUI>().text = sList[0];
+            EquipManageContent.transform.GetChild(i).GetChild(2).GetComponent<TextMeshProUGUI>().text = sList[1] + '\n'
+                + sList[2] + '\n' + sList[3];
+            EquipManageContent.transform.GetChild(i).GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>().text = "선택";
+        }
+        for (int i = GD.EquipmentList.Count; i < 50; i++)
+        {
+            EquipManageContent.transform.GetChild(i).gameObject.SetActive(false);
+        }
+        for (int i = 0; i < ChD.size; i++)
+        {
+            if (ChD.characterDatas[i].curEquip != -1)
+            {
+                EquipManageContent.transform.GetChild(ChD.characterDatas[i].curEquip).GetChild(3).GetChild(0).
+                    GetComponent<TextMeshProUGUI>().text = ChD.characterDatas[i].Name + " 착용 중";
+            }
+        }
+    }
+    public void EquipmentManageSelect(GameObject me)
+    {
+        int num = me.name[7] - 48;
+        if (me.name[8] != 41)
+        {
+            num *= 10;
+            num += me.name[8] - 48;
+        }
+        bool isEquip = false;
+        for (int i = 0; i < ChD.size; i++)
+        {
+            if (ChD.characterDatas[i].curEquip == num) isEquip = true;
+        }
+        if (isEquip) return;
+        string myCondition = me.transform.GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>().text;
+        if (myCondition == "선택")
+        {
+            if (SelectedEquipList.Count > 1) return;
+            me.transform.GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>().text = "선택 됨";
+            SelectedEquipList.Add(num);
+        }
+        else
+        {
+            me.transform.GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>().text = "선택";
+            SelectedEquipList.Remove(num);
+        }
+        SetEquipListImage();
+    }
+    void SetEquipListImage()
+    {
+        if (SelectedEquipList.Count == 0)
+        {
+            SelectedEquipImage[0].SetActive(false);
+            SelectedEquipImage[1].SetActive(false);
+            EquipManageButton.SetActive(false);
+        }
+        else if (SelectedEquipList.Count == 1)
+        {
+            SelectedEquipImage[0].SetActive(true);
+            SelectedEquipImage[1].SetActive(false);
+            SelectedEquipImage[0].GetComponent<Image>().sprite = EquipmentManager.Instance.equipSpr[GD.EquipmentList[SelectedEquipList[0]].equipNum];
+            SelectedEquipImage[0].transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = GD.EquipmentList[SelectedEquipList[0]].equipName;
+            EquipManageButton.SetActive(true);
+            EquipManageButton.transform.GetChild(0).GetComponent<Text>().text = "초기화(700이그넘)";
+        }
+        else
+        {
+            SelectedEquipImage[0].SetActive(true);
+            SelectedEquipImage[1].SetActive(true);
+            SelectedEquipImage[0].GetComponent<Image>().sprite = EquipmentManager.Instance.equipSpr[GD.EquipmentList[SelectedEquipList[0]].equipNum];
+            SelectedEquipImage[0].transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = GD.EquipmentList[SelectedEquipList[0]].equipName;
+            SelectedEquipImage[1].GetComponent<Image>().sprite = EquipmentManager.Instance.equipSpr[GD.EquipmentList[SelectedEquipList[1]].equipNum];
+            SelectedEquipImage[1].transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = GD.EquipmentList[SelectedEquipList[1]].equipName;
+            EquipManageButton.SetActive(true);
+            EquipManageButton.transform.GetChild(0).GetComponent<Text>().text = "합성(300이그넘)";
+        }
+    }
+    public void SelectEquipManageButton()
+    {   
+        if (SelectedEquipList.Count == 1)
+        {
+            if (GD.Ignum < 700) return;
+            GD.Ignum -= 700;
+            equipment e = GD.EquipmentList[SelectedEquipList[0]];
+            e = EquipmentManager.Instance.ResetEquipment(e);
+            GD.EquipmentList[SelectedEquipList[0]] = e;
+            SelectedEquipList.Clear();
+            DayAct();
+            EquipManageView.SetActive(false);
+            PopUpCanvas.SetActive(false);
+            GetEquipmentCanvas.SetActive(true);           
+            GetEquipmentCanvas.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = EquipmentManager.Instance.equipSpr[e.equipNum];
+            List<string> sList = EquipmentManager.Instance.equipmentStrings(e);
+            equipStrings[0].text = sList[0];
+            equipStrings[1].text = sList[1] + '\n' + sList[2] + '\n' + sList[3];
+        }
+        if (SelectedEquipList.Count == 2)
+        {
+            if (GD.Ignum < 300) return;
+            GD.Ignum -= 300;
+            equipment e1 = GD.EquipmentList[SelectedEquipList[0]];
+            equipment e2 = GD.EquipmentList[SelectedEquipList[1]];
+            equipment newE = EquipmentManager.Instance.AddEquipments(e1,e2);
+            GD.EquipmentList.RemoveAt(SelectedEquipList[0]);
+            GD.EquipmentList.RemoveAt(SelectedEquipList[1]);
+            GD.EquipmentList.Add(newE);
+            for(int i = 0; i < ChD.size; i++)
+            {
+                if (ChD.characterDatas[i].curEquip > SelectedEquipList[0]) ChD.characterDatas[i].curEquip--;
+                if (ChD.characterDatas[i].curEquip > SelectedEquipList[1]) ChD.characterDatas[i].curEquip--;
+            }
+            SelectedEquipList.Clear();
+            DayAct();
+            EquipManageView.SetActive(false);
+            PopUpCanvas.SetActive(false);
+            GetEquipmentCanvas.SetActive(true);
+            GetEquipmentCanvas.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = EquipmentManager.Instance.equipSpr[newE.equipNum];
+            List<string> sList = EquipmentManager.Instance.equipmentStrings(newE);
+            equipStrings[0].text = sList[0];
+            equipStrings[1].text = sList[1] + '\n' + sList[2] + '\n' + sList[3];
+        }
+    }
 
+
+
+    public void TributeViewOn()
+    {
+        if (canvasOn) return;
+        if (GD.isAct) return;
+        canvasOn = true;
+        tributeView.SetActive(true);
+        int cur = GD.tributeStack;
+        int ig = 0;
+        if (cur == 0) ig = 100;
+        else if (cur == 1) ig = 300;
+        else if (cur == 2) ig = 600;
+        tributeView.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "현재 공급로:" + cur;
+        if (cur == 3) tributeView.transform.GetChild(1).GetChild(1).gameObject.SetActive(false);
+        else tributeView.transform.GetChild(1).GetChild(1).GetComponent<TextMeshProUGUI>().text = "공급로 확보\n(" + ig + "이그넘 필요)";
+    }
+
+    public void TributeViewOff()
+    {
+        canvasOn = false;
+        tributeView.SetActive(false);
+    }
+
+    public void GetTributeStack()
+    {
+        int cur = GD.tributeStack;
+        int ig = 0;
+        if (cur == 0) ig = 100;
+        else if (cur == 1) ig = 300;
+        else if (cur == 2) ig = 600;
+        if (GD.Ignum < ig) return;
+        GD.Ignum -= ig;
+        GD.tributeStack++;
+        DayAct();
+        save();
+        TributeViewOff();
+    }
+    public void GetTribute()
+    {
+        int cur = GD.tributeStack;
+        int tri = 100;
+        if (cur == 1) tri = Random.Range(1, 4) * 100;
+        else if (cur == 2) tri = Random.Range(3, 6) * 100;
+        else if (cur == 3) tri = 500;
+        GD.tribute += tri;
+        DayAct();
+        save();
+        TributeViewOff();
+
+    }
 }

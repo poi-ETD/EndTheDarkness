@@ -8,126 +8,167 @@ using UnityEngine.SceneManagement;
 using Newtonsoft.Json;
 public class BattleManager : MonoBehaviour
 {
-    [SerializeField] GameObject[] CharacterPrefebs;
-    public List<Character> characters = new List<Character>();
-    public bool CharacterSelectMode;
-    public bool EnemySelectMode;
-    public Character character;
-    public Enemy enemy;
-    public int cost;
-    public GameObject card;
-    public Enemy penemy;
-    public GameObject pcard;
-    public Character pcharacter;
+    [SerializeField] GameObject[] CharacterPrefebs; 
+    public List<Character> characters = new List<Character>(); //현재 게임에 있는 캐릭터들의 목록,순서또한 동일
+    public bool CharacterSelectMode;//캐릭터를 고를 수 있는 상태
+    public bool EnemySelectMode;//적을 고를 수 있는 상태
+    public Character character;//현재 지정된 캐릭터
+    public Enemy enemy;//현재 지정된 적
+
+    public GameObject card;//현재 지정된 카드
+    public GameObject pcard;//바로 이전에 사용한 카드
 
     [SerializeField] TextMeshProUGUI costT;
-    public int startCost;
-    public int CardCount;
+    public int cost;//남은 코스트
+    public int nextTurnStartCost;//다음 턴 시작 시 코스트를 올려주는 변수
+
+    public int CardCount;//턴이 시작 될 때마다 뽑는 카드 수
+    public int TurnCardCount;//현재 턴에 사용 한 카드 수
 
     [SerializeField] CardManager CM;
     public ActManager AM;
 
-    public int TurnCardCount;
+
+    public GameObject[] Enemys;//적들
+
     [SerializeField] GameObject Warn;
     public Text warntext;
-    public List<Character> forward = new List<Character>();
-    public List<Character> back = new List<Character>();
-    public int line;
-    public int diecount;
-    public int nextTurnStartCost;
+    public List<Character> forward = new List<Character>();//전방에 있는 캐릭터들 목록
+    public List<Character> back = new List<Character>();//후방에 있는 캐릭터들 목록
+    public int line;//전방,후방을 나누는 선
+    public int diecount;//죽은 아군의 수
+
     [SerializeField] GameObject completeButton;
-    int curCharacterNumber;
-    public bool otherCanvasOn;
+
+    public bool otherCanvasOn;//다른 캔버스(무덤이나 로그,덱 등)이 켜져 있을 때
     public Log log;
+
     [SerializeField] GameObject window_Grave;
     public int ReviveCount;
     public bool card7mode;
-    public GameObject[] Enemys;
+
+
     public GameData gd;
-    public CharacterData CD;
-    [SerializeField] GameObject victory;
-    [SerializeField] GameObject defeated;
-    public bool SelectMode;
-    public bool porte3mode;
+    public CharacterData ChD;
+    [SerializeField] GameObject victory; //승리 시 나오는 팝업 창
+    [SerializeField] GameObject defeated; //패배 시 나오는 팝업 창
+
+    public bool SelectMode; //스타키티시모등 카드 선택 해야 할 때
+    public bool porte3mode;//스타키티시모가 켜져 있을 때
+
     [SerializeField] GameObject condition;
     public Text conditionText;
+
     public bool GraveReviveMode;
+
     [SerializeField] Text StackT;
     [SerializeField] GameObject StackPopUp;
     public TextMeshProUGUI CardUseText;
     [SerializeField] GameObject CancleButton;
+
     public bool card20Activing;
     [SerializeField] GameObject go_GraveView_Button_Revive; // YH
     public bool CancleReviveMode;
-    public bool ReviveMode;
+
     public GameObject DeckView;
     public GameObject SelectedCard;
     [SerializeField] GameObject LineObject;
+
     [SerializeField] GameObject FormationCollapsePopup;
     [SerializeField] Text FormationCollapseText;
     [SerializeField] GameObject[] FormationCollapseButton;
     [SerializeField] Text[] FormationCollapseButtonText;
-    bool MoveToForward;
+    bool MoveToForward; //진형 붕괴 시 후방에서 전방으로 가는 상황이면 true,아니면 false
 
-    public int porte3count;
+    public int porte3count;//포르테 패시브의 중첩 갯수
+
     public RectTransform rect_HandCanvas;
     HandManager HM;
+    [SerializeField] private GameObject go_Menus;
 
     List<Character> characterOriginal = new List<Character>();
+
     [SerializeField] TextMeshProUGUI rewardIgnum;
+    [SerializeField] TextMeshProUGUI rewardTribute;
     [SerializeField] GameObject RewardCanvas;
-    public bool isV;
+    public bool isV;//승리 팝업이 켜져있을 때
     [SerializeField] GameObject RewardCardPrefebs;
-    [SerializeField] private GameObject go_Menus;
     public int SelectedRewardCount;
     [SerializeField] GameObject noSelect;
-    [SerializeField] GameObject Sless;
-    int toGraveCount = 0;
-
-    public int SelectDeckCount;
-    public bool DeckSelectMode;
-    public bool DeckSelect;
-    public bool DeckSelectCancle;
-
-    public GameObject c20;
-
-    public bool card22on;
-    public Character card22c;
-
     int listlength = 3;
     List<int> RandomCardList = new List<int>();
     CardData2 data2 = new CardData2();
     List<int> RancomSelectCard = new List<int>();
-    public TextMeshProUGUI curMessage;
+    [SerializeField] TextMeshProUGUI[] RewardEquipmentString;
+    //승리 시 보상 선택하는 창에 들어갈 변수들
 
-    public bool otherCor;
-    public bool sparkyPassive2;
-    public bool turnStarting;
+    [SerializeField] GameObject Sless;//덱에서 카드 선택할 때 아무것도 선택 안 되어 있으 면
 
-    public int turnEndu;
-    public int endu;
+
+    public bool ReviveMode;
+    public int SelectDeckCount;//덱에서 선택 할 카드 수
+    public bool DeckSelectMode;
+    public bool DeckSelect;
+    public bool DeckSelectCancle;
+    //덱에서 카드 고를 때 필요한 변수들
+
+    public GameObject c20;//스케치 반복용
+
+
+
+    public bool otherCor; //코루틴이 동작 중일 때
+ 
+    public bool turnStarting;//턴 시작 코루틴이 동작 중일 때
+
+    public int turnEndu;//턴 종료 코루틴이 동작중일 때
+
 
     //YH
     [HideInInspector] public bool isPointerinHand = false;
     [HideInInspector] public bool isSelectedCardinHand = false;
 
-    public GameObject DmgPrefebs;
-
-
-    public void costUp(int i)
+    public GameObject DmgPrefebs;//데미지 프리펩
+    
+    public void SetBless20() //bless20이 켜져있다면 적용 될 함수
+    {
+        for(int i = 0; i < forward.Count; i++)
+        {
+            forward[i].AtkUp(-1);
+        }
+        for(int i = 0; i < back.Count; i++)
+        {
+            back[i].AtkUp(1);
+        }
+    }
+    public void ResetBless20() //원래 공격력으로 돌려놓는 함수
+    {
+        for (int i = 0; i < forward.Count; i++)
+        {
+            forward[i].AtkUp(1);
+        }
+        for (int i = 0; i < back.Count; i++)
+        {
+            back[i].AtkUp(-1);
+        }
+    }
+    public void costUp(int i) //현재 코스트를 올려주는 함수
     {
         cost += i;
         costT.text = "" + cost;
     }
-    public void FormationCollapse(string ename)
+    public void FormationCollapse(string ename) //진형붕괴 함수
     {
+        if (gd.blessbool[20])
+        {
+            ResetBless20();
+        }
         otherCanvasOn = true;
-        if (forward.Count < back.Count)
+        if (forward.Count < back.Count) //더 많은 쪽에서 적은쪽으로 옮긴다.
         {
             MoveToForward = true;
             line++;
         }
-        else if (forward.Count == back.Count)
+        else if (forward.Count == back.Count) //전방과 후방의 수가 같으면 랜덤으로 결정
         {
             int rand = Random.Range(0, 2);
             if (rand == 0) { rand = -1; MoveToForward = false; }
@@ -135,10 +176,11 @@ public class BattleManager : MonoBehaviour
             line += rand;
         }
         else if (forward.Count > back.Count)
-        {
+        { 
             MoveToForward = false;
             line--;
         }
+        //line변수의 값 조정으로 전방과 후방의 수 조정
         for (int i = 0; i < 3; i++)
         {
             FormationCollapseButton[i].SetActive(false);
@@ -163,9 +205,9 @@ public class BattleManager : MonoBehaviour
             }
         }
     }
-    public void Click_SelectFormationCollapse(int c)
+    public void Click_SelectFormationCollapse(int c)//진형붕괴 팝업창에 뜬 버튼을 클릭했을 시
     {
-        CD.line = line;
+        ChD.line = line;
         if (MoveToForward)
         {
 
@@ -178,27 +220,34 @@ public class BattleManager : MonoBehaviour
             back.Add(forward[c]);
             forward.RemoveAt(c);
         }
+        //선택한 캐릭터를 옮긴다.
         characters.Clear();
         for (int i = 0; i < line; i++)
         {
             forward[i].transform.position = new Vector2(-880 / 45f, (300 - 150 * characters.Count) / 45f);
             characters.Add(forward[i]);
         }
-        for (int i = line; i < CD.size; i++)
+        for (int i = line; i < ChD.size; i++)
         {
             back[i - line].transform.position = new Vector2(-880 / 45f, (270 - 150 * characters.Count) / 45f);
             characters.Add(back[i - line]);
         }
-        for (int i = 1; i < CD.size; i++)
+        //캐릭터들의 위치 재설정
+        for (int i = 1; i < ChD.size; i++)
         {
             characters[i].curNo = i;
         }
-        otherCanvasOn = false;
-        otherCor = false;
+        //캐릭터들의 현재 위치 정보 재설정
+        otherCanvasOn = false; //진형붕괴 팝업이 꺼졌기 때문
+        otherCor = false; //턴 시작 코루틴을 진행시킴
         FormationCollapsePopup.SetActive(false);
+        if (gd.blessbool[20])
+        {
+            SetBless20();
+        }
         LineObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-820, 360 - 150 * line);
     }
-    public void Click_StackPopUpOn()
+    public void Click_StackPopUpOn() //현재 스택을 보여주는 함수 (구현 더 해야 함)
     {
         if (StackPopUp.activeSelf)
         {
@@ -222,31 +271,31 @@ public class BattleManager : MonoBehaviour
             StackPopUp.SetActive(true);
         }
     }
-    public void Click_toMain()
+    public void Click_toMain() //메인화면으로 가기 위함
     {
 
         for (int i = 0; i < characters.Count; i++)
         {
             bool isForward = false;
-            CD.characterDatas[i].curHp = characterOriginal[i].Hp;
+            ChD.characterDatas[i].curHp = characterOriginal[i].Hp;
             for (int j = 0; j < forward.Count; j++)
             {
                 if (forward[j] == characterOriginal[i])
                 {
-                    CD.characterDatas[i].curFormation = 0;
+                    ChD.characterDatas[i].curFormation = 0;
                     isForward = true;
                     break;
                 }
             }
-            if (!isForward) CD.characterDatas[i].curFormation = 1;
+            if (!isForward) ChD.characterDatas[i].curFormation = 1;
         }
 
         string path4 = Path.Combine(Application.persistentDataPath, "CharacterData.json");
-        string CharacterData = JsonConvert.SerializeObject(CD);
+        string CharacterData = JsonConvert.SerializeObject(ChD);
         File.WriteAllText(path4, CharacterData);
         Time.timeScale = 1;
 
-        SceneManager.LoadScene("Main");
+        SceneManager.LoadScene("Main"); //지금은 메인화면으로 갈 때 데이터를 저장하게 되는데, 승리시에만 하도록 추후에 변경해야함
     }
 
     public void Click_Menu()
@@ -259,59 +308,61 @@ public class BattleManager : MonoBehaviour
 
     private void Awake()
     {
-        startCost = 0;
+       
         string path = Path.Combine(Application.persistentDataPath, "GameData.json");
         string gameData = File.ReadAllText(path);
         gd = JsonConvert.DeserializeObject<GameData>(gameData);
         path = Path.Combine(Application.persistentDataPath, "CharacterData.json");
         string characterData = File.ReadAllText(path);
-        CD = JsonConvert.DeserializeObject<CharacterData>(characterData);
-        line = CD.line;
-        for (int i = 0; i < CD.size; i++)
+        ChD = JsonConvert.DeserializeObject<CharacterData>(characterData);
+        line = ChD.line;
+        for (int i = 0; i < ChD.size; i++)
         {
             GameObject CharacterC = null;
 
-            if (CD.characterDatas[i].curFormation == 0) //전방
+            if (ChD.characterDatas[i].curFormation == 0) //전방
             {
-
-                CharacterC = Instantiate(CharacterPrefebs[CD.characterDatas[i].No], new Vector2(-880 / 45f, 375 / 45f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
+                
+                CharacterC = Instantiate(CharacterPrefebs[ChD.characterDatas[i].No], new Vector2(-880 / 45f, 375 / 45f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
                 forward.Add(CharacterC.GetComponent<Character>());
             }
             else //후방
             {
-                CharacterC = Instantiate(CharacterPrefebs[CD.characterDatas[i].No], new Vector2(-880 / 45f, (330 - 150 * characters.Count) / 45f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
+                CharacterC = Instantiate(CharacterPrefebs[ChD.characterDatas[i].No], new Vector2(-880 / 45f, (330 - 150 * characters.Count) / 45f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
                 back.Add(CharacterC.GetComponent<Character>());
-            }
+            } //전방과 후방 목록에 각각 캐릭터를 넣음
             characterOriginal.Add(CharacterC.GetComponent<Character>());
-            CharacterC.GetComponent<Character>().Atk = CD.characterDatas[i].Atk;
-            CharacterC.GetComponent<Character>().Hp = CD.characterDatas[i].curHp;
-            CharacterC.GetComponent<Character>().endur = CD.characterDatas[i].Endur;
-            startCost += CD.characterDatas[i].Cost;
-            CharacterC.GetComponent<Character>().passive = CD.characterDatas[i].passive;
-            CharacterC.GetComponent<Character>().Name = CD.characterDatas[i].Name;
+            CharacterC.GetComponent<Character>().Atk = ChD.characterDatas[i].Atk;
+            CharacterC.GetComponent<Character>().Hp = ChD.characterDatas[i].curHp;
+            CharacterC.GetComponent<Character>().def = ChD.characterDatas[i].def;
+            CharacterC.GetComponent<Character>().cost = ChD.characterDatas[i].Cost;
+            CharacterC.GetComponent<Character>().passive = ChD.characterDatas[i].passive;
+            CharacterC.GetComponent<Character>().Name = ChD.characterDatas[i].Name;
+            //캐릭터들의 기본 스탯을 데이터와 같게 설정
+            CharacterC.GetComponent<Character>().lobbyNum = i; //로비에 있는 순서대로 불러오기 떄문에 미리 저장
         }
-
+       
         for (int i = 0; i < line; i++)
         {
             forward[i].transform.position = new Vector2(-880 / 45f, (300 - 150 * characters.Count) / 45f);
             characters.Add(forward[i]);
-        }
-        for (int i = line; i < CD.size; i++)
+        }//위치가 전방인 캐릭터들을 목록에 넣음
+        for (int i = line; i < ChD.size; i++)
         {
             back[i - line].transform.position = new Vector2(-880 / 45f, (270 - 150 * characters.Count) / 45f);
             characters.Add(back[i - line]);
-        }
-        for (int i = 1; i < CD.size; i++)
+        }//위치가 후방인 캐릭터들을 목록에 넣음
+        for (int i = 1; i < ChD.size; i++)
         {
             characters[i].curNo = i;
         }
-        if (gd.BattleNo == 3 || gd.BattleNo == 6) //폴리만 예외
+        if (gd.BattleNo == 3 || gd.BattleNo == 6) //폴리만 예외,추후에 폴리 다시 작업할 때 수정예정
         {
             GameObject EnemySummon = Instantiate(Enemys[gd.BattleNo], new Vector2(0, 6), transform.rotation, GameObject.Find("CharacterCanvas").transform);
         }
         else
         {
-            GameObject EnemySummon = Instantiate(Enemys[gd.victory], new Vector2(-2, -2), transform.rotation, GameObject.Find("CharacterCanvas").transform);
+            GameObject EnemySummon = Instantiate(Enemys[0], new Vector2(-2, -2), transform.rotation, GameObject.Find("CharacterCanvas").transform);
         }
         Enemys = GameObject.FindGameObjectsWithTag("Enemy");
         for (int i = 0; i < Enemys.Length; i++)
@@ -322,47 +373,52 @@ public class BattleManager : MonoBehaviour
 
         LineObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-820, 360 - 150 * line);
         HM = GameObject.Find("HandManager").GetComponent<HandManager>();
+        if (gd.blessbool[20])
+        {
+            SetBless20();
+        }
+        if (gd.blessbool[4])
+        {
+            for (int i = 0; i < characters.Count; i++)
+                characters[i].turnAct++;
+        }
     }
 
 
     private void Update()
     {
-        if (Input.GetKey("escape"))
+        if (Input.GetKey("escape")) //esc누르면 게임 나가게
             Application.Quit();
     }
-    public void porte3()
-    {
 
-        porte3mode = true;
-    }
-    public void Porte3On()
+    public void Porte3On() //스타키티시모 on
     {
         condition.SetActive(true);
         conditionText.text = "스타키티시모";
         completeButton.SetActive(true);
         SelectMode = true;
     }
-    public void Click_Complete()
+    public void Click_Complete()//카드를 고르는 기능용
     {
         condition.SetActive(false);
         SelectMode = false;
         completeButton.SetActive(false);
-        if (porte3mode)
+        if (porte3mode) //현재 상태가 스타키티시모 라면
         {
            
             if (card != null)
             {
                 card.transform.localScale = new Vector3(1, 1, 1);
-                CM.FieldToDeck(card);
-                CM.CardToField();
-                CM.field[CM.field.Count - 1].GetComponent<Card>().cardcost -= 2;
+                CM.FieldToDeck(card);//선택한 카드를 덱에 보내고
+                CM.CardToField();//랜덤한 카드를 필드 가장 오른쪽으로 보냄
+                CM.field[CM.field.Count - 1].GetComponent<Card>().cardcost -= 2;//필드의 가장 오른쪽 카드의 코스트를 2감소시킴
                 if (CM.field[CM.field.Count - 1].GetComponent<Card>().cardcost < 0)
-                    CM.field[CM.field.Count - 1].GetComponent<Card>().cardcost = 0;
+                    CM.field[CM.field.Count - 1].GetComponent<Card>().cardcost = 0; 
                 CM.field[CM.field.Count - 1].GetComponent<Card>().costT.text = CM.field[CM.field.Count - 1].GetComponent<Card>().cardcost + "";
                 log.logContent.text += "\n스타카티시모!" + CM.field[CM.field.Count - 1].GetComponent<Card>().Name.text + "의 코스트가 감소하였습니다.";
                 porte3count--;
                 card = null;
-                if (porte3count == 0)
+                if (porte3count == 0) //포르테3의 중첩이 다 끝나면
                 {
                     porte3mode = false;
                 }
@@ -371,7 +427,7 @@ public class BattleManager : MonoBehaviour
                     Porte3On();
                 }
             }
-            else
+            else //아무 카드도 선택이 되어있지 않을 때
             {
                 condition.SetActive(true);
                 SelectMode = true;
@@ -381,44 +437,37 @@ public class BattleManager : MonoBehaviour
             }
         }
     }
-    public void CancleCharacter()
+    public void CancleCharacter() //발동->캐릭터를 두번 눌럿을때 or 눌러진 상태에서 다른 캐릭터를 눌렀을때
     {
 
         if (!otherCanvasOn)
         {
 
-            if (character != null)
-                character.SelectBox.SetActive(false);
+            if (character != null)//이미 눌러진 캐릭터가 있다면
+                character.SelectBox.SetActive(false); //선택이 되었다는 표시를 없앤다.
 
             character = null;
         }
     }
-    public void CharacterSelect(GameObject c)
+    public void CharacterSelect(GameObject c)//캐릭터 클릭이 가능 할 때 누르면 발동
     {
      
         if (!otherCanvasOn)
         {
          
-            CancleCharacter();
-            for (int i = 0; i < characters.Count; i++)
-            {
-                if (c.GetComponent<Character>() == characters[i])
-                    curCharacterNumber = i;
-            }
-
-
+            CancleCharacter();//이미 눌러진 캐릭터를 취소
 
             character = c.GetComponent<Character>();
             if (character != null)
                 character.SelectBox.SetActive(true);
         }
     }
-    public void useCost(int c)
+    public void useCost(int c) //코스트 사용 함수
     {
         cost -= c;
         costT.text = "" + cost;
     }
-    public void EnemySelect(GameObject e)
+    public void EnemySelect(GameObject e) //공격 카드가 발동되었을 시 적을 선택
     {
         if (!otherCanvasOn)
         {
@@ -426,20 +475,19 @@ public class BattleManager : MonoBehaviour
             card.GetComponent<Card>().EnemySelectCard();
         }
     }
-    public void CancleEnemy()
+    public void CancleEnemy() //현재 지정된 적을 풀어야 할 때 사용 (공격 카드를 발동 한 후 등)
     {
         if (!otherCanvasOn)
         {
-
             enemy = null;
         }
     }
-    public void SetCard(GameObject c)
+    public void SetCard(GameObject c) //카드를 눌렀을 때
     {
         if (SelectMode)
-        {
-            
+        {           
             cancleCard();
+            HandManager.Instance.go_UseButton.SetActive(true);
             card = c;
             return;
         }
@@ -447,15 +495,13 @@ public class BattleManager : MonoBehaviour
         if (!otherCanvasOn)
         {
             cancleCard();
-            /*tra2 = c.GetComponent<Transform>();
-            tra2.localScale = new Vector2(1.5f, 1.5f);       
-            c.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, -230, 0);*/
+          
             HandManager.Instance.go_UseButton.SetActive(true);
             
             card = c;
         }
     }
-    public void cancleCard()
+    public void cancleCard() //카드를 두번 누르거나, 다른 카드를 눌렀을때 이미 눌러진 카드에게 적용되는 함수
     {
         if (!otherCanvasOn)
         {
@@ -471,17 +517,18 @@ public class BattleManager : MonoBehaviour
     }
 
 
-    public void Click_useCard()
+    public void Click_useCard() //카드 사용 버튼을 누를 때
     {
         CancleButton.SetActive(false);
         //HandManager.Instance.go_SelectedCardTooltip.SetActive(false);
-
-        if (!EnemySelectMode)
+        if (!EnemySelectMode) 
         {
             if (card != null)
             {
+                
                 card.GetComponent<Card>().useCard();
-                HandManager.Instance.CancelToUse();
+   
+   //                 HandManager.Instance.CancelToUse(); 카드 사용 시 발동되게 옮깁니다.
             }
         }
         else
@@ -499,7 +546,7 @@ public class BattleManager : MonoBehaviour
     }
 
 
-    public void WarnOn()
+    public void WarnOn()//여러가지 경고 처리
     {
         Warn.SetActive(true);
 
@@ -517,7 +564,7 @@ public class BattleManager : MonoBehaviour
         warntext.text = "타겟 설정을 다시 해주세요";
         Invoke("TargetOff", 1f);
     }
-    public void allClear()
+    public void allClear()//지정된 카드,적,캐릭터 모두 null로 만듬(턴 종료시 발동)
     {
         cancleCard();
         CancleCharacter();
@@ -599,7 +646,7 @@ public class BattleManager : MonoBehaviour
                
             }
         }
-        for (int i = 0; i < CD.size; i++)
+        for (int i = 0; i < ChD.size; i++)
         {
             characters[i].myPassive.SpecialDrow(drow);
         }
@@ -607,14 +654,13 @@ public class BattleManager : MonoBehaviour
     }
     IEnumerator specialDrowC() 
     {
-
         while (specialDrowList.Count != 0)
         {
 
             CM.SpecialCardToField(specialDrowList[0]);
             specialDrowList.RemoveAt(0);
 
-            yield return new WaitForSeconds(0.25f);
+            yield return new WaitForSeconds(0.3f);
         }
         //AM.MyAct();
         // CM.Rebatch();           
@@ -668,14 +714,14 @@ public class BattleManager : MonoBehaviour
         {
             if (!characters[i].isDie)
             {
-                characters[i].AtkUp(atk);
+                characters[i].TurnAtkUp(atk);
             }
         }
     }
     public void TurnAtkUp(int atk) //해당 턴 동안 공격력 증가
     {
         log.logContent.text += "\n이번 턴 동안 " + character.Name + "의 공격력이 " + atk + "만큼 증가합니다.";
-        character.AtkUp(atk);
+        character.TurnAtkUp(atk);
     }
     public void AtkUp(int atk) //해당 전투동안 공격력 증가
     {
@@ -767,7 +813,7 @@ public class BattleManager : MonoBehaviour
 
         go_GraveView_Button_Revive.SetActive(false);
         ReviveCount = 0;
-        card7mode = false;
+       
         CM.GraveOff();
         otherCanvasOn = false;
         window_Grave.SetActive(false);
@@ -820,9 +866,9 @@ public class BattleManager : MonoBehaviour
 
     public bool card20done = false;
     GameObject copyCard;
-    public void card20Active()
+    public void card20Active() //스케치발동이 발동 되었다면
     {
-        c20 = card;
+        c20 = card; //스케치발동을 c20이라는 오브젝트에 저장후,
         otherCanvasOn = true;
         copyCard = Instantiate(pcard, CM.HandCanvas.transform);
         copyCard.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, -230, 0);
@@ -831,7 +877,7 @@ public class BattleManager : MonoBehaviour
         CancleButton.SetActive(true);
         copyCard.GetComponent<Card>().iscard20Mode = true;
         copyCard.GetComponent<Card>().cardcost = 0;
-        card = copyCard;
+        card = copyCard;//현재 지정된 카드를 이전에 사용한 카드의 복사본을 변경
         HandManager.Instance.go_UseButton.SetActive(true);
     }
     public void Click_cancleButtonUse()
@@ -843,34 +889,36 @@ public class BattleManager : MonoBehaviour
         c20 = null;
 
     }
-    public void reflectUp(int r)
+    public void reflectUp(int r) //반사데미지를 올려줌
     {
         character.reflect += r;
     }
 
-    public void Victory()
+    public void Victory() //승리시 발동하는 함수
     {
         otherCanvasOn = true;
         victory.SetActive(true);
         isV = true;
         int ignum = Random.Range(15, 26) * 10 + gd.victory * 20;
+        int tribute = Random.Range(5, 11) * 10;
         if (gd.blessbool[15]) ignum *= 3;
         rewardIgnum.text = ignum + "이그넘 획득";
+        rewardTribute.text = tribute + "공물 획득";
         gd.Ignum += ignum;
-        if (gd.blessbool[16]) listlength = 4;
-        if (!gd.blessbool[9]) noSelect.SetActive(false);
+        //정해진 공식에 따라 이그넘을 획득 후
+        if (gd.blessbool[16]) listlength = 4; //축복 16번이 true라면 4개를 보여줘야함
+        if (!gd.blessbool[9]) noSelect.SetActive(false); //축복 9번이 없다면 아무것도 선택 안하는 버튼을 없앰
         for (int i = 0; i < data2.cd.Length; i++)
         {
             for (int j = 0; j < characters.Count; j++)
             {
                 if (data2.cd[i].Deck == characters[j].characterNo && data2.cd[i].type != 2)
                 {
-                    RandomCardList.Add(i);
+                    RandomCardList.Add(i);//획득 할 수 있는 모든 카드를 리스트에 넣은 후
                 }
             }
         }
         int rand = Random.Range(0, RandomCardList.Count);
-
         for (int i = 1; i <= listlength; i++)
         {
             int temp = RandomCardList[rand];
@@ -885,17 +933,32 @@ public class BattleManager : MonoBehaviour
             newCard.GetComponent<NoBattleCard>().setCardInfoInLobby(RandomCardList[RandomCardList.Count - i], 0);
             RancomSelectCard.Add(RandomCardList[RandomCardList.Count - i]);
         }
+        //랜덤함수를 반복 해서 맨 앞 n장의 카드들을 중복되지 않는 카드들로
+        equipment e=EquipmentManager.Instance.makeEquipment(); //새로운 장비를 생성함.
+        List<string> sList = EquipmentManager.Instance.equipmentStrings(e);
+        RewardEquipmentString[0].text = sList[0];
+        RewardEquipmentString[1].text = sList[1] + '\n' + sList[2] + '\n' + sList[3];
+        gd.EquipmentList.Add(e);
     }
-    public void Click_SelectReward()
+    public void Click_SelectReward()//원하는 카드를 선택해서 카드 데이터에 저장하는 함수
     {
+        bool isSelect=false;
+        for (int i = 0; i < RancomSelectCard.Count; i++)
+        {
+
+            if (RewardCanvas.transform.GetChild(i).GetComponent<NoBattleCard>().select)
+            {
+                isSelect = true;
+            }
+        }
+        if (!isSelect) return;
         CardData CardD;
         string path = Path.Combine(Application.persistentDataPath, "CardData.json");
         string cardData = File.ReadAllText(path);
         CardD = JsonConvert.DeserializeObject<CardData>(cardData);
-
         for (int i = 0; i < RancomSelectCard.Count; i++)
         {
-            Debug.Log(RancomSelectCard[i]);
+           
             if (RewardCanvas.transform.GetChild(i).GetComponent<NoBattleCard>().select)
             {
                 CardD.cardNo.Add(RancomSelectCard[i]);
@@ -909,32 +972,34 @@ public class BattleManager : MonoBehaviour
         File.WriteAllText(path, cardData);
         Click_NoSelectAndMain();
     }
-    public void Click_NoSelectAndMain()
-    {
+    public void Click_NoSelectAndMain()//전투 정보를 모두 저장한 후 로비로 가는 함수
+    {if (gd.bless3count > 0) gd.bless3count--;
+        if (gd.bless3count == 0) gd.blessbool[3] = false; //블레스3이 켜져있다면 1개씩 감소시킴.
         for (int i = 0; i < characters.Count; i++)
         {
             bool isForward = false;
-            CD.characterDatas[i].curHp = characterOriginal[i].Hp;
+            ChD.characterDatas[i].curHp = characterOriginal[i].Hp;
             for (int j = 0; j < forward.Count; j++)
             {
                 if (forward[j] == characterOriginal[i])
                 {
-                    CD.characterDatas[i].curFormation = 0;
+                    ChD.characterDatas[i].curFormation = 0;
                     isForward = true;
                     break;
                 }
             }
-            if (!isForward) CD.characterDatas[i].curFormation = 1;
+            if (!isForward) ChD.characterDatas[i].curFormation = 1; //진형붕괴를 통해 위치가 바꼈다면 저장
         }
 
         string path4 = Path.Combine(Application.persistentDataPath, "CharacterData.json");
-        string CharacterData = JsonConvert.SerializeObject(CD);
+        string CharacterData = JsonConvert.SerializeObject(ChD);
         File.WriteAllText(path4, CharacterData);
         gd.isAct = false;
         gd.Day++;
         gd.isNight = false;
         gd.victory++;
         gd.isActInDay = false;
+        //로비에 가게되면 새로운 날짜기 때문에 행동력이 주어지고 낮으로 바뀌게된다.
         string path3 = Path.Combine(Application.persistentDataPath, "GameData.json");
         string GameData = JsonConvert.SerializeObject(gd);
         File.WriteAllText(path3, GameData);
@@ -946,7 +1011,7 @@ public class BattleManager : MonoBehaviour
         defeated.SetActive(true);
     }
     public void goEnemySelectMode() //공격 카드 선택 시 어떤 적을 공격할지 고르는 모드
-    {
+    {   
         EnemySelectMode = true; //이 상태로 들어가면 Enemy를 클릭시 선택이 된다.
         CardUseText.text = "취소";
     }
@@ -957,7 +1022,7 @@ public class BattleManager : MonoBehaviour
     //type==0 랜덤 대상 type==1 방어도 높은 적 우선 type==2 체력 높은 적 우선 type==3 방어도 있는 적 우선
     //type==4 모든 대상
     //ActM =>true 일 시 행동력 감소 포함
-    public void HitFront(int dmg, int type, Enemy enemy, bool ActM)
+    public void HitFront(int dmg, int type, Enemy enemy, bool ActM) //타켓을 전방으로
     {
         bool Alive = false;
 
@@ -968,7 +1033,7 @@ public class BattleManager : MonoBehaviour
         if (!Alive)
         {
 
-            HitAll(dmg, type, enemy, ActM);
+            HitAll(dmg, type, enemy, ActM);//전방에 아무도 없다면 타겟을 모두로
         }
         else
         {
@@ -1086,7 +1151,7 @@ public class BattleManager : MonoBehaviour
             }
         }
     }
-    public void HitAll(int dmg, int type, Enemy enemy, bool ActM)
+    public void HitAll(int dmg, int type, Enemy enemy, bool ActM) //타겟을 모두로
     {
       
         int rand2 = 0;
@@ -1205,7 +1270,7 @@ public class BattleManager : MonoBehaviour
             }
         }
     }
-    public void HitBack(int dmg, int type, Enemy enemy, bool ActM)
+    public void HitBack(int dmg, int type, Enemy enemy, bool ActM) //타겟을 후방으로
     {
         bool Alive = false;
 
@@ -1215,7 +1280,7 @@ public class BattleManager : MonoBehaviour
         }
         if (!Alive)
         {
-            HitAll(dmg, type, enemy, ActM);
+            HitAll(dmg, type, enemy, ActM);//후방에 아무도 없다면 타겟을 전체로
         }
         else
         {
@@ -1359,14 +1424,14 @@ public class BattleManager : MonoBehaviour
     {
        AM.MakeEarlyAct(6, 0, null, myEnemy, null);
     }
-    public void card22() 
+    public void card22()  //결의
     {
       
         for (int i = 0; i < characters.Count; i++)
         {
             if (!characters[i].isDie)
             {       
-                characters[i].getArmor(4+characters[i].endur); 
+                characters[i].getArmor(4+characters[i].turnDef); 
             }
         }
     }
@@ -1376,10 +1441,10 @@ public class BattleManager : MonoBehaviour
         for (int i = 0; i < characters.Count; i++)
         {
             if(characters[i].characterNo!=2)
-            characters[i].onMinusAct(characters[i].Act);
+            characters[i].onMinusAct(characters[i].turnAct);
             else
             {
-                characters[i].AtkUp(3);
+                characters[i].TurnAtkUp(3);
             }
         }
 
