@@ -16,6 +16,8 @@ public class HandManager : MonoBehaviour
         }
     }
 
+    Camera camera;
+
     public GameObject cardSample;
     private GameObject card;
     private List<GameObject> list_Card;
@@ -45,6 +47,9 @@ public class HandManager : MonoBehaviour
     private Card onPointerCard = null; // this field have script<Card> on mouse pointer
     private Card selectedCard = null; // this field have script<Card> selected
 
+    private bool isSelectedCard = false;
+    [SerializeField] private GameObject go_selectedCardImage;
+
     private void Awake()
     {
         if (instance == null)
@@ -66,7 +71,7 @@ public class HandManager : MonoBehaviour
 
     void Start()
     {
-
+        camera = GameObject.Find("Main Camera").GetComponent<Camera>();
     }
 
     void Update()
@@ -92,7 +97,14 @@ public class HandManager : MonoBehaviour
             InputToCardText();
 
         if (Input.GetMouseButtonDown(1))
+        {
+            isSelectedCard = false;
+            go_selectedCardImage.SetActive(false);
             CancelToUse();
+        }
+
+        if (isSelectedCard)
+            CardDrag();
     }
 
     public void AddCard(GameObject newCard)
@@ -236,6 +248,18 @@ public class HandManager : MonoBehaviour
                                               // 1. add polygon collider -> 2. if mouse pointer in collider go_SelectedCard.SetActive(true), else go_SelectedCard.SetActive(false)
     }
 
+    public void CardMouseDown()
+    {
+        isSelectedCard = true;
+        go_selectedCardImage.SetActive(true);
+        selectedCard.gameObject.transform.position = new Vector3(0f, 1000f, 0f);
+    }
+
+    public void CardMouseUp()
+    {
+        
+    }
+
     private void initStack()
     {
         selectedCardStack = 0;
@@ -296,6 +320,14 @@ public class HandManager : MonoBehaviour
     public void SelectCardToOriginPosition()
     {
         if (selectedCard != null)
-            selectedCard.transform.DOMove(selectedCard.origin_Position, 0.3f).SetEase(Ease.OutExpo);
+            selectedCard.gameObject.transform.position = selectedCard.origin_Position;
+        //selectedCard.transform.DOMove(selectedCard.origin_Position, 0.3f).SetEase(Ease.OutExpo);
+    }
+
+    private void CardDrag()
+    {
+        Vector3 mouseCursor = Input.mousePosition;
+
+        go_selectedCardImage.GetComponent<RectTransform>().localPosition = mouseCursor;
     }
 }

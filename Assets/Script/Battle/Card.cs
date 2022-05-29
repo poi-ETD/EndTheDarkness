@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
+
 public class Card : MonoBehaviour
 {
     CardManager CM;
+    public Image cardImage;
     public bool isUsed;
     public bool isDestroy;
     public TextMeshProUGUI Content;
@@ -334,14 +337,20 @@ public class Card : MonoBehaviour
         }
         else if (isGrave || isDeck)
             CM.ClickInGraveOrDeck(gameObject);
+
+        HandManager.Instance.CardMouseDown();
+        gameObject.GetComponent<RectTransform>().localPosition = new Vector3(0f, 1000f, 0f);
+    }
+
+    private void OnMouseUp()
+    {
+        HandManager.Instance.CardMouseUp();
     }
 
     private void OnMouseEnter()
     {
         if (!BM.EnemySelectMode && !BM.otherCanvasOn&&!isGrave&&!isDeck)
-        {
             HandManager.Instance.CardMouseEnter(this);
-        }
         if (BM.otherCanvasOn)
         {
            // if(isGrave||isDeck) HandManager.Instance.CardMouseEnter(this); 
