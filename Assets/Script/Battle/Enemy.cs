@@ -31,7 +31,12 @@ public class Enemy : MonoBehaviour
     ActManager AM;
     public int myNo;
     public bool goingShadow;
-    
+
+    public float speed;
+
+    public Sprite face;
+
+    public bool isAct;
     public bool CanShadow()
     {
         bool can = false;
@@ -96,12 +101,9 @@ public class Enemy : MonoBehaviour
     }
     public void EnemyEndTurn()
     {             
-        AM.EarlyAct();
+        //AM.EarlyAct();
     }
-    void TurnStart()
-    {
-        TM.PlayerTurnStart();
-    }
+  
    
    
     public void OnHitCal(int dmg, int no, bool reply)

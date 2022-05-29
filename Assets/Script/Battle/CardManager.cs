@@ -194,7 +194,7 @@ public class CardManager : MonoBehaviour
         HandManager.Instance.ArrangeCard();
       
     }
-
+    
     public void FieldToGrave(GameObject c) //사용하지 않고 바로 필드에서 무덤으로 버리는 함수
     {
         for (int i = field.Count - 1; i >= 0; i--)
@@ -464,5 +464,21 @@ public class CardManager : MonoBehaviour
             }
         }
         HandManager.Instance.ArrangeCard();
+    }
+    public void Drow()
+    {
+        StartCoroutine("DrowCor");
+    }
+    IEnumerator DrowCor()
+    {
+        BM.otherCor = true;
+
+      
+            CardToField();
+            yield return new WaitForSeconds(0.25f);
+
+
+        HandManager.Instance.InitCard();
+        BM.otherCor = false;
     }
 }

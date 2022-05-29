@@ -15,6 +15,11 @@ public class Character : MonoBehaviour
     public int def;
     public int turnDef;
     public int Act=1;
+
+    public float speed;
+    public int curSpeed;
+    public bool isAct;
+
     public TurnManager TM;
     public BattleManager BM;
     public TextMeshProUGUI hpT;
@@ -64,7 +69,7 @@ public class Character : MonoBehaviour
     
     public void useAct(int i)
     {
-        turnAct -= i;
+       // turnAct -= i;
         if (turnAct < 0) turnAct = 0;
         actT.text = "" + turnAct;
     }
@@ -115,6 +120,7 @@ public class Character : MonoBehaviour
 
     public void onClickEvent()
     {
+        return;
       
         if (!isDie && !BM.SelectMode && !BM.EnemySelectMode)
         {
@@ -191,14 +197,13 @@ public class Character : MonoBehaviour
 
       
         myPassive = GetComponent<CharacterPassive>();
-        myImage = transform.GetChild(7).GetComponent<Image>();
+        myImage = transform.GetChild(8).GetComponent<Image>();
       
         if (Hp <= 0) die();
         if (Hp > maxHp) Hp = maxHp;
 
         stringHp = Hp;
         hpT.text = "<color=#a39fff><b>" + Hp + "</color></b><size=15>/" + maxHp + "</size>";
-
     }
     
     public void BoardClear()

@@ -338,6 +338,7 @@ public class BattleManager : MonoBehaviour
             CharacterC.GetComponent<Character>().cost = ChD.characterDatas[i].Cost;
             CharacterC.GetComponent<Character>().passive = ChD.characterDatas[i].passive;
             CharacterC.GetComponent<Character>().Name = ChD.characterDatas[i].Name;
+            CharacterC.GetComponent<Character>().speed = ChD.characterDatas[i].speed;
             //캐릭터들의 기본 스탯을 데이터와 같게 설정
             CharacterC.GetComponent<Character>().lobbyNum = i; //로비에 있는 순서대로 불러오기 떄문에 미리 저장
         }
@@ -450,17 +451,16 @@ public class BattleManager : MonoBehaviour
         }
     }
     public void CharacterSelect(GameObject c)//캐릭터 클릭이 가능 할 때 누르면 발동
-    {
-     
-        if (!otherCanvasOn)
+    {                 
+        CancleCharacter();//이미 눌러진 캐릭터를 취소
+        while (CM.field.Count < 5)
         {
-         
-            CancleCharacter();//이미 눌러진 캐릭터를 취소
-
+            CM.Drow();
+        }
             character = c.GetComponent<Character>();
             if (character != null)
                 character.SelectBox.SetActive(true);
-        }
+        
     }
     public void useCost(int c) //코스트 사용 함수
     {
@@ -559,7 +559,8 @@ public class BattleManager : MonoBehaviour
     }
     public void TargetOn()
     {
-        allClear();
+        cancleCard();
+        CancleEnemy();
         Warn.SetActive(true);
         warntext.text = "타겟 설정을 다시 해주세요";
         Invoke("TargetOff", 1f);

@@ -211,6 +211,7 @@ public class CharacterPassive : MonoBehaviour
         }
         if (myNo == 4 && myPassvie[0] > 0&& CM.field.Count > 3)
         {
+            Debug.Log("Aaa");
             AM.MakeAct(0,13, 0,null, null, myCharacter, null, myPassvie[0]); //창조의 잠재력
         }
         

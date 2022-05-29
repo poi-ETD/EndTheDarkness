@@ -467,7 +467,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 678b223f10bba99439efa224c956ce14, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6def579745f757a4fbce80d58f0762cc, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1558,10 +1558,14 @@ MonoBehaviour:
   Hp: 0
   Atk: 0
   Armor: 0
-  Act: 1
+  turnAct: 0
   turnAtk: 0
   def: 0
   turnDef: 0
+  Act: 1
+  speed: 0
+  curSpeed: 0
+  isAct: 0
   TM: {fileID: 0}
   BM: {fileID: 0}
   hpT: {fileID: 7610119030524993051}
@@ -1575,7 +1579,7 @@ MonoBehaviour:
   AttackCount: 0
   bless: 0000000000000000000000000000000000000000
   SelectBox: {fileID: 5662799699541840815}
-  myImage: {fileID: 0}
+  myImage: {fileID: 5822465092041506592}
   cost: 0
   hitStack: 0
   dmgStack: 0
@@ -1593,6 +1597,7 @@ MonoBehaviour:
   stringHp: 0
   stringArmor: 0
   beforeArmor: 0
+  lobbyNum: 0
 --- !u!61 &7610119031415292889
 BoxCollider2D:
   m_ObjectHideFlags: 0

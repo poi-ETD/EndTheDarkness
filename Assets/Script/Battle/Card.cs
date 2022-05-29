@@ -43,7 +43,7 @@ public class Card : MonoBehaviour
                 BM.costOver();
                 return;
             }
-            if (BM.character.turnAct <= 0)
+            if (BM.character.turnAct <= -5)
             {
                 if (cardNo != 18)
                 {
@@ -173,8 +173,9 @@ public class Card : MonoBehaviour
                 BM.useCost(cardcost);
                 BM.character.useAct(1);               
                 CardUse();
+                BM.AM.Act();
             }
-            BM.AM.Act();
+            
         }
         else
         {

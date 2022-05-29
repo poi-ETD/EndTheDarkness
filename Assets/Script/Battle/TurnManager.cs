@@ -68,6 +68,7 @@ public class TurnManager : MonoBehaviour
             enemy[i] = enemys[i].GetComponent<Enemy>();
             enemy[i].EnemyStartTurn();
         }
+        PlayerTurnStart();
     }
     public void PlayerTurnEnd()
     {
@@ -106,17 +107,19 @@ public class TurnManager : MonoBehaviour
 
     IEnumerator TurnEnd()
     {
-        BM.otherCanvasOn = true;
+        
+
         for (int i = 0; i < BM.ChD.size; i++)
         {
             BM.characters[i].myPassive.TurnEndTimeCount();//턴 종료시 발동할 패시브를 위해
-
             yield return null;
 
         }
 
-        AM.Act();//패시브 발동
+        
+        AM.Act();//턴 종료 패시브 발동
 
+        
         while (BM.otherCor)
         {
             yield return new WaitForSeconds(0.1f);
@@ -130,7 +133,7 @@ public class TurnManager : MonoBehaviour
         BM.otherCanvasOn = false;
         t++; //턴을 1 올림
         turnText.text = "" + t;
-
+        PlayerTurnStart();
     }
 
 
@@ -138,12 +141,13 @@ public class TurnManager : MonoBehaviour
 
     public void PlayerTurnEndButton()
     {
-        if (BM.otherCor || BM.turnStarting) return; // 내 턴이 아니므로 눌러도 반응 x
+        
         turnEndImage.color = new Color(0.3f, 0.3f, 0.3f);
         HandManager.Instance.go_UseButton.SetActive(false); //YH
         HandManager.Instance.go_SelectedCardTooltip.SetActive(false); //YH
         HandManager.Instance.SelectCardToOriginPosition(); //YH
-        GameObject.Find("ActManager").GetComponent<ActManager>().LateAct();
+       // GameObject.Find("ActManager").GetComponent<ActManager>().LateAct();
+        PlayerTurnEnd();
     }
 
    
@@ -153,9 +157,11 @@ public class TurnManager : MonoBehaviour
     }
     public void PlayerTurnStart()
     {
+
+
         BM.turnStarting = true;
         GameObject.Find("HandManager").GetComponent<HandManager>().isInited = false;
-     
+        
         BM.log.logContent.text += "\n" + t + "턴 시작!";
 
         int gameCost = 0;
@@ -205,7 +211,7 @@ public class TurnManager : MonoBehaviour
         {
             BM.characters[i].myPassive.TurnStart();
         }
-        AM.Act();
+        AM.Act(); //턴 시작 패시브 발동
       
     }
 
