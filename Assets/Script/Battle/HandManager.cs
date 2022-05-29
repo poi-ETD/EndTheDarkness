@@ -326,7 +326,7 @@ public class HandManager : MonoBehaviour
 
     private void CardDrag()
     {
-        Vector3 mouseCursor = Input.mousePosition;
+        Vector3 mouseCursor = Input.mousePosition - new Vector3(960, 540);
 
         go_selectedCardImage.GetComponent<RectTransform>().localPosition = mouseCursor;
     }
