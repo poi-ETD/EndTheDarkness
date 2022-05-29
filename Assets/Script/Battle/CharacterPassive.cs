@@ -45,50 +45,19 @@ public class CharacterPassive : MonoBehaviour
     public void MyHit(Enemy e,int dmg)
     {
         if (myCharacter.isDie) return;
-      
-
-
-
         if (myCharacter.reflect > 0)
         {
-            
+            AM.MakeAct(0, -1, myCharacter.reflect, null,e, myCharacter, null, 1); //반사 데미지    
         }
-     
+        if (BM.gd.blessbool[7] && myCharacter.curNo < BM.line)
+        {
+            AM.MakeAct(0, -2, dmg / 2, null, null, myCharacter, null, 1);//역류하는 고통
+        }
         
     }
 
 
-    IEnumerator MyHitCor(Enemy e)
-    {
-        while (BM.otherCor)
-        {
-            yield return new WaitForSeconds(0.1f);
-        }
-        BM.otherCor = true;
-
-        if (myCharacter.reflect > 0)
-        {
-
-            transform.localScale *= 1.2f;
-            if (!e.isDie)
-            {
-                BM.OnAttack(myCharacter.reflect, e, myCharacter, 1);
-                BM.log.logContent.text += "" + e.Name + "에게 반사데미지" + myCharacter.reflect + "이 주어집니다.";
-                BM.curMessage.text += "" + e.Name + "에게 반사데미지" + myCharacter.reflect + "이 주어집니다.";
-            }
-
-            yield return new WaitForSeconds(0.7f);
-            transform.localScale /= 1.2f;
-            BM.curMessage.text = "";
-            yield return new WaitForSeconds(0.3f);
-        }
-
-
-
-
-        BM.otherCor = false;
-        yield return null;
-    }
+    
 
 
     public void MyAttack()
@@ -108,7 +77,7 @@ public class CharacterPassive : MonoBehaviour
     public void Sparky4()
     {
         if (myCharacter.isDie) return;
-        myCharacter.RealAtkUp(2);
+        myCharacter.AtkUp(2);
     }
     public void SpecialDrow(int drow)
     {
@@ -187,7 +156,7 @@ public class CharacterPassive : MonoBehaviour
         if (myNo == 4 && myPassvie[2] > 0)
         {
             BM.porte3count = myCharacter.passive[2];
-            BM.porte3();
+            BM.porte3mode = true;
         }
         if (myNo == 4 && myPassvie[3] > 0)
         {
@@ -259,13 +228,13 @@ public class CharacterPassive : MonoBehaviour
             CM.PlusCard(14);
         if (!isKing)
         {
-            myCharacter.myImage.sprite = upQ; 
-            
+            myCharacter.myImage.sprite = upQ;
+            myCharacter.cost += 1;
             isKing = true;
             myCharacter.Atk += 2;
-            myCharacter.AtkUp(2);
+            myCharacter.TurnAtkUp(2);
         }
-        BM.startCost++;
+        
     }
     public void Porte1()
     {
@@ -372,7 +341,7 @@ public class CharacterPassive : MonoBehaviour
     {
         if (myCharacter.isDie) return;
 
-        if (myNo == 2 && myPassvie[2]>0&&myCharacter.Act == 0&& CM.field.Count > 0)
+        if (myNo == 2 && myPassvie[2]>0&&myCharacter.turnAct == 0&& CM.field.Count > 0)
         {
             AM.MakeAct(0,7, 1, null,null, myCharacter, null, myPassvie[2]);
         }

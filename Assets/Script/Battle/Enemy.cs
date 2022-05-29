@@ -109,7 +109,7 @@ public class Enemy : MonoBehaviour
         if (isDie) return;
         AM.MakeAct(2, 0, dmg, null, this, null, null, 1);
         BM.characters[no].myPassive.MyAttack();
-        for (int i = 0; i < BM.CD.size; i++)
+        for (int i = 0; i < BM.ChD.size; i++)
         {
             if (!reply)
             {

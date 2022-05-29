@@ -24,4 +24,12 @@ public class Enums
         character,
         enemy
     }
+    public enum EquipmentStat
+    {
+        atk=0 ,
+        def,
+        maxHp,
+        cost,
+        act,
+    }
 }
