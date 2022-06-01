@@ -937,6 +937,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f71fb66b7b0fe546a62998699afd6c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cardImage: {fileID: 9053282549368549450}
   isUsed: 0
   isDestroy: 0
   Content: {fileID: 9053282548992789885}
@@ -955,6 +956,7 @@ MonoBehaviour:
   cardNo: 0
   selectType: 0
   iscard20Mode: 0
+  isSelected: 0
   origin_Position: {x: 0, y: 0, z: 0}
 --- !u!61 &-8729179083978840914
 BoxCollider2D:
