@@ -66,6 +66,7 @@ public class BattleManager : MonoBehaviour
     public TextMeshProUGUI CardUseText;
     [SerializeField] GameObject CancleButton;
 
+    [HideInInspector] public bool isGraveWindowOn; // YH
     public bool card20Activing;
     [SerializeField] GameObject go_GraveView_Button_Revive; // YH
     public bool CancleReviveMode;
@@ -763,6 +764,7 @@ public class BattleManager : MonoBehaviour
     public void Click_GraveOn() //무덤 열기. 특정 경우에는 클릭 안 해도 자동으로 열림
     {
         otherCanvasOn = true;
+        isGraveWindowOn = true;
 
         if (GraveReviveMode)
             go_GraveView_Button_Revive.SetActive(true);
@@ -775,6 +777,8 @@ public class BattleManager : MonoBehaviour
 
     public void Click_GraveOff() //무덤에서 그냥 종료 버튼
     {
+        isGraveWindowOn = false;
+
         if (GraveReviveMode) //만약에 무덤에서 카드를 고르는 카드 사용 중일 때는 그 카드의 발동을 취소하는 함수 호출
         {
             Grave_ReviveCancel();

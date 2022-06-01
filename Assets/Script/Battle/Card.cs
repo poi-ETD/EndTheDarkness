@@ -318,28 +318,35 @@ public class Card : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (BM.otherCor) return;
-
-        if (isSelected) return;
-
-        BM.isSelectedCardinHand = true; //YH
-        isSelected = true; //YH
-        HandManager.Instance.SelectCard(this);
-        HandManager.Instance.InputToOriginText(this); //YH  
-        HandManager.Instance.CardMouseEnter(this); //YH
-
-        if (!BM.EnemySelectMode && !BM.otherCanvasOn)
+        if (!isGrave)
         {
-            if (BM.card != gameObject)
-                BM.SetCard(gameObject);
-            else
-                BM.cancleCard();
-        }
-        else if (isGrave || isDeck)
-            CM.ClickInGraveOrDeck(gameObject);
+            if (BM.otherCor) return;
 
-        HandManager.Instance.CardMouseDown();
-        gameObject.GetComponent<RectTransform>().localPosition = new Vector3(0f, 1000f, 0f);
+            if (isSelected) return;
+
+            BM.isSelectedCardinHand = true; //YH
+            isSelected = true; //YH
+            HandManager.Instance.SelectCard(this);
+            HandManager.Instance.InputToOriginText(this); //YH  
+            HandManager.Instance.CardMouseEnter(this); //YH
+
+            if (!BM.EnemySelectMode && !BM.otherCanvasOn)
+            {
+                if (BM.card != gameObject)
+                    BM.SetCard(gameObject);
+                else
+                    BM.cancleCard();
+            }
+            else if (isGrave || isDeck)
+                CM.ClickInGraveOrDeck(gameObject);
+
+            //HandManager.Instance.CardMouseDown();
+            //gameObject.GetComponent<RectTransform>().localPosition = new Vector3(0f, 1000f, 0f);
+        }
+        else
+        {
+
+        }
     }
 
     private void OnMouseUp()
@@ -349,10 +356,12 @@ public class Card : MonoBehaviour
 
     private void OnMouseEnter()
     {
-        if (!BM.EnemySelectMode && !BM.otherCanvasOn&&!isGrave&&!isDeck)
+        if (!BM.EnemySelectMode && !BM.otherCanvasOn &&!isDeck)
             HandManager.Instance.CardMouseEnter(this);
-        if (BM.otherCanvasOn)
+        if (BM.otherCanvasOn && BM.isGraveWindowOn)
         {
+            if (isGrave)
+                HandManager.Instance.CardTooltipOn(this);
            // if(isGrave||isDeck) HandManager.Instance.CardMouseEnter(this); 
         }
     }
@@ -368,6 +377,11 @@ public class Card : MonoBehaviour
         {
             isOnMouse = false;
             HandManager.Instance.CardMouseExit(this);
+        }
+        else
+        {
+            if (BM.isGraveWindowOn)
+                HandManager.Instance.go_SelectedCardTooltip.SetActive(false);
         }
     }
 

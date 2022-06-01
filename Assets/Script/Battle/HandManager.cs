@@ -93,12 +93,12 @@ public class HandManager : MonoBehaviour
             }
         }
 
-        if (!BM.isPointerinHand)
-            InputToCardText();
+        //if (!BM.isPointerinHand)
+        //    InputToCardText();
 
         if (Input.GetMouseButtonDown(1))
         {
-            isSelectedCard = false;
+            //isSelectedCard = false;
             go_selectedCardImage.SetActive(false);
             CancelToUse();
         }
@@ -208,51 +208,66 @@ public class HandManager : MonoBehaviour
 
     public void CardMouseEnter(Card card)
     {
-        if (BM.turnStarting) return;
-
-        onPointerCard = card;
-        BM.isPointerinHand = true;
-
-        if (selectedCardStack <= 2 && isInited)
+        if (!card.isGrave && !BM.isGraveWindowOn)
         {
-            CardTooltipOn(card);
+            if (BM.turnStarting) return;
 
-            if (card != selectedCard)
+            onPointerCard = card;
+            BM.isPointerinHand = true;
+
+            if (selectedCardStack <= 2 && isInited)
             {
-                card.transform.DOMove(new Vector3(card.gameObject.transform.position.x, card.gameObject.transform.position.y + 0.5f,
-                    card.gameObject.transform.position.z), 0.3f).SetEase(Ease.OutExpo);
+                CardTooltipOn(card);
+
+                if (card != selectedCard)
+                {
+                    card.transform.DOMove(new Vector3(card.gameObject.transform.position.x, card.gameObject.transform.position.y + 0.5f,
+                        card.gameObject.transform.position.z), 0.3f).SetEase(Ease.OutExpo);
+                }
+                selectedCardStack++;
+
+                if (selectedCardStack == 1)
+                    Invoke("initStack", 0.15f);
+
+                // TODO:if first card select too much fast, add below
+                // if (firstcard) -> Invoke("initStack", 1f~);
             }
-            selectedCardStack++;
+        }
+        else
+        {
 
-            if (selectedCardStack == 1)
-                Invoke("initStack", 0.15f);
-
-            // TODO:if first card select too much fast, add below
-            // if (firstcard) -> Invoke("initStack", 1f~);
         }
     }
 
     public void CardMouseExit(Card card)
     {
-        onPointerCard = null;
-        BM.isPointerinHand = false;
-
-        if (isInited)
+        if (!card.isGrave)
         {
-            if (card != selectedCard)
-                card.transform.DOMove(card.origin_Position, 0.3f).SetEase(Ease.OutExpo);
-        }       
+            onPointerCard = null;
+            BM.isPointerinHand = false;
 
-        if (!BM.isSelectedCardinHand)
-            go_SelectedCardTooltip.SetActive(false); // if be unpleasant because of too much fast flicker of selected card, add below
-                                              // 1. add polygon collider -> 2. if mouse pointer in collider go_SelectedCard.SetActive(true), else go_SelectedCard.SetActive(false)
+            if (isInited)
+            {
+                if (card != selectedCard)
+                    card.transform.DOMove(card.origin_Position, 0.3f).SetEase(Ease.OutExpo);
+            }
+
+            if (!BM.isSelectedCardinHand)
+                go_SelectedCardTooltip.SetActive(false); // if be unpleasant because of too much fast flicker of selected card, add below
+                                                         // 1. add polygon collider -> 2. if mouse pointer in collider go_SelectedCard.SetActive(true), else go_SelectedCard.SetActive(false)
+        }
+        else
+        {
+            go_SelectedCardTooltip.SetActive(false);
+        }
     }
 
     public void CardMouseDown()
     {
-        isSelectedCard = true;
-        go_selectedCardImage.SetActive(true);
-        selectedCard.gameObject.transform.position = new Vector3(0f, 1000f, 0f);
+        //isSelectedCard = true;
+        //go_selectedCardImage.SetActive(true);
+        //selectedCard.gameObject.SetActive(false);
+        //selectedCard.gameObject.transform.position = new Vector3(0f, 1000f, 0f);
     }
 
     public void CardMouseUp()
@@ -284,6 +299,8 @@ public class HandManager : MonoBehaviour
         if (selectedCard == null)
             return;
 
+        //selectedCard.gameObject.SetActive(true);
+
         if (selectedCard != onPointerCard)
         {
             SelectCardToOriginPosition();
@@ -308,7 +325,7 @@ public class HandManager : MonoBehaviour
         selectedCard = card;
     }
 
-    private void CardTooltipOn(Card card)
+    public void CardTooltipOn(Card card)
     {
         text_TooltipCardName.text = card.Name.text;
         text_TooltipCardNo.text = card.NoT.text;
@@ -320,8 +337,8 @@ public class HandManager : MonoBehaviour
     public void SelectCardToOriginPosition()
     {
         if (selectedCard != null)
-            selectedCard.gameObject.transform.position = selectedCard.origin_Position;
-        //selectedCard.transform.DOMove(selectedCard.origin_Position, 0.3f).SetEase(Ease.OutExpo);
+            selectedCard.transform.DOMove(selectedCard.origin_Position, 0.3f).SetEase(Ease.OutExpo);
+        //selectedCard.gameObject.transform.position = selectedCard.origin_Position;
     }
 
     private void CardDrag()
