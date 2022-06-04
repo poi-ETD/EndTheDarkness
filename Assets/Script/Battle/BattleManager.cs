@@ -578,7 +578,7 @@ public class BattleManager : MonoBehaviour
     }
     public void costOver()
     {
-        allClear();
+        cancleCard();
         Warn.SetActive(true);
         warntext.text = "코스트가 부족합니다";
         Invoke("costOverOff", 1f);
@@ -693,6 +693,8 @@ public class BattleManager : MonoBehaviour
             newCard.GetComponent<Card>().use = false;
             newCard.GetComponent<Card>().isUsed = false;
             newCard.GetComponent<Card>().isGrave = false;
+            newCard.GetComponent<Card>().isDeck = false;
+            newCard.GetComponent<Card>().isSelected = false;
             newCard.GetComponent<Transform>().localScale = new Vector2(1, 1);
             newCard.SetActive(false);
             CM.Deck.Add(newCard);

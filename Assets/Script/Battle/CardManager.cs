@@ -143,8 +143,8 @@ public class CardManager : MonoBehaviour
         newCard.GetComponent<Card>().cardcost = cd.cd[i].Cost;
         newCard.GetComponent<Card>().realcost = cd.cd[i].Cost;
         newCard.GetComponent<Card>().selectType = cd.cd[CD.cardNo[i]].select;
-      
-        Deck.Add(newCard);
+        
+         Deck.Add(newCard);
         newCard.SetActive(false);
     }
     public void UseCard(GameObject usingCard)//사용된 카드를 무덤에 넣는 과정
@@ -187,7 +187,7 @@ public class CardManager : MonoBehaviour
       
         if (usingCard.GetComponent<Card>().Name.text != "스케치 반복")
         {
-            BM.allClear();
+            BM.cancleCard();
             TM.turnCardPlus();
         }
         // StartCoroutine("CardUseCor",curC);
@@ -438,6 +438,7 @@ public class CardManager : MonoBehaviour
                 c.transform.parent = GameObject.Find("DeckContent").transform;
                 c.GetComponent<Card>().isGrave = false;
                 c.SetActive(false);
+                c.GetComponent<Card>().isSelected = false;
                 Grave.RemoveAt(i);
                 break;
             }

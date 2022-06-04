@@ -322,17 +322,18 @@ public class Card : MonoBehaviour
         if (!isGrave)
         {
             if (BM.otherCor) return;
-
+           
             if (isSelected) return;
-
+          
             BM.isSelectedCardinHand = true; //YH
             isSelected = true; //YH
             HandManager.Instance.SelectCard(this);
             HandManager.Instance.InputToOriginText(this); //YH  
             HandManager.Instance.CardMouseEnter(this); //YH
-
+         
             if (!BM.EnemySelectMode && !BM.otherCanvasOn)
             {
+                
                 if (BM.card != gameObject)
                     BM.SetCard(gameObject);
                 else
@@ -346,7 +347,7 @@ public class Card : MonoBehaviour
         }
         else
         {
-
+           
         }
     }
 
