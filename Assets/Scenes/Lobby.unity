@@ -109523,6 +109523,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: ebbf52e5b609c774ab373acb69f263ae, type: 3}
   - {fileID: 21300000, guid: f605b32ea42581845bf7fbcacef58651, type: 3}
   - {fileID: 21300000, guid: 6cc7b02b23c2dec40a7a2f1c09f21d01, type: 3}
+  - {fileID: 21300000, guid: 0eb7031cecdc68b469b619b71ec21966, type: 3}
   LobbyCharacterPrefebs: {fileID: 8302398870094710930, guid: 3fd454fc05d086c44b86f3e4a39f44b8,
     type: 3}
   PassiveView: {fileID: 826953529}
@@ -112852,7 +112853,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1969054171
 RectTransform:
   m_ObjectHideFlags: 0

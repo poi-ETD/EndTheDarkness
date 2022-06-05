@@ -5213,12 +5213,14 @@ MonoBehaviour:
   - {fileID: 21300000, guid: ebbf52e5b609c774ab373acb69f263ae, type: 3}
   - {fileID: 21300000, guid: f605b32ea42581845bf7fbcacef58651, type: 3}
   - {fileID: 21300000, guid: 6cc7b02b23c2dec40a7a2f1c09f21d01, type: 3}
+  - {fileID: 21300000, guid: 0eb7031cecdc68b469b619b71ec21966, type: 3}
   CharacterFaceImgae:
   - {fileID: 0}
   - {fileID: 21300000, guid: 3b4a2971ec10b3748b9b6fcc84190d48, type: 3}
   - {fileID: 21300000, guid: 09185b4511a45fd4582ae913a13b6734, type: 3}
   - {fileID: 21300000, guid: 6def579745f757a4fbce80d58f0762cc, type: 3}
   - {fileID: 21300000, guid: 75a4f94e1ec9c3248afba1e0e0862f64, type: 3}
+  - {fileID: 21300000, guid: 155c5804e3c65ad41ad0f82fd1c803ef, type: 3}
   Canvas: {fileID: 693740718}
   Prefebs: {fileID: 2019911453237105221, guid: ebbdde722b2871942863523187f63b03, type: 3}
   listImage:

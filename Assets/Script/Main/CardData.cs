@@ -25,7 +25,7 @@ public class CardData2
             this.select = select;
         }
     }
-    public cardData[] cd = new cardData[27]
+    public cardData[] cd = new cardData[29]
     {  new cardData("이름자리입니다","내용입니다",0,0,0,0,0),
 
        new cardData("기본공격","-적 한명에게 데미지: <color=red><b>7</color></b>",1,0,0,1,1),
@@ -76,7 +76,9 @@ public class CardData2
 
        new cardData("사이코키네시스","-패에있는 카드를 모두 묘지에 버린다.\n-덱에 있는 카드를 1장 선택해 가지고 온다.",2,4,1,24,3),
        new cardData("들어낸 뼈갑옷","-망자부활:현재 남은 코스트.\n-다음 턴 시작 시 자신에게 방어도:7.",1,1,1,25,0),
-       new cardData("흩날리는 살더미","-망자부활:10.\n-적 전체에게 데미지:2 (3번).",2,1,1,26,0)
+       new cardData("흩날리는 살더미","-망자부활:10.\n-적 전체에게 데미지:2 (3번).",2,1,1,26,0),
+       new cardData("음을 읊조리고 금을 연주한다.","-적 한명에게 약화부여:10.\n-약화가 부여된 적에게 데미지:15.",3,5,0,27,1),
+       new cardData("불타는 금은보패","-소지한 이그넘이 50 감소한다.\n-령이 사용할 시,적 전체에게 약화부여:2.\n-적 전체에게 데미지:2",2,5,0,28,0),
     };
     
 

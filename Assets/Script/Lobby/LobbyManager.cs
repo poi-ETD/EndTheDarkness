@@ -150,6 +150,7 @@ public class LobbyManager : MonoBehaviour
                 }
             }
             int r = Random.Range(0, RandomCardList.Count);
+            
             GameObject newCard = Instantiate(ShopPrefebs, GameObject.Find("ResetShop").transform.GetChild(0).transform);
             newCard.GetComponent<NoBattleCard>().setCardInfoInLobby(RandomCardList[r], 0);
             int f = r;
@@ -157,9 +158,12 @@ public class LobbyManager : MonoBehaviour
             newCard = Instantiate(ShopPrefebs, GameObject.Find("ResetShop").transform.transform.GetChild(0).transform);
             newCard.GetComponent<NoBattleCard>().setCardInfoInLobby(RandomCardList[r], 0);
             int s = r;
-            while (r == f || s == r) r = Random.Range(0, RandomCardList.Count);
-            newCard = Instantiate(ShopPrefebs, GameObject.Find("ResetShop").transform.transform.GetChild(0).transform);
-            newCard.GetComponent<NoBattleCard>().setCardInfoInLobby(RandomCardList[r], 0);
+            if (RandomCardList.Count > 2)
+            {
+                while (r == f || s == r) r = Random.Range(0, RandomCardList.Count);
+                newCard = Instantiate(ShopPrefebs, GameObject.Find("ResetShop").transform.transform.GetChild(0).transform);
+                newCard.GetComponent<NoBattleCard>().setCardInfoInLobby(RandomCardList[r], 0);
+            }
         }
         else if (rc == ChD.size)
         {

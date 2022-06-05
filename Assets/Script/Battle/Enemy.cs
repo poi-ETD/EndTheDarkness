@@ -31,7 +31,13 @@ public class Enemy : MonoBehaviour
     ActManager AM;
     public int myNo;
     public bool goingShadow;
-    
+
+    public int[] status = new int[10];
+
+    public void StatusChange(int kind,int amount)
+    {
+        status[kind] += amount;
+    }
     public bool CanShadow()
     {
         bool can = false;
@@ -125,6 +131,11 @@ public class Enemy : MonoBehaviour
     public void onHit(int dmg)
     {
         if (isDie) return;
+        if (status[(int)Enums.Status.weak] > 0)
+        {
+            status[(int)Enums.Status.weak]--;
+            dmg *= 2;
+        }
         GameObject Dmg = Instantiate(BM.DmgPrefebs, transform);
         Dmg.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
         Dmg.GetComponent<DMGtext>().GetType(0, dmg);      

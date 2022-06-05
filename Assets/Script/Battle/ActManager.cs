@@ -235,6 +235,10 @@ public class ActManager : MonoBehaviour
                         for(int i=0;i<BM.Enemys.Length;i++)
                         BM.Enemys[i].GetComponent<Enemy>().OnHitCal(ActList[0].mount, ActList[0].myC.curNo, false);
                     }
+                    if (ActList[0].no >=100) //상태이상은 100번부터
+                    {
+                        ActList[0].targetE.StatusChange(ActList[0].no-100, ActList[0].mount);
+                    }
                     if (sum == 1)
                     {
                         yield return new WaitForSeconds(1);

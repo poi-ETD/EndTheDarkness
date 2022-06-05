@@ -33,7 +33,7 @@ public class CardManager : MonoBehaviour
     HandManager HM;
     ActManager AM;
     CardData2 cd = new CardData2();
-    string[] deckText = new string[5];
+    string[] deckText = new string[6];
 
 
     private void Update()
@@ -48,6 +48,7 @@ public class CardManager : MonoBehaviour
         deckText[2] = "스파키";
         deckText[3] = "반가라";
         deckText[4] = "포르테";
+        deckText[5] = "령";
         string filepath = Application.persistentDataPath + "/CardData.json";
         string path = Path.Combine(Application.persistentDataPath, "CardData.json");
         if (File.Exists(path))

@@ -10,6 +10,7 @@ public class Card : MonoBehaviour
     public TextMeshProUGUI Content;
     public bool use;
     BattleManager BM;
+    ActManager AM;
     public int cardcost;
     public TextMeshProUGUI costT;
     public TextMeshProUGUI DeckT;
@@ -170,6 +171,18 @@ public class Card : MonoBehaviour
                     BM.ghostRevive(10);
                     BM.AllAttack(2, BM.character,3);
                 }
+                if (cardNo == 28)
+                {
+                    BM.gd.Ignum -= 50;
+                    if (BM.character.characterNo == 5)
+                    {
+                        for(int i = 0; i < BM.Enemys.Length; i++)
+                        {
+                            BM.Enemys[i].GetComponent<Enemy>().StatusChange((int)Enums.Status.weak, 2);
+                        }
+                    }
+                    BM.AllAttack(2, BM.character, 1);
+                }
                 BM.useCost(cardcost);
                 BM.character.useAct(1);               
                 CardUse();
@@ -227,8 +240,19 @@ public class Card : MonoBehaviour
         {
             BM.OnDmgOneTarget(4, BM.enemy,7);                      
         }
-        
-        BM.useCost(cardcost);       
+        if (cardNo == 27)
+        {
+
+
+          
+
+            if (BM.enemy.status[(int)Enums.Status.weak] > 0)
+        {
+            BM.OnDmgOneTarget(15, BM.enemy, 1);
+        }
+            BM.enemy.GetComponent<Enemy>().StatusChange((int)Enums.Status.weak, 10);
+        }
+        BM.useCost(cardcost);           
         BM.character.useAct(1);
         CardUse();
     
@@ -277,7 +301,8 @@ public class Card : MonoBehaviour
     {
       
         CM = GameObject.Find("CardManager").GetComponent<CardManager>();
-        BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();       
+        BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
+        AM = BM.AM;
     }
     public void CardUse()
     {

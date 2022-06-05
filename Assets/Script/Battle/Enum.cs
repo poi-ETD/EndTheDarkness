@@ -32,4 +32,10 @@ public class Enums
         cost,
         act,
     }
+    public enum Status
+    {
+        posion,
+        weak,
+    }
+  
 }
