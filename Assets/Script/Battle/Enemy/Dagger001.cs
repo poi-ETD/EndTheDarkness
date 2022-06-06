@@ -16,7 +16,8 @@ public class Dagger001 : MonoBehaviour
     [SerializeField] Dagger001 anotherDagger;
     int pattern;
     bool[] done = new bool[3];
-
+    int myturn;
+    
     // YH
     public Image image_character;
     public Sprite sprite_idle;
@@ -30,13 +31,14 @@ public class Dagger001 : MonoBehaviour
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         myEnemy.Name = "단검" + plusname;
         NameT.text = myEnemy.Name;
-        StartPattern();
+     
     }
     private void Update()
     {
-        if (curTurn != TM.t)
+        if (myEnemy.isAct)
         {
             StartPattern();
+            myEnemy.isAct = false;
         }
     }
     void StartPattern()
@@ -44,15 +46,16 @@ public class Dagger001 : MonoBehaviour
         if (BM.diecount < BM.characters.Count)
         {
             if (!myEnemy.isDie)
-            {               
-                if ((curTurn + 1) % 5 != 0)
+            {
+                myturn++;
+                if (myturn%3!=0)
                   {
-                      pattern = Random.Range(0, 3);
+                      pattern = Random.Range(0, 2);
                       if (plusname == 2)
                       {
                           while (pattern == anotherDagger.pattern)
                           {
-                              pattern = Random.Range(0, 3);
+                              pattern = Random.Range(0, 2);
                           }
                       }
 
@@ -66,11 +69,7 @@ public class Dagger001 : MonoBehaviour
                           BM.EnemyGetAromor(3, myEnemy, myEnemy);
                           BM.HitFront(3, 0, myEnemy, false);
                       }
-                      if (pattern == 2)
-                      {
-                          
-                          BM.HitBack(1, 0, myEnemy, true);
-                      }
+                 
                   }
                   else
                   {
@@ -81,11 +80,11 @@ public class Dagger001 : MonoBehaviour
                   }
               }
            }
-
+        myEnemy.BM.AM.LateAct();
                
-                myEnemy.EnemyEndTurn();
+              // myEnemy.EnemyEndTurn();
 
-                curTurn++;
+                
             }
         }
     

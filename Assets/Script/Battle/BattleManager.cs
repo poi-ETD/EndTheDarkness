@@ -66,6 +66,7 @@ public class BattleManager : MonoBehaviour
     public TextMeshProUGUI CardUseText;
     [SerializeField] GameObject CancleButton;
 
+    [HideInInspector] public bool isGraveWindowOn; // YH
     public bool card20Activing;
     [SerializeField] GameObject go_GraveView_Button_Revive; // YH
     public bool CancleReviveMode;
@@ -337,6 +338,7 @@ public class BattleManager : MonoBehaviour
             CharacterC.GetComponent<Character>().cost = ChD.characterDatas[i].Cost;
             CharacterC.GetComponent<Character>().passive = ChD.characterDatas[i].passive;
             CharacterC.GetComponent<Character>().Name = ChD.characterDatas[i].Name;
+            CharacterC.GetComponent<Character>().speed = ChD.characterDatas[i].speed;
             //캐릭터들의 기본 스탯을 데이터와 같게 설정
             CharacterC.GetComponent<Character>().lobbyNum = i; //로비에 있는 순서대로 불러오기 떄문에 미리 저장
         }
@@ -449,17 +451,16 @@ public class BattleManager : MonoBehaviour
         }
     }
     public void CharacterSelect(GameObject c)//캐릭터 클릭이 가능 할 때 누르면 발동
-    {
-     
-        if (!otherCanvasOn)
+    {                 
+        CancleCharacter();//이미 눌러진 캐릭터를 취소
+        while (CM.field.Count < 5)
         {
-         
-            CancleCharacter();//이미 눌러진 캐릭터를 취소
-
+            CM.Drow();
+        }
             character = c.GetComponent<Character>();
             if (character != null)
                 character.SelectBox.SetActive(true);
-        }
+        
     }
     public void useCost(int c) //코스트 사용 함수
     {
@@ -558,7 +559,8 @@ public class BattleManager : MonoBehaviour
     }
     public void TargetOn()
     {
-        allClear();
+        cancleCard();
+        CancleEnemy();
         Warn.SetActive(true);
         warntext.text = "타겟 설정을 다시 해주세요";
         Invoke("TargetOff", 1f);
@@ -575,7 +577,7 @@ public class BattleManager : MonoBehaviour
     }
     public void costOver()
     {
-        allClear();
+        cancleCard();
         Warn.SetActive(true);
         warntext.text = "코스트가 부족합니다";
         Invoke("costOverOff", 1f);
@@ -690,6 +692,8 @@ public class BattleManager : MonoBehaviour
             newCard.GetComponent<Card>().use = false;
             newCard.GetComponent<Card>().isUsed = false;
             newCard.GetComponent<Card>().isGrave = false;
+            newCard.GetComponent<Card>().isDeck = false;
+            newCard.GetComponent<Card>().isSelected = false;
             newCard.GetComponent<Transform>().localScale = new Vector2(1, 1);
             newCard.SetActive(false);
             CM.Deck.Add(newCard);
@@ -762,6 +766,7 @@ public class BattleManager : MonoBehaviour
     public void Click_GraveOn() //무덤 열기. 특정 경우에는 클릭 안 해도 자동으로 열림
     {
         otherCanvasOn = true;
+        isGraveWindowOn = true;
 
         if (GraveReviveMode)
             go_GraveView_Button_Revive.SetActive(true);
@@ -774,6 +779,8 @@ public class BattleManager : MonoBehaviour
 
     public void Click_GraveOff() //무덤에서 그냥 종료 버튼
     {
+        isGraveWindowOn = false;
+
         if (GraveReviveMode) //만약에 무덤에서 카드를 고르는 카드 사용 중일 때는 그 카드의 발동을 취소하는 함수 호출
         {
             Grave_ReviveCancel();

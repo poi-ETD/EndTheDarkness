@@ -1,20 +1,129 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using DG.Tweening;
+using System.Linq;
 
 public class ActManager : MonoBehaviour
 {
     BattleManager BM;
     TurnManager TM;
+    List<Character> characters = new List<Character>();
+    List<Enemy> enemys = new List<Enemy>();
+    List<ord> orderList = new List<ord>();
+    [SerializeField] Transform speedLineTrans;
+    public int curOrder;
+    bool isTurn;
+    
+    public struct ord{
+        public float value;
+        public int type;
+        public int obj;
+        public ord(float value, int type,int obj) 
+        {
+    
+            this.value = value;
+            this.type = type;
+            this.obj = obj;
+        }
+
+
+    }
     void Start()
     {
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
+        characters = BM.characters;
+        for(int i = 0; i < BM.Enemys.Length; i++)
+        {
+            enemys.Add(BM.Enemys[i].GetComponent<Enemy>());
+        }
     }
-   
-   
-    public int earlyCount;//적이 행동을 정한 만큼 저장,모든 적이 저장이 되면 턴 시작
+
+    public void SetOrder()
+    {
+        isTurn = true;
+        curOrder = 0;
+        orderList.Clear();
+        for (int i = 0; i < 11; i++)
+        {
+            speedLineTrans.GetChild(i).gameObject.SetActive(false);
+        }
+        for (int i = 0; i < characters.Count; i++)
+        {
+            float s = characters[i].speed;
+            if (s <= 1) characters[i].speed=1;
+            ord newOrd = new ord(s, 0, i);
+            orderList.Add(newOrd);
+            while (s + characters[i].speed <= 10)
+            {
+                s += characters[i].speed;
+                ord newOrd2 = new ord(s, 0, i);
+                orderList.Add(newOrd2);
+            }
+        }
+        for(int i = 0; i < enemys.Count; i++)
+        {
+            float s = enemys[i].speed;
+            if (s <= 1) enemys[i].speed = 1;
+            ord newOrd = new ord(s, 1, i);
+            orderList.Add(newOrd);
+            while (s + enemys[i].speed <= 10)
+            {
+                s += enemys[i].speed;
+                ord newOrd2 = new ord(s, 1, i);
+                orderList.Add(newOrd2);
+            }
+        }
+        orderList = orderList.OrderBy(obj =>
+        {
+            return obj.value;
+        }).ToList();
+        for (int i = 0; i < orderList.Count; i++)
+        {
+            
+            speedLineTrans.GetChild(i).gameObject.SetActive(true);
+            if (orderList[i].type == 0)
+            {
+                speedLineTrans.GetChild(i).GetComponent<Image>().sprite = characters[orderList[i].obj].myImage.sprite;
+            }
+            else
+            {
+                speedLineTrans.GetChild(i).GetComponent<Image>().sprite = enemys[orderList[i].obj].face;
+            }
+        }
+        ActByOrder(0);
+
+    }
+    public void ActByOrder(int or)
+    {
+        BM.CancleCharacter();   
+        curOrder = or;
+        if (orderList[or].type == 0)
+        {
+            if (!characters[orderList[or].obj].isDie)
+            {
+                BM.CharacterSelect(characters[orderList[or].obj].gameObject);
+            }
+            else
+            {
+                ActByOrder(or + 1);
+            }
+        }
+        else
+        {
+            if (!enemys[orderList[or].obj].isDie)
+            {
+                enemys[orderList[or].obj].isAct = true;
+            }
+            else
+            {
+                ActByOrder(or + 1);
+            }
+        }
+    }
+    public int earlyCount;//적이 행동을 정한 만큼 저장,모든 적이 저장이 되면  시작
 
     public int sum;//이번 행동에 행동해야 할 행동의 총 합, 이 값이 클수록 행동과 행동사이의 시간이 줄어든다.
 
@@ -25,17 +134,15 @@ public class ActManager : MonoBehaviour
     List<ActStruct> lateActList = new List<ActStruct>();
     List<ActStruct> earlyActList = new List<ActStruct>();
    
-    public void EarlyAct()
+   /* public void EarlyAct()
     {
         earlyCount++;       
         if (earlyCount == BM.Enemys.Length)
-        {
-           
+        {       
             TM.PlayerTurnStart();
-
             earlyCount = 0;
         }
-    }
+    }*/
 
     public struct ActStruct
     {
@@ -128,6 +235,7 @@ public class ActManager : MonoBehaviour
     public void Act()
     {
         StartCoroutine(ActCo());
+        Debug.Log("act");
     }
 
   
@@ -138,10 +246,13 @@ public class ActManager : MonoBehaviour
         while (BM.otherCanvasOn)
         {
             yield return new WaitForSeconds(0.01f);
+           
         }
         while (BM.otherCor)
         {
+          
             yield return new WaitForSeconds(0.01f);
+          
         }
 
         BM.otherCor = true;  
@@ -227,12 +338,12 @@ public class ActManager : MonoBehaviour
                         ActList[0].myC.myPassive.Porte4();
                     }
                     if (ActList[0].no == -1)
-                    {
+                    { //캐릭터가 타겟에게 공격
                         ActList[0].targetE.OnHitCal(ActList[0].mount, ActList[0].myC.curNo, false);
                     }
                     if (ActList[0].no == -2)
                     {
-                        for(int i=0;i<BM.Enemys.Length;i++)
+                        for(int i=0;i<BM.Enemys.Length;i++) //캐릭터가 모든 타겟에게 공격
                         BM.Enemys[i].GetComponent<Enemy>().OnHitCal(ActList[0].mount, ActList[0].myC.curNo, false);
                     }
                     if (ActList[0].no >=100) //상태이상은 100번부터
@@ -311,23 +422,33 @@ public class ActManager : MonoBehaviour
                 yield return new WaitForSeconds(0.2f);
             }
             ActList.RemoveAt(0);
-          
         }
         if (isEarlyActing) //적의 선 행동이 끝나면 내 턴이 된다.
         {
             isEarlyActing = false;
             TM.turnEndImage.color = new Color(1, 1, 1);
         }
+        
         if (BM.turnStarting)
-        {
-            earlyAct();
-            isEarlyActing = true;
+        {       
+            //earlyAct();
+            //isEarlyActing = true;
+            TM.turnEndImage.color = new Color(1, 1, 1);
+            SetOrder();
         }
-        if (isLateActing)
-        {
-            TM.PlayerTurnEnd();
-            isLateActing = false;
+        else if (isTurn)
+        {           
+            if (curOrder+1< orderList.Count)
+            {                
+               ActByOrder(curOrder + 1);
+            }
+            else
+            {               
+                isTurn = false;
+                TM.PlayerTurnEndButton();
+            }
         }
+       
      
         sum = 1;
         BM.log.writePassiveInLog();
