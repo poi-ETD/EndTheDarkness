@@ -8,7 +8,7 @@ public class TurnManager : MonoBehaviour
     public bool PlayerTurn;//플레이어의 턴인지 확인용
     [SerializeField] GameObject[] enemys;
     [SerializeField] Enemy[] enemy;
-    public int t;
+    public int turn;
     public GameObject EndButton;
     public BattleManager BM;
     ActManager AM;
@@ -49,20 +49,17 @@ public class TurnManager : MonoBehaviour
             BM.log.logContent.text += "\n모든 스트레이트 펀치의 코스트가 3 감소합니다.";
         }
     }
-    private void Awake()
-    {   
-        t = 1;
-        turnText.text = "" + t;
-        PlayerTurn = false;       
-        EndButton.SetActive(false);
-        turnEndImage.color = new Color(0.3f, 0.3f, 0.3f);
-        AM = GameObject.Find("ActManager").GetComponent<ActManager>();
-    }
+
     private void Start()
     {
         enemys = GameObject.FindGameObjectsWithTag("Enemy");
         enemy = new Enemy[enemys.Length];
-      
+        turn = 1;
+        turnText.text = "" + turn;
+        PlayerTurn = false;
+        EndButton.SetActive(false);
+        turnEndImage.color = new Color(0.3f, 0.3f, 0.3f);
+        AM = GameObject.Find("ActManager").GetComponent<ActManager>();
         for (int i = 0; i < enemys.Length; i++)
         {
             enemy[i] = enemys[i].GetComponent<Enemy>();
@@ -131,8 +128,8 @@ public class TurnManager : MonoBehaviour
 
         BM.characters[BM.ChD.size - 1].transform.localScale = new Vector3(1, 1, 1);
         BM.otherCanvasOn = false;
-        t++; //턴을 1 올림
-        turnText.text = "" + t;
+        turn++; //턴을 1 올림
+        turnText.text = "" + turn;
         PlayerTurnStart();
     }
 
@@ -162,11 +159,11 @@ public class TurnManager : MonoBehaviour
         BM.turnStarting = true;
         GameObject.Find("HandManager").GetComponent<HandManager>().isInited = false;
         
-        BM.log.logContent.text += "\n" + t + "턴 시작!";
+        BM.log.logContent.text += "\n" + turn + "턴 시작!";
 
         int gameCost = 0;
         for (int i = 0; i < BM.characters.Count; i++) gameCost += BM.characters[i].cost;
-        BM.cost = gameCost+BM.nextTurnStartCost;//턴 시작 시 전 턴에 코스트 증가하는 효과가 있었다면 적용.
+        BM.leftCost = gameCost+BM.nextTurnStartCost;//턴 시작 시 전 턴에 코스트 증가하는 효과가 있었다면 적용.
         
         BM.useCost(0);//코스트 글자 변경을 위함
 
@@ -182,8 +179,8 @@ public class TurnManager : MonoBehaviour
             if (!BM.characters[i].isDie)
             {
                 BM.characters[i].turnAct = BM.characters[i].Act;
-                if (BM.gd.blessbool[4] && t == 1)  BM.characters[i].turnAct = 0; 
-                if (BM.gd.blessbool[12] && t == 1)BM.characters[i].turnAct = 0; 
+                if (BM.GD.blessbool[4] && turn == 1)  BM.characters[i].turnAct = 0; 
+                if (BM.GD.blessbool[12] && turn == 1)BM.characters[i].turnAct = 0; 
                
                
                 BM.characters[i].onMinusAct(BM.characters[i].NextTurnMinusAct);

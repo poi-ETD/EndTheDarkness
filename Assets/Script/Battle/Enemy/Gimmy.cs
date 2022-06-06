@@ -46,7 +46,7 @@ public class Gimmy : MonoBehaviour
             
             BM.Victory();
         }
-        if (curTurn != TM.t)
+        if (curTurn != TM.turn)
         {
             StartPattern();
         }
@@ -55,11 +55,11 @@ public class Gimmy : MonoBehaviour
     void StartPattern()
     {
         myEnemy.Board.text = "";
-        if (BM.diecount < BM.characters.Count)
+        if (BM.teamDieCount < BM.characters.Count)
         {
             if (myEnemy.power)
             {
-                for (int i = 0; i < TM.t; i++)
+                for (int i = 0; i < TM.turn; i++)
                 {
                     BM.HitFront(1, 0, myEnemy, false);
                 }
@@ -69,9 +69,9 @@ public class Gimmy : MonoBehaviour
 
                 if (!phaseStart)
                 {
-                    PhaseTurn = TM.t;
+                    PhaseTurn = TM.turn;
                     phaseStart = true;
-                    myEnemy.GetArmor(100 - TM.t, myEnemy.Name);
+                    myEnemy.GetArmor(100 - TM.turn, myEnemy.Name);
                   
                 }
                 if (onecounter == 4)

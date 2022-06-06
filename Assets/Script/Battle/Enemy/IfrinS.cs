@@ -34,7 +34,7 @@ public class IfrinS : MonoBehaviour
     }
     void Update()
     {
-        if (curTurn != TM.t)
+        if (curTurn != TM.turn)
         {
             StartPattern();
         }
@@ -46,7 +46,7 @@ public class IfrinS : MonoBehaviour
         {
             if (myEnemy.Hp > 10)
             {
-                if (BM.diecount < BM.characters.Count)
+                if (BM.teamDieCount < BM.characters.Count)
                 {
                     myEnemy.immortal = true;
                     if ((curTurn + 1) % 4 != 0)

@@ -11,14 +11,7 @@ public class BlackWhite : MonoBehaviour
     public Text newText;
     BattleManager BM;
     Character c;
-    private void Awake()
-    {
-       
-    }
-    private void Update()
-    {
-   
-    }
+
     public void birth()
     {
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
@@ -29,7 +22,7 @@ public class BlackWhite : MonoBehaviour
             enemyScript[i] = enemys[i].GetComponent<Enemy>();
         }
         myCard = GetComponent<Card>();
-        myCard.Content.text += "\n모든 적에게 1의 데미지 부여:(" + 1 + ")";
+        myCard.Content.text += "\n-모든 적에게 1의 데미지 부여:(" + 1 + ")";
     }
     public string content;
     public void PlusStack()
@@ -42,7 +35,7 @@ public class BlackWhite : MonoBehaviour
     }   
     public void onDamage()
     {
-        c = BM.character;
+        c = BM.selectedCharacter;
         Invoke("BWattack", 0.3f);
     }
     void BWattack()

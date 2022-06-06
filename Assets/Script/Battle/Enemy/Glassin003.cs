@@ -37,7 +37,7 @@ public class Glassin003 : MonoBehaviour
             BM.Enemys[0] = b1;
             BM.Enemys[1] = b2;
         }
-        if (curTurn != TM.t)
+        if (curTurn != TM.turn)
         {
             StartPattern();
         }
@@ -45,7 +45,7 @@ public class Glassin003 : MonoBehaviour
     void StartPattern()
     {
 
-        if (BM.diecount < BM.characters.Count)
+        if (BM.teamDieCount < BM.characters.Count)
         {
             if (!myEnemy.isDie)
             {

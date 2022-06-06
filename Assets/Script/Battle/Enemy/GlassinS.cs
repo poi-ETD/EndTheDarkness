@@ -32,7 +32,7 @@ public class GlassinS : MonoBehaviour
             myEnemy.Hp = 0;
             BM.Victory();
         }
-        if (curTurn != TM.t)
+        if (curTurn != TM.turn)
         {
             StartPattern();
         }
@@ -44,7 +44,7 @@ public class GlassinS : MonoBehaviour
     {
         if (!myEnemy.isDie)
         {
-            if (BM.diecount < BM.characters.Count)
+            if (BM.teamDieCount < BM.characters.Count)
             {
                 if (Ifrin.Hp > 10)
                 {
@@ -73,7 +73,7 @@ public class GlassinS : MonoBehaviour
                         if (rand == 1)
                         {
                             randCount[1] = true;
-                            if (BM.diecount >= 1)
+                            if (BM.teamDieCount >= 1)
                             {
                                 int rand2 = Random.Range(0, BM.characters.Count);
                                 while (BM.characters[rand2].isDie)

@@ -122,9 +122,9 @@ public class Character : MonoBehaviour
     {
         return;
       
-        if (!isDie && !BM.SelectMode && !BM.EnemySelectMode)
+        if (!isDie && !BM.cardSelectMode && !BM.EnemySelectMode)
         {
-            if (BM.character != this)
+            if (BM.selectedCharacter != this)
             {
                 BM.CharacterSelect(gameObject);
             }
@@ -137,7 +137,7 @@ public class Character : MonoBehaviour
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         if (BM.ChD.characterDatas[lobbyNum].curEquip != -1)
         {
-            equipment myEquip = BM.gd.EquipmentList[BM.ChD.characterDatas[lobbyNum].curEquip];
+            equipment myEquip = BM.GD.EquipmentList[BM.ChD.characterDatas[lobbyNum].curEquip];
             bool cantEquip = false;
             if (myEquip.type == 1 && BM.ChD.characterDatas[lobbyNum].curFormation == 0)
             {
@@ -337,8 +337,8 @@ public class Character : MonoBehaviour
         turnAct = 0;
         board.text = "";
         Armor = 0;
-        BM.diecount++;
-        if (BM.diecount == BM.characters.Count)
+        BM.teamDieCount++;
+        if (BM.teamDieCount == BM.characters.Count)
         {   Time.timeScale = 0;
             BM.Defetead();
         }

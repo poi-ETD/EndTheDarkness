@@ -59,7 +59,7 @@ public class Enemy : MonoBehaviour
         }
         return can;
     }
-    private void Awake()
+    private void Start()
     {
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
@@ -71,7 +71,7 @@ public class Enemy : MonoBehaviour
     public void onClickEvent()
 {
     if (isDie) return;
-    if (BM.SelectMode) return;
+    if (BM.cardSelectMode) return;
         if (Shadow) return;
     if (BM.EnemySelectMode)
     {

@@ -35,11 +35,11 @@ public class BlessManager : MonoBehaviour
         }
         if (bless[4])
         {
-            BM.gd.blessbool[4] = true;
+            BM.GD.blessbool[4] = true;
         }
         if (bless[7])
         {
-            BM.gd.blessbool[7] = true;
+            BM.GD.blessbool[7] = true;
         }
         if (bless[17])
         {

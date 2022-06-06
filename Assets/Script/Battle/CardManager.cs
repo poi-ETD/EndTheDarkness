@@ -41,7 +41,7 @@ public class CardManager : MonoBehaviour
         graveT.text = "" + Grave.Count;
         deckT.text = "" + Deck.Count;
     }
-    private void Awake()
+    private void Start()
     {
         deckText[0] = "기본";
         deckText[1] = "Q";
@@ -66,7 +66,7 @@ public class CardManager : MonoBehaviour
             newCard.GetComponent<Card>().Content.text = cd.cd[CD.cardNo[i]].Content;
             newCard.GetComponent<Card>().Name.text = cd.cd[CD.cardNo[i]].Name;
             newCard.GetComponent<Card>().cardcost = CD.cardCost[i];
-            newCard.GetComponent<Card>().realcost = CD.cardCost[i];
+            newCard.GetComponent<Card>().realCost = CD.cardCost[i];
             newCard.GetComponent<Card>().selectType = cd.cd[CD.cardNo[i]].select;
             //addComponent(newCard, CD.cardNo[i]);                    
             Deck.Add(newCard);
@@ -97,7 +97,7 @@ public class CardManager : MonoBehaviour
         for (int i = 0; i < Deck.Count; i++)
         {
             Deck[i].SetActive(true);
-            Deck[i].GetComponent<Card>().cardcost = Deck[i].GetComponent<Card>().realcost;
+            Deck[i].GetComponent<Card>().cardcost = Deck[i].GetComponent<Card>().realCost;
             Deck[i].GetComponent<Card>().textSet();
             Deck[i].SetActive(false);
           
@@ -105,7 +105,7 @@ public class CardManager : MonoBehaviour
         for (int i = 0; i < Grave.Count; i++)
         {
             Grave[i].SetActive(true);
-            Grave[i].GetComponent<Card>().cardcost = Grave[i].GetComponent<Card>().realcost;
+            Grave[i].GetComponent<Card>().cardcost = Grave[i].GetComponent<Card>().realCost;
             Grave[i].GetComponent<Card>().textSet();
             Grave[i].SetActive(false);
         }
@@ -142,7 +142,7 @@ public class CardManager : MonoBehaviour
         newCard.GetComponent<Card>().Content.text = cd.cd[i].Content;
         newCard.GetComponent<Card>().Name.text = cd.cd[i].Name;
         newCard.GetComponent<Card>().cardcost = cd.cd[i].Cost;
-        newCard.GetComponent<Card>().realcost = cd.cd[i].Cost;
+        newCard.GetComponent<Card>().realCost = cd.cd[i].Cost;
         newCard.GetComponent<Card>().selectType = cd.cd[CD.cardNo[i]].select;
         
          Deck.Add(newCard);
@@ -170,15 +170,15 @@ public class CardManager : MonoBehaviour
         
         if (!InGrave) Grave.Add(usingCard);
         usingCard.transform.parent = GraveContent.transform;      
-        if(BM.character!=null)
-        BM.character.Acting();
+        if(BM.selectedCharacter!=null)
+        BM.selectedCharacter.Acting();
         usingCard.GetComponent<Card>().isGrave = true;
         usingCard.SetActive(false);
         HandManager.Instance.CancelToUse();
-        TM.BM.pcard = usingCard; //스케치 반복을 위해 이전 카드를 기록함
+        TM.BM.previousSelectedCard = usingCard; //스케치 반복을 위해 이전 카드를 기록함
  
-        BM.character.SelectBox.SetActive(false);
-        Character curC = BM.character;
+        BM.selectedCharacter.SelectBox.SetActive(false);
+        Character curC = BM.selectedCharacter;
 
         curC.GetComponent<CharacterPassive>().myAct();     
         for(int i = 0; i < BM.ChD.size; i++)
@@ -271,7 +271,6 @@ public class CardManager : MonoBehaviour
             {
                 field.Add(Grave[i]);
                 HM.AddCard(Grave[i]);
-                Gcard.GetComponent<Card>().use = false;
                 Grave[i].GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 225);
                 Grave[i].GetComponentInChildren<Image>().color = new Color(1, 1, 1);
                 Grave[i].SetActive(true);
@@ -279,8 +278,7 @@ public class CardManager : MonoBehaviour
                 Grave[i].GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0.5f);
              
                 
-                Grave[i].GetComponent<Card>().isGrave = false;
-                Grave[i].GetComponent<Card>().isUsed = false;           
+                Grave[i].GetComponent<Card>().isGrave = false;          
                 Grave[i].GetComponent<Transform>().localScale = new Vector2(1, 1);
                 Grave.RemoveAt(i);
                 break;
@@ -358,7 +356,7 @@ public class CardManager : MonoBehaviour
             }
             else
             {
-                if (BM.ReviveCount > ReviveCard.Count)
+                if (BM.reviveCount > ReviveCard.Count)
                 {
                     g.GetComponent<Transform>().localScale = new Vector2(1.1f, 1.1f);
                     ReviveCard.Add(g);
@@ -411,7 +409,6 @@ public class CardManager : MonoBehaviour
                     field.Add(SelectedCard[j]);
                     HM.AddCard(SelectedCard[j]);
                     SelectedCard[j].GetComponent<Card>().isDeck = false;
-                    SelectedCard[j].GetComponent<Card>().use = false;
                     SelectedCard[j].GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0.5f);
                     SelectedCard[j].GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0.5f);
                     SelectedCard[j].SetActive(true);
@@ -433,7 +430,6 @@ public class CardManager : MonoBehaviour
             {
                 Deck.Add(c);
                 c.GetComponent<Card>().isDeck = true;
-                c.GetComponent<Card>().use = false;
                 c.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0.5f);
                 c.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0.5f);
                 c.transform.parent = GameObject.Find("DeckContent").transform;
@@ -455,7 +451,6 @@ public class CardManager : MonoBehaviour
             {
                 Grave.Add(c);
                 c.GetComponent<Card>().isDeck = false;
-                c.GetComponent<Card>().use = false;
                 c.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0.5f);
                 c.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0.5f);
                 c.transform.parent = GraveContent.transform;

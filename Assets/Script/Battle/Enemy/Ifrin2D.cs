@@ -30,7 +30,7 @@ public class Ifrin2D : MonoBehaviour
             myEnemy.Hp = 0;
       
         }
-        if (curTurn != TM.t)
+        if (curTurn != TM.turn)
         {
             StartPattern();
         }
@@ -40,7 +40,7 @@ public class Ifrin2D : MonoBehaviour
     {
         if (!myEnemy.isDie)
         {
-            if (BM.diecount < BM.characters.Count)
+            if (BM.teamDieCount < BM.characters.Count)
             {
                 if (posionCount < 5)
                 {

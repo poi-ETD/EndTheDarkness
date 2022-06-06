@@ -49,7 +49,7 @@ public class CharacterPassive : MonoBehaviour
         {
             AM.MakeAct(0, -1, myCharacter.reflect, null,e, myCharacter, null, 1); //반사 데미지    
         }
-        if (BM.gd.blessbool[7] && myCharacter.curNo < BM.line)
+        if (BM.GD.blessbool[7] && myCharacter.curNo < BM.line)
         {
             AM.MakeAct(0, -2, dmg / 2, null, null, myCharacter, null, 1);//역류하는 고통
         }

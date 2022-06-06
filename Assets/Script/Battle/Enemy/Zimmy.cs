@@ -23,7 +23,7 @@ public class Zimmy : MonoBehaviour
     }
     void Update()
     {if (myEnemy.Hp <= 0) BM.Victory();
-        if (curTurn != TM.t)
+        if (curTurn != TM.turn)
         {
             StartPattern();
         }
@@ -32,7 +32,7 @@ public class Zimmy : MonoBehaviour
     void StartPattern()
     {
 
-        if (BM.diecount < BM.characters.Count)
+        if (BM.teamDieCount < BM.characters.Count)
         {
             if (!myEnemy.isDie)
             {

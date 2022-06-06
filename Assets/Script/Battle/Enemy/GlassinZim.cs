@@ -22,7 +22,7 @@ public class GlassinZim : MonoBehaviour
     }
     void Update()
     {
-        if (curTurn != TM.t)
+        if (curTurn != TM.turn)
         {
             StartPattern();
         }
@@ -31,7 +31,7 @@ public class GlassinZim : MonoBehaviour
     void StartPattern()
     {
 
-        if (BM.diecount < BM.characters.Count)
+        if (BM.teamDieCount < BM.characters.Count)
         {
             if (!myEnemy.isDie)
             {

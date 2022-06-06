@@ -29,7 +29,7 @@ public class Ranger : MonoBehaviour
             myEnemy.Hp = 0;
          
         }
-        if (curTurn != TM.t)
+        if (curTurn != TM.turn)
         {
             StartPattern();
         }
@@ -38,7 +38,7 @@ public class Ranger : MonoBehaviour
     {
       
         myEnemy.Board.text = "";
-        if (BM.diecount < BM.characters.Count)
+        if (BM.teamDieCount < BM.characters.Count)
         {
             if (!myEnemy.isDie)
             {              

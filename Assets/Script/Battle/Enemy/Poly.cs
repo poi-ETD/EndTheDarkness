@@ -30,7 +30,7 @@ public class Poly : MonoBehaviour
             myEnemy.Hp = 0;
             BM.Victory();
         }
-        if (curTurn != TM.t)
+        if (curTurn != TM.turn)
         {
             StartPattern();
         }
@@ -38,7 +38,7 @@ public class Poly : MonoBehaviour
     void StartPattern()
     {
     
-        if (BM.diecount < BM.characters.Count)
+        if (BM.teamDieCount < BM.characters.Count)
         {
             if (myEnemy.Hp > 150)
             {

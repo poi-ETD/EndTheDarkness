@@ -235,7 +235,7 @@ public class ActManager : MonoBehaviour
     public void Act()
     {
         StartCoroutine(ActCo());
-        Debug.Log("act");
+       
     }
 
   

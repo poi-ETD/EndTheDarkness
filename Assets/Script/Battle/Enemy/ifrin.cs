@@ -39,7 +39,7 @@ public class ifrin : MonoBehaviour
             myEnemy.Hp = 0;
             if (Glassin.isDie) BM.Victory();
         }
-        if (curTurn != TM.t)
+        if (curTurn != TM.turn)
         {
             StartPattern();
         }
@@ -60,7 +60,7 @@ public class ifrin : MonoBehaviour
     {
         if (!myEnemy.isDie)
         {
-            if (BM.diecount < BM.characters.Count)
+            if (BM.teamDieCount < BM.characters.Count)
             {
                 if (!Glassin.isDie)
                 {

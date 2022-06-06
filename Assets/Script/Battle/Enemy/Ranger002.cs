@@ -21,14 +21,14 @@ public class Ranger002 : MonoBehaviour
     }
     private void Update()
     {
-        if (curTurn != TM.t)
+        if (curTurn != TM.turn)
         {
             StartPattern();
         }
     }
     void StartPattern()
     {
-        if (BM.diecount < BM.characters.Count)
+        if (BM.teamDieCount < BM.characters.Count)
         {
             if (!myEnemy.isDie)
             {

@@ -32,14 +32,14 @@ public class DaggerI : MonoBehaviour
             myEnemy.Hp = 0;
             pattern = -1;
         }
-        if (curTurn != TM.t)
+        if (curTurn != TM.turn)
         {
             StartPattern();
         }
     }
     void StartPattern()
     {
-        if (BM.diecount < BM.characters.Count)
+        if (BM.teamDieCount < BM.characters.Count)
         {
             if (!myEnemy.isDie)
             {
