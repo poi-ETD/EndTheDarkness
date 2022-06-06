@@ -307,8 +307,7 @@ public class BattleManager : MonoBehaviour
     }
 
     private void Awake()
-    {
-       
+    {      
         string path = Path.Combine(Application.persistentDataPath, "GameData.json");
         string gameData = File.ReadAllText(path);
         gd = JsonConvert.DeserializeObject<GameData>(gameData);
@@ -597,11 +596,11 @@ public class BattleManager : MonoBehaviour
         
     }
 
-    public void OnAttack(int dmg,Enemy E,Character c,int n) //패시브나 리플렉트로 인하여 데미지 입힐 경우
+    public void OnAttack(int dmg,Enemy e,Character c,int n) //패시브나 리플렉트로 인하여 데미지 입힐 경우
     {
         for (int k = 0; k < n; k++)
         {
-           E.OnHitCal(dmg, c.curNo, false);
+           e.OnHitCal(dmg, c.curNo, false);
         }     
     }
 
@@ -1403,14 +1402,12 @@ public class BattleManager : MonoBehaviour
 
     public void EnemyGetAromor(int mount, Enemy myEnemy, Enemy target)
     {
-       AM.MakeLateAct(2, mount, null, myEnemy, target);
-     
+       AM.MakeLateAct(2, mount, null, myEnemy, target);    
     }
 
     public void EnemyGetHp(int mount, Enemy myEnemy, Enemy target)
     {
-        AM.MakeLateAct(3, mount, null, myEnemy, target);
-     
+        AM.MakeLateAct(3, mount, null, myEnemy, target);     
     }
 
 
