@@ -2802,19 +2802,19 @@ MonoBehaviour:
   characters: []
   CharacterSelectMode: 0
   EnemySelectMode: 0
-  character: {fileID: 0}
-  enemy: {fileID: 0}
-  card: {fileID: 0}
-  pcard: {fileID: 0}
+  selectedCharacter: {fileID: 0}
+  selectedEnemy: {fileID: 0}
+  selectedCard: {fileID: 0}
+  previousSelectedCard: {fileID: 0}
   costT: {fileID: 45218142}
-  cost: 2
+  leftCost: 0
   nextTurnStartCost: 0
   CardCount: 5
   TurnCardCount: 0
   CM: {fileID: 2043666056}
   AM: {fileID: 1494894260}
   Enemys:
-  - {fileID: 8526652786934175351, guid: c47a2c53f9e5149429e525136a7d0f41, type: 3}
+  - {fileID: 8526652786934175351, guid: 97414c795e2149a43a018fd8de173a23, type: 3}
   - {fileID: 4683036356863319242, guid: 0b358fe23b42c514fb7e1e211c9351d8, type: 3}
   - {fileID: 3104608646525041465, guid: af64e7082df220545ae667f664153da1, type: 3}
   - {fileID: 1233573338231355905, guid: f5632c08302212b439772558243ed323, type: 3}
@@ -2823,21 +2823,21 @@ MonoBehaviour:
   - {fileID: 6645752759065849782, guid: 5824b61a1d3ba4549aa12d051a05056c, type: 3}
   - {fileID: 5171553541266741408, guid: 8c1b02021fe9ae04a81e7ae265f6978f, type: 3}
   - {fileID: 1008581653891502491, guid: 453039e87a2e4d34ab622c02931dcc49, type: 3}
-  Warn: {fileID: 759816071}
-  warntext: {fileID: 129511392}
+  warnObj: {fileID: 0}
+  warnT: {fileID: 0}
   forward: []
   back: []
   line: 1
-  diecount: 0
+  teamDieCount: 0
   completeButton: {fileID: 1741072191}
   otherCanvasOn: 0
   log: {fileID: 647120529}
   window_Grave: {fileID: 1950354993}
-  ReviveCount: 0
+  reviveCount: 0
   card7mode: 0
-  victory: {fileID: 109399635}
-  defeated: {fileID: 1756809415}
-  SelectMode: 0
+  victory_window: {fileID: 0}
+  defeated_window: {fileID: 0}
+  cardSelectMode: 0
   porte3mode: 0
   condition: {fileID: 1336579352}
   conditionText: {fileID: 695960801}
@@ -2883,7 +2883,7 @@ MonoBehaviour:
   DeckSelectMode: 0
   DeckSelect: 0
   DeckSelectCancle: 0
-  c20: {fileID: 0}
+  usedInCard20: {fileID: 0}
   otherCor: 0
   turnStarting: 0
   turnEndu: 0
@@ -11018,7 +11018,7 @@ MonoBehaviour:
   PlayerTurn: 0
   enemys: []
   enemy: []
-  t: 0
+  turn: 0
   EndButton: {fileID: 326126828}
   BM: {fileID: 397930971}
   turnText: {fileID: 1597582259}

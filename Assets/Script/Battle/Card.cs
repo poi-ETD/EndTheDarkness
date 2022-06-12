@@ -341,7 +341,7 @@ public class Card : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (!isGrave)
+        if (!isGrave && !isDeck)
         {
             if (BM.otherCor) return;
            
@@ -361,16 +361,14 @@ public class Card : MonoBehaviour
                 else
                     BM.cancleCard();
             }
-            else if (isGrave || isDeck)
-                CM.ClickInGraveOrDeck(gameObject);
+            //else if (isGrave || isDeck)
+            //    CM.ClickInGraveOrDeck(gameObject);
 
             //HandManager.Instance.CardMouseDown();
             //gameObject.GetComponent<RectTransform>().localPosition = new Vector3(0f, 1000f, 0f);
         }
         else
-        {
-           
-        }
+            CM.ClickInGraveOrDeck(gameObject);
     }
 
     private void OnMouseUp()
