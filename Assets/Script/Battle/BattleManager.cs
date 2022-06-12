@@ -505,10 +505,9 @@ public class BattleManager : MonoBehaviour
         {
             if (selectedCard != null)
             {
-                
                 selectedCard.GetComponent<Card>().useCard();
    
-   //                 HandManager.Instance.CancelToUse(); 카드 사용 시 발동되게 옮깁니다.
+                //HandManager.Instance.CancelToUse(); 카드 사용 시 발동되게 옮깁니다.
             }
         }
         else
@@ -522,7 +521,7 @@ public class BattleManager : MonoBehaviour
             CardUseText.text = "사용";
             EnemySelectMode = false;
         }
-
+        
     }
 
 
@@ -988,18 +987,17 @@ public class BattleManager : MonoBehaviour
         Time.timeScale = 1;
         SceneManager.LoadScene("Lobby");
     }
+
     public void Defetead() //패배했을 시 패배 창 띄우기
     {
         defeated_window.SetActive(true);
     }
+
     public void goEnemySelectMode() //공격 카드 선택 시 어떤 적을 공격할지 고르는 모드
     {   
         EnemySelectMode = true; //이 상태로 들어가면 Enemy를 클릭시 선택이 된다.
         CardUseText.text = "취소";
     }
-
- 
-   
 
     //type==0 랜덤 대상 type==1 방어도 높은 적 우선 type==2 체력 높은 적 우선 type==3 방어도 있는 적 우선
     //type==4 모든 대상

@@ -364,7 +364,7 @@ public class Card : MonoBehaviour
             //else if (isGrave || isDeck)
             //    CM.ClickInGraveOrDeck(gameObject);
 
-            //HandManager.Instance.CardMouseDown();
+            HandManager.Instance.CardMouseDown();
             //gameObject.GetComponent<RectTransform>().localPosition = new Vector3(0f, 1000f, 0f);
         }
         else

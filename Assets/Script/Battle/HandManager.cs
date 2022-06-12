@@ -96,15 +96,23 @@ public class HandManager : MonoBehaviour
         //if (!BM.isPointerinHand)
         //    InputToCardText();
 
+        if(Input.GetMouseButtonDown(0))
+        {
+            if (isSelectedCard)
+                BM.Click_useCard();
+        }
+
         if (Input.GetMouseButtonDown(1))
         {
             //isSelectedCard = false;
-            go_selectedCardImage.SetActive(false);
             CancelToUse();
         }
 
         if (isSelectedCard)
+        {
             CardDrag();
+            go_selectedCardImage.SetActive(true);
+        }
     }
 
     public void AddCard(GameObject newCard)
@@ -264,10 +272,14 @@ public class HandManager : MonoBehaviour
 
     public void CardMouseDown()
     {
-        //isSelectedCard = true;
-        //go_selectedCardImage.SetActive(true);
-        //selectedCard.gameObject.SetActive(false);
+        Invoke("On_IsSelectedCard", 0.01f);
+        selectedCard.gameObject.SetActive(false);
         //selectedCard.gameObject.transform.position = new Vector3(0f, 1000f, 0f);
+    }
+
+    private void On_IsSelectedCard() // 카드 선택(왼쪽 클릭) 후 카드 사용(왼쪽 클릭)까지 격차를 주기 위한(동시에 이뤄지지 않게 하기 위한) Invoke용 함수
+    {
+        isSelectedCard = true;
     }
 
     public void CardMouseUp()
@@ -299,7 +311,9 @@ public class HandManager : MonoBehaviour
         if (selectedCard == null)
             return;
 
-        //selectedCard.gameObject.SetActive(true);
+        isSelectedCard = false;
+        selectedCard.gameObject.SetActive(true);
+        go_selectedCardImage.SetActive(false);
 
         if (selectedCard != onPointerCard)
         {
