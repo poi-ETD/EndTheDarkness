@@ -432,7 +432,7 @@ public class BattleManager : MonoBehaviour
     }
     public void CharacterSelect(GameObject characterHaveTurn)//캐릭터 클릭이 가능 할 때 누르면 발동
     {                 
-        CancleCharacter();//이미 눌러진 캐릭터를 취소
+       //CancleCharacter();//이미 눌러진 캐릭터를 취소
         while (CM.field.Count < 5)
         {
             CM.Drow();
@@ -765,7 +765,7 @@ public class BattleManager : MonoBehaviour
             CM.GraveOff();
             otherCanvasOn = false;
             cancleCard();
-            CancleCharacter();
+            //CancleCharacter();
             CancleEnemy();
             window_Grave.SetActive(false);
         }
