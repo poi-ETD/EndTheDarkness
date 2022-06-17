@@ -497,7 +497,7 @@ public class BattleManager : MonoBehaviour
     }
 
 
-    public void Click_useCard() //카드 사용 버튼을 누를 때
+    public void Click_useCard() // 카드 드래그 상태에서 아무곳이나(또는 적) 클릭시
     {
         CancleButton.SetActive(false);
         //HandManager.Instance.go_SelectedCardTooltip.SetActive(false);
