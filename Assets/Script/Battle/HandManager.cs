@@ -328,7 +328,7 @@ public class HandManager : MonoBehaviour
         selectedCard = null;
     }
 
-    public void SelectCard(Card card)
+    public void SelectCard(Card card) // 이전에 선택된 카드의 선택상태를 취소하고 새로운 인자로 들어온 카드를 설정하는 함수
     {
         if (selectedCard != null)
         {

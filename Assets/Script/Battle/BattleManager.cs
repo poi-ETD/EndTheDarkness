@@ -128,6 +128,7 @@ public class BattleManager : MonoBehaviour
     //YH
     [HideInInspector] public bool isPointerinHand = false;
     [HideInInspector] public bool isSelectedCardinHand = false;
+    private EnemyInfo ei;
 
     public GameObject DmgPrefebs;//데미지 프리펩
     
@@ -287,7 +288,8 @@ public class BattleManager : MonoBehaviour
     }
 
     private void Start()
-    {      
+    {
+        ei = GameObject.Find("SelectEnemyInformation").GetComponent<EnemyInfo>();
         string path = Path.Combine(Application.persistentDataPath, "GameData.json");
         string gameData = File.ReadAllText(path);
         GD = JsonConvert.DeserializeObject<GameData>(gameData);
@@ -497,11 +499,11 @@ public class BattleManager : MonoBehaviour
     }
 
 
-    public void Click_useCard() // 카드 드래그 상태에서 아무곳이나(또는 적) 클릭시
+    public void Click_useCard() // 카드 드래그 상태에서 아무곳이나(또는 적) 클릭시 사용되는 함수
     {
         CancleButton.SetActive(false);
         //HandManager.Instance.go_SelectedCardTooltip.SetActive(false);
-        if (!EnemySelectMode) 
+        if (selectedCard.GetComponent<Card>().selectType != 1)
         {
             if (selectedCard != null)
             {
@@ -510,7 +512,7 @@ public class BattleManager : MonoBehaviour
                 //HandManager.Instance.CancelToUse(); 카드 사용 시 발동되게 옮깁니다.
             }
         }
-        else
+        else if (selectedCard.GetComponent<Card>().selectType == 1)
         {
             if (usedInCard20 != null)
             {
@@ -518,10 +520,12 @@ public class BattleManager : MonoBehaviour
                 selectedCard = usedInCard20;
                 otherCanvasOn = false;
             }
+            
+            EnemySelect(ei.g);
+
             CardUseText.text = "사용";
             EnemySelectMode = false;
         }
-        
     }
 
 
@@ -847,6 +851,7 @@ public class BattleManager : MonoBehaviour
 
     public bool card20done = false;
     GameObject copyCard;
+
     public void card20Active() //스케치발동이 발동 되었다면
     {
         usedInCard20 = selectedCard; //스케치발동을 c20이라는 오브젝트에 저장후,
@@ -861,6 +866,7 @@ public class BattleManager : MonoBehaviour
         selectedCard = copyCard;//현재 지정된 카드를 이전에 사용한 카드의 복사본을 변경
         HandManager.Instance.go_UseButton.SetActive(true);
     }
+
     public void Click_cancleButtonUse()
     {
         Destroy(copyCard);
