@@ -54,7 +54,6 @@ public class Card : MonoBehaviour
             }
             if (selectType==1)
             {
-              
                 BM.goEnemySelectMode();
             }
            else if (selectType == 2) //무덤류
@@ -355,7 +354,6 @@ public class Card : MonoBehaviour
          
             if (!BM.EnemySelectMode && !BM.otherCanvasOn)
             {
-                
                 if (BM.selectedCard != gameObject)
                     BM.SetCard(gameObject);
                 else

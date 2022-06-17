@@ -72,34 +72,23 @@ public class TurnManager : MonoBehaviour
         for (int i = 0; i < BM.Enemys.Length; i++)
         {
             if (!BM.Enemys[i].GetComponent<Enemy>().isDie)
-            {
                 BM.Enemys[i].GetComponent<Enemy>().EnemyStartTurn();//내 턴 종료시 상대의 턴 한정 은신이나 무적,불사를 해제한다.
-            }
         }
-        
-           
-          
-            turnCard = 0;
 
-            PlayerTurn = false;
+        turnCard = 0;
 
-            EndButton.SetActive(false);
-            BM.CharacterSelectMode = false;
-            BM.EnemySelectMode = false;
+        PlayerTurn = false;
 
+        EndButton.SetActive(false);
+        BM.CharacterSelectMode = false;
+        BM.EnemySelectMode = false;
 
+        for (int i = 0; i < BM.Enemys.Length; i++)
+            BM.Enemys[i].GetComponent<Enemy>().Board.text = "";
 
-            for (int i = 0; i < BM.Enemys.Length; i++)
-            {
-                BM.Enemys[i].GetComponent<Enemy>().Board.text = "";
-
-            }
-
-            BM.TurnCardCount = BM.CardCount; //뽑아야 할 카드의 수를 디폴트로 변경
-            BM.allClear();
-            StartCoroutine("TurnEnd");
-
-      
+        BM.TurnCardCount = BM.CardCount; //뽑아야 할 카드의 수를 디폴트로 변경
+        BM.allClear();
+        StartCoroutine("TurnEnd");
     }
 
     IEnumerator TurnEnd()

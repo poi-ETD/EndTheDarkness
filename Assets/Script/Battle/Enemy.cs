@@ -69,32 +69,28 @@ public class Enemy : MonoBehaviour
         
     }        
     public void onClickEvent()
-{
-    if (isDie) return;
-    if (BM.cardSelectMode) return;
-        if (Shadow) return;
-    if (BM.EnemySelectMode)
     {
-       
-        BM.EnemySelect(gameObject);
-    
-    }
-   
-       
+        if (isDie) return;
+        if (BM.cardSelectMode) return;
+        if (Shadow) return;
 
-    
-}
+        if (BM.EnemySelectMode)
+            BM.EnemySelect(gameObject);
+    }
     public void onEnterEvnent()
     {
-
         if (isDie) return;
-            ei.setThis(this);
+
+        ei.setThis(this);
     }
     public void onExitEvent()
     {
-        if (isDie) {
+        if (isDie)
+        {
             ei.g.SetActive(false);
-            return; }
+            return;
+        }
+
         ei.setNull();
     }
     public void EnemyStartTurn()
