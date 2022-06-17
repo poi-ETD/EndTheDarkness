@@ -505,8 +505,7 @@ public class BattleManager : MonoBehaviour
         {
             if (selectedCard != null)
             {
-                selectedCard.GetComponent<Card>().useCard();
-   
+                selectedCard.GetComponent<Card>().useCard();  
                 //HandManager.Instance.CancelToUse(); 카드 사용 시 발동되게 옮깁니다.
             }
         }

@@ -2814,7 +2814,7 @@ MonoBehaviour:
   CM: {fileID: 2043666056}
   AM: {fileID: 1494894260}
   Enemys:
-  - {fileID: 8526652786934175351, guid: 97414c795e2149a43a018fd8de173a23, type: 3}
+  - {fileID: 8526652786934175351, guid: c47a2c53f9e5149429e525136a7d0f41, type: 3}
   - {fileID: 4683036356863319242, guid: 0b358fe23b42c514fb7e1e211c9351d8, type: 3}
   - {fileID: 3104608646525041465, guid: af64e7082df220545ae667f664153da1, type: 3}
   - {fileID: 1233573338231355905, guid: f5632c08302212b439772558243ed323, type: 3}
@@ -2823,8 +2823,8 @@ MonoBehaviour:
   - {fileID: 6645752759065849782, guid: 5824b61a1d3ba4549aa12d051a05056c, type: 3}
   - {fileID: 5171553541266741408, guid: 8c1b02021fe9ae04a81e7ae265f6978f, type: 3}
   - {fileID: 1008581653891502491, guid: 453039e87a2e4d34ab622c02931dcc49, type: 3}
-  warnObj: {fileID: 0}
-  warnT: {fileID: 0}
+  warnObj: {fileID: 759816071}
+  warnT: {fileID: 129511392}
   forward: []
   back: []
   line: 1
