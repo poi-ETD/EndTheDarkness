@@ -451,6 +451,7 @@ public class BattleManager : MonoBehaviour
     }
     public void EnemySelect(GameObject SelectedEnemyInSelectMode) //공격 카드가 발동되었을 시 적을 선택
     {
+        Debug.Log(SelectedEnemyInSelectMode.name);
         if (!otherCanvasOn)
         {
             selectedEnemy = SelectedEnemyInSelectMode.GetComponent<Enemy>();
@@ -520,7 +521,7 @@ public class BattleManager : MonoBehaviour
                 otherCanvasOn = false;
             }
             
-            EnemySelect(ei.g);
+            EnemySelect(ei.SelectedEnemy.gameObject);
 
             CardUseText.text = "사용";
             EnemySelectMode = false;

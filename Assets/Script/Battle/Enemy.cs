@@ -75,7 +75,9 @@ public class Enemy : MonoBehaviour
         if (Shadow) return;
 
         if (BM.EnemySelectMode)
-            BM.EnemySelect(gameObject);
+        {
+            Debug.Log("OnSelect");
+            BM.EnemySelect(gameObject); }
     }
     public void onEnterEvnent()
     {
