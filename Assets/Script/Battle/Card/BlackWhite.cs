@@ -35,7 +35,7 @@ public class BlackWhite : MonoBehaviour
     }   
     public void onDamage()
     {
-        c = BM.selectedCharacter;
+        c = BM.actCharacter;
         Invoke("BWattack", 0.3f);
     }
     void BWattack()

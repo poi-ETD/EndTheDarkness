@@ -36,6 +36,7 @@ public class Enemy : MonoBehaviour
 
     public void StatusChange(int kind,int amount)
     {
+     
         status[kind] += amount;
     }
 

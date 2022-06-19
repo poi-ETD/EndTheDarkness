@@ -12,18 +12,18 @@ public class BattleManager : MonoBehaviour
     public List<Character> characters = new List<Character>(); //현재 게임에 있는 캐릭터들의 목록,순서또한 동일
     public bool CharacterSelectMode;//캐릭터를 고를 수 있는 상태
     public bool EnemySelectMode;//적을 고를 수 있는 상태
-    public Character selectedCharacter;//현재 지정된 캐릭터
+    public Character actCharacter;//현재 행동하는 캐릭터
     public Enemy selectedEnemy;//현재 지정된 적
-
+    public Character selectedCharacter;//현재 선택된 캐릭터
     public GameObject selectedCard;//현재 지정된 카드
     public GameObject previousSelectedCard;//바로 이전에 사용한 카드
 
-    [SerializeField] TextMeshProUGUI costT;
+    public TextMeshProUGUI costT;
     public int leftCost;//남은 코스트
     public int nextTurnStartCost;//다음 턴 시작 시 코스트를 올려주는 변수
 
     public int CardCount;//턴이 시작 될 때마다 뽑는 카드 수
-    public int TurnCardCount;//현재 턴에 사용 한 카드 수
+    public int TurnCardCount;//다음 턴 시작 시 뽑게 될 카드 수
 
     [SerializeField] CardManager CM;
     public ActManager AM;
@@ -313,7 +313,7 @@ public class BattleManager : MonoBehaviour
                 back.Add(CharacterC.GetComponent<Character>());
             } //전방과 후방 목록에 각각 캐릭터를 넣음
             characterOriginal.Add(CharacterC.GetComponent<Character>());
-            CharacterC.GetComponent<Character>().Atk = ChD.characterDatas[i].Atk;
+            CharacterC.GetComponent<Character>().atk = ChD.characterDatas[i].Atk;
             CharacterC.GetComponent<Character>().Hp = ChD.characterDatas[i].curHp;
             CharacterC.GetComponent<Character>().maxHp = ChD.characterDatas[i].maxHp;
                  CharacterC.GetComponent<Character>().def = ChD.characterDatas[i].def;
@@ -426,38 +426,67 @@ public class BattleManager : MonoBehaviour
         if (!otherCanvasOn)
         {
 
-            if (selectedCharacter != null)//이미 눌러진 캐릭터가 있다면
-                selectedCharacter.SelectBox.SetActive(false); //선택이 되었다는 표시를 없앤다.
+            if (actCharacter != null)//이미 눌러진 캐릭터가 있다면
+                actCharacter.SelectBox.SetActive(false); //선택이 되었다는 표시를 없앤다.
 
-            selectedCharacter = null;
+            actCharacter = null;
         }
     }
-    public void CharacterSelect(GameObject characterHaveTurn)//캐릭터 클릭이 가능 할 때 누르면 발동
+    public void ShowCharacterHaveTurn(GameObject characterHaveTurn)//캐릭터 클릭이 가능 할 때 누르면 발동
     {                 
        //CancleCharacter();//이미 눌러진 캐릭터를 취소
         while (CM.field.Count < 5)
         {
             CM.Drow();
         }
-            selectedCharacter = characterHaveTurn.GetComponent<Character>();
-            if (selectedCharacter != null)
-                selectedCharacter.SelectBox.SetActive(true);
+      
+            actCharacter = characterHaveTurn.GetComponent<Character>();
+        
+        actCharacter.myPassive.ActStart();
+        AM.isStartAct = true;
+        AM.Act();
+            if (actCharacter != null)
+                actCharacter.SelectBox.SetActive(true);
         
     }
-    public void useCost(int amount) //코스트 사용 함수
+    public void useCost(int amount,GameObject card) //코스트 사용 함수
     {
-        leftCost -= amount;
-        costT.text = "" + leftCost;
+        if (actCharacter.characterNo==5&&actCharacter.passive[3]>0) 
+        {   leftCost -= 1;
+            card.GetComponent<Card>().GetRemove();
+        }
+        else 
+            leftCost -= amount;
+        costT.text =""+ leftCost;
+    }
+    public void SpeedChange(Character character,float amount)
+    {
+        character.speed += amount;
+        character.curSpeed += amount;
+        AM.SpeedChangeByEffect();
+    }
+    public void TurnSpeedChange(Character character, float amount)
+    {       
+        character.curSpeed += amount;
+        AM.SpeedChangeByEffect();
     }
     public void EnemySelect(GameObject SelectedEnemyInSelectMode) //공격 카드가 발동되었을 시 적을 선택
-    {
-        Debug.Log(SelectedEnemyInSelectMode.name);
+    {       
         if (!otherCanvasOn)
         {
             selectedEnemy = SelectedEnemyInSelectMode.GetComponent<Enemy>();
             selectedCard.GetComponent<Card>().EnemySelectCard();
         }
     }
+    public void CharacterSelect(GameObject SelectedCharacterInSelectMode) //아군 선택 카드가 발동되었을 시 아군을 선택
+    {
+        if (!otherCanvasOn)
+        {
+            selectedCharacter = SelectedCharacterInSelectMode.GetComponent<Character>();
+            selectedCard.GetComponent<Card>().CharacterSelectCard();
+        }
+    }
+
     public void CancleEnemy() //현재 지정된 적을 풀어야 할 때 사용 (공격 카드를 발동 한 후 등)
     {
         if (!otherCanvasOn)
@@ -500,7 +529,7 @@ public class BattleManager : MonoBehaviour
     }
 
 
-    public void Click_useCard() // 카드 드래그 상태에서 아무곳이나(또는 적) 클릭시 사용되는 함수
+    public void Click_useCard() // 카드 드래그 상태에서 아무곳이나(또는 적,아군) 클릭시 사용되는 함수
     {
         CancleButton.SetActive(false);
         //HandManager.Instance.go_SelectedCardTooltip.SetActive(false);
@@ -526,9 +555,20 @@ public class BattleManager : MonoBehaviour
             CardUseText.text = "사용";
             EnemySelectMode = false;
         }
+      else if(selectedCard.GetComponent<Card>().selectType == 5)
+        {
+            if (usedInCard20 != null)
+            {
+                Destroy(selectedCard);
+                selectedCard = usedInCard20;
+                otherCanvasOn = false;
+            }
+            CardUseText.text = "사용";
+           CharacterSelectMode = false;
+        }
     }
 
-
+   
     public void WarnOn()//여러가지 경고 처리
     {
         warnObj.SetActive(true);
@@ -573,10 +613,10 @@ public class BattleManager : MonoBehaviour
     {
         CardUseText.text = "사용";
         EnemySelectMode = false;
-        log.logContent.text += "\n" + enemy.Name + "에게 " + (dmg + selectedCharacter.turnAtk) + "의 데미지!("+time+")";
+        log.logContent.text += "\n" + enemy.Name + "에게 " + (dmg + actCharacter.turnAtk) + "의 데미지!("+time+")";
         for (int k = 0; k < time; k++)
         {
-            selectedEnemy.OnHitCal(dmg + selectedCharacter.turnAtk, selectedCharacter.curNo, false);
+            selectedEnemy.OnHitCal(dmg + actCharacter.turnAtk, actCharacter.curNo, false);
         }
         
     }
@@ -605,10 +645,10 @@ public class BattleManager : MonoBehaviour
 
    
 
-    public void getArmor(int armor) //방어도 획득
+    public void getArmor(int armor,Character character) //방어도 획득
     {
-        log.logContent.text += "\n" + selectedCharacter.Name + "이(가) " + armor + "의 방어도 획득!";
-        selectedCharacter.getArmor(armor);
+        log.logContent.text += "\n" + character.Name + "이(가) " + armor + "의 방어도 획득!";
+        character.getArmor(armor);
     }
     List<GameObject> specialDrowList = new List<GameObject>();
     public void specialDrow(int drow) //카드를 통한 드로우
@@ -678,16 +718,16 @@ public class BattleManager : MonoBehaviour
             CM.Deck.Add(newCard);
         }
     }
-    public void NextTurnArmor(int armor) //다음 턴 방어도 획득
+    public void NextTurnArmor(int armor,Character character) //다음 턴 방어도 획득
     {
-        log.logContent.text += "\n" + selectedCharacter.Name + "이(가) 다음턴에 " + armor + "의 방어도 획득!";
-        selectedCharacter.nextarmor += armor;
+        log.logContent.text += "\n" + actCharacter.Name + "이(가) 다음턴에 " + armor + "의 방어도 획득!";
+        character.nextarmor += armor;
     }
     public void card8(int point) //car8개별 효과 함수
     {
-        log.logContent.text += "\n" + selectedCharacter.Name + "이(가) 이번 턴 종료시 남은 cost*10의 방어도를 얻습니다.";
-        selectedCharacter.card8 = true;
-        selectedCharacter.card8point = point;
+        log.logContent.text += "\n" + actCharacter.Name + "이(가) 이번 턴 종료시 남은 cost*10의 방어도를 얻습니다.";
+        actCharacter.card8 = true;
+        actCharacter.card8point = point;
     }
     public void teamTurnAtkUp(int atk) //해당 턴 동안 모든 아군 공격력 증가
     {
@@ -700,16 +740,15 @@ public class BattleManager : MonoBehaviour
             }
         }
     }
-    public void TurnAtkUp(int atk) //해당 턴 동안 공격력 증가
+    public void TurnAtkUp(Character character,int atk) //해당 턴 동안 공격력 증가
     {
-        log.logContent.text += "\n이번 턴 동안 " + selectedCharacter.Name + "의 공격력이 " + atk + "만큼 증가합니다.";
-        selectedCharacter.TurnAtkUp(atk);
+        log.logContent.text += "\n이번 턴 동안 " + character.Name + "의 공격력이 " + atk + "만큼 증가합니다.";
+        character.TurnAtkUp(atk);
     }
-    public void AtkUp(int atk) //해당 전투동안 공격력 증가
+    public void AtkUp(Character character,int atk) //해당 전투동안 공격력 증가
     {
-        log.logContent.text += "\n" + selectedCharacter.Name + "의 공격력이 " + atk + "만큼 증가합니다.";
-        selectedCharacter.Atk += atk;
-        selectedCharacter.turnAtk += atk;
+        log.logContent.text += "\n" + character.Name + "의 공격력이 " + atk + "만큼 증가합니다.";
+        character.AtkUp(atk);
     }
 
     public void card12()
@@ -777,7 +816,7 @@ public class BattleManager : MonoBehaviour
 
     public void Click_Grave_Revive() //무덤에서 부활버튼 누를 때
     {
-        log.logContent.text += "\n" + selectedCharacter.Name + "이(가) " + selectedCard.GetComponent<Card>().Name.text + " 발동!";
+        log.logContent.text += "\n" + actCharacter.Name + "이(가) " + selectedCard.GetComponent<Card>().Name.text + " 발동!";
         ReviveMode = true;
        
         GraveReviveMode = false;
@@ -878,7 +917,7 @@ public class BattleManager : MonoBehaviour
     }
     public void reflectUp(int amount) //반사데미지를 올려줌
     {
-        selectedCharacter.reflect += amount;
+        actCharacter.reflect += amount;
     }
 
     public void Victory() //승리시 발동하는 함수
@@ -1005,6 +1044,11 @@ public class BattleManager : MonoBehaviour
         CardUseText.text = "취소";
     }
 
+    public void goCharacterSelectMode() //아군 선택 카드 선택 시 어떤 아군을 선택할지 고르는 모드
+    {
+        CharacterSelectMode = true; //이 상태로 들어가면 character를 클릭시 선택이 된다.
+        CardUseText.text = "취소";
+    }
     //type==0 랜덤 대상 type==1 방어도 높은 적 우선 type==2 체력 높은 적 우선 type==3 방어도 있는 적 우선
     //type==4 모든 대상
     //ActM =>true 일 시 행동력 감소 포함
@@ -1041,13 +1085,13 @@ public class BattleManager : MonoBehaviour
                 int maxArmor = 0;
                 for (int i = 0; i < forward.Count; i++)
                 {
-                    if (characters[i].Armor == maxArmor)
+                    if (characters[i].armor == maxArmor)
                     {
                         MaxArmor.Add(forward[i]);
                     }
-                    else if (characters[i].Armor > maxArmor)
+                    else if (characters[i].armor > maxArmor)
                     {
-                        maxArmor = characters[i].Armor;
+                        maxArmor = characters[i].armor;
                         MaxArmor.Clear();
                         MaxArmor.Add(forward[i]);
                     }
@@ -1097,7 +1141,7 @@ public class BattleManager : MonoBehaviour
                 List<Character> HaveArmor = new List<Character>();
                 for (int i = 0; i < forward.Count; i++)
                 {
-                    if (forward[i].Armor > 0) HaveArmor.Add(forward[i]);
+                    if (forward[i].armor > 0) HaveArmor.Add(forward[i]);
                 }
                 if (HaveArmor.Count == 0) HitFront(dmg, 0, enemy, ActM);
                 else
@@ -1159,13 +1203,13 @@ public class BattleManager : MonoBehaviour
             int maxArmor = 0;
             for (int i = 0; i < characters.Count; i++)
             {
-                if (characters[i].Armor == maxArmor)
+                if (characters[i].armor == maxArmor)
                 {
                     MaxArmor.Add(characters[i]);
                 }
-                else if (characters[i].Armor > maxArmor)
+                else if (characters[i].armor > maxArmor)
                 {
-                    maxArmor = characters[i].Armor;
+                    maxArmor = characters[i].armor;
                     MaxArmor.Clear();
                     MaxArmor.Add(characters[i]);
                 }
@@ -1217,7 +1261,7 @@ public class BattleManager : MonoBehaviour
             List<Character> HaveArmor = new List<Character>();
             for (int i = 0; i < characters.Count; i++)
             {
-                if (characters[i].Armor > 0) HaveArmor.Add(characters[i]);
+                if (characters[i].armor > 0) HaveArmor.Add(characters[i]);
             }
             if (HaveArmor.Count == 0) HitAll(dmg, 0, enemy, ActM);
             else
@@ -1289,13 +1333,13 @@ public class BattleManager : MonoBehaviour
                 int maxArmor = 0;
                 for (int i = line; i < characters.Count; i++)
                 {
-                    if (characters[i].Armor == maxArmor)
+                    if (characters[i].armor == maxArmor)
                     {
                         MaxArmor.Add(characters[i]);
                     }
-                    else if (characters[i].Armor > maxArmor)
+                    else if (characters[i].armor > maxArmor)
                     {
-                        maxArmor = characters[i].Armor;
+                        maxArmor = characters[i].armor;
                         MaxArmor.Clear();
                         MaxArmor.Add(characters[i]);
                     }
@@ -1347,7 +1391,7 @@ public class BattleManager : MonoBehaviour
                 List<Character> HaveArmor = new List<Character>();
                 for (int i = line; i < characters.Count; i++)
                 {
-                    if (characters[i].Armor > 0) HaveArmor.Add(characters[i]);
+                    if (characters[i].armor > 0) HaveArmor.Add(characters[i]);
                 }
                 if (HaveArmor.Count == 0) HitBack(dmg, 0, enemy, ActM);
                 else
@@ -1410,14 +1454,26 @@ public class BattleManager : MonoBehaviour
     }
     public void card22()  //결의
     {
-      
+        List<int> minArmorList = new List<int>();
+        int minArmor = 0;
         for (int i = 0; i < characters.Count; i++)
         {
             if (!characters[i].isDie)
             {       
-                characters[i].getArmor(4+characters[i].turnDef); 
+                characters[i].getArmor(4+characters[i].turnDef);
+                if (characters[i].armor < minArmor)
+                {
+                    minArmor = characters[i].armor;                    
+                    minArmorList.Clear();
+                    minArmorList.Add(i);
+                }
+                else if (characters[i].armor == minArmor)
+                {
+                    minArmorList.Add(i);
+                }
             }
         }
+        getArmor(10, characters[minArmorList[Random.Range(0, minArmorList.Count)]]);
     }
     public void card23() //매치포인트
     {

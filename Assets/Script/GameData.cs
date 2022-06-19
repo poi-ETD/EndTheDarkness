@@ -17,6 +17,7 @@ public class GameData
     public bool isActInDay;
     public int passiveStack;
     public int tributeStack;
+    public int ryungPassive2;
    
     public List<equipment> EquipmentList = new List<equipment>();
     public int[] curEquip = new int[4];//-1일 때는 장착 x,초기 값으로 넣어주자.

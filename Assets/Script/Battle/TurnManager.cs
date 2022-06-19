@@ -25,13 +25,7 @@ public class TurnManager : MonoBehaviour
 
         if (turnCard == 4) //현재 턴에 카드를 4번 사용했다면, 모든 스트레이트 펀치의 코스트를 감소시켜야함.
         {
-            for(int i = 0; i < CM.Grave.Count; i++)
-            {
-                if (CM.Grave[i].GetComponent<Card>().cardNo == 11)
-                {
-                    CM.Grave[i].GetComponent<Card>().decreaseCost(3);
-                }
-            }
+            
             for (int i = 0; i < CM.field.Count; i++)
             {
                 if (CM.field[i].GetComponent<Card>().cardNo == 11)
@@ -39,14 +33,8 @@ public class TurnManager : MonoBehaviour
                     CM.field[i].GetComponent<Card>().decreaseCost(3);
                 }
             }
-            for (int i = 0; i < CM.Deck.Count; i++)
-            {
-                if (CM.Deck[i].GetComponent<Card>().cardNo == 11)
-                {
-                    CM.Deck[i].GetComponent<Card>().decreaseCost(3);
-                }
-            }
-            BM.log.logContent.text += "\n모든 스트레이트 펀치의 코스트가 3 감소합니다.";
+            
+            BM.log.logContent.text += "\n패에 있는 스트레이트 펀치의 코스트가 3 감소합니다.";
         }
     }
 
@@ -94,7 +82,6 @@ public class TurnManager : MonoBehaviour
     IEnumerator TurnEnd()
     {
         
-
         for (int i = 0; i < BM.ChD.size; i++)
         {
             BM.characters[i].myPassive.TurnEndTimeCount();//턴 종료시 발동할 패시브를 위해
@@ -153,13 +140,13 @@ public class TurnManager : MonoBehaviour
         int gameCost = 0;
         for (int i = 0; i < BM.characters.Count; i++) gameCost += BM.characters[i].cost;
         BM.leftCost = gameCost+BM.nextTurnStartCost;//턴 시작 시 전 턴에 코스트 증가하는 효과가 있었다면 적용.
-        
-        BM.useCost(0);//코스트 글자 변경을 위함
+
+       BM.costT.text = "" + BM.leftCost;
 
         BM.nextTurnStartCost = 0;
         PlayerTurn =true;
 
-        BM.CharacterSelectMode = true;
+   
 
         EndButton.SetActive(true);
 
@@ -173,11 +160,11 @@ public class TurnManager : MonoBehaviour
                
                
                 BM.characters[i].onMinusAct(BM.characters[i].NextTurnMinusAct);
-                BM.characters[i].turnAtk = BM.characters[i].Atk;
+                BM.characters[i].turnAtk = BM.characters[i].atk;
                 BM.characters[i].TurnAtkUp(turnAtk);
                 BM.characters[i].turnDef = BM.characters[i].def;
                 BM.characters[i].getArmor(BM.characters[i].nextarmor);
-                if (BM.characters[i].Armor < 0) BM.characters[i].Armor = 0;
+                if (BM.characters[i].armor < 0) BM.characters[i].armor = 0;
                 BM.characters[i].nextarmor = 0;
               //턴 시작 시 전 턴에 올라간 값들을 수정
             }
