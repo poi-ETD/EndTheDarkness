@@ -521,7 +521,7 @@ public class BattleManager : MonoBehaviour
                 otherCanvasOn = false;
             }
             
-            EnemySelect(ei.g);
+            EnemySelect(ei.SelectedEnemy.gameObject);
 
             CardUseText.text = "사용";
             EnemySelectMode = false;
