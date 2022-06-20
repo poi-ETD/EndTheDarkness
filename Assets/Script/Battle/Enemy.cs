@@ -36,6 +36,7 @@ public class Enemy : MonoBehaviour
 
     public void StatusChange(int kind,int amount)
     {
+     
         status[kind] += amount;
     }
 
@@ -75,7 +76,9 @@ public class Enemy : MonoBehaviour
         if (Shadow) return;
 
         if (BM.EnemySelectMode)
-            BM.EnemySelect(gameObject);
+        {
+            Debug.Log("OnSelect");
+            BM.EnemySelect(gameObject); }
     }
     public void onEnterEvnent()
     {

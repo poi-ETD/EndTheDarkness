@@ -14,13 +14,15 @@ public class CardManager : MonoBehaviour
     public List<GameObject> field = new List<GameObject>(); //필드에 있는 카드들의 리스트
     public List<GameObject> ReviveCard = new List<GameObject>(); //무덤에서 부활로 선택된 카드들의 리스트
     public List<GameObject> SelectedCard = new List<GameObject>(); //덱에서 선택된 카드들의 리스트
+    public List<GameObject> RemoveCard = new List<GameObject>();
     public Text graveT;
     public Text deckT;
     [SerializeField] GameObject graveWarn;
     [SerializeField] GameObject selectedWarn;
     [SerializeField] GameObject CardPrefebs;
-    [SerializeField] GameObject GravePopup;
+  
     [SerializeField] GameObject GraveContent;
+    [SerializeField] GameObject RemoveContent;
     public TurnManager TM;
     public int FiledCardCount;//현재 필드에 카드가 몇 장 있나
     public int specialDrow;//카드를 통한 드로우
@@ -150,35 +152,46 @@ public class CardManager : MonoBehaviour
     }
     public void UseCard(GameObject usingCard)//사용된 카드를 무덤에 넣는 과정
     {
-        for (int i = field.Count - 1; i >= 0; i--)
+        if (usingCard.GetComponent<Card>().isRemove)
         {
-            if (usingCard == field[i])
-            {
-                field.RemoveAt(i);
-                break;
-            }
+            usingCard.GetComponent<Card>().RemoveThisCardInField();
+            usingCard.transform.parent = RemoveContent.transform;
+            usingCard.SetActive(false);
         }
-        bool InGrave = false;
-        for (int i = 0; i < Grave.Count; i++)
+        else
         {
-            if (Grave[i] == usingCard)
+            for (int i = field.Count - 1; i >= 0; i--)
             {
-                InGrave = true;
-                break;
+                if (usingCard == field[i])
+                {
+                    field.RemoveAt(i);
+                    break;
+                }
             }
-        }
+            bool InGrave = false;
+            for (int i = 0; i < Grave.Count; i++)
+            {
+                if (Grave[i] == usingCard)
+                {
+                    InGrave = true;
+                    break;
+                }
+            }
+
+            if (!InGrave) Grave.Add(usingCard);
+            usingCard.transform.parent = GraveContent.transform;
+            usingCard.GetComponent<Card>().isGrave = true;
+            usingCard.SetActive(false);
+        }   
+        if(BM.actCharacter!=null)
+        BM.actCharacter.Acting();
         
-        if (!InGrave) Grave.Add(usingCard);
-        usingCard.transform.parent = GraveContent.transform;      
-        if(BM.selectedCharacter!=null)
-        BM.selectedCharacter.Acting();
-        usingCard.GetComponent<Card>().isGrave = true;
-        usingCard.SetActive(false);
+     
         HandManager.Instance.CancelToUse();
         TM.BM.previousSelectedCard = usingCard; //스케치 반복을 위해 이전 카드를 기록함
  
-        BM.selectedCharacter.SelectBox.SetActive(false);
-        Character curC = BM.selectedCharacter;
+        BM.actCharacter.SelectBox.SetActive(false);
+        Character curC = BM.actCharacter;
 
         curC.GetComponent<CharacterPassive>().myAct();     
         for(int i = 0; i < BM.ChD.size; i++)
@@ -477,5 +490,22 @@ public class CardManager : MonoBehaviour
 
         HandManager.Instance.InitCard();
         BM.otherCor = false;
+    }
+    public void RemoveCardRemove()
+    {
+        for(int i = 0; i < field.Count; i++)
+        {
+            if (field[i].GetComponent<Card>().isRemove)
+            {
+                field[i].GetComponent<Card>().RemoveThisCardInField();
+            }
+        }
+        for (int i = 0; i < Deck.Count; i++)
+        {
+            if (Deck[i].GetComponent<Card>().isRemove)
+            {
+                Deck[i].GetComponent<Card>().RemoveThisCardInDeck();
+            }
+        }
     }
 }
