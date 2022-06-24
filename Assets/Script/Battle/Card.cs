@@ -43,11 +43,13 @@ public class Card : MonoBehaviour
                 BM.TargetOn();
                 return;
             }
+
             if (BM.leftCost < cardcost)
             {
                 BM.costOver();
                 return;
             }
+
             if (BM.actCharacter.turnAct <= -5)
             {
                 if (cardNo != 18)
@@ -56,31 +58,32 @@ public class Card : MonoBehaviour
                     return;
                 }
             }
+
             if (selectType==1)
             {
-                BM.goEnemySelectMode();
+                //BM.goEnemySelectMode();
             }
-           else if (selectType == 2) //무덤류
+            else if (selectType == 2) //무덤류
             {
                 if (cardNo == 7)
                 {
-                  
+
                     BM.ReviveToField(2);
-                  
+
                 }
                 if (cardNo == 13)
                 {
                     BM.ReviveToField(1);
                 }
             }
-           else if (selectType == 3)
+            else if (selectType == 3)
             {
                 if (cardNo == 24)
                 {
                     BM.SelectDeckCard(1);
                 }
             }
-        else   if (selectType == 4)
+            else if (selectType == 4)
             {
                 if (BM.previousSelectedCard == null)
                 {
@@ -446,7 +449,7 @@ public class Card : MonoBehaviour
             HandManager.Instance.SelectCard(this);
             HandManager.Instance.InputToOriginText(this); //YH  
             HandManager.Instance.CardMouseEnter(this); //YH
-         
+
             if (!BM.EnemySelectMode && !BM.otherCanvasOn)
             {
                 if (BM.selectedCard != gameObject)
@@ -456,6 +459,17 @@ public class Card : MonoBehaviour
             }
             //else if (isGrave || isDeck)
             //    CM.ClickInGraveOrDeck(gameObject);
+
+            if (selectType == 1)
+            {
+                BM.EnemySelectMode = true;
+                Debug.Log("Enemy select mode on");
+            }
+            else
+            {
+                BM.EnemySelectMode = false;
+                Debug.Log("Enemy select mode off");
+            }
 
             HandManager.Instance.CardMouseDown();
             //gameObject.GetComponent<RectTransform>().localPosition = new Vector3(0f, 1000f, 0f);
@@ -471,13 +485,16 @@ public class Card : MonoBehaviour
 
     private void OnMouseEnter()
     {
-        if (!BM.EnemySelectMode && !BM.otherCanvasOn &&!isDeck)
-            HandManager.Instance.CardMouseEnter(this);
-        if (BM.otherCanvasOn && BM.isGraveWindowOn)
+        if (!HandManager.Instance.isSelectedCard)
         {
-            if (isGrave)
-                HandManager.Instance.CardTooltipOn(this);
-           // if(isGrave||isDeck) HandManager.Instance.CardMouseEnter(this); 
+            if (!BM.EnemySelectMode && !BM.otherCanvasOn && !isDeck)
+                HandManager.Instance.CardMouseEnter(this);
+            if (BM.otherCanvasOn && BM.isGraveWindowOn)
+            {
+                if (isGrave)
+                    HandManager.Instance.CardTooltipOn(this);
+                // if(isGrave||isDeck) HandManager.Instance.CardMouseEnter(this); 
+            }
         }
     }
 
@@ -488,15 +505,18 @@ public class Card : MonoBehaviour
 
     private void OnMouseExit()
     {
-        if (!BM.otherCanvasOn)
+        if (!HandManager.Instance.isSelectedCard)
         {
-            isOnMouse = false;
-            HandManager.Instance.CardMouseExit(this);
-        }
-        else
-        {
-            if (BM.isGraveWindowOn)
-                HandManager.Instance.go_SelectedCardTooltip.SetActive(false);
+            if (!BM.otherCanvasOn)
+            {
+                isOnMouse = false;
+                HandManager.Instance.CardMouseExit(this);
+            }
+            else
+            {
+                if (BM.isGraveWindowOn)
+                    HandManager.Instance.go_SelectedCardTooltip.SetActive(false);
+            }
         }
     }
 

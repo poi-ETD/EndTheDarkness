@@ -499,8 +499,10 @@ public class BattleManager : MonoBehaviour
         if (cardSelectMode)
         {           
             cancleCard();
-            HandManager.Instance.go_UseButton.SetActive(true);
+            //HandManager.Instance.go_UseButton.SetActive(true);
             selectedCard = c;
+
+            Debug.Log("Set Card a" + selectedCard.GetComponent<Card>().selectType.ToString());
             return;
         }
 
@@ -508,9 +510,11 @@ public class BattleManager : MonoBehaviour
         {
             cancleCard();
           
-            HandManager.Instance.go_UseButton.SetActive(true);
+            //HandManager.Instance.go_UseButton.SetActive(true);
             
             selectedCard = c;
+
+            Debug.Log("Set Card b" + selectedCard.GetComponent<Card>().selectType.ToString());
         }
     }
     public void cancleCard() //카드를 두번 누르거나, 다른 카드를 눌렀을때 이미 눌러진 카드에게 적용되는 함수
@@ -521,13 +525,12 @@ public class BattleManager : MonoBehaviour
 
             selectedCard = null;
 
-            HandManager.Instance.go_UseButton.SetActive(false);
+            //HandManager.Instance.go_UseButton.SetActive(false);
 
             if (!isPointerinHand)
                 HandManager.Instance.SelectCardToOriginPosition();
         }
     }
-
 
     public void Click_useCard() // 카드 드래그 상태에서 아무곳이나(또는 적,아군) 클릭시 사용되는 함수
     {
@@ -543,19 +546,22 @@ public class BattleManager : MonoBehaviour
         }
         else if (selectedCard.GetComponent<Card>().selectType == 1)
         {
-            if (usedInCard20 != null)
+            if (ei.SelectedEnemy != null)
             {
-                Destroy(selectedCard);
-                selectedCard = usedInCard20;
-                otherCanvasOn = false;
-            }
-            
-            EnemySelect(ei.SelectedEnemy.gameObject);
+                if (usedInCard20 != null)
+                {
+                    Destroy(selectedCard);
+                    selectedCard = usedInCard20;
+                    otherCanvasOn = false;
+                }
 
-            CardUseText.text = "사용";
-            EnemySelectMode = false;
+                EnemySelect(ei.SelectedEnemy.gameObject);
+
+                CardUseText.text = "사용";
+                EnemySelectMode = false;
+            }
         }
-      else if(selectedCard.GetComponent<Card>().selectType == 5)
+        else if (selectedCard.GetComponent<Card>().selectType == 5)
         {
             if (usedInCard20 != null)
             {
@@ -564,11 +570,10 @@ public class BattleManager : MonoBehaviour
                 otherCanvasOn = false;
             }
             CardUseText.text = "사용";
-           CharacterSelectMode = false;
+            CharacterSelectMode = false;
         }
     }
 
-   
     public void WarnOn()//여러가지 경고 처리
     {
         warnObj.SetActive(true);
@@ -903,7 +908,7 @@ public class BattleManager : MonoBehaviour
         copyCard.GetComponent<Card>().iscard20Mode = true;
         copyCard.GetComponent<Card>().cardcost = 0;
         selectedCard = copyCard;//현재 지정된 카드를 이전에 사용한 카드의 복사본을 변경
-        HandManager.Instance.go_UseButton.SetActive(true);
+        //HandManager.Instance.go_UseButton.SetActive(true);
     }
 
     public void Click_cancleButtonUse()

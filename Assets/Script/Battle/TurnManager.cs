@@ -116,10 +116,10 @@ public class TurnManager : MonoBehaviour
     {
         
         turnEndImage.color = new Color(0.3f, 0.3f, 0.3f);
-        HandManager.Instance.go_UseButton.SetActive(false); //YH
+        //HandManager.Instance.go_UseButton.SetActive(false); //YH
         HandManager.Instance.go_SelectedCardTooltip.SetActive(false); //YH
         HandManager.Instance.SelectCardToOriginPosition(); //YH
-       // GameObject.Find("ActManager").GetComponent<ActManager>().LateAct();
+        //GameObject.Find("ActManager").GetComponent<ActManager>().LateAct();
         PlayerTurnEnd();
     }
 
