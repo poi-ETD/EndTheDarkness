@@ -8,8 +8,8 @@ public class Character : MonoBehaviour
     public int characterNo; 
     public int maxHp;
     public int Hp;
-    public int Atk;
-    public int Armor;
+    public int atk;
+    public int armor;
     public int turnAct;
     public int turnAtk;
     public int def;
@@ -17,7 +17,7 @@ public class Character : MonoBehaviour
     public int Act=1;
 
     public float speed;
-    public int curSpeed;
+    public float curSpeed;
     public bool isAct;
 
     public TurnManager TM;
@@ -102,14 +102,14 @@ public class Character : MonoBehaviour
             Dmg.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
             Dmg.GetComponent<DMGtext>().GetType(2, a);
         }
-        Armor += a;
-        if (Armor < 0) Armor = 0;
+        armor += a;
+        if (armor < 0) armor = 0;
         if (bless[2])
         {
-            Armor = 0;
+            armor = 0;
         }
-        stringArmor = Armor;
-        armorT.text = "" + Armor;
+        stringArmor = armor;
+        armorT.text = "" + armor;
         
     }
     public void StatusAbnom(int status,int count)
@@ -120,17 +120,12 @@ public class Character : MonoBehaviour
 
     public void onClickEvent()
     {
-        return;
-      
-        if (!isDie && !BM.cardSelectMode && !BM.EnemySelectMode)
+        if (isDie) return;
+        if (BM.CharacterSelectMode)
         {
-            if (BM.selectedCharacter != this)
-            {
-                BM.CharacterSelect(gameObject);
-            }
-            else
-                BM.CancleCharacter();
+            BM.CharacterSelect(gameObject);
         }
+
     }
     private void Start()
     {
@@ -245,11 +240,11 @@ public class Character : MonoBehaviour
 
     public void AtkUp(int i)
     {
-        Atk += i;
+        atk += i;
         turnAtk += i;
         if (bless[6])
         {
-            Atk = 1;
+            atk = 1;
             turnAtk = 1;
         }
         atkT.text = turnAtk + "";
@@ -269,18 +264,18 @@ public class Character : MonoBehaviour
             if (i == curNo) myPassive.MyHit(E,dmg);
             else { BM.characters[i].myPassive.TeamHit(curNo);}
         }
-        if (Armor > 0)
+        if (armor > 0)
         {
-            int startArmor = Armor;
-            Armor -= dmg;
-            if (Armor < 0)
+            int startArmor = armor;
+            armor -= dmg;
+            if (armor < 0)
             {
-                Hp += Armor;
-                Armor = 0;
+                Hp += armor;
+                armor = 0;
             }
             if (startArmor > dmg)
             {
-                myPassive.MyArmorHit((Armor) / 2, E);
+                myPassive.MyArmorHit((armor) / 2, E);
             }
             else
             {
@@ -336,7 +331,7 @@ public class Character : MonoBehaviour
         myImage.color = color;
         turnAct = 0;
         board.text = "";
-        Armor = 0;
+        armor = 0;
         BM.teamDieCount++;
         if (BM.teamDieCount == BM.characters.Count)
         {   Time.timeScale = 0;

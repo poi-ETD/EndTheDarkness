@@ -403,18 +403,7 @@ public class LobbyManager : MonoBehaviour
     public void GetPassiveInGM() //개발용
     {
         if (canvasOn) return;
-        PassiveView.SetActive(true);
-        canvasOn = true;
-        PopUpCanvas.SetActive(true);
-        for (int i = 0; i < ChD.size; i++)
-        {
-            ByPassive[i].SetActive(true);
-            ByPassiveNames[i].text = ChD.characterDatas[i].Name;
-            ByPassiveButtons[i * 4].text = ChaInfo.cd[ChD.characterDatas[i].No].passive[0];
-            ByPassiveButtons[i * 4 + 1].text = ChaInfo.cd[ChD.characterDatas[i].No].passive[1];
-            ByPassiveButtons[i * 4 + 2].text = ChaInfo.cd[ChD.characterDatas[i].No].passive[2];
-            ByPassiveButtons[i * 4 + 3].text = ChaInfo.cd[ChD.characterDatas[i].No].passive[3];
-        }
+        SceneManager.LoadScene("GMmode");
 
     }
     public void GetPassive()

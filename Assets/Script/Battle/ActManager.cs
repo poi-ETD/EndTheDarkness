@@ -15,7 +15,7 @@ public class ActManager : MonoBehaviour
     [SerializeField] Transform speedLineTrans;
     public int curOrder;
     bool isTurn;
-    
+    public bool isStartAct;
     public struct ord{
         public float value;
         public int type;
@@ -30,6 +30,7 @@ public class ActManager : MonoBehaviour
 
 
     }
+    
     void Start()
     {
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
@@ -40,7 +41,14 @@ public class ActManager : MonoBehaviour
             enemys.Add(BM.Enemys[i].GetComponent<Enemy>());
         }
     }
-
+    public void ActComplete() //행동 종료 패시브를 불러 일으키기 위한 함수.
+    {
+        BM.actCharacter.myPassive.myAct();
+    }
+    public void SpeedChangeByEffect()
+    {
+        Debug.Log("스피드가 변하여 연산을 다시 진행합니다.");
+    }
     public void SetOrder()
     {
         isTurn = true;
@@ -98,13 +106,14 @@ public class ActManager : MonoBehaviour
     }
     public void ActByOrder(int or)
     {
+      
         BM.CancleCharacter();   
         curOrder = or;
         if (orderList[or].type == 0)
         {
             if (!characters[orderList[or].obj].isDie)
             {
-                BM.CharacterSelect(characters[orderList[or].obj].gameObject);
+                BM.ShowCharacterHaveTurn(characters[orderList[or].obj].gameObject);
             }
             else
             {
@@ -280,7 +289,7 @@ public class ActManager : MonoBehaviour
                     }
                     if (ActList[0].no == 3)
                     {
-                        ActList[0].myC.myPassive.Q3(ActList[0].mount);
+                        ActList[0].myC.myPassive.Q3();
                     }
                     if (ActList[0].no == 4)
                     {
@@ -337,6 +346,10 @@ public class ActManager : MonoBehaviour
                     {
                         ActList[0].myC.myPassive.Porte4();
                     }
+                    if (ActList[0].no == 17)
+                    {
+                        ActList[0].myC.myPassive.Ryung1();
+                    }
                     if (ActList[0].no == -1)
                     { //캐릭터가 타겟에게 공격
                         ActList[0].targetE.OnHitCal(ActList[0].mount, ActList[0].myC.curNo, false);
@@ -356,7 +369,7 @@ public class ActManager : MonoBehaviour
                     }
                     else
                         yield return new WaitForSeconds(2f / sum);
-
+                    if(BM.actCharacter!=ActList[0].myC)
                     ActList[0].myC.SelectBox.SetActive(false);
                     yield return new WaitForSeconds(0.5f / sum);
                 } //패시브 횟수만큼
@@ -437,15 +450,22 @@ public class ActManager : MonoBehaviour
             SetOrder();
         }
         else if (isTurn)
-        {           
-            if (curOrder+1< orderList.Count)
-            {                
-               ActByOrder(curOrder + 1);
+        {
+            if (isStartAct)
+            {
+                isStartAct = false;
             }
             else
-            {               
-                isTurn = false;
-                TM.PlayerTurnEndButton();
+            {
+                if (curOrder + 1 < orderList.Count)
+                {
+                    ActByOrder(curOrder + 1);
+                }
+                else
+                {
+                    isTurn = false;
+                    TM.PlayerTurnEndButton();
+                }
             }
         }
        

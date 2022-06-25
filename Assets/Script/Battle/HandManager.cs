@@ -47,7 +47,7 @@ public class HandManager : MonoBehaviour
     private Card onPointerCard = null; // this field have script<Card> on mouse pointer
     private Card selectedCard = null; // this field have script<Card> selected
 
-    private bool isSelectedCard = false;
+    [HideInInspector] public bool isSelectedCard = false;
     [SerializeField] private GameObject go_selectedCardImage;
 
     private void Awake()
@@ -280,6 +280,7 @@ public class HandManager : MonoBehaviour
     private void On_IsSelectedCard() // 카드 선택(왼쪽 클릭) 후 카드 사용(왼쪽 클릭)까지 격차를 주기 위한(동시에 이뤄지지 않게 하기 위한) Invoke용 함수
     {
         isSelectedCard = true;
+        ArrangeCard();
     }
 
     public void CardMouseUp()

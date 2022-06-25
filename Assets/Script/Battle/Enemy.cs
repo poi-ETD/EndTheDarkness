@@ -36,6 +36,7 @@ public class Enemy : MonoBehaviour
 
     public void StatusChange(int kind,int amount)
     {
+     
         status[kind] += amount;
     }
 
@@ -81,7 +82,7 @@ public class Enemy : MonoBehaviour
     }
     public void onEnterEvnent()
     {
-        if (isDie) return;
+        if (isDie || !BM.EnemySelectMode) return; // 적이 죽거나 적 선택이 필요한 카드로 인한 적 선택 모드가 아닐시 반응하지 않게 하는 코드
 
         ei.setThis(this);
     }
@@ -92,6 +93,8 @@ public class Enemy : MonoBehaviour
             ei.g.SetActive(false);
             return;
         }
+
+        if (!BM.EnemySelectMode) return; // 적 선택이 필요한 카드로 인한 적 선택 모드가 아닐시 반응하지 않게 하는 코드
 
         ei.setNull();
     }
