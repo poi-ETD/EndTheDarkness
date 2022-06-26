@@ -16,19 +16,21 @@ public class ActManager : MonoBehaviour
     public int curOrder;
     bool isTurn;
     public bool isStartAct;
+    public float curSpeed;
     public struct ord{
         public float value;
         public int type;
         public int obj;
+
         public ord(float value, int type,int obj) 
         {
     
             this.value = value;
             this.type = type;
             this.obj = obj;
+           
         }
-
-
+      
     }
     
     void Start()
@@ -45,19 +47,58 @@ public class ActManager : MonoBehaviour
     {
         BM.actCharacter.myPassive.myAct();
     }
-    public void SpeedChangeByEffect()
+    public void SpeedChangeByEffect(int type,int no)
     {
-        Debug.Log("스피드가 변하여 연산을 다시 진행합니다.");
+        if (!isTurn) return;
+        Debug.Log("속도 변화");
+        if (type == 0) //팀이 속도가 변했을 경우
+        {
+            for(int i = 0; i < orderList.Count; i++)
+            {
+                if (orderList[i].type == 0 && orderList[i].obj == no)
+                {
+                    orderList.RemoveAt(i);
+                }
+            } //현재 선택된 팀의 예정 행동을 다 없앰
+            float previousActTime = characters[no].curTurnActTime;
+            if (characters[no].curTurnActTime+characters[no].curSpeed<curSpeed)
+            {
+                characters[no].curTurnActTime = curSpeed - characters[no].curSpeed;
+            }
+
+            float characterActing = characters[no].curTurnActTime + characters[no].curSpeed;
+          
+            ord newOrd = new ord(characterActing, 0, no);         
+            if (characterActing <= 10 || previousActTime == 0)
+            {
+                Debug.Log(characterActing);
+                orderList.Add(newOrd);
+            }
+            characterActing += characters[no].curSpeed;
+            while (characterActing <= 10)
+            {
+                Debug.Log(characterActing);
+                ord newOrd2 = new ord(characterActing, 0, no);
+                characterActing += characters[no].curSpeed;
+                orderList.Add(newOrd2);
+            }
+            orderList = orderList.OrderBy(obj =>
+            {
+                return obj.value;
+            }).ToList();
+            SpeedImageChange();
+        }
+        else //적이 속도가 변했을 경우
+        {
+
+        }
     }
     public void SetOrder()
     {
         isTurn = true;
         curOrder = 0;
         orderList.Clear();
-        for (int i = 0; i < 11; i++)
-        {
-            speedLineTrans.GetChild(i).gameObject.SetActive(false);
-        }
+       
         for (int i = 0; i < characters.Count; i++)
         {
             float s = characters[i].speed;
@@ -88,9 +129,19 @@ public class ActManager : MonoBehaviour
         {
             return obj.value;
         }).ToList();
+        SpeedImageChange();
+        ActByOrder();
+    }
+    public void SpeedImageChange()
+    {
+       
+        for (int i = 0; i < 15; i++)
+        {
+            speedLineTrans.GetChild(i).gameObject.SetActive(false);
+        }
         for (int i = 0; i < orderList.Count; i++)
         {
-            
+
             speedLineTrans.GetChild(i).gameObject.SetActive(true);
             if (orderList[i].type == 0)
             {
@@ -101,14 +152,22 @@ public class ActManager : MonoBehaviour
                 speedLineTrans.GetChild(i).GetComponent<Image>().sprite = enemys[orderList[i].obj].face;
             }
         }
-        ActByOrder(0);
-
     }
-    public void ActByOrder(int or)
+    public void ActByOrder()
     {
+        if (orderList.Count == 0)
+        {
+            isTurn = false;
+            TM.PlayerTurnEndButton();
+            return;
+        }
       
+        SpeedImageChange();
+        int or = 0;
+        curSpeed = orderList[or].value;
         BM.CancleCharacter();   
         curOrder = or;
+        
         if (orderList[or].type == 0)
         {
             if (!characters[orderList[or].obj].isDie)
@@ -117,7 +176,8 @@ public class ActManager : MonoBehaviour
             }
             else
             {
-                ActByOrder(or + 1);
+                orderList.RemoveAt(0);
+                ActByOrder();
             }
         }
         else
@@ -128,7 +188,8 @@ public class ActManager : MonoBehaviour
             }
             else
             {
-                ActByOrder(or + 1);
+                orderList.RemoveAt(0);
+                ActByOrder();
             }
         }
     }
@@ -457,9 +518,14 @@ public class ActManager : MonoBehaviour
             }
             else
             {
-                if (curOrder + 1 < orderList.Count)
+                if (orderList.Count>0)
                 {
-                    ActByOrder(curOrder + 1);
+                    if (orderList[0].type == 0)
+                    {
+                        characters[orderList[0].obj].curTurnActTime = curSpeed;
+                    }
+                    orderList.RemoveAt(0);
+                    ActByOrder();
                 }
                 else
                 {

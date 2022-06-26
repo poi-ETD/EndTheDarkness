@@ -34,17 +34,18 @@ public class Enemy : MonoBehaviour
 
     public int[] status = new int[10];
 
-    public void StatusChange(int kind,int amount)
-    {
-     
-        status[kind] += amount;
-    }
-
     public float speed;
+
+    public float curTurnSpeed;
 
     public Sprite face;
 
     public bool isAct;
+
+    public void StatusChange(int kind, int amount)
+    {
+        status[kind] += amount;
+    }
 
     public bool CanShadow()
     {

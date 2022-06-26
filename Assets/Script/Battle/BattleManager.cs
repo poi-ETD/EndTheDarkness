@@ -441,7 +441,7 @@ public class BattleManager : MonoBehaviour
         }
       
             actCharacter = characterHaveTurn.GetComponent<Character>();
-        
+
         actCharacter.myPassive.ActStart();
         AM.isStartAct = true;
         AM.Act();
@@ -463,12 +463,12 @@ public class BattleManager : MonoBehaviour
     {
         character.speed += amount;
         character.curSpeed += amount;
-        AM.SpeedChangeByEffect();
+        AM.SpeedChangeByEffect(0,character.curNo);
     }
     public void TurnSpeedChange(Character character, float amount)
     {       
         character.curSpeed += amount;
-        AM.SpeedChangeByEffect();
+        AM.SpeedChangeByEffect(0,character.curNo);
     }
     public void EnemySelect(GameObject SelectedEnemyInSelectMode) //공격 카드가 발동되었을 시 적을 선택
     {       

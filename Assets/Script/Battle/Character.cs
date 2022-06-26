@@ -18,7 +18,8 @@ public class Character : MonoBehaviour
 
     public float speed;
     public float curSpeed;
-    public bool isAct;
+    public float curTurnActTime;
+
 
     public TurnManager TM;
     public BattleManager BM;
