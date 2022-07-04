@@ -24,7 +24,7 @@ public class GameData
 }
 public struct equipment
 {
-    public int type;
+    public int type;//type=>음수일 경우엔 해당 캐릭터의 전용장비(ex -1은 큐의 전용장비), 그 외에는 type적용
     public string equipName;
     public List<int> improveStat; //증가시키는 스탯의 종류,중첩이 가능하다.
     public List<int> improveMount; //증가시키는 스탯의 양

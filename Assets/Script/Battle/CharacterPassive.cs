@@ -28,8 +28,8 @@ public class CharacterPassive : MonoBehaviour
     int sparkyAttackCount;
 
     float[] passiveCount=new float[4];
-    
 
+    bool haveMyEquip;
 
     private void Start()
     {
@@ -206,7 +206,7 @@ public class CharacterPassive : MonoBehaviour
     {
 
         if (myCharacter.isDie) return;
-       
+     
         
         
         
@@ -430,7 +430,15 @@ public class CharacterPassive : MonoBehaviour
                 }
             }                      
         }
+        if (myNo == 1 && haveMyEquip&&ghost>=100)
+        {
+            Qequip();
+        }
         ghostText.text = ghost + "";
+    }
+    void Qequip()
+    {
+        BM.Victory();
     }
 
     public void Q2(int g)
