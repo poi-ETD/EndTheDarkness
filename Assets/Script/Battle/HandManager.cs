@@ -50,6 +50,8 @@ public class HandManager : MonoBehaviour
     [HideInInspector] public bool isSelectedCard = false;
     [SerializeField] private GameObject go_selectedCardImage;
 
+    [HideInInspector] public bool isEnableOtherButton; // 패에서 카드 클릭시 카드를 사용하거나 취소하기 전까지는 다른 버튼을 사용하지 못하게 하는 변수
+
     private void Awake()
     {
         if (instance == null)
@@ -72,6 +74,8 @@ public class HandManager : MonoBehaviour
     void Start()
     {
         camera = GameObject.Find("Main Camera").GetComponent<Camera>();
+
+        isEnableOtherButton = true;
     }
 
     void Update()
@@ -327,6 +331,7 @@ public class HandManager : MonoBehaviour
         BM.cancleCard();
 
         selectedCard = null;
+        isEnableOtherButton = true;
     }
 
     public void SelectCard(Card card) // 이전에 선택된 카드의 선택상태를 취소하고 새로운 인자로 들어온 카드를 설정하는 함수

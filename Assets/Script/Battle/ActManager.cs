@@ -135,7 +135,7 @@ public class ActManager : MonoBehaviour
     public void SpeedImageChange()
     {
        
-        for (int i = 0; i < 15; i++)
+        for (int i = 0; i < 11; i++)
         {
             speedLineTrans.GetChild(i).gameObject.SetActive(false);
         }

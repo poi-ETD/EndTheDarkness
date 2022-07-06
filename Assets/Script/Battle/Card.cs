@@ -443,7 +443,11 @@ public class Card : MonoBehaviour
             if (BM.otherCor) return;
            
             if (isSelected) return;
-          
+
+            if (!HandManager.Instance.isEnableOtherButton)
+                return;
+
+            HandManager.Instance.isEnableOtherButton = false;
             BM.isSelectedCardinHand = true; //YH
             isSelected = true; //YH
             HandManager.Instance.SelectCard(this);

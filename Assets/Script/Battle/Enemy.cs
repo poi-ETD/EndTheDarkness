@@ -42,6 +42,23 @@ public class Enemy : MonoBehaviour
 
     public bool isAct;
 
+    private void Start()
+    {
+        TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
+        BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
+        Hp = maxHp;
+        ei = GameObject.Find("SelectEnemyInformation").GetComponent<EnemyInfo>();
+        AM = GameObject.Find("ActManager").GetComponent<ActManager>();
+    }
+
+    private void Update()
+    {
+        if (Input.GetMouseButtonDown(1))
+        {
+            ei.setNull();
+        }
+    }
+
     public void StatusChange(int kind, int amount)
     {
         status[kind] += amount;
@@ -61,15 +78,7 @@ public class Enemy : MonoBehaviour
         }
         return can;
     }
-    private void Start()
-    {
-        TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
-        BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
-        Hp = maxHp;
-        ei = GameObject.Find("SelectEnemyInformation").GetComponent<EnemyInfo>();
-        AM = GameObject.Find("ActManager").GetComponent<ActManager>();
         
-    }        
     public void onClickEvent()
     {
         if (isDie) return;

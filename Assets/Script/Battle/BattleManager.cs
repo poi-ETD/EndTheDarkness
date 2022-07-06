@@ -788,16 +788,19 @@ public class BattleManager : MonoBehaviour
 
     public void Click_GraveOn() //무덤 열기. 특정 경우에는 클릭 안 해도 자동으로 열림
     {
-        otherCanvasOn = true;
-        isGraveWindowOn = true;
+        if (!HandManager.Instance.isEnableOtherButton)
+        {
+            otherCanvasOn = true;
+            isGraveWindowOn = true;
 
-        if (GraveReviveMode)
-            go_GraveView_Button_Revive.SetActive(true);
-        else
-            go_GraveView_Button_Revive.SetActive(false);
+            if (GraveReviveMode)
+                go_GraveView_Button_Revive.SetActive(true);
+            else
+                go_GraveView_Button_Revive.SetActive(false);
 
-        CM.GraveOn();
-        window_Grave.SetActive(true);
+            CM.GraveOn();
+            window_Grave.SetActive(true);
+        }
     }
 
     public void Click_GraveOff() //무덤에서 그냥 종료 버튼

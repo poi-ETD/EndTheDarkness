@@ -22,20 +22,23 @@ public class EnemyInfo : MonoBehaviour
 
     public void setNull()
     {
-        SelectedEnemy.myImage.transform.localScale = new Vector2(1, 1);
-
-        // YH
-        if (SelectedEnemy.gameObject.GetComponent<Dagger001>() != null)
+        if (SelectedEnemy != null)
         {
-            Dagger001 dagger001 = SelectedEnemy.gameObject.GetComponent<Dagger001>();
-            dagger001.image_character.sprite = dagger001.sprite_idle;
+            SelectedEnemy.myImage.transform.localScale = new Vector2(1, 1);
+
+            // YH
+            if (SelectedEnemy.gameObject.GetComponent<Dagger001>() != null)
+            {
+                Dagger001 dagger001 = SelectedEnemy.gameObject.GetComponent<Dagger001>();
+                dagger001.image_character.sprite = dagger001.sprite_idle;
+            }
+
+            SelectedEnemy.hpSlider.gameObject.SetActive(true);
+
+            SelectedEnemy = null;
+
+            g.SetActive(false);
         }
-
-        SelectedEnemy.hpSlider.gameObject.SetActive(true);
-
-        SelectedEnemy = null;
-
-        g.SetActive(false);
     }
 
     public void setThis(Enemy e)
@@ -59,5 +62,7 @@ public class EnemyInfo : MonoBehaviour
         t[0].text = e.Name;
         t[1].text = e.Hp + "/" + e.maxHp + "";
         t[2].text = e.Armor + "";
+
+        Debug.Log(SelectedEnemy);
     }
 }
