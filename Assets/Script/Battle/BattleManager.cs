@@ -276,7 +276,8 @@ public class BattleManager : MonoBehaviour
     }
     public void Click_toMain() //메인화면으로 가기 위함
     {
-        SceneManager.LoadScene("Main"); //지금은 메인화면으로 갈 때 데이터를 저장하게 되는데, 승리시에만 하도록 추후에 변경해야함
+        StartCoroutine(SceneControllerManager.Instance.SwitchScene("Scene1_Main"));
+        //SceneManager.LoadScene("Scene1_Main"); //지금은 메인화면으로 갈 때 데이터를 저장하게 되는데, 승리시에만 하도록 추후에 변경해야함
     }
 
     public void Click_Menu()
@@ -1038,7 +1039,8 @@ public class BattleManager : MonoBehaviour
         string GameData = JsonConvert.SerializeObject(GD);
         File.WriteAllText(path3, GameData);
         Time.timeScale = 1;
-        SceneManager.LoadScene("Lobby");
+        StartCoroutine(SceneControllerManager.Instance.SwitchScene("Scene2_Lobby"));
+        //SceneManager.LoadScene("Scene2_Lobby");
     }
 
     public void Defetead() //패배했을 시 패배 창 띄우기

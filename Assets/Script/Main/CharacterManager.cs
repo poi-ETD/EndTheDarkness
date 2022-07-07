@@ -43,7 +43,8 @@ public class CharacterManager : MonoBehaviour
         string characterData = JsonConvert.SerializeObject(CD);       
         string path = Path.Combine(Application.persistentDataPath, "CharacterData.json");                       
         File.WriteAllText(path, characterData);
-        SceneManager.LoadScene("Lobby");
+        StartCoroutine(SceneControllerManager.Instance.SwitchScene("Scene2_Lobby"));
+        //SceneManager.LoadScene("Scene2_Lobby");
     }
     public void RemoveCharacter(int i)
     {if(i<CharacterList.Count)

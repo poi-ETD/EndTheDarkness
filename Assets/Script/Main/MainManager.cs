@@ -44,7 +44,8 @@ public class MainManager : MonoBehaviour
         }
         else
         {
-            SceneManager.LoadScene("Lobby");
+            StartCoroutine(SceneControllerManager.Instance.SwitchScene("Scene2_Lobby"));
+            //SceneManager.LoadSceneAsync("Scene2_Lobby", LoadSceneMode.Additive);
         }
     }
     public void NewGame()

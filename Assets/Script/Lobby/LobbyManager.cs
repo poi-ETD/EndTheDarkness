@@ -516,7 +516,8 @@ public class LobbyManager : MonoBehaviour
     public void goHome()
     {
         save();
-        SceneManager.LoadScene("Main");
+        StartCoroutine(SceneControllerManager.Instance.SwitchScene("Scene1_Main"));
+        //SceneManager.LoadScene("Scene1_Main");
     }
     public void Actfalse()
     {
@@ -703,7 +704,8 @@ public class LobbyManager : MonoBehaviour
         {
             GD.isAct = true;
             save();
-            SceneManager.LoadScene("battle");
+            StartCoroutine(SceneControllerManager.Instance.SwitchScene("Scene3_Battle"));
+            //SceneManager.LoadScene("Scene3_Battle");
         }
     }
     public void getMoney()

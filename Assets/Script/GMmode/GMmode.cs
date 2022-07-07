@@ -57,7 +57,8 @@ public void GoLobby()
         string gameData = JsonConvert.SerializeObject(GD);
         path = Path.Combine(Application.persistentDataPath, "GameData.json");
         File.WriteAllText(path, gameData);
-        SceneManager.LoadScene("Lobby");
+        StartCoroutine(SceneControllerManager.Instance.SwitchScene("Scene2_Lobby"));
+        //SceneManager.LoadScene("Scene2_Lobby");
     }   
     void SaveCard()
     {
