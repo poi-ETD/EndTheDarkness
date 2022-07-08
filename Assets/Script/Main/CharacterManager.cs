@@ -29,8 +29,12 @@ public class CharacterManager : MonoBehaviour
     [SerializeField] CardSetManager cardManager;
     [SerializeField] Image SubImage;
     [SerializeField] GameObject warnPopup;
+
+    [SerializeField] private GameObject go_Window_SlotName;
+    [SerializeField] private Text text_SlotName;
+
     public void ToMain()
-    { 
+    {
         cardManager.SaveCard();
         for(int i = 0; i < CharacterList.Count; i++)
         {
@@ -41,11 +45,16 @@ public class CharacterManager : MonoBehaviour
         }
         CD.size = CharacterList.Count;
         string characterData = JsonConvert.SerializeObject(CD);       
-        string path = Path.Combine(Application.persistentDataPath, "CharacterData.json");                       
+        string path = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CharacterDatas[GameManager.Instance.numberOfSlot]);                       
         File.WriteAllText(path, characterData);
+
+        GameManager.Instance.nowSlot = GameManager.Instance.numberOfSlot; // 게임을 시작하기 전 현재 슬롯 번호를 초기화함. 이후 게임 내에선 이 현재 슬롯번호를 이용함
+        GameManager.Instance.numberOfSlot++; // 게임 슬롯을 하나 더 만들었으니 현재 보유하고 있는 슬롯의 수를 증가시킴
+
         StartCoroutine(SceneControllerManager.Instance.SwitchScene("Scene3_Lobby"));
         //SceneManager.LoadScene("Scene2_Lobby");
     }
+
     public void RemoveCharacter(int i)
     {
         if (i < CharacterList.Count)
@@ -58,12 +67,6 @@ public class CharacterManager : MonoBehaviour
         curPassive = -1;
         curFormation = -1;
         counter = -1;
-        string path = Path.Combine(Application.persistentDataPath, "CharacterData.json");
-        if (File.Exists(path))
-        {
-            string characterData = File.ReadAllText(path);
-            CD = JsonConvert.DeserializeObject<CharacterData>(characterData);
-        }
 
         for (int i = 1; i < CD2.cd.Length; i++)
         {
@@ -151,7 +154,7 @@ public class CharacterManager : MonoBehaviour
 
         if (counter+1 >= CharacterList.Count)
         {
-            ToMain();
+            go_Window_SlotName.SetActive(true);
             return;
         }
 
@@ -218,6 +221,13 @@ public class CharacterManager : MonoBehaviour
             curFormation = i;
             FrontButton[curFormation].color = new Color(1, 0, 0);
         }
+    }
+
+    public void Click_Button_OK_SlotName()
+    {
+        GameManager.Instance.slot_Names[GameManager.Instance.numberOfSlot] = text_SlotName.text;
+
+        ToMain();
     }
 }
 

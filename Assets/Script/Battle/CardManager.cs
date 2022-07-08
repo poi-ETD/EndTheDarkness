@@ -52,7 +52,7 @@ public class CardManager : MonoBehaviour
         deckText[4] = "포르테";
         deckText[5] = "령";
         //string filepath = Application.persistentDataPath + "/CardData.json";
-        string path = Path.Combine(Application.persistentDataPath, "CardData.json");
+        string path = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CardDatas[GameManager.Instance.nowSlot]);
         if (File.Exists(path))
         {
             string cardData = File.ReadAllText(path);

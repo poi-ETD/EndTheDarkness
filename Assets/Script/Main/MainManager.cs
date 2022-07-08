@@ -10,6 +10,9 @@ public class MainManager : MonoBehaviour
     bool smallmode;
     [SerializeField] Text smallt;
     [SerializeField] Text ContinueT;
+
+    [SerializeField] private GameObject go_Main;
+    [SerializeField] private GameObject go_New;
     public void SmallMode()
     {
         if (smallmode == false)
@@ -28,16 +31,14 @@ public class MainManager : MonoBehaviour
     }
     private void Awake()
     {
-        string path = Path.Combine(Application.persistentDataPath, "CharacterData.json");
-        if (!File.Exists(path))
-        {
-            
-            ContinueT.color = new Color(0.4f, 0.4f, 0.4f);
-        }
+        //string path = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CharacterDatas[GameManager.Instance.nowSlot]);
+
+        //if (!File.Exists(path))
+        //    ContinueT.color = new Color(0.4f, 0.4f, 0.4f);
     }
-    public void Continue()
+    public void ContinueGame()
     {
-        string path = Path.Combine(Application.persistentDataPath, "CharacterData.json");
+        string path = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CharacterDatas[GameManager.Instance.nowSlot]);
         if (!File.Exists(path))
             return;
         else
@@ -45,19 +46,34 @@ public class MainManager : MonoBehaviour
     }
     public void NewGame()
     {
-        string path = Path.Combine(Application.persistentDataPath, "CharacterData.json");
-        string path2 = Path.Combine(Application.persistentDataPath, "CardData.json");
-        string path3 = Path.Combine(Application.persistentDataPath, "GameData.json");
-        if (File.Exists(path))
-            File.Delete(path);
-        if (File.Exists(path2))
-            File.Delete(path2);
-        if (File.Exists(path3))
-            File.Delete(path3);
-
-        StartCoroutine(SceneControllerManager.Instance.SwitchScene("Scene2_Character"));
-        //SceneManager.LoadScene("character");
+        go_Main.SetActive(false);
+        go_New.SetActive(true);
     }
+
+    public void Click_Button_NewSlot()
+    {
+        if (GameManager.Instance.numberOfSlot < 10)
+        {
+            //string path = Path.Combine(Application.persistentDataPath, "CharacterData.json");
+            //string path2 = Path.Combine(Application.persistentDataPath, "CardData.json");
+            string path_GameData = Path.Combine(Application.persistentDataPath, "GameData.json");
+            //if (File.Exists(path))
+            //    File.Delete(path);
+            //if (File.Exists(path2))
+            //    File.Delete(path2);
+            if (File.Exists(path_GameData))
+                File.Delete(path_GameData);
+
+            StartCoroutine(SceneControllerManager.Instance.SwitchScene("Scene2_Character"));
+            //SceneManager.LoadScene("character");
+        }
+    }
+
+    public void Click_Button_ContinueSlot()
+    {
+
+    }
+
     /* public GameObject[,] Enemys;
      public BattleData bd=new BattleData();
      float wtime;

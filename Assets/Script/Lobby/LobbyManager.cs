@@ -82,8 +82,8 @@ public class LobbyManager : MonoBehaviour
     [SerializeField] GameObject tributeView;
     private void Awake()
     {
-        string path = Path.Combine(Application.persistentDataPath, "CardData.json");
-        string path2 = Path.Combine(Application.persistentDataPath, "CharacterData.json");
+        string path = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CardDatas[GameManager.Instance.nowSlot]);
+        string path2 = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CharacterDatas[GameManager.Instance.nowSlot]);
         string path3 = Path.Combine(Application.persistentDataPath, "GameData.json");
         if (File.Exists(path))
         {
@@ -498,11 +498,11 @@ public class LobbyManager : MonoBehaviour
     public void save()
     {
         string characterData = JsonConvert.SerializeObject(ChD);
-        string path = Path.Combine(Application.persistentDataPath, "CharacterData.json");
+        string path = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CharacterDatas[GameManager.Instance.nowSlot]);
         File.WriteAllText(path, characterData);
 
         string cardData = JsonConvert.SerializeObject(CD);
-        path = Path.Combine(Application.persistentDataPath, "CardData.json");
+        path = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CardDatas[GameManager.Instance.nowSlot]);
         File.WriteAllText(path, cardData);
 
         string gameData = JsonConvert.SerializeObject(GD);

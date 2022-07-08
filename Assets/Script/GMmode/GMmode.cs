@@ -21,8 +21,8 @@ public class GMmode : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        string path = Path.Combine(Application.persistentDataPath, "CardData.json");
-        string path2 = Path.Combine(Application.persistentDataPath, "CharacterData.json");
+        string path = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CardDatas[GameManager.Instance.nowSlot]);
+        string path2 = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CharacterDatas[GameManager.Instance.nowSlot]);
         if (File.Exists(path))
         {
             string cardData = File.ReadAllText(path);
@@ -48,11 +48,11 @@ public class GMmode : MonoBehaviour
 public void GoLobby()
     {
         string characterData = JsonConvert.SerializeObject(ChD);
-        string path = Path.Combine(Application.persistentDataPath, "CharacterData.json");
+        string path = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CharacterDatas[GameManager.Instance.nowSlot]);
         File.WriteAllText(path, characterData);
         SaveCard();
         string cardData = JsonConvert.SerializeObject(CD);
-        path = Path.Combine(Application.persistentDataPath, "CardData.json");
+        path = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CardDatas[GameManager.Instance.nowSlot]);
         File.WriteAllText(path, cardData);
         string gameData = JsonConvert.SerializeObject(GD);
         path = Path.Combine(Application.persistentDataPath, "GameData.json");

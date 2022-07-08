@@ -22,13 +22,7 @@ public class CardSetManager : MonoBehaviour
     private void Awake()
     {
         //string filepath = Application.persistentDataPath + "/CardData.json";
-        string path = Path.Combine(Application.persistentDataPath, "CardData.json");
-        if (File.Exists(path))
-        {           
-            string cardData = File.ReadAllText(path);
-            CD = JsonConvert.DeserializeObject<CardData>(cardData);
 
-        }
         AllCard = CD.cardNo.Count;
         for (int i = 0; i < AllCard; i++)
         {
@@ -113,9 +107,9 @@ public void SaveCard()
 
             }
         }
-       
+        
         string cardData = JsonConvert.SerializeObject(CD);
-        string path = Path.Combine(Application.persistentDataPath, "CardData.json");
+        string path = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CardDatas[GameManager.Instance.numberOfSlot]);
         File.WriteAllText(path, cardData);
     }  
 }
