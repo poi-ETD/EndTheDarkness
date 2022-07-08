@@ -51,7 +51,7 @@ public class CardManager : MonoBehaviour
         deckText[3] = "반가라";
         deckText[4] = "포르테";
         deckText[5] = "령";
-        string filepath = Application.persistentDataPath + "/CardData.json";
+        //string filepath = Application.persistentDataPath + "/CardData.json";
         string path = Path.Combine(Application.persistentDataPath, "CardData.json");
         if (File.Exists(path))
         {

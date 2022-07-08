@@ -43,14 +43,16 @@ public class CharacterManager : MonoBehaviour
         string characterData = JsonConvert.SerializeObject(CD);       
         string path = Path.Combine(Application.persistentDataPath, "CharacterData.json");                       
         File.WriteAllText(path, characterData);
-        StartCoroutine(SceneControllerManager.Instance.SwitchScene("Scene2_Lobby"));
+        StartCoroutine(SceneControllerManager.Instance.SwitchScene("Scene3_Lobby"));
         //SceneManager.LoadScene("Scene2_Lobby");
     }
     public void RemoveCharacter(int i)
-    {if(i<CharacterList.Count)
-        CharacterList.RemoveAt(i);
+    {
+        if (i < CharacterList.Count)
+            CharacterList.RemoveAt(i);
         setListImage();
     }
+
     private void Awake()
     {
         curPassive = -1;
@@ -61,18 +63,19 @@ public class CharacterManager : MonoBehaviour
         {
             string characterData = File.ReadAllText(path);
             CD = JsonConvert.DeserializeObject<CharacterData>(characterData);
-         
-        }
-   for(int i = 1; i < CD2.cd.Length; i++)
-        {
-            GameObject cha = Instantiate(Prefebs, Canvas.transform);
-            cha.GetComponent<CharacterSetting>().SetCharacter(i,CharacterImgae[i]);
         }
 
+        for (int i = 1; i < CD2.cd.Length; i++)
+        {
+            GameObject cha = Instantiate(Prefebs, Canvas.transform);
+            cha.GetComponent<CharacterSetting>().SetCharacter(i, CharacterImgae[i]);
+        }
     }
+
     public void setCharacter(int n)
     {
         bool isThere=false;
+
         for(int i = 0; i < CharacterList.Count; i++)
         {
             if (CharacterList[i] == n)
@@ -81,13 +84,13 @@ public class CharacterManager : MonoBehaviour
                 isThere = true;
             }
         }
+
         if (!isThere && CharacterList.Count < 4)
-        {
-          
             CharacterList.Add(n);
-        }
+
         setListImage();
     }
+
     void setListImage()
     {
         for(int i = 0; i < CharacterList.Count; i++)
@@ -95,63 +98,71 @@ public class CharacterManager : MonoBehaviour
             listImage[i].sprite = CharacterFaceImgae[CharacterList[i]];
             listImage[i].color = new Color(1, 1, 1, 1);
         }
+
         for(int i = CharacterList.Count; i < 4; i++)
-        {
             listImage[i].color = new Color(1, 1, 1, 0);
-        }
     }
+
     public bool noSelect;
+
     public void noSelectMakeFalse()
     {
         noSelect = false;
     }
+
     [SerializeField] GameObject MaxCardPopup;
-    public void SetSubSetting() //1->이름 2~5 -> 패시브 1 6->패시브 팝업 텍스트
-    {      
+
+    public void SetSubSetting() // 1->이름, 2~5->패시브 1, 6->패시브 팝업 텍스트
+    {
         if (counter > -1)
-        { int no = CharacterList[counter];
+        {
+            int no = CharacterList[counter];
             if (curFormation == -1)
             {
                 warnPopup.SetActive(true);
                 SetText[6].text = "진형이 설정되지 않았습니다.";
                 return;
             }
+
             if (curPassive == -1)
             {
                 warnPopup.SetActive(true);
                 SetText[6].text = "패시브가 설정되지 않았습니다.";
                 return;
             }
-            if (cardManager.curCardCount < cardManager.maxiumCardCount&&!noSelect)
+
+            if (cardManager.curCardCount < cardManager.maxiumCardCount && !noSelect)
             {
                 noSelect = true;
                 MaxCardPopup.SetActive(true);
                 return;
             }
+
             noSelect = false;
             MaxCardPopup.SetActive(false);
             // public curCharacterData(string name, int no, int cost, int atk, 
             //int maxHp, int curHp, int passive1, int passive2, int passive3, int passive4, int curFormation)
             int[] passiveO = new int[4];
-            CD.characterDatas[counter]=new CharacterData.curCharacterData(
-                CD2.cd[no].Name, no, CD2.cd[no].Cost, CD2.cd[no].Atk,CD2.cd[no].Def,CD2.cd[no].speed, CD2.cd[no].maxHp, CD2.cd[no].maxHp,passiveO,curFormation,-1);
+            CD.characterDatas[counter] = new CharacterData.curCharacterData(
+                CD2.cd[no].Name, no, CD2.cd[no].Cost, CD2.cd[no].Atk, CD2.cd[no].Def, CD2.cd[no].speed, CD2.cd[no].maxHp, CD2.cd[no].maxHp, passiveO, curFormation, -1);
             CD.characterDatas[counter].passive[curPassive]++;
-           
+
         }
-      
+
         if (counter+1 >= CharacterList.Count)
         {
             ToMain();
             return;
         }
+
         counter++;
         cardManager.clear();
+
         if(CharacterList[counter]==1)
-        cardManager.getStarterCard(CharacterList[counter],5);
+            cardManager.getStarterCard(CharacterList[counter],5);
         else
-        {
             cardManager.getStarterCard(CharacterList[counter], 1);
-        }
+
         SubImage.sprite = CharacterImgae[CharacterList[counter]];
         SetText[0].text = CD2.cd[CharacterList[counter]].Name;
         SetText[1].text = CD2.cd[CharacterList[counter]].passive[0];
@@ -162,23 +173,26 @@ public class CharacterManager : MonoBehaviour
         curPassive = -1;
         curFormation = -1;
         PassivePopup.SetActive(false);
+
         for(int i=0;i<4;i++)
-        Arrows[i].SetActive(false);
+            Arrows[i].SetActive(false);
+
         FrontButton[0].color = new Color(1, 1, 1);
         FrontButton[1].color = new Color(1, 1, 1);
     }
+
     public void setPassive(int i)
     {
         if (curPassive != i)
-        {          
+        {
             PassivePopup.SetActive(true);
-            
-                SetText[5].text = CD2.cd[CharacterList[counter]].passiveContent[i];
-            
+
+            SetText[5].text = CD2.cd[CharacterList[counter]].passiveContent[i];
+
             if (curPassive != -1)
                 Arrows[curPassive].SetActive(false);
             curPassive = i;
-           
+
             Arrows[i].SetActive(true);
         }
         else
@@ -188,6 +202,7 @@ public class CharacterManager : MonoBehaviour
             curPassive = -1;
         }
     }
+
     public void setFormation(int i)
     {
         if (i == curFormation)
@@ -198,7 +213,8 @@ public class CharacterManager : MonoBehaviour
         else
         {
             if(curFormation!=-1)
-            FrontButton[curFormation].color = new Color(1, 1, 1);
+                FrontButton[curFormation].color = new Color(1, 1, 1);
+
             curFormation = i;
             FrontButton[curFormation].color = new Color(1, 0, 0);
         }

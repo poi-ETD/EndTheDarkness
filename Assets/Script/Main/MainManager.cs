@@ -39,14 +39,9 @@ public class MainManager : MonoBehaviour
     {
         string path = Path.Combine(Application.persistentDataPath, "CharacterData.json");
         if (!File.Exists(path))
-        {
             return;
-        }
         else
-        {
-            StartCoroutine(SceneControllerManager.Instance.SwitchScene("Scene2_Lobby"));
-            //SceneManager.LoadSceneAsync("Scene2_Lobby", LoadSceneMode.Additive);
-        }
+            StartCoroutine(SceneControllerManager.Instance.SwitchScene("Scene3_Lobby"));
     }
     public void NewGame()
     {
@@ -54,13 +49,14 @@ public class MainManager : MonoBehaviour
         string path2 = Path.Combine(Application.persistentDataPath, "CardData.json");
         string path3 = Path.Combine(Application.persistentDataPath, "GameData.json");
         if (File.Exists(path))
-            System.IO.File.Delete(path);
+            File.Delete(path);
         if (File.Exists(path2))
-            System.IO.File.Delete(path2);
+            File.Delete(path2);
         if (File.Exists(path3))
-            System.IO.File.Delete(path3);
-        SceneManager.LoadScene("character");
-    
+            File.Delete(path3);
+
+        StartCoroutine(SceneControllerManager.Instance.SwitchScene("Scene2_Character"));
+        //SceneManager.LoadScene("character");
     }
     /* public GameObject[,] Enemys;
      public BattleData bd=new BattleData();

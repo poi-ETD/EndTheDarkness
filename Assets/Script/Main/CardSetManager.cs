@@ -21,7 +21,7 @@ public class CardSetManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI cardCount;
     private void Awake()
     {
-        string filepath = Application.persistentDataPath + "/CardData.json";
+        //string filepath = Application.persistentDataPath + "/CardData.json";
         string path = Path.Combine(Application.persistentDataPath, "CardData.json");
         if (File.Exists(path))
         {           
@@ -122,9 +122,9 @@ public void SaveCard()
 
 public class CardData
 {
-    public List<int> cardNo = new List<int>();
-    public List<int> cardCost = new List<int>();
-    public List<int> cardGet = new List<int>();
+    public List<int> cardNo = new List<int>(); // 소유한 카드들의 넘버 (ex:인덱스 0부터 4까지 [1, 1, 1, 1, 1] 이라면 넘버 1 카드 5장을 소유하고 있는 것)
+    public List<int> cardCost = new List<int>(); // 소유한 카드들의 코스트
+    public List<int> cardGet = new List<int>(); // 소유한 카드들의 획득 순서
     public int get;
     
 }

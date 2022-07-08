@@ -1039,7 +1039,7 @@ public class BattleManager : MonoBehaviour
         string GameData = JsonConvert.SerializeObject(GD);
         File.WriteAllText(path3, GameData);
         Time.timeScale = 1;
-        StartCoroutine(SceneControllerManager.Instance.SwitchScene("Scene2_Lobby"));
+        StartCoroutine(SceneControllerManager.Instance.SwitchScene("Scene3_Lobby"));
         //SceneManager.LoadScene("Scene2_Lobby");
     }
 

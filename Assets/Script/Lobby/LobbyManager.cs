@@ -84,6 +84,7 @@ public class LobbyManager : MonoBehaviour
     {
         string path = Path.Combine(Application.persistentDataPath, "CardData.json");
         string path2 = Path.Combine(Application.persistentDataPath, "CharacterData.json");
+        string path3 = Path.Combine(Application.persistentDataPath, "GameData.json");
         if (File.Exists(path))
         {
             string cardData = File.ReadAllText(path);
@@ -94,7 +95,6 @@ public class LobbyManager : MonoBehaviour
             string characterData = File.ReadAllText(path2);
             ChD = JsonConvert.DeserializeObject<CharacterData>(characterData);
         }
-        string path3 = Path.Combine(Application.persistentDataPath, "GameData.json");
         if (File.Exists(path3))
         {
             string gameData = File.ReadAllText(path3);
@@ -403,7 +403,9 @@ public class LobbyManager : MonoBehaviour
     public void GetPassiveInGM() //개발용
     {
         if (canvasOn) return;
-        SceneManager.LoadScene("GMmode");
+
+        StartCoroutine(SceneControllerManager.Instance.SwitchScene("Scene4_GMmode"));
+        //SceneManager.LoadScene("GMmode");
 
     }
     public void GetPassive()
@@ -498,12 +500,15 @@ public class LobbyManager : MonoBehaviour
         string characterData = JsonConvert.SerializeObject(ChD);
         string path = Path.Combine(Application.persistentDataPath, "CharacterData.json");
         File.WriteAllText(path, characterData);
+
         string cardData = JsonConvert.SerializeObject(CD);
         path = Path.Combine(Application.persistentDataPath, "CardData.json");
         File.WriteAllText(path, cardData);
+
         string gameData = JsonConvert.SerializeObject(GD);
         path = Path.Combine(Application.persistentDataPath, "GameData.json");
         File.WriteAllText(path, gameData);
+
         IgnumT.text = GD.Ignum + "";
         TributeT.text = GD.tribute + "";
     }
@@ -704,7 +709,7 @@ public class LobbyManager : MonoBehaviour
         {
             GD.isAct = true;
             save();
-            StartCoroutine(SceneControllerManager.Instance.SwitchScene("Scene3_Battle"));
+            StartCoroutine(SceneControllerManager.Instance.SwitchScene("Scene5_Battle"));
             //SceneManager.LoadScene("Scene3_Battle");
         }
     }
