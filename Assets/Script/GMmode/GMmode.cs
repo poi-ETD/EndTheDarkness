@@ -59,7 +59,22 @@ public void GoLobby()
         File.WriteAllText(path, gameData);
         StartCoroutine(SceneControllerManager.Instance.SwitchScene("Scene3_Lobby"));
         //SceneManager.LoadScene("Scene2_Lobby");
-    }   
+    }  
+    public void GetIgnum()
+    {
+        GD.Ignum += 10000;
+    }
+    public void GetTribute()
+    {
+        GD.tribute += 10000;
+    }
+    public void GetAct()
+    {
+        GD.isNight = false;
+        GD.isAct = false;
+        GD.isActInDay = false;
+        
+    }
     void SaveCard()
     {
         CD.cardCost.Clear();
@@ -81,8 +96,12 @@ public void GoLobby()
         }
     }
     public void OpenCardView()
-    {  
-        for(int i = 0; i < CD.cardNo.Count; i++)
+    {
+        for (int i = 0; i <CaInfo.cd.Length; i++)
+        {
+            CardCount[i] = 0;
+        }
+        for (int i = 0; i < CD.cardNo.Count; i++)
         {
             CardCount[CD.cardNo[i]]++;
         }

@@ -87,6 +87,7 @@ public class LobbyManager : MonoBehaviour
         string path3 = Path.Combine(Application.persistentDataPath, "GameData.json");
         if (File.Exists(path))
         {
+            Debug.Log(path);
             string cardData = File.ReadAllText(path);
             CD = JsonConvert.DeserializeObject<CardData>(cardData);
         }
@@ -274,7 +275,6 @@ public class LobbyManager : MonoBehaviour
             canvasOn = true;
             PopUpCanvas.SetActive(true);
             CharacterView.SetActive(true);
-
 
             for (int i = 0; i < ChD.size; i++)
             {
@@ -712,6 +712,10 @@ public class LobbyManager : MonoBehaviour
             StartCoroutine(SceneControllerManager.Instance.SwitchScene("Scene5_Battle"));
             //SceneManager.LoadScene("Scene3_Battle");
         }
+    }
+    public void click_button_GMmode()
+    {
+        StartCoroutine(SceneControllerManager.Instance.SwitchScene("Scene4_GMmode"));
     }
     public void getMoney()
     {

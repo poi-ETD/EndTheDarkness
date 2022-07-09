@@ -38,13 +38,15 @@ public class CardSetManager : MonoBehaviour
     */
     }
     public void getStarterCard(int no,int counter) //->no==0이면 모든 카드, type==1->스타트 2->직업
-    {
+    {      
         curCardCount = 0;
         maxiumCardCount = counter;
         cardCount.text = "선택 가능한 최대 카드 수 : " + maxiumCardCount;
         for (int i = 1; i < cd.cd.Length; i++)
-        {if (cd.cd[i].Deck == no && cd.cd[i].type == 0)
+        {
+            if (cd.cd[i].Deck == no && cd.cd[i].type == 0)
             {
+                //Debug.Log(cd.cd[i].No);
                 GameObject newCard = Instantiate(CardPrefebs, Canvas.transform);
                 newCard.GetComponent<NoBattleCard>().setCardInfo(i);
             }

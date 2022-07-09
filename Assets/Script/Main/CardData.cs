@@ -14,7 +14,7 @@ public class CardData2
         public int type; // 기본&스타터,에디셔녈,토큰
         public int select; // 0->선택X 1->적 선택2->묘지on,묘지 선택 3 ->덱 on,덱 선택 4->스케치반복 5->아군 선택
      
-        public cardData(string Name, string Content, int Cost, int Deck,int type,int No,int select)
+        public cardData(string Name, string Content, int No, int Cost, int Deck,int type,int select)
         {
             this.Name = Name;
             this.Content = Content;
