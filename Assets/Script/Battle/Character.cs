@@ -68,6 +68,7 @@ public class Character : MonoBehaviour
     public int lobbyNum;
 
     
+
     public void useAct(int i)
     {
        // turnAct -= i;
@@ -131,58 +132,69 @@ public class Character : MonoBehaviour
     private void Start()
     {
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
+        myPassive = GetComponent<CharacterPassive>();
         if (BM.ChD.characterDatas[lobbyNum].curEquip != -1)
         {
             equipment myEquip = BM.GD.EquipmentList[BM.ChD.characterDatas[lobbyNum].curEquip];
-            bool cantEquip = false;
-            if (myEquip.type == 1 && BM.ChD.characterDatas[lobbyNum].curFormation == 0)
+            if (myEquip.special == 0)
             {
-                cantEquip = true;
-            }
-            if (myEquip.type == 0 && BM.ChD.characterDatas[lobbyNum].curFormation == 1)
-            {
-                cantEquip = true;
-            }
-
-            if (!cantEquip)
-            {
-                for (int i = 0; i < myEquip.improveMount.Count; i++)
+                bool cantEquip = false;
+                if (myEquip.type == 1 && BM.ChD.characterDatas[lobbyNum].curFormation == 0)
                 {
+                    cantEquip = true;
+                }
+                if (myEquip.type == 0 && BM.ChD.characterDatas[lobbyNum].curFormation == 1)
+                {
+                    cantEquip = true;
+                }
 
-                    switch (myEquip.improveStat[i])
+                if (!cantEquip)
+                {
+                    for (int i = 0; i < myEquip.improveMount.Count; i++)
+                    {
+
+                        switch (myEquip.improveStat[i])
+                        {
+                            case 0:
+                                AtkUp(myEquip.improveMount[i]);
+                                break;
+                            case 1:
+                                DefUp(myEquip.improveMount[i]);
+                                break;
+                            case 2:
+                                maxHp += myEquip.improveMount[i];
+                                break;
+                            case 3:
+                                cost += myEquip.improveMount[i];
+                                break;
+                            case 4:
+                                Act++;
+                                break;
+                        }
+                    }
+                    switch (myEquip.degradeStat)
                     {
                         case 0:
-                            AtkUp(myEquip.improveMount[i]);
+                            AtkUp(-myEquip.degradeMount);
                             break;
                         case 1:
-                            DefUp(myEquip.improveMount[i]);
+                            DefUp(-myEquip.degradeMount);
                             break;
                         case 2:
-                            maxHp += myEquip.improveMount[i];
+                            maxHp -= myEquip.degradeMount;
                             break;
                         case 3:
-                            cost += myEquip.improveMount[i];
+                            cost -= myEquip.degradeMount;
                             break;
-                        case 4:
-                            Act++;
-                            break;
+
                     }
                 }
-                switch (myEquip.degradeStat)
+            }
+            else //전용 장비
+            {
+                if (myEquip.special == characterNo)
                 {
-                    case 0:
-                        AtkUp(-myEquip.degradeMount);
-                        break;
-                    case 1:
-                        DefUp(-myEquip.degradeMount);
-                        break;
-                    case 2:
-                        maxHp -= myEquip.degradeMount;
-                        break;
-                    case 3:
-                        cost -= myEquip.degradeMount;
-                        break;
-
+                    myPassive.haveMyEquip = true;
                 }
             }
         }
@@ -192,7 +204,7 @@ public class Character : MonoBehaviour
         //endurT.text = "" + endur;
 
       
-        myPassive = GetComponent<CharacterPassive>();
+      
         myImage = transform.GetChild(8).GetComponent<Image>();
       
         if (Hp <= 0) die();
@@ -321,6 +333,12 @@ public class Character : MonoBehaviour
         if (Hp < 0) Hp = 0;
         hpT.text = "<color=#a39fff><b>" + stringHp + "</color></b><size=15>/" + maxHp + "</size>";   
 
+    }
+    public void Recover(int amount)
+    {
+        Hp += amount;
+        if (Hp > maxHp) Hp = maxHp;
+        hpT.text = "<color=#a39fff><b>" + Hp + "</color></b><size=15>/" + maxHp + "</size>";
     }
     void die()
     {

@@ -266,17 +266,17 @@ public class Card : MonoBehaviour
         BM.log.logContent.text += "\n" + BM.actCharacter.Name + "이(가) " + Name.text + " 발동!";
         if (cardNo == 1)
         {          
-            BM.OnDmgOneTarget(7,BM.selectedEnemy,1);         
+            BM.OnDmgOneTarget(7,BM.selectedEnemy,BM.selectedCharacter,1);         
         }
         if (cardNo == 3)
         {                
-            BM.OnDmgOneTarget(7, BM.selectedEnemy,1);
+            BM.OnDmgOneTarget(7, BM.selectedEnemy,BM.selectedCharacter,1);
             BM.specialDrow(1);          
         }
      
         if (cardNo == 11)
         {
-            BM.OnDmgOneTarget(15, BM.selectedEnemy,1);
+            BM.OnDmgOneTarget(15, BM.selectedEnemy,BM.selectedCharacter,1);
        
         }
         if (cardNo == 14)
@@ -289,25 +289,25 @@ public class Card : MonoBehaviour
                     q = BM.characters[i].GetComponent<CharacterPassive>();
                 }
             }
-            BM.OnDmgOneTarget(q.ghost, BM.selectedEnemy,1);
+            BM.OnDmgOneTarget(q.ghost, BM.selectedEnemy,BM.selectedCharacter,1);
             BM.ghostRevive(-1 * q.ghost);
            BM.ghostRevive(30);
         }
         if (cardNo == 15)
         {
-            BM.OnDmgOneTarget(CM.Grave.Count, BM.selectedEnemy,1);
+            BM.OnDmgOneTarget(CM.Grave.Count, BM.selectedEnemy,BM.selectedCharacter,1);
             BM.ghostRevive(CM.Grave.Count);
         }
    
         if (cardNo == 19)
         {
-            BM.OnDmgOneTarget(4, BM.selectedEnemy,7);                      
+            BM.OnDmgOneTarget(4, BM.selectedEnemy,BM.selectedCharacter,7);                      
         }
         if (cardNo == 27)
         {
             if (BM.selectedEnemy.status[(int)Enums.Status.weak] > 0)
             {
-            BM.OnDmgOneTarget(15, BM.selectedEnemy, 1);
+            BM.OnDmgOneTarget(15, BM.selectedEnemy, BM.selectedCharacter,1);
             }
             for (int i = 0; i < BM.characters.Count; i++)
             {

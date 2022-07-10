@@ -80,7 +80,7 @@ public class LobbyManager : MonoBehaviour
 
 
     [SerializeField] GameObject tributeView;
-    private void Awake()
+    private void Start()
     {
         string path = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CardDatas[GameManager.Instance.nowSlot]);
         string path2 = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CharacterDatas[GameManager.Instance.nowSlot]);
@@ -291,7 +291,9 @@ public class LobbyManager : MonoBehaviour
                     equipment e = GD.EquipmentList[ChD.characterDatas[i].curEquip];
                     List<string> sList = EquipmentManager.Instance.equipmentStrings(e);
                     s1 = sList[0];
-                    s2 = sList[1] + '\n' + sList[2] + '\n' + sList[3];
+                    if (e.special == 0)
+                        s2 = sList[1] + '\n' + sList[2] + '\n' + sList[3];
+                    else s2 = sList[1];
                     spr = EquipmentManager.Instance.equipSpr[e.equipNum];
                 }
                 CharacterView.transform.GetChild(i).gameObject.SetActive(true);
@@ -318,9 +320,13 @@ public class LobbyManager : MonoBehaviour
             EquipmentContent.transform.GetChild(i).gameObject.SetActive(true);
             EquipmentContent.transform.GetChild(i).GetChild(0).GetComponent<Image>().sprite = EquipmentManager.Instance.equipSpr[e.equipNum];
             EquipmentContent.transform.GetChild(i).GetChild(1).GetComponent<TextMeshProUGUI>().text = sList[0];
-            EquipmentContent.transform.GetChild(i).GetChild(2).GetComponent<TextMeshProUGUI>().text = sList[1] + '\n'
-                + sList[2] + '\n' + sList[3];
-            EquipmentContent.transform.GetChild(i).GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>().text = "착용";
+            if (e.special == 0)
+                EquipmentContent.transform.GetChild(i).GetChild(2).GetComponent<TextMeshProUGUI>().text = sList[1] + '\n'
+                    + sList[2] + '\n' + sList[3];
+            else EquipmentContent.transform.GetChild(i).GetChild(2).GetComponent<TextMeshProUGUI>().text = sList[1] + '\n'
+
+
+;            EquipmentContent.transform.GetChild(i).GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>().text = "착용";
         }
         for(int i = GD.EquipmentList.Count; i < 50; i++)
         {
@@ -934,9 +940,17 @@ public class LobbyManager : MonoBehaviour
             EquipManageContent.transform.GetChild(i).gameObject.SetActive(true);
             EquipManageContent.transform.GetChild(i).GetChild(0).GetComponent<Image>().sprite = EquipmentManager.Instance.equipSpr[e.equipNum];
             EquipManageContent.transform.GetChild(i).GetChild(1).GetComponent<TextMeshProUGUI>().text = sList[0];
-            EquipManageContent.transform.GetChild(i).GetChild(2).GetComponent<TextMeshProUGUI>().text = sList[1] + '\n'
-                + sList[2] + '\n' + sList[3];
-            EquipManageContent.transform.GetChild(i).GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>().text = "선택";
+            if (e.special == 0)
+            {
+                EquipManageContent.transform.GetChild(i).GetChild(2).GetComponent<TextMeshProUGUI>().text = sList[1] + '\n'
+                      + sList[2] + '\n' + sList[3];
+                EquipManageContent.transform.GetChild(i).GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>().text = "선택";
+            }
+            else
+            {
+                EquipManageContent.transform.GetChild(i).GetChild(2).GetComponent<TextMeshProUGUI>().text = sList[1];
+                EquipManageContent.transform.GetChild(i).GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>().text = "선택불가";
+            }
         }
         for (int i = GD.EquipmentList.Count; i < 50; i++)
         {
@@ -965,6 +979,7 @@ public class LobbyManager : MonoBehaviour
             if (ChD.characterDatas[i].curEquip == num) isEquip = true;
         }
         if (isEquip) return;
+        if (GD.EquipmentList[num].special != 0) return;
         string myCondition = me.transform.GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>().text;
         if (myCondition == "선택")
         {

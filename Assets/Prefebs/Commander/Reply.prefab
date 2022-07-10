@@ -674,8 +674,8 @@ MonoBehaviour:
   characterNo: 2
   maxHp: 45
   Hp: 0
-  Atk: 1
-  Armor: 0
+  atk: 0
+  armor: 0
   turnAct: 0
   turnAtk: 0
   def: 0
@@ -683,7 +683,7 @@ MonoBehaviour:
   Act: 1
   speed: 0
   curSpeed: 0
-  isAct: 0
+  curTurnActTime: 0
   TM: {fileID: 0}
   BM: {fileID: 0}
   hpT: {fileID: 6535696081620546607}
@@ -790,11 +790,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f337c7279b59e6438b23bb8eebe75bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ghost: 49
+  ghost: 0
   ghostText: {fileID: 0}
   upQ: {fileID: 0}
   DMGtext: {fileID: 3516283684887914833, guid: dd90e8f3edae7fc489918575a58fd894, type: 3}
-  ReplyAttackDone: 0
+  sparkyAttackDone: 0
+  haveMyEquip: 0
 --- !u!1 &6535696080571968689
 GameObject:
   m_ObjectHideFlags: 0

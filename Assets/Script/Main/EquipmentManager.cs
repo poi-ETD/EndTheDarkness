@@ -89,68 +89,99 @@ Resources.Load<Sprite>("temporal/axe_010")
         l1.Add(rand1);
         List<int> l2 = new List<int>();
         l2.Add(improveMount);
-        equipment e = new equipment(t, prefix[randPrefix]+" "+equipName[randEquip],l1,l2, rand2, degradeMount,randEquip);
+        equipment e = new equipment(t,0,"", prefix[randPrefix]+" "+equipName[randEquip],l1,l2, rand2, degradeMount,randEquip);
+        return e;
+    }
+    public equipment makeSpecialEquipment(int characterNo)
+    {       
+        CharacterData2 cd = new CharacterData2();
+        string Name = cd.cd[characterNo].specialEquipName;
+        string content = cd.cd[characterNo].specialEquipContent;
+        int t=0;
+        if (characterNo == 1||characterNo==2||characterNo==4||characterNo==5)
+        {
+            t = 2;
+        }
+        else if (characterNo == 3)
+        {
+            t = 0;
+        }
+        equipment e = new equipment(t,characterNo,Name,content,null,null,0,0,0);
         return e;
     }
     public List<string> equipmentStrings(equipment e)
     {
-        List<string> names= new List<string>();
-        string equipName = e.equipName;
-        names.Add(equipName);
-        string s = "착용 조건: ";
-        switch (e.type)
+        if (e.special == 0)
         {
-            case 0:s += "전방";
-                break;
-            case 1:s += "후방";
-                break;
-            case 2:s += "전체";
-                break;
-        }
-        names.Add(s);
-        s = "증가 스탯:";
-        for (int i = 0; i < e.improveStat.Count; i++)
-        {
-            if (i > 0) s += "\n";
-            switch (e.improveStat[i])
+            List<string> names = new List<string>();
+            string equipName = e.equipName;
+            names.Add(equipName);
+            string s = "착용 조건: ";
+            switch (e.type)
             {
-                case (int)Enums.EquipmentStat.atk:
-                    s += " 공격력(" + e.improveMount[i] + ")";
+                case 0:
+                    s += "전방";
                     break;
-                case (int)Enums.EquipmentStat.def:
-                    s += " 지구력(" + e.improveMount[i] + ")";
+                case 1:
+                    s += "후방";
                     break;
-                case (int)Enums.EquipmentStat.maxHp:
-                    s += " 최대 HP(" + e.improveMount[i] + ")";
-                    break;
-                case (int)Enums.EquipmentStat.cost:
-                    s += " 부여 코스트(" + e.improveMount[i] + ")";
-                    break;
-                case (int)Enums.EquipmentStat.act:
-                    s += " 행동력(" + e.improveMount[i] + ")";
+                case 2:
+                    s += "전체";
                     break;
             }
+            names.Add(s);
+            s = "증가 스탯:";
+            for (int i = 0; i < e.improveStat.Count; i++)
+            {
+                if (i > 0) s += "\n";
+                switch (e.improveStat[i])
+                {
+                    case (int)Enums.EquipmentStat.atk:
+                        s += " 공격력(" + e.improveMount[i] + ")";
+                        break;
+                    case (int)Enums.EquipmentStat.def:
+                        s += " 지구력(" + e.improveMount[i] + ")";
+                        break;
+                    case (int)Enums.EquipmentStat.maxHp:
+                        s += " 최대 HP(" + e.improveMount[i] + ")";
+                        break;
+                    case (int)Enums.EquipmentStat.cost:
+                        s += " 부여 코스트(" + e.improveMount[i] + ")";
+                        break;
+                    case (int)Enums.EquipmentStat.act:
+                        s += " 행동력(" + e.improveMount[i] + ")";
+                        break;
+                }
+            }
+            names.Add(s);
+            s = "감소 스탯:";
+            switch (e.degradeStat)
+            {
+                case (int)Enums.EquipmentStat.atk:
+                    s += " 공격력(" + e.degradeMount + ")";
+                    break;
+                case (int)Enums.EquipmentStat.def:
+                    s += " 지구력(" + e.degradeMount + ")";
+                    break;
+                case (int)Enums.EquipmentStat.maxHp:
+                    s += " 최대 HP(" + e.degradeMount + ")";
+                    break;
+                case (int)Enums.EquipmentStat.cost:
+                    s += " 부여 코스트(" + e.degradeMount + ")";
+                    break;
+
+            }
+            names.Add(s);
+            return names;
         }
-        names.Add(s);
-        s = "감소 스탯:";
-        switch (e.degradeStat)
+        else
         {
-            case (int)Enums.EquipmentStat.atk:
-                s += " 공격력(" + e.degradeMount + ")";
-                break;
-            case (int)Enums.EquipmentStat.def:
-                s += " 지구력(" + e.degradeMount + ")";
-                break;
-            case (int)Enums.EquipmentStat.maxHp:
-                s += " 최대 HP(" + e.degradeMount + ")";
-                break;
-            case (int)Enums.EquipmentStat.cost:
-                s += " 부여 코스트(" + e.degradeMount + ")";
-                break;
-          
+            List<string> names = new List<string>();
+            names.Add(e.equipName);
+            names.Add(e.equipContent);
+            return names;
         }
-        names.Add(s);
-        return names;
+     
     }
     public equipment ResetEquipment(equipment e)
     {
@@ -206,7 +237,7 @@ Resources.Load<Sprite>("temporal/axe_010")
         l1.Add(rand1);
         List<int> l2 = new List<int>();
         l2.Add(improveMount);
-        equipment newE = new equipment(t, e.equipName, l1, l2, rand2, degradeMount, e.equipNum);
+        equipment newE = new equipment(t,0,"", e.equipName, l1, l2, rand2, degradeMount, e.equipNum);
         return newE;
     }
     public equipment AddEquipments(equipment e1,equipment e2)
@@ -229,7 +260,7 @@ Resources.Load<Sprite>("temporal/axe_010")
         }   
 
         
-        equipment e = new equipment(t, prefix[randPrefix] + " " + equipName[randEquip], l1, l2, rand2, degradeMount, randEquip);
+        equipment e = new equipment(t,0,"", prefix[randPrefix] + " " + equipName[randEquip], l1, l2, rand2, degradeMount, randEquip);
         return e;
     }
 }

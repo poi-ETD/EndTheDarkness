@@ -18,6 +18,9 @@ public class GMmode : MonoBehaviour
     [SerializeField] GameObject CharacterView;
     int[] CardCount = new int[200];
     [SerializeField]TextMeshProUGUI[] passiveCounts;
+
+    [SerializeField] GameObject GetEquipmentCanvas;
+    [SerializeField] TextMeshProUGUI[] equipStrings;
     // Start is called before the first frame update
     void Start()
     {
@@ -139,6 +142,32 @@ public void GoLobby()
         ChD.characterDatas[k / 4].passive[k % 4]--;
         if (ChD.characterDatas[k / 4].passive[k % 4] < 0) ChD.characterDatas[k / 4].passive[k % 4] = 0;
         passiveCounts[k].text = ChD.characterDatas[k / 4].passive[k % 4] + "";
+    }
+    public void GetRandomEquipment()
+    {
+        //canvasOn = true;
+        equipment curEquip;
+        GetEquipmentCanvas.SetActive(true);
+        curEquip = EquipmentManager.Instance.makeEquipment();
+        GetEquipmentCanvas.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = EquipmentManager.Instance.equipSpr[curEquip.equipNum];
+        List<string> sList = EquipmentManager.Instance.equipmentStrings(curEquip);
+        equipStrings[0].text = sList[0];
+        equipStrings[1].text = sList[1] + '\n' + sList[2] + '\n' + sList[3];
+        GD.EquipmentList.Add(curEquip);
+    }
+    public void GetSpecialEquipment(int i)
+    {
+        CharacterView.SetActive(false);
+        GetEquipmentCanvas.SetActive(true);
+        equipment curEquip=EquipmentManager.Instance.makeSpecialEquipment(ChD.characterDatas[i].No);     
+        GetEquipmentCanvas.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = EquipmentManager.Instance.equipSpr[curEquip.equipNum];
+        List<string> sList = EquipmentManager.Instance.equipmentStrings(curEquip);
+     
+        equipStrings[0].text = sList[0];
+        if (curEquip.special == 0)
+            equipStrings[1].text = sList[1] + '\n' + sList[2] + '\n' + sList[3];
+        else equipStrings[1].text = sList[1];
+        GD.EquipmentList.Add(curEquip);
     }
 }
 

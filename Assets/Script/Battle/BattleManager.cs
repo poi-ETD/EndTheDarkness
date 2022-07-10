@@ -615,14 +615,14 @@ public class BattleManager : MonoBehaviour
     {
         warnObj.SetActive(false);
     }
-    public void OnDmgOneTarget(int dmg, Enemy enemy, int time) //카드를 사용해 데미지를 입힐 경우
+    public void OnDmgOneTarget(int dmg, Enemy enemy,Character character, int time) //카드를 사용해 데미지를 입힐 경우
     {
         CardUseText.text = "사용";
         EnemySelectMode = false;
-        log.logContent.text += "\n" + enemy.Name + "에게 " + (dmg + actCharacter.turnAtk) + "의 데미지!("+time+")";
+        //log.logContent.text += "\n" + enemy.Name + "에게 " + (dmg + character.turnAtk) + "의 데미지!("+time+")";
         for (int k = 0; k < time; k++)
         {
-            selectedEnemy.OnHitCal(dmg + actCharacter.turnAtk, actCharacter.curNo, false);
+            enemy.OnHitCal(dmg + character.turnAtk, character.curNo, false);
         }
         
     }
@@ -707,6 +707,7 @@ public class BattleManager : MonoBehaviour
         }
         if (QpassiveScript != null)
         {
+           
             QpassiveScript.GhostRevive(ghostCount);
         }
     } 

@@ -216,17 +216,17 @@ public class ActManager : MonoBehaviour
 
     public struct ActStruct
     {
-        public int type;
-        public int no;
-        
-      
+        public int type; //0 ->아군이 하는 행동 1->적이 하는 행동 2->적 피격모션
+        public int no; //아군일 때 0~100 각 캐릭터의 패시브 , 100~200 상태이상 200~400 전문장비로 인한 효과(4배수)
+        //  -1일때 특정 적 공격 -2일때 적 전체 공격
+        //  적일 때 no는 Act코루틴 참조
         public int mount;//mount가 필요한 패시브만 적용
-        public Enemy myE;
-        public Enemy targetE;
-        public Character myC;
-        public Character targetC;
+        public Enemy myE; //행동하는 적
+        public Enemy targetE; //타겟 적
+        public Character myC; //행동하는 캐릭터
+        public Character targetC; //타겟 캐릭터
      
-        public int count;
+        public int count; //횟수
         //no=>-1 리플렉트
         public ActStruct(int type, int no, int mount, Enemy myE, Enemy targetE, Character myC, Character targetC, int count)
         {
@@ -335,6 +335,7 @@ public class ActManager : MonoBehaviour
             if (ActList[0].type == 0) //아군 패시브 발동
             {
                 BM.log.setPassive(ActList[0].no, ActList[0].count); //패시브를 로그에 기록
+                //단 no가 100이하인 것만 패시브 판정
                 while (ActList[0].count != c)
                 {
                     c++;
@@ -420,9 +421,17 @@ public class ActManager : MonoBehaviour
                         for(int i=0;i<BM.Enemys.Length;i++) //캐릭터가 모든 타겟에게 공격
                         BM.Enemys[i].GetComponent<Enemy>().OnHitCal(ActList[0].mount, ActList[0].myC.curNo, false);
                     }
-                    if (ActList[0].no >=100) //상태이상은 100번부터
+                    if (ActList[0].no >=100&&ActList[0].no<200) //상태이상은 100번부터~200
                     {
                         ActList[0].targetE.StatusChange(ActList[0].no-100, ActList[0].mount);
+                    }
+                    if (ActList[0].no == 201) //큐의 회복 
+                    {
+                        ActList[0].myC.myPassive.Qequip2();
+                    }
+                    if (ActList[0].no == 205)
+                    {
+                        ActList[0].myC.myPassive.SparkEquip();
                     }
                     if (sum == 1)
                     {

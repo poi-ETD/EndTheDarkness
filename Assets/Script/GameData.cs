@@ -24,18 +24,22 @@ public class GameData
 }
 public struct equipment
 {
-    public int type;//type=>음수일 경우엔 해당 캐릭터의 전용장비(ex -1은 큐의 전용장비), 그 외에는 type적용
+    public int type;//type 0->전방,1->후방,2->전체
+    public int special;//0일 경우에 일반 장비, 그 외에 캐릭터 NO의 장비
     public string equipName;
-    public List<int> improveStat; //증가시키는 스탯의 종류,중첩이 가능하다.
-    public List<int> improveMount; //증가시키는 스탯의 양
-    public int degradeStat; //저하시키는 스탯의 종류
-    public int degradeMount; //저하시키는 스탯의 양
+    public string equipContent; //장비의 설명, 일반 장비는 신경 x
+    public List<int> improveStat; //증가시키는 스탯의 종류,중첩이 가능하다., 전용장비는 신경 X
+    public List<int> improveMount; //증가시키는 스탯의 양 ,전용장비는 신경 X
+    public int degradeStat; //저하시키는 스탯의 종류, 전용장비는 신경 X
+    public int degradeMount; //저하시키는 스탯의 양 ,전용장비는 신경 X
     public int equipNum;
 
-    public equipment(int type, string equipName, List<int> improveStat, List<int> improveMount, int degradeStat, int degradeMount, int equipNum)
+    public equipment(int type,int special, string equipName,string equipContent, List<int> improveStat, List<int> improveMount, int degradeStat, int degradeMount, int equipNum)
     {
         this.type = type;
+        this.special = special;
         this.equipName = equipName;
+        this.equipContent = equipContent;
         this.improveStat = improveStat;
         this.improveMount = improveMount;
         this.degradeStat = degradeStat;

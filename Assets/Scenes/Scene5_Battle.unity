@@ -932,7 +932,9 @@ MonoBehaviour:
   text_TooltipCardName: {fileID: 9053282549421450790}
   text_TooltipCardNo: {fileID: 9053282548953910597}
   text_TooltipCardContext: {fileID: 9053282549770701055}
+  isSelectedCard: 0
   go_selectedCardImage: {fileID: 1055180424}
+  isEnableOtherButton: 0
 --- !u!4 &131153709
 Transform:
   m_ObjectHideFlags: 0
@@ -2925,8 +2927,8 @@ MonoBehaviour:
   window_Grave: {fileID: 1950354993}
   reviveCount: 0
   card7mode: 0
-  victory_window: {fileID: 0}
-  defeated_window: {fileID: 0}
+  victory_window: {fileID: 109399635}
+  defeated_window: {fileID: 1756809415}
   cardSelectMode: 0
   porte3mode: 0
   condition: {fileID: 1336579352}
@@ -10155,6 +10157,7 @@ MonoBehaviour:
   speedLineTrans: {fileID: 1954242233}
   curOrder: 0
   isStartAct: 0
+  curSpeed: 0
   earlyCount: 0
   sum: 0
   isEarlyActing: 0

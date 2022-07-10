@@ -29,7 +29,7 @@ public class CharacterPassive : MonoBehaviour
 
     float[] passiveCount=new float[4];
 
-    bool haveMyEquip;
+    public bool haveMyEquip;
 
     private void Start()
     {
@@ -39,6 +39,11 @@ public class CharacterPassive : MonoBehaviour
         BM = myCharacter.BM;
         CM = GameObject.Find("CardManager").GetComponent<CardManager>();
         AM = GameObject.Find("ActManager").GetComponent<ActManager>();
+        if (myNo == 2 && haveMyEquip)
+        {
+            myCharacter.AtkUp(10);
+            BM.SpeedChange(myCharacter, -0.5f);
+        }
     }
 
 
@@ -125,6 +130,10 @@ public class CharacterPassive : MonoBehaviour
         {
             myCharacter.ActUp(myPassvie[0]);
         }
+        if (myNo == 1 && haveMyEquip && ghost >= 200)
+        {
+            Qequip();
+        }
         if (myNo == 2)
         {
             passiveCount[0] = 0;
@@ -206,12 +215,21 @@ public class CharacterPassive : MonoBehaviour
     {
 
         if (myCharacter.isDie) return;
-     
-        
-        
-        
+        if (myNo == 1 && haveMyEquip)
+        {
+            AM.MakeAct(0, 201, 0, null, null, myCharacter, null, 1);
+        }
+
+
+
     }
-  
+   public void Qequip2()
+    {
+        for(int i = 0; i < BM.ChD.size; i++)
+        {
+            BM.characters[i].Recover(5);
+        }
+    }
     public void Q1()
     {
         if (myCharacter.isDie) return;
@@ -292,6 +310,7 @@ public class CharacterPassive : MonoBehaviour
     public void Sparky2(int dmg,Enemy e)
     {
         if (myCharacter.isDie) return;
+        //Debug.Log(dmg);
         e.OnHitCal(dmg, myCharacter.curNo,true);   
     }
 
@@ -372,6 +391,15 @@ public class CharacterPassive : MonoBehaviour
         {
             AM.MakeAct(0, 13, 0, null, null, myCharacter, null, myPassvie[0]); //창조의 잠재력
         }
+        if (myNo == 2 && haveMyEquip)
+        {
+            AM.MakeAct(0, 205, 0, null, null, myCharacter, null, 1);
+        }
+    }
+    public void SparkEquip()
+    {
+        int rand = Random.Range(0,BM.Enemys.Length);
+        BM.OnDmgOneTarget(1, BM.Enemys[rand].GetComponent<Enemy>(), myCharacter,3);
     }
     public void Sparky3()
     {
@@ -419,6 +447,7 @@ public class CharacterPassive : MonoBehaviour
     {
         if (myCharacter.isDie) return;                    
         int x = ghost + ghostplus;
+       
         if (myPassvie[1] > 0&&!isKing)
         {
             while (ghost != x)
@@ -430,10 +459,7 @@ public class CharacterPassive : MonoBehaviour
                 }
             }                      
         }
-        if (myNo == 1 && haveMyEquip&&ghost>=100)
-        {
-            Qequip();
-        }
+        ghost = x;
         ghostText.text = ghost + "";
     }
     void Qequip()
