@@ -45,10 +45,10 @@ public class HandManager : MonoBehaviour
     private int selectedCardStack = 0; // prevent to too much fast select error between cards
 
     private Card onPointerCard = null; // this field have script<Card> on mouse pointer
-    private Card selectedCard = null; // this field have script<Card> selected
+    public Card selectedCard = null; // this field have script<Card> selected
 
     [HideInInspector] public bool isSelectedCard = false;
-    [SerializeField] private GameObject go_selectedCardImage;
+    public GameObject go_selectedCardImage;
 
     [HideInInspector] public bool isEnableOtherButton; // 패에서 카드 클릭시 카드를 사용하거나 취소하기 전까지는 다른 버튼을 사용하지 못하게 하는 변수
 

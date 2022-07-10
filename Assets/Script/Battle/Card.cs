@@ -6,10 +6,10 @@ using UnityEngine.UI;
 
 public class Card : MonoBehaviour
 {
-    CardManager CM;
+    public CardManager CM;
     public Image cardImage;
     public TextMeshProUGUI Content;
-    BattleManager BM;
+    public BattleManager BM;
     ActManager AM;
     public int cardcost;
     public TextMeshProUGUI costT;
@@ -20,21 +20,39 @@ public class Card : MonoBehaviour
     public int realCost;
     public bool isDeck;
     public bool isIngame;
-    public int DeckNo;// start->0 Q->1 스파키->2 반가라->3 포르테->4
+    public int DeckNo;// start->0 Q->1 스파키->2 반가라->3 포르테->4 령->5
     public int type;//스타터->0 스타터x->1 특수->2
     public int cardNo;
     public int selectType;
     public bool iscard20Mode;
 
+    //부여 가능한 속성들
     int drowCard;
     int weaknessCount;
+    int percentDmgToAllTarget;
+
+
 
     public bool isRemove;
     //YH
     [HideInInspector] public bool isSelected = false;
-
+    public void useCardInCard20()
+    {
+        if (selectType == 1)
+        {
+            BM.selectedEnemy = BM.previousEnemy;
+            EnemySelectCard();
+        }
+        else if (selectType == 5)
+        {
+            BM.selectedCharacter = BM.previousCharacter;
+            CharacterSelectCard();
+        }
+        else useCard();
+    }
     public void useCard()
     {
+        
         BM.otherCanvasOn = false;
         if (!BM.EnemySelectMode)
         {
@@ -48,17 +66,7 @@ public class Card : MonoBehaviour
             {
                 BM.costOver();
                 return;
-            }
-
-            if (BM.actCharacter.turnAct <= -5)
-            {
-                if (cardNo != 18)
-                {
-                    BM.overAct();
-                    return;
-                }
-            }
-
+            }        
             if (selectType==1)
             {
                 //BM.goEnemySelectMode();
@@ -97,7 +105,7 @@ public class Card : MonoBehaviour
                     BM.warnT.text = "스케치 반복은 연속해서 사용 할 수 없습니다.";
                     return;
                 }
-                BM.card20Active();
+                BM.UsePreviousCard();
             }
             else if (selectType == 5)
             {
@@ -143,8 +151,8 @@ public class Card : MonoBehaviour
                 {              
                     BM.useCost(cardcost,gameObject);
                     BM.actCharacter.useAct(1);
-                    BM.card12remake();
-
+                    BM.card12();
+                   
                     return;
                 }
                 if (cardNo == 16)
@@ -248,8 +256,11 @@ public class Card : MonoBehaviour
                         BM.AllAttack(2, BM.actCharacter, 1);
                     }
                 }
-                BM.useCost(cardcost, gameObject);
-                BM.actCharacter.useAct(1);               
+                if (!iscard20Mode)
+                {
+                    BM.useCost(cardcost, gameObject);
+                    BM.actCharacter.useAct(1);
+                }               
                 CardUse();
                 BM.AM.Act();
             }
@@ -263,20 +274,22 @@ public class Card : MonoBehaviour
     }
     public void EnemySelectCard()
     {
+       // Debug.Log("Aaa");
         BM.log.logContent.text += "\n" + BM.actCharacter.Name + "이(가) " + Name.text + " 발동!";
         if (cardNo == 1)
         {          
-            BM.OnDmgOneTarget(7,BM.selectedEnemy,BM.selectedCharacter,1);         
+            BM.OnDmgOneTarget(7,BM.selectedEnemy,BM.actCharacter,1);         
         }
         if (cardNo == 3)
-        {                
-            BM.OnDmgOneTarget(7, BM.selectedEnemy,BM.selectedCharacter,1);
+        {
+           
+            BM.OnDmgOneTarget(7, BM.selectedEnemy,BM.actCharacter,1);
             BM.specialDrow(1);          
         }
      
         if (cardNo == 11)
         {
-            BM.OnDmgOneTarget(15, BM.selectedEnemy,BM.selectedCharacter,1);
+            BM.OnDmgOneTarget(15, BM.selectedEnemy,BM.actCharacter,1);
        
         }
         if (cardNo == 14)
@@ -289,25 +302,25 @@ public class Card : MonoBehaviour
                     q = BM.characters[i].GetComponent<CharacterPassive>();
                 }
             }
-            BM.OnDmgOneTarget(q.ghost, BM.selectedEnemy,BM.selectedCharacter,1);
+            BM.OnDmgOneTarget(q.ghost, BM.selectedEnemy,BM.actCharacter,1);
             BM.ghostRevive(-1 * q.ghost);
            BM.ghostRevive(30);
         }
         if (cardNo == 15)
         {
-            BM.OnDmgOneTarget(CM.Grave.Count, BM.selectedEnemy,BM.selectedCharacter,1);
+            BM.OnDmgOneTarget(CM.Grave.Count, BM.selectedEnemy,BM.actCharacter,1);
             BM.ghostRevive(CM.Grave.Count);
         }
    
         if (cardNo == 19)
         {
-            BM.OnDmgOneTarget(4, BM.selectedEnemy,BM.selectedCharacter,7);                      
+            BM.OnDmgOneTarget(4, BM.selectedEnemy,BM.actCharacter,7);                      
         }
         if (cardNo == 27)
         {
             if (BM.selectedEnemy.status[(int)Enums.Status.weak] > 0)
             {
-            BM.OnDmgOneTarget(15, BM.selectedEnemy, BM.selectedCharacter,1);
+            BM.OnDmgOneTarget(15, BM.selectedEnemy, BM.actCharacter,1);
             }
             for (int i = 0; i < BM.characters.Count; i++)
             {
@@ -315,9 +328,12 @@ public class Card : MonoBehaviour
             }
             BM.selectedEnemy.GetComponent<Enemy>().StatusChange((int)Enums.Status.weak, 10);
         }
-      
-        BM.useCost(cardcost, gameObject);           
-        BM.actCharacter.useAct(1);
+        if (!iscard20Mode)
+        {
+            BM.useCost(cardcost, gameObject);
+            BM.actCharacter.useAct(1);
+        }
+        
         CardUse();
     
         BM.AM.Act();
@@ -328,16 +344,17 @@ public class Card : MonoBehaviour
     }
     public void SelectRevive()
     {
-        
-
         if (cardNo == 7)
         {            
             BM.ghostRevive(4);
         }
-     
-        
-        BM.actCharacter.useAct(1);
-        BM.useCost(cardcost, gameObject);
+
+
+        if (!iscard20Mode)
+        {
+            BM.useCost(cardcost, gameObject);
+            BM.actCharacter.useAct(1);
+        }
         CardUse();
         BM.AM.Act();
         BM.Click_GraveOff();
@@ -348,9 +365,12 @@ public class Card : MonoBehaviour
         if (cardNo == 24)
         {
             BM.card24();
-        }     
-        BM.actCharacter.useAct(1);
-        BM.useCost(cardcost, gameObject);
+        }
+        if (!iscard20Mode)
+        {
+            BM.useCost(cardcost, gameObject);
+            BM.actCharacter.useAct(1);
+        }
         CardUse();
         BM.AM.Act();
     }
@@ -368,8 +388,11 @@ public class Card : MonoBehaviour
                 if(BM.characters[i].characterNo==3)//반가라 일 경우
                 BM.NextTurnArmor(-30,BM.characters[i]); }
         }
-        BM.useCost(cardcost, gameObject);
-        BM.CharacterSelectMode = false;
+        if (!iscard20Mode)
+        {
+            BM.useCost(cardcost, gameObject);
+            BM.actCharacter.useAct(1);
+        }
         BM.actCharacter.useAct(1);
         CardUse();
        
@@ -392,9 +415,6 @@ public class Card : MonoBehaviour
     public void CardUse()
     {
       
-        if(Name.text=="리셋")return;
-        
-
         if (GetComponent<BlackWhite>() != null)
         {        
             GetComponent<BlackWhite>().onDamage();
@@ -414,12 +434,19 @@ public class Card : MonoBehaviour
                 BM.Enemys[i].GetComponent<Enemy>().StatusChange((int)Enums.Status.weak, weaknessCount);
             }
         }
+        if (percentDmgToAllTarget > 0)
+        {
+            BM.AllAttackOnPercent(percentDmgToAllTarget, BM.actCharacter);            
+        }
         if (iscard20Mode)
         {
+            
             Destroy(gameObject);
-            CM.UseCard(BM.usedInCard20);       
-            BM.log.logContent.text += "\n" + BM.actCharacter.Name + "이(가) " + BM.usedInCard20.GetComponent<Card>().Name.text + " 발동!";
-            BM.useCost(BM.usedInCard20.GetComponent<Card>().cardcost,gameObject);             
+           
+             
+           // BM.log.logContent.text += "\n" + BM.actCharacter.Name + "이(가) " + BM.usedInCard20.GetComponent<Card>().Name.text + " 발동!";
+            BM.useCost(BM.usedInCard20.GetComponent<Card>().cardcost,gameObject);
+            BM.usedInCard20.GetComponent<Card>().CardUse();
             BM.usedInCard20 = null;
             return;
         }
@@ -548,7 +575,7 @@ public class Card : MonoBehaviour
     {
         if (weaknessCount == 0)
         {
-            weaknessCount = 0;
+            weaknessCount = 1;
             Content.text += "\n-[적 전체에게 약화를 1부여한다.]";
         }
         else
@@ -581,8 +608,25 @@ public class Card : MonoBehaviour
             BM.characters[i].myPassive.CardRemove();
         }
         CM.field.Remove(gameObject);
-        CM.RemoveCard.Add(gameObject);
-      
-       
+        CM.RemoveCard.Add(gameObject);             
     }
+    public void GetPercentDmgToAllTarget(int dmg)
+    {
+        if (percentDmgToAllTarget== 0)
+        {
+            percentDmgToAllTarget = dmg;
+            Content.text += "\n-[적 전체에게 데미지:적 현재 HP의" +dmg+"%]";
+        }
+        else
+        {
+            int previous = percentDmgToAllTarget;
+            percentDmgToAllTarget += dmg;
+            string newstring = Content.text;
+            newstring = newstring.Replace("[적 전체에게 데미지:적 현재 HP의" +previous+"%]", "[적 전체에게 데미지:적 현재 HP의" + percentDmgToAllTarget + "%]");
+            Content.text = newstring;
+        }
+    }
+
+
+
 }

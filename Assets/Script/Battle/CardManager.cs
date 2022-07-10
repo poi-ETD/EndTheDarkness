@@ -64,6 +64,7 @@ public class CardManager : MonoBehaviour
             GameObject newCard = Instantiate(CardPrefebs, CardCanvas.transform);
             newCard.GetComponent<Card>().NoT.text = "NO." + cd.cd[CD.cardNo[i]].No.ToString("D3");//넘버
             newCard.GetComponent<Card>().cardNo = cd.cd[CD.cardNo[i]].No;
+            newCard.GetComponent<Card>().DeckNo = cd.cd[CD.cardNo[i]].Deck;
             newCard.GetComponent<Card>().DeckT.text = deckText[cd.cd[CD.cardNo[i]].Deck];
             newCard.GetComponent<Card>().Content.text = cd.cd[CD.cardNo[i]].Content;
             newCard.GetComponent<Card>().Name.text = cd.cd[CD.cardNo[i]].Name;
@@ -185,18 +186,26 @@ public class CardManager : MonoBehaviour
         }   
         if(BM.actCharacter!=null)
         BM.actCharacter.Acting();
-        
-     
+        BM.previousCharacter = null;
+        BM.previousEnemy = null;
+        if (usingCard.GetComponent<Card>().selectType == 1)
+        {
+            BM.previousEnemy = BM.selectedEnemy;
+        }
+        if (usingCard.GetComponent<Card>().selectType == 5)
+        {
+            BM.previousCharacter = BM.selectedCharacter;
+        }
         HandManager.Instance.CancelToUse();
         TM.BM.previousSelectedCard = usingCard; //스케치 반복을 위해 이전 카드를 기록함
  
         BM.actCharacter.SelectBox.SetActive(false);
         Character curC = BM.actCharacter;
-
+        curC.myPassive.CardUse(usingCard.GetComponent<Card>());
         curC.GetComponent<CharacterPassive>().myAct();     
         for(int i = 0; i < BM.ChD.size; i++)
         {
-            BM.characters[i].myPassive.CardUse();        
+            BM.characters[i].myPassive.CardUseInTeam();        
         }   
       
         if (usingCard.GetComponent<Card>().Name.text != "스케치 반복")

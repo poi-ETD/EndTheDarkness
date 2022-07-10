@@ -16,7 +16,11 @@ public class BattleManager : MonoBehaviour
     public Enemy selectedEnemy;//현재 지정된 적
     public Character selectedCharacter;//현재 선택된 캐릭터
     public GameObject selectedCard;//현재 지정된 카드
+
     public GameObject previousSelectedCard;//바로 이전에 사용한 카드
+    public Enemy previousEnemy;
+    public Character previousCharacter;
+
 
     public TextMeshProUGUI costT;
     public int leftCost;//남은 코스트
@@ -46,7 +50,7 @@ public class BattleManager : MonoBehaviour
     [SerializeField] GameObject window_Grave;
     public int reviveCount;
     public bool card7mode;
-
+    bool card12On;
 
     public GameData GD;
     public CharacterData ChD;
@@ -75,6 +79,8 @@ public class BattleManager : MonoBehaviour
     public GameObject DeckView;
     public GameObject SelectedCard;
     [SerializeField] GameObject LineObject;
+
+    [SerializeField] GameObject UseButton;
 
     [SerializeField] GameObject FormationCollapsePopup;
     [SerializeField] Text FormationCollapseText;
@@ -549,12 +555,12 @@ public class BattleManager : MonoBehaviour
         {
             if (ei.SelectedEnemy != null)
             {
-                if (usedInCard20 != null)
+              /*  if (usedInCard20 != null)
                 {
                     Destroy(selectedCard);
                     selectedCard = usedInCard20;
                     otherCanvasOn = false;
-                }
+                }*/
 
                 EnemySelect(ei.SelectedEnemy.gameObject);
 
@@ -564,14 +570,14 @@ public class BattleManager : MonoBehaviour
         }
         else if (selectedCard.GetComponent<Card>().selectType == 5)
         {
-            if (usedInCard20 != null)
+           /* if (usedInCard20 != null)
             {
                 Destroy(selectedCard);
                 selectedCard = usedInCard20;
                 otherCanvasOn = false;
-            }
+            }*/
             CardUseText.text = "사용";
-            CharacterSelectMode = false;
+           // CharacterSelectMode = false;
         }
     }
 
@@ -622,9 +628,9 @@ public class BattleManager : MonoBehaviour
         //log.logContent.text += "\n" + enemy.Name + "에게 " + (dmg + character.turnAtk) + "의 데미지!("+time+")";
         for (int k = 0; k < time; k++)
         {
+            Debug.Log(character + "" + enemy);
             enemy.OnHitCal(dmg + character.turnAtk, character.curNo, false);
-        }
-        
+        }        
     }
 
     public void OnAttack(int dmg,Enemy enemy,Character character,int time) //패시브나 리플렉트로 인하여 데미지 입힐 경우
@@ -648,8 +654,18 @@ public class BattleManager : MonoBehaviour
         }
         
     }
+    public void AllAttackOnPercent(int percent, Character character) //모든적에게 체력 퍼센트 데미지 부여
+    {
+       
+            for (int i = 0; i < Enemys.Length; i++)
+            {
+                Enemy e = Enemys[i].GetComponent<Enemy>();
+                e.OnHitCal(Mathf.FloorToInt(percent*e.Hp*0.01f), character.curNo, false);
+            }
+        
 
-   
+    }
+
 
     public void getArmor(int armor,Character character) //방어도 획득
     {
@@ -689,6 +705,10 @@ public class BattleManager : MonoBehaviour
             specialDrowList.RemoveAt(0);
 
             yield return new WaitForSeconds(0.3f);
+        }
+        if (card12On)
+        { AM.Act();
+            card12On = false;
         }
         //AM.MyAct();
         // CM.Rebatch();           
@@ -758,17 +778,10 @@ public class BattleManager : MonoBehaviour
         character.AtkUp(atk);
     }
 
+
     public void card12()
     {
-        condition.SetActive(true);
-        conditionText.text = "리셋";
-        cardSelectMode = true;
-        log.logContent.text += "\n리셋!";
-        completeButton.SetActive(true);
-
-    }
-    public void card12remake()
-    {
+        card12On = true;
         StartCoroutine("card12C");
     }
 
@@ -786,6 +799,7 @@ public class BattleManager : MonoBehaviour
             yield return new WaitForSeconds(0.25f);
         }
         specialDrow(g);
+
     }
 
     public void Click_GraveOn() //무덤 열기. 특정 경우에는 클릭 안 해도 자동으로 열림
@@ -900,31 +914,35 @@ public class BattleManager : MonoBehaviour
 
     public bool card20done = false;
     GameObject copyCard;
-
+    /*
     public void card20Active() //스케치발동이 발동 되었다면
-    {
+    {        
         usedInCard20 = selectedCard; //스케치발동을 c20이라는 오브젝트에 저장후,
-        otherCanvasOn = true;
+        otherCanvasOn = true; //다른거 터치 안되게 해야 함
+        UseButton.SetActive(true);//사용할 지 말지 정해
         copyCard = Instantiate(previousSelectedCard, CM.HandCanvas.transform);
         copyCard.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, -230, 0);
         copyCard.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
         copyCard.SetActive(true);
+        HM.go_selectedCardImage.SetActive(false);
         CancleButton.SetActive(true);
         copyCard.GetComponent<Card>().iscard20Mode = true;
         copyCard.GetComponent<Card>().cardcost = 0;
         selectedCard = copyCard;//현재 지정된 카드를 이전에 사용한 카드의 복사본을 변경
         //HandManager.Instance.go_UseButton.SetActive(true);
-    }
-
-    public void Click_cancleButtonUse()
+    }*/
+    public void UsePreviousCard()
     {
-        Destroy(copyCard);
-        otherCanvasOn = false;
-        CancleButton.SetActive(false);
-        selectedCard = usedInCard20;
-        usedInCard20 = null;
-
+        usedInCard20 = selectedCard;
+       // Debug.Log(usedInCard20.GetComponent<Card>().cardNo);
+        copyCard = Instantiate(previousSelectedCard, CM.HandCanvas.transform);
+        copyCard.SetActive(false);
+        copyCard.GetComponent<Card>().iscard20Mode = true;
+        copyCard.GetComponent<Card>().BM = this;
+        copyCard.GetComponent<Card>().CM = CM;
+        copyCard.GetComponent<Card>().useCardInCard20();
     }
+
     public void reflectUp(int amount) //반사데미지를 올려줌
     {
         actCharacter.reflect += amount;

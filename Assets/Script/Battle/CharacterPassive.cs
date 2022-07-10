@@ -44,6 +44,12 @@ public class CharacterPassive : MonoBehaviour
             myCharacter.AtkUp(10);
             BM.SpeedChange(myCharacter, -0.5f);
         }
+        if (myNo == 4 && haveMyEquip)
+        {
+            myCharacter.MaxHpChange(-5);
+            myCharacter.AtkUp(1);
+            myCharacter.cost += 1;
+        }
     }
 
 
@@ -170,7 +176,17 @@ public class CharacterPassive : MonoBehaviour
         }
         if (myNo == 2 && myPassvie[0] > 0) sparkyCardDrow = 0;
         if (myNo == 5) passiveCount[2] = 0;
-    } //개편완
+        if (myNo == 3 && haveMyEquip)
+        {
+            for(int i = 0; i < BM.characters.Count; i++)
+            {
+                if (myCharacter != BM.characters[i])
+                {
+                    BM.characters[i].getArmor(myCharacter.armor);
+                }
+            }
+        }
+    } 
 
 
     public void Vangara2(int type)
@@ -199,8 +215,7 @@ public class CharacterPassive : MonoBehaviour
     {
         if (myCharacter.isDie) return;
         if (CM.Deck.Count > CM.Grave.Count)
-        {
-            
+        {          
             CM.DeckToGrave(CM.Deck[Random.Range(0, CM.Deck.Count)]);
         }
         else if (CM.Deck.Count < CM.Grave.Count)
@@ -353,7 +368,7 @@ public class CharacterPassive : MonoBehaviour
         }
    }
   
-    public void CardUse()
+    public void CardUseInTeam()
     {
         if (myCharacter.isDie) return;
         if (myNo == 2 && myPassvie[0] > 0)
@@ -363,7 +378,14 @@ public class CharacterPassive : MonoBehaviour
             {
                AM.MakeAct(0,5,1,null,null,myCharacter,null,myPassvie[0]);
             }
-        }    
+        }     
+    }
+    public void CardUse(Card card)
+    {
+        if (myNo == 4 && haveMyEquip && card.DeckNo == 4)
+        {
+            myCharacter.AtkUp(1);
+        }
     }
     public void Sparky1()
     {
@@ -491,6 +513,19 @@ public class CharacterPassive : MonoBehaviour
         if (myNo == 5 && myPassvie[0] > 0)
         {
             AM.MakeAct(0, 17, 1, null, null, myCharacter, null, myPassvie[0]);
+        }
+        if (myNo == 4 && haveMyEquip)
+        {
+            //Debug.Log(myNo);
+            for(int i = 0; i < CM.field.Count; i++)
+            {
+                if (CM.field[i].GetComponent<Card>().DeckNo == 4)
+                {
+                   // Debug.Log(i);
+                   if(CM.field[i]!=null)
+                    CM.field[i].GetComponent<Card>().GetPercentDmgToAllTarget(5);
+                }
+            }
         }
     }
     public void Ryung1()

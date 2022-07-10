@@ -33,6 +33,7 @@ public class BlackWhite : MonoBehaviour
         myCard.Content.text = newstring;
        
     }   
+    
     public void onDamage()
     {
         c = BM.actCharacter;

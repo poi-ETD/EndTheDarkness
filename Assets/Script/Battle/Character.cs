@@ -334,6 +334,12 @@ public class Character : MonoBehaviour
         hpT.text = "<color=#a39fff><b>" + stringHp + "</color></b><size=15>/" + maxHp + "</size>";   
 
     }
+    public void MaxHpChange(int amount)
+    {
+        maxHp += amount;
+        if (Hp > maxHp) Hp = maxHp;
+        hpT.text = "<color=#a39fff><b>" + Hp + "</color></b><size=15>/" + maxHp + "</size>";
+    }
     public void Recover(int amount)
     {
         Hp += amount;
