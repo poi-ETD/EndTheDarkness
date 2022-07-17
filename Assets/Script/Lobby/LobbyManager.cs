@@ -12,8 +12,8 @@ public class LobbyManager : MonoBehaviour
     public CardData CD;
     public CharacterData ChD;
     public GameData GD = new GameData();
-    CharacterData2 ChaInfo = new CharacterData2();
-    CardData2 CaInfo = new CardData2();
+    CharacterInfo ChaInfo = new CharacterInfo();
+    CardInfo CaInfo = new CardInfo();
     [SerializeField] GameObject PopUpCanvas;
     [SerializeField] GameObject day;
     [SerializeField] GameObject night;
@@ -79,7 +79,7 @@ public class LobbyManager : MonoBehaviour
     [SerializeField] GameObject EquipManageButton;
 
 
-    [SerializeField] GameObject tributeView;
+    [SerializeField] GameObject tributeView; //공물
     private void Start()
     {
         string path = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CardDatas[GameManager.Instance.nowPlayingSlot]);
@@ -102,7 +102,7 @@ public class LobbyManager : MonoBehaviour
             GD = JsonConvert.DeserializeObject<GameData>(gameData);
         }
         else
-        {
+        { //path3->이 없다면, 첫 시작이기 때문에 리세마라 시작
             GD.Day = 1; 
             Resetmara(ResetMaraCount);
 

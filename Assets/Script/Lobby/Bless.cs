@@ -17,7 +17,7 @@ public class Bless : MonoBehaviour
     [SerializeField] GameObject noIgn;
     [SerializeField] TextMeshProUGUI[] blessT;
     blessData bd = new blessData();
-    CharacterData2 chainfo = new CharacterData2();
+    CharacterInfo chainfo = new CharacterInfo();
     [SerializeField] GameObject bless6;
     [SerializeField] GameObject bless5;
     [SerializeField] GameObject bless5Content;
@@ -98,7 +98,7 @@ public class Bless : MonoBehaviour
             {
                 if(lobby.CD.cardGet[i]==lobby.GD.bless12[0]|| lobby.CD.cardGet[i] == lobby.GD.bless12[1]|| lobby.CD.cardGet[i] == lobby.GD.bless12[2])
                 {
-                    CardData2 carddata = new CardData2();
+                    CardInfo carddata = new CardInfo();
                     lobby.CD.cardCost[i] = carddata.cd[lobby.CD.cardNo[i]].Cost;
                 }
             }
@@ -117,7 +117,7 @@ public class Bless : MonoBehaviour
             {
                 if (lobby.CD.cardGet[i] == lobby.GD.bless12[0] || lobby.CD.cardGet[i] == lobby.GD.bless12[1] || lobby.CD.cardGet[i] == lobby.GD.bless12[2])
                 {
-                    CardData2 carddata = new CardData2();
+                    CardInfo carddata = new CardInfo();
                     lobby.CD.cardCost[i] = carddata.cd[lobby.CD.cardNo[i]].Cost;
                 }
             }

@@ -94,7 +94,7 @@ Resources.Load<Sprite>("temporal/axe_010")
     }
     public equipment makeSpecialEquipment(int characterNo)
     {       
-        CharacterData2 cd = new CharacterData2();
+        CharacterInfo cd = new CharacterInfo();
         string Name = cd.cd[characterNo].specialEquipName;
         string content = cd.cd[characterNo].specialEquipContent;
         int t=0;

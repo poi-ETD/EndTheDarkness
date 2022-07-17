@@ -61,7 +61,7 @@ public class Log : MonoBehaviour
     string SetPassiveName(int i,int c) //패시브 번호에 따라 로그 출력을 위한 함수
     {
         string s = "";
-        CharacterData2 chD = new CharacterData2();
+        CharacterInfo chD = new CharacterInfo();
         int k = i % 4 - 1;
         int m = i / 4 + 1;
         if (k == -1) { k = 3; m--; }

@@ -15,7 +15,7 @@ public class CardSetManager : MonoBehaviour
     public int AllCard;
     public GameObject Canvas;
     public GameObject CardPrefebs;
-    CardData2 cd = new CardData2();
+    CardInfo cd = new CardInfo();
     public int curCardCount;
    public int maxiumCardCount;
     [SerializeField] TextMeshProUGUI cardCount;

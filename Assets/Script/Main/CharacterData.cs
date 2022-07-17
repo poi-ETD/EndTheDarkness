@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterData2
+public class CharacterInfo
 {
     public struct characterData
     {

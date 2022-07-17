@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CardData2
+public class CardInfo
 {
    public struct cardData
     {

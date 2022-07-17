@@ -8,7 +8,7 @@ public class SetCardInGM : MonoBehaviour
     [SerializeField] TextMeshProUGUI count;
     [SerializeField] TextMeshProUGUI content;
     [SerializeField] TextMeshProUGUI noT;
-    CardData2 CaInfo = new CardData2();
+    CardInfo CaInfo = new CardInfo();
     GMmode gm;
     int no;
     int size;

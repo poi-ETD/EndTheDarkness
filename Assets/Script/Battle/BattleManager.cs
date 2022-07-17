@@ -105,7 +105,7 @@ public class BattleManager : MonoBehaviour
     [SerializeField] GameObject noSelect;
     int listlength = 3;
     List<int> RandomCardList = new List<int>();
-    CardData2 data2 = new CardData2();
+    CardInfo data2 = new CardInfo();
     List<int> RancomSelectCard = new List<int>();
     [SerializeField] TextMeshProUGUI[] RewardEquipmentString;
     //승리 시 보상 선택하는 창에 들어갈 변수들

@@ -12,8 +12,8 @@ public class GMmode : MonoBehaviour
     public CardData CD;
     public CharacterData ChD;
     public GameData GD = new GameData();
-    CharacterData2 ChaInfo = new CharacterData2();
-    CardData2 CaInfo = new CardData2();
+    CharacterInfo ChaInfo = new CharacterInfo();
+    CardInfo CaInfo = new CardInfo();
     [SerializeField] GameObject CardView;
     [SerializeField] GameObject CharacterView;
     int[] CardCount = new int[200];

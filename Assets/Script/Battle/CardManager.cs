@@ -34,7 +34,7 @@ public class CardManager : MonoBehaviour
     BattleManager BM;
     HandManager HM;
     ActManager AM;
-    CardData2 cd = new CardData2();
+    CardInfo cd = new CardInfo();
     string[] deckText = new string[6];
 
 

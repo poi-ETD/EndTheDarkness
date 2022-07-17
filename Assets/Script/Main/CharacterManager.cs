@@ -10,7 +10,7 @@ public class CharacterManager : MonoBehaviour
 {
     CharacterData CD = new CharacterData();
     float timer;
-    CharacterData2 CD2 = new CharacterData2();
+    CharacterInfo CI = new CharacterInfo();
     [SerializeField] Sprite[] CharacterImgae;
     [SerializeField] Sprite[] CharacterFaceImgae;
     [SerializeField] GameObject Canvas;
@@ -23,8 +23,8 @@ public class CharacterManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI[] SetText;//1->이름 2~5 -> 패시브 1 6->패시브 팝업 텍스트 7->경고 팝업 텍스트
     [SerializeField] GameObject PassivePopup;
     int curPassive;
-    [SerializeField] GameObject[] Arrows;
-    [SerializeField] Image[] FrontButton;
+    [SerializeField] GameObject[] Arrows; //현재 선택된 패시브 가르키는 화살표
+    [SerializeField] Image[] FrontButton; //전방, 후방
     int curFormation;
     [SerializeField] CardSetManager cardManager;
     [SerializeField] Image SubImage;
@@ -33,7 +33,7 @@ public class CharacterManager : MonoBehaviour
     [SerializeField] private GameObject go_Window_SlotName;
     [SerializeField] private Text text_SlotName;
 
-    public void ToMain()
+    public void ToMain() //저장 후 로비로 게임 시작
     {
         cardManager.SaveCard();
         for(int i = 0; i < CharacterList.Count; i++)
@@ -43,7 +43,7 @@ public class CharacterManager : MonoBehaviour
               }
            
         }
-        CD.size = CharacterList.Count;
+        CD.size = CharacterList.Count; //캐릭터의 수
         string characterData = JsonConvert.SerializeObject(CD);       
         string path = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CharacterDatas[GameManager.Instance.selectedSlot_Main]);                       
         File.WriteAllText(path, characterData);
@@ -54,7 +54,7 @@ public class CharacterManager : MonoBehaviour
         //SceneManager.LoadScene("Scene2_Lobby");
     }
 
-    public void RemoveCharacter(int i)
+    public void RemoveCharacter(int i) //리스트에서 캐릭터를 누르면, 리스트에서 없앰.
     {
         if (i < CharacterList.Count)
             CharacterList.RemoveAt(i);
@@ -65,17 +65,16 @@ public class CharacterManager : MonoBehaviour
     {
         curPassive = -1;
         curFormation = -1;
-        counter = -1;
-
-        for (int i = 1; i < CD2.cd.Length; i++)
+        counter = -1; //초기 값 세팅
+        for (int i = 1; i < CI.cd.Length; i++)
         {
             GameObject cha = Instantiate(Prefebs, Canvas.transform);
             cha.GetComponent<CharacterSetting>().SetCharacter(i, CharacterImgae[i]);
         }
     }
 
-    public void setCharacter(int n)
-    {
+    public void setCharacter(int n) //리스트가 아닌, 캐릭터 일러를 누르면 이미 있는 캐릭터면 리스트에서 없애고,
+    {//존재하지 않는 캐릭터면 리스트에 추가함
         bool isThere=false;
 
         for(int i = 0; i < CharacterList.Count; i++)
@@ -93,7 +92,7 @@ public class CharacterManager : MonoBehaviour
         setListImage();
     }
 
-    void setListImage()
+    void setListImage() //리스트가 변경함에 따라 리스트에 보이는 캐릭터의 이미지를 다시 나타냄
     {
         for(int i = 0; i < CharacterList.Count; i++)
         {
@@ -103,7 +102,7 @@ public class CharacterManager : MonoBehaviour
 
         for(int i = CharacterList.Count; i < 4; i++)
             listImage[i].color = new Color(1, 1, 1, 0);
-    }
+    } 
 
     public bool noSelect;
 
@@ -115,30 +114,30 @@ public class CharacterManager : MonoBehaviour
     [SerializeField] GameObject MaxCardPopup;
 
     public void SetSubSetting() // 1->이름, 2~5->패시브 1, 6->패시브 팝업 텍스트
-    {
+    { //캐릭터 최대 4명을 선택하고 세부적으로 선택을 할 때
         if (counter > -1)
         {
             int no = CharacterList[counter];
-            if (curFormation == -1)
+            if (curFormation == -1) //진형이 초기값이라면.
             {
                 warnPopup.SetActive(true);
                 SetText[6].text = "진형이 설정되지 않았습니다.";
                 return;
             }
 
-            if (curPassive == -1)
+            if (curPassive == -1) //패시브가 초기값이라면
             {
                 warnPopup.SetActive(true);
                 SetText[6].text = "패시브가 설정되지 않았습니다.";
                 return;
             }
 
-            if (cardManager.curCardCount < cardManager.maxiumCardCount && !noSelect)
+            if (cardManager.curCardCount < cardManager.maxiumCardCount && !noSelect)//카드를 더 선택이 가능하다면
             {
                 noSelect = true;
                 MaxCardPopup.SetActive(true);
-                return;
-            }
+                return; 
+            } 
 
             noSelect = false;
             MaxCardPopup.SetActive(false);
@@ -146,18 +145,18 @@ public class CharacterManager : MonoBehaviour
             //int maxHp, int curHp, int passive1, int passive2, int passive3, int passive4, int curFormation)
             int[] passiveO = new int[4];
             CD.characterDatas[counter] = new CharacterData.curCharacterData(
-                CD2.cd[no].Name, no, CD2.cd[no].Cost, CD2.cd[no].Atk, CD2.cd[no].Def, CD2.cd[no].speed, CD2.cd[no].maxHp, CD2.cd[no].maxHp, passiveO, curFormation, -1);
+                CI.cd[no].Name, no, CI.cd[no].Cost, CI.cd[no].Atk, CI.cd[no].Def, CI.cd[no].speed, CI.cd[no].maxHp, CI.cd[no].maxHp, passiveO, curFormation, -1);
             CD.characterDatas[counter].passive[curPassive]++;
 
         }
 
-        if (counter+1 >= CharacterList.Count)
+        if (counter+1 >= CharacterList.Count) //모든 캐릭터 서브 세팅을 마치면
         {
-            go_Window_SlotName.SetActive(true);
+            go_Window_SlotName.SetActive(true); 
             return;
         }
 
-        counter++;
+        counter++; //다음 캐릭터 세팅을 위함.
         cardManager.clear();
 
         if(CharacterList[counter]==1)
@@ -166,14 +165,15 @@ public class CharacterManager : MonoBehaviour
             cardManager.getStarterCard(CharacterList[counter], 1);
 
         SubImage.sprite = CharacterImgae[CharacterList[counter]];
-        SetText[0].text = CD2.cd[CharacterList[counter]].Name;
-        SetText[1].text = CD2.cd[CharacterList[counter]].passive[0];
-        SetText[2].text = CD2.cd[CharacterList[counter]].passive[1];
-        SetText[3].text = CD2.cd[CharacterList[counter]].passive[2];
-        SetText[4].text = CD2.cd[CharacterList[counter]].passive[3];      
+        SetText[0].text = CI.cd[CharacterList[counter]].Name;
+        SetText[1].text = CI.cd[CharacterList[counter]].passive[0];
+        SetText[2].text = CI.cd[CharacterList[counter]].passive[1];
+        SetText[3].text = CI.cd[CharacterList[counter]].passive[2];
+        SetText[4].text = CI.cd[CharacterList[counter]].passive[3];   
+        //다음 캐릭터를 보여줌
         Canvas.SetActive(false);
         curPassive = -1;
-        curFormation = -1;
+        curFormation = -1; //캐릭터가 바꼈기 때문에 다시 초기값 세팅
         PassivePopup.SetActive(false);
 
         for(int i=0;i<4;i++)
@@ -183,36 +183,36 @@ public class CharacterManager : MonoBehaviour
         FrontButton[1].color = new Color(1, 1, 1);
     }
 
-    public void setPassive(int i)
+    public void setPassive(int selectedPassive) //서브 세팅에서 패시브를 눌렀을 때
     {
-        if (curPassive != i)
+        if (curPassive != selectedPassive) //이미 눌러진 패시브가 아니라면,
         {
-            PassivePopup.SetActive(true);
+            PassivePopup.SetActive(true); //패시브 설명을 킴
 
-            SetText[5].text = CD2.cd[CharacterList[counter]].passiveContent[i];
-
+            SetText[5].text = CI.cd[CharacterList[counter]].passiveContent[selectedPassive];
+            //설명에 있는 텍스트를 변경함
             if (curPassive != -1)
-                Arrows[curPassive].SetActive(false);
-            curPassive = i;
+                Arrows[curPassive].SetActive(false); //이미 패시브 다른게 있었다면 화살표 없앰.
+            curPassive = selectedPassive;
 
-            Arrows[i].SetActive(true);
+            Arrows[selectedPassive].SetActive(true);
         }
-        else
+        else //이미 눌러진 패시브와 같다면 초기상태로 변경
         {
             Arrows[curPassive].SetActive(false);
             PassivePopup.SetActive(false);
             curPassive = -1;
-        }
+        } 
     }
 
-    public void setFormation(int i)
+    public void setFormation(int i) //진형 설정
     {
-        if (i == curFormation)
+        if (i == curFormation) //이미 눌린 진형을 또 누르면 초기로
         {
             FrontButton[i].color = new Color(1, 1, 1);
             curFormation = -1;
         }
-        else
+        else //다를 시 진형 선택
         {
             if(curFormation!=-1)
                 FrontButton[curFormation].color = new Color(1, 1, 1);
@@ -230,23 +230,9 @@ public class CharacterManager : MonoBehaviour
     }
 }
 
-public class CharacterData
+public class CharacterData //json으로 저장 될 인게임ㄴ 캐릭터 정보
 {
-   /* private static CharacterData instance;
-
-    //게임 매니저 인스턴스에 접근할 수 있는 프로퍼티. static이므로 다른 클래스에서 맘껏 호출할 수 있다.
-    public static CharacterData Instance
-    {
-        get
-        {
-            if (null == instance)
-            {
-                //게임 인스턴스가 없다면 하나 생성해서 넣어준다.
-                instance = new CharacterData();
-            }
-            return instance;
-        }
-    }*/
+  
     public struct curCharacterData
     {
         public string Name;
@@ -276,7 +262,7 @@ public class CharacterData
         }
     }
     public curCharacterData[] characterDatas = new curCharacterData[5];
-    public int line;
-    public int size;
+    public int line; //전, 후방을 나누는 기준
+    public int size; 
   
 }

@@ -442,9 +442,8 @@ public class Card : MonoBehaviour
         {
             
             Destroy(gameObject);
-           
-             
-           // BM.log.logContent.text += "\n" + BM.actCharacter.Name + "이(가) " + BM.usedInCard20.GetComponent<Card>().Name.text + " 발동!";
+            Destroy(gameObject);
+            // BM.log.logContent.text += "\n" + BM.actCharacter.Name + "이(가) " + BM.usedInCard20.GetComponent<Card>().Name.text + " 발동!";
             BM.useCost(BM.usedInCard20.GetComponent<Card>().cardcost,gameObject);
             BM.usedInCard20.GetComponent<Card>().CardUse();
             BM.usedInCard20 = null;
