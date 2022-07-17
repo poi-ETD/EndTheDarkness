@@ -5,9 +5,9 @@ using System.IO;
 
 public class UserSaveData
 {
+    public bool isInit;
+
     public string[] slot_Names;
-    public int numberOfSlot;
-    public int nowSlot;
 }
 
 public class GameManager : MonoBehaviour
@@ -22,12 +22,15 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    [HideInInspector] public bool isInit; // 게임 최초 실행자일시 false지만 한번 실행하고 난뒤로부터는 항상 true
+                                          // 즉, path에 UserMainData.json이 없을 시 false, 있을 시 true
+
     [HideInInspector] public string[] slot_Names; // 각 슬롯의 이름을 담는 문자열 배열
     [HideInInspector] public string[] slot_CharacterDatas; // 각 슬롯의 캐릭터 데이터가 담긴 json 파일의 이름을 담는 문자열 배열
     [HideInInspector] public string[] slot_CardDatas; // 각 슬롯의 카드 데이터가 담긴 json 파일의 이름을 담는 문자열 배열
 
-    [HideInInspector] public int numberOfSlot = 0; // 총 10개의 빈 슬롯중 만들어둔 슬롯의 수
-    [HideInInspector] public int nowSlot = 0; // 현재 게임에 이용하고 있는 슬롯의 번호 (0~9)
+    [HideInInspector] public int selectedSlot_Main;
+    [HideInInspector] public int nowPlayingSlot; // 현재 게임에 이용하고 있는 슬롯의 번호 (0~9)
 
     private void Awake()
     {
@@ -71,7 +74,10 @@ public class GameManager : MonoBehaviour
         if (File_Exist_Examine())
             Load();
         else
+        {
+            Init();
             Save();
+        }
     }
 
     void Update()
@@ -79,13 +85,20 @@ public class GameManager : MonoBehaviour
 
     }
 
+    private void Init()
+    {
+        for (int i = 0; i < 10; i++)
+            slot_Names[i] = "";
+
+        isInit = true;
+    }
+
     public void Save()
     {
         UserSaveData userData = new UserSaveData();
 
+        userData.isInit = isInit;
         userData.slot_Names = slot_Names;
-        userData.numberOfSlot = numberOfSlot;
-        userData.nowSlot = nowSlot;
 
         string json = JsonUtility.ToJson(userData);
 
@@ -106,9 +119,8 @@ public class GameManager : MonoBehaviour
 
         UserSaveData userData = JsonUtility.FromJson<UserSaveData>(json);
 
+        isInit = userData.isInit;
         slot_Names = userData.slot_Names;
-        numberOfSlot = userData.numberOfSlot;
-        nowSlot = userData.nowSlot;
 
         Debug.Log("로컬로부터 데이터불러오기 완료");
     }

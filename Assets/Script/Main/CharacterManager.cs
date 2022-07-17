@@ -45,11 +45,10 @@ public class CharacterManager : MonoBehaviour
         }
         CD.size = CharacterList.Count;
         string characterData = JsonConvert.SerializeObject(CD);       
-        string path = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CharacterDatas[GameManager.Instance.numberOfSlot]);                       
+        string path = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CharacterDatas[GameManager.Instance.selectedSlot_Main]);                       
         File.WriteAllText(path, characterData);
 
-        GameManager.Instance.nowSlot = GameManager.Instance.numberOfSlot; // 게임을 시작하기 전 현재 슬롯 번호를 초기화함. 이후 게임 내에선 이 현재 슬롯번호를 이용함
-        GameManager.Instance.numberOfSlot++; // 게임 슬롯을 하나 더 만들었으니 현재 보유하고 있는 슬롯의 수를 증가시킴
+        GameManager.Instance.nowPlayingSlot = GameManager.Instance.selectedSlot_Main; // 게임을 시작하기 전 현재 슬롯 번호를 초기화함. 이후 게임 내에선 이 현재 슬롯번호를 이용함
 
         StartCoroutine(SceneControllerManager.Instance.SwitchScene("Scene3_Lobby"));
         //SceneManager.LoadScene("Scene2_Lobby");
@@ -225,7 +224,7 @@ public class CharacterManager : MonoBehaviour
 
     public void Click_Button_OK_SlotName()
     {
-        GameManager.Instance.slot_Names[GameManager.Instance.numberOfSlot] = text_SlotName.text;
+        GameManager.Instance.slot_Names[GameManager.Instance.selectedSlot_Main] = text_SlotName.text;
 
         ToMain();
     }

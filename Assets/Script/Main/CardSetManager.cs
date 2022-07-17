@@ -111,7 +111,7 @@ public void SaveCard()
         }
         
         string cardData = JsonConvert.SerializeObject(CD);
-        string path = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CardDatas[GameManager.Instance.numberOfSlot]);
+        string path = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CardDatas[GameManager.Instance.selectedSlot_Main]);
         File.WriteAllText(path, cardData);
     }  
 }

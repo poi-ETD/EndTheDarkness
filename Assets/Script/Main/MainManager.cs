@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class MainManager : MonoBehaviour
 {
@@ -13,6 +14,9 @@ public class MainManager : MonoBehaviour
 
     [SerializeField] private GameObject go_Main;
     [SerializeField] private GameObject go_New;
+    [SerializeField] private GameObject go_StartEditDelete;
+    [SerializeField] private TextMeshProUGUI[] texts_SlotName;
+
     public void SmallMode()
     {
         if (smallmode == false)
@@ -36,43 +40,110 @@ public class MainManager : MonoBehaviour
         //if (!File.Exists(path))
         //    ContinueT.color = new Color(0.4f, 0.4f, 0.4f);
     }
+
+    public void NewGame()
+    {
+        for (int i = 0; i < 10; i++)
+            texts_SlotName[i].text = GameManager.Instance.slot_Names[i];
+
+        go_Main.SetActive(false);
+        go_New.SetActive(true);
+    }
+
     public void ContinueGame()
     {
-        string path = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CharacterDatas[GameManager.Instance.nowSlot]);
+        string path = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CharacterDatas[GameManager.Instance.nowPlayingSlot]);
         if (!File.Exists(path))
             return;
         else
             StartCoroutine(SceneControllerManager.Instance.SwitchScene("Scene3_Lobby"));
     }
-    public void NewGame()
+    
+    //public void Click_Button_NewSlot()
+    //{
+    //    if (/*GameManager.Instance.numberOfSlot < 10*/true)
+    //    {
+    //        //string path = Path.Combine(Application.persistentDataPath, "CharacterData.json");
+    //        //string path2 = Path.Combine(Application.persistentDataPath, "CardData.json");
+    //        string path_GameData = Path.Combine(Application.persistentDataPath, "GameData.json");
+    //        //if (File.Exists(path))
+    //        //    File.Delete(path);
+    //        //if (File.Exists(path2))
+    //        //    File.Delete(path2);
+    //        if (File.Exists(path_GameData))
+    //            File.Delete(path_GameData);
+
+    //        StartCoroutine(SceneControllerManager.Instance.SwitchScene("Scene2_Character"));
+    //        //SceneManager.LoadScene("character");
+    //    }
+    //}
+
+    public void Click_Button_Slot(int slotCode) // 슬롯 클릭시 실행되는 함수
     {
-        go_Main.SetActive(false);
-        go_New.SetActive(true);
+        GameManager.Instance.selectedSlot_Main = slotCode;
+
+        if (GameManager.Instance.slot_Names[slotCode].Equals("")) // 클릭한 슬롯의 이름이 비어있다면 빈 슬롯으로 판단하고 NewSlot() 함수 실행
+            NewSlot();
+        else // 클릭한 슬롯의 이름이 비어있지 않다면 존재하는 슬롯으로 판단하고 ExistingSlot(int slotCode) 함수 실행
+            ExistingSlot(slotCode);
     }
 
-    public void Click_Button_NewSlot()
+    private void NewSlot() // 기존 새로하기 버튼 클릭시 실행되는 루틴이 담긴 함수
     {
-        if (GameManager.Instance.numberOfSlot < 10)
-        {
-            //string path = Path.Combine(Application.persistentDataPath, "CharacterData.json");
-            //string path2 = Path.Combine(Application.persistentDataPath, "CardData.json");
-            string path_GameData = Path.Combine(Application.persistentDataPath, "GameData.json");
-            //if (File.Exists(path))
-            //    File.Delete(path);
-            //if (File.Exists(path2))
-            //    File.Delete(path2);
-            if (File.Exists(path_GameData))
-                File.Delete(path_GameData);
+        string path_GameData = Path.Combine(Application.persistentDataPath, "GameData.json");
 
-            StartCoroutine(SceneControllerManager.Instance.SwitchScene("Scene2_Character"));
-            //SceneManager.LoadScene("character");
-        }
+        if (File.Exists(path_GameData))
+            File.Delete(path_GameData);
+
+        StartCoroutine(SceneControllerManager.Instance.SwitchScene("Scene2_Character"));
     }
 
-    public void Click_Button_ContinueSlot()
+    private void ExistingSlot(int slotCode) // 이미 데이터가 존재하는 슬롯으로 시작할지, 수정할지, 삭제할지 고르기 전 실행되는 함수
+    {
+        RectTransform rect = go_StartEditDelete.GetComponent<RectTransform>();
+        float y = 0;
+
+        if (slotCode == 0) y = 450f;
+        else if (slotCode == 1) y = 350f;
+        else if (slotCode == 2) y = 250f;
+        else if (slotCode == 3) y = 150f;
+        else if (slotCode == 4) y = 50f;
+        else if (slotCode == 5) y = -50f;
+        else if (slotCode == 6) y = -150f;
+        else if (slotCode == 7) y = -250f;
+        else if (slotCode == 8) y = -350f;
+        else if (slotCode == 9) y = -450f;
+
+        rect.anchoredPosition = new Vector2(rect.anchoredPosition.x, y);
+        go_StartEditDelete.SetActive(true);
+    }
+
+    public void Click_Button_Start()
     {
 
     }
+
+    public void Click_Button_Edit()
+    {
+
+    }
+
+    public void Click_Button_Delete()
+    {
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
     /* public GameObject[,] Enemys;
      public BattleData bd=new BattleData();

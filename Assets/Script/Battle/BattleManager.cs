@@ -300,7 +300,7 @@ public class BattleManager : MonoBehaviour
         string path = Path.Combine(Application.persistentDataPath, "GameData.json");
         string gameData = File.ReadAllText(path);
         GD = JsonConvert.DeserializeObject<GameData>(gameData);
-        path = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CharacterDatas[GameManager.Instance.nowSlot]);
+        path = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CharacterDatas[GameManager.Instance.nowPlayingSlot]);
         string characterData = File.ReadAllText(path);
         ChD = JsonConvert.DeserializeObject<CharacterData>(characterData);
         line = ChD.line;
@@ -1007,7 +1007,7 @@ public class BattleManager : MonoBehaviour
         }
         if (!isSelect) return;
         CardData CardD;
-        string path = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CardDatas[GameManager.Instance.nowSlot]);
+        string path = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CardDatas[GameManager.Instance.nowPlayingSlot]);
         string cardData = File.ReadAllText(path);
         CardD = JsonConvert.DeserializeObject<CardData>(cardData);
         for (int i = 0; i < RancomSelectCard.Count; i++)
@@ -1022,7 +1022,7 @@ public class BattleManager : MonoBehaviour
             }
         }
         cardData = JsonConvert.SerializeObject(CardD);
-        path = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CardDatas[GameManager.Instance.nowSlot]);
+        path = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CardDatas[GameManager.Instance.nowPlayingSlot]);
         File.WriteAllText(path, cardData);
         Click_NoSelectAndMain();
     }
@@ -1045,7 +1045,7 @@ public class BattleManager : MonoBehaviour
             if (!isForward) ChD.characterDatas[i].curFormation = 1; //진형붕괴를 통해 위치가 바꼈다면 저장
         }
 
-        string path4 = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CharacterDatas[GameManager.Instance.nowSlot]);
+        string path4 = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CharacterDatas[GameManager.Instance.nowPlayingSlot]);
         string CharacterData = JsonConvert.SerializeObject(ChD);
         File.WriteAllText(path4, CharacterData);
         GD.isAct = false;
