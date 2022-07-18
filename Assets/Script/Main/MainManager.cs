@@ -41,7 +41,7 @@ public class MainManager : MonoBehaviour
         //    ContinueT.color = new Color(0.4f, 0.4f, 0.4f);
     }
 
-    public void NewGame()
+    public void Click_Button_NewGame()
     {
         for (int i = 0; i < 10; i++)
             texts_SlotName[i].text = GameManager.Instance.slot_Names[i];
@@ -50,7 +50,7 @@ public class MainManager : MonoBehaviour
         go_New.SetActive(true);
     }
 
-    public void ContinueGame()
+    public void Click_Button_ContinueGame()
     {
         string path = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CharacterDatas[GameManager.Instance.nowPlayingSlot]);
         if (!File.Exists(path))
@@ -120,7 +120,11 @@ public class MainManager : MonoBehaviour
 
     public void Click_Button_Start()
     {
+        GameManager.Instance.nowPlayingSlot = GameManager.Instance.selectedSlot_Main; // 게임을 시작하기 전 현재 슬롯 번호를 초기화함. 이후 게임 내에선 이 현재 슬롯번호를 이용함
 
+        GameManager.Instance.Save();
+
+        StartCoroutine(SceneControllerManager.Instance.SwitchScene("Scene3_Lobby"));
     }
 
     public void Click_Button_Edit()
@@ -130,7 +134,12 @@ public class MainManager : MonoBehaviour
 
     public void Click_Button_Delete()
     {
+        GameManager.Instance.slot_Names[GameManager.Instance.selectedSlot_Main] = "";
+        texts_SlotName[GameManager.Instance.selectedSlot_Main].text = "";
 
+        GameManager.Instance.Save();
+
+        go_StartEditDelete.SetActive(false);
     }
 
 

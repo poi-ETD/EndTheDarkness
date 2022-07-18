@@ -8,6 +8,7 @@ public class UserSaveData
     public bool isInit;
 
     public string[] slot_Names;
+    public int nowPlayingSlot;
 }
 
 public class GameManager : MonoBehaviour
@@ -98,7 +99,9 @@ public class GameManager : MonoBehaviour
         UserSaveData userData = new UserSaveData();
 
         userData.isInit = isInit;
+
         userData.slot_Names = slot_Names;
+        userData.nowPlayingSlot = nowPlayingSlot;
 
         string json = JsonUtility.ToJson(userData);
 
@@ -120,7 +123,9 @@ public class GameManager : MonoBehaviour
         UserSaveData userData = JsonUtility.FromJson<UserSaveData>(json);
 
         isInit = userData.isInit;
+
         slot_Names = userData.slot_Names;
+        nowPlayingSlot = userData.nowPlayingSlot;
 
         Debug.Log("로컬로부터 데이터불러오기 완료");
     }

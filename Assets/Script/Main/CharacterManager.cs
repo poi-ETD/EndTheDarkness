@@ -50,6 +50,8 @@ public class CharacterManager : MonoBehaviour
 
         GameManager.Instance.nowPlayingSlot = GameManager.Instance.selectedSlot_Main; // 게임을 시작하기 전 현재 슬롯 번호를 초기화함. 이후 게임 내에선 이 현재 슬롯번호를 이용함
 
+        GameManager.Instance.Save();
+
         StartCoroutine(SceneControllerManager.Instance.SwitchScene("Scene3_Lobby"));
         //SceneManager.LoadScene("Scene2_Lobby");
     }
@@ -225,6 +227,8 @@ public class CharacterManager : MonoBehaviour
     public void Click_Button_OK_SlotName()
     {
         GameManager.Instance.slot_Names[GameManager.Instance.selectedSlot_Main] = text_SlotName.text;
+        GameManager.Instance.Save();
+        Debug.Log("슬롯의 이름이 " + text_SlotName.text + "(으)로 설정되었습니다.");
 
         ToMain();
     }

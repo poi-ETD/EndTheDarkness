@@ -78,8 +78,8 @@ public class LobbyManager : MonoBehaviour
     [SerializeField] GameObject[] SelectedEquipImage;
     [SerializeField] GameObject EquipManageButton;
 
-
     [SerializeField] GameObject tributeView; //공물
+
     private void Start()
     {
         string path = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CardDatas[GameManager.Instance.nowPlayingSlot]);
@@ -135,6 +135,7 @@ public class LobbyManager : MonoBehaviour
         }
         setDay();
     }
+
     public void Resetmara(int rc)
     {
         if (rc < ChD.size)
@@ -196,7 +197,9 @@ public class LobbyManager : MonoBehaviour
             save();
         }
     }
+
     public bool resetmara;
+
     public void CardSelectInReset(bool t)
     {
         if (ShopSelectedCard == null && t) return;
