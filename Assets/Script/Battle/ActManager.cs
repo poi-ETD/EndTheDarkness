@@ -47,6 +47,12 @@ public class ActManager : MonoBehaviour
     {
         BM.actCharacter.myPassive.myAct();
     }
+    public void EndButton()
+    {
+        if (BM.otherCor) return;
+        ActComplete();
+        Act();
+    }
     public void SpeedChangeByEffect(int type,int no)
     {
         if (!isTurn) return;
@@ -98,7 +104,12 @@ public class ActManager : MonoBehaviour
         isTurn = true;
         curOrder = 0;
         orderList.Clear();
-       
+        enemys.Clear();
+        characters = BM.characters;
+        for (int i = 0; i < BM.Enemys.Length; i++)
+        {
+            enemys.Add(BM.Enemys[i].GetComponent<Enemy>());
+        }
         for (int i = 0; i < characters.Count; i++)
         {
             float s = characters[i].speed;
@@ -201,18 +212,8 @@ public class ActManager : MonoBehaviour
     public bool isEarlyActing; //적이 선 행동을 하는 중
     bool isLateActing; //적이 후 행동을 하는 중
     List<ActStruct> ActList = new List<ActStruct>();
-    List<ActStruct> lateActList = new List<ActStruct>();
-    List<ActStruct> earlyActList = new List<ActStruct>();
-   
-   /* public void EarlyAct()
-    {
-        earlyCount++;       
-        if (earlyCount == BM.Enemys.Length)
-        {       
-            TM.PlayerTurnStart();
-            earlyCount = 0;
-        }
-    }*/
+    List<ActStruct> EnemyActList = new List<ActStruct>();
+    
 
     public struct ActStruct
     {
@@ -241,59 +242,61 @@ public class ActManager : MonoBehaviour
         }
     }
    
-    public void earlyAct()
-    {
-        for (int i = 0; i < earlyActList.Count; i++)
-        {
-            if (earlyActList[i].no == 1)
-            {
-                MakeAct(1, 1, earlyActList[i].mount, earlyActList[i].myE, null, null, earlyActList[i].targetC, 1);
-                earlyActList[i].targetC.myPassive.ActMinus(earlyActList[i].mount);
-            }
-            if (earlyActList[i].no== 4)
-            {
-                MakeAct(1, 4, earlyActList[i].mount, earlyActList[i].myE, null, null, null, 1);
-            }
-            if (earlyActList[i].no == 6)
-            {               
-                BM.FormationCollapse(earlyActList[i].myE.Name);
-            }
-        }
-        earlyActList.Clear();
-        Act();
-    }
-    public void LateAct()
+   
+    public void EnemyAct()
     {
         isLateActing = true;
-        for (int i = 0; i < lateActList.Count; i++)
+      
+        for (int i = 0; i < EnemyActList.Count; i++)
         {
-            if (lateActList[i].no == 0)
+            if (i == 0)
             {
-                MakeAct(1, 0, lateActList[i].mount, lateActList[i].myE, null, null, lateActList[i].targetC, 1);
-                lateActList[i].targetC.onHit(lateActList[i].mount, lateActList[i].myE);
+                MakeAct(1, 5, 0, EnemyActList[i].myE, null, null, null, 1);
             }
-            else if (lateActList[i].no == 2)
+          
+            if (EnemyActList[i].no == 0)
             {
-                MakeAct(1, 2, lateActList[i].mount, lateActList[i].myE, lateActList[i].targetE, null, null, 1);
+                MakeAct(1, 0, EnemyActList[i].mount, EnemyActList[i].myE, null, null, EnemyActList[i].targetC, 1);
+                EnemyActList[i].targetC.onHit(EnemyActList[i].mount, EnemyActList[i].myE);
+            }
+            else if (EnemyActList[i].no == 1)
+            {
+                MakeAct(1, 1, EnemyActList[i].mount, EnemyActList[i].myE, EnemyActList[i].targetE, null, EnemyActList[i].targetC, 1);
+            }
+            else if (EnemyActList[i].no == 2)
+            {
+                MakeAct(1, 2, EnemyActList[i].mount, EnemyActList[i].myE, EnemyActList[i].targetE, null, null, 1);
             }
 
-            else if (lateActList[i].no == 3)
+            else if (EnemyActList[i].no == 3)
             {
-                MakeAct(1, 3, lateActList[i].mount, lateActList[i].myE, lateActList[i].targetE, null, null, 1);
+                MakeAct(1, 3, EnemyActList[i].mount, EnemyActList[i].myE, EnemyActList[i].targetE, null, null, 1);
+            }
+            else if (EnemyActList[i].no == 4)
+            {
+                MakeAct(1, 4, EnemyActList[i].mount, EnemyActList[i].myE, null, null, null, 1);
+            }
+            else if (EnemyActList[i].no == 7)
+            {
+                MakeAct(1, 7, EnemyActList[i].mount, EnemyActList[i].myE, EnemyActList[i].targetE, null, null, 1);
+            }
+            if (i == EnemyActList.Count-1)
+            {
+                MakeAct(1, 6, 0, EnemyActList[i].myE, null, null, null, 1);
             }
         }
         Act();
-        lateActList.Clear();
+        EnemyActList.Clear();
     }
-    public void MakeLateAct(int no,int mount,Character target,Enemy myE,Enemy targetE)
-    {
+    public void MakeEnemyAct(int no,int mount,Character target,Enemy myE,Enemy targetE)
+    {if (no == 0 && mount == 0) return;
         ActStruct newActStruct = new ActStruct(1, no, mount, myE, targetE, null,target, 1);
-        lateActList.Add(newActStruct);
+        EnemyActList.Add(newActStruct);
     }
-    public void MakeEarlyAct(int no, int mount, Character target, Enemy myE, Enemy targetE)
-    {
-        ActStruct newActStruct = new ActStruct(1, no, mount, myE, targetE, null, target, 1);
-        earlyActList.Add(newActStruct);
+    public void SpdIncreaseByEnemy(int no, int mount, Character target, Enemy myE, Enemy targetE)
+    {      
+        ActStruct newActStruct = new ActStruct(1, 1, mount, myE, targetE, null, target, 1);
+        EnemyActList.Add(newActStruct);
     }
     public void MakeAct(int type,int no, int mount, Enemy myE,Enemy targetE, Character myC, Character targetC, int count) 
     {
@@ -451,38 +454,27 @@ public class ActManager : MonoBehaviour
                 if (ActList[0].myE.isDie) yield return null;
                 else
                 {
-                    yield return new WaitForSeconds(0.2f);
+                    yield return new WaitForSeconds(0.5f);
                     if (ActList[0].no == 0) //적의 공격
                     {
                         ActList[0].targetC.onDamage(ActList[0].mount);
-                        ActList[0].myE.transform.DOMove(ActList[0].myE.transform.position + new Vector3(0, -0.5f, 0), 0.2f);
-                        yield return new WaitForSeconds(0.2f);
-                        ActList[0].myE.transform.DOMove(ActList[0].myE.transform.position + new Vector3(0, 0.5f, 0), 0.2f);
-                        yield return new WaitForSeconds(0.2f);
+                      
                     }
-                    if (ActList[0].no == 1) //적의 행동력 감소
+                    if (ActList[0].no == 1) //적의 아군 속도 증가
                     {
-                        ActList[0].targetC.onMinusAct(ActList[0].mount);
-                        ActList[0].myE.transform.DOMove(ActList[0].myE.transform.position + new Vector3(0, -0.5f, 0), 0.2f);
-                        yield return new WaitForSeconds(0.2f);
-                        ActList[0].myE.transform.DOMove(ActList[0].myE.transform.position + new Vector3(0, 0.5f, 0), 0.2f);
-                        yield return new WaitForSeconds(0.2f);
+                        float spdMount = (float)ActList[0].mount / 100;
+                        BM.SpeedChange(ActList[0].targetC,spdMount);
+                     
                     }
                     if (ActList[0].no == 2) //적의 방어력 획득
                     {
                         ActList[0].targetE.GetArmorStat(ActList[0].mount);
-                        ActList[0].myE.transform.DOMove(ActList[0].myE.transform.position + new Vector3(0, -0.5f, 0), 0.2f);
-                        yield return new WaitForSeconds(0.2f);
-                        ActList[0].myE.transform.DOMove(ActList[0].myE.transform.position + new Vector3(0, 0.5f, 0), 0.2f);
-                        yield return new WaitForSeconds(0.2f);
+                       
                     }
                     if (ActList[0].no == 3) //적의 체력 회복
                     {
                         ActList[0].targetE.GetHp(ActList[0].mount);
-                        ActList[0].myE.transform.DOMove(ActList[0].myE.transform.position + new Vector3(0, -0.5f, 0), 0.2f);
-                        yield return new WaitForSeconds(0.2f);
-                        ActList[0].myE.transform.DOMove(ActList[0].myE.transform.position + new Vector3(0, 0.5f, 0), 0.2f);
-                        yield return new WaitForSeconds(0.2f);
+                       
                     }
                     if (ActList[0].no == 4) //적의 상태 변화
                     {
@@ -495,7 +487,22 @@ public class ActManager : MonoBehaviour
                                 yield return new WaitForSeconds(0.05f);
                             }
                         }
-
+                    }
+                    if (ActList[0].no == 5)
+                    {
+                        ActList[0].myE.transform.DOMove(ActList[0].myE.transform.position + new Vector3(0, -0.5f, 0), 0.1f);
+                        yield return new WaitForSeconds(0.1f);
+                       
+                    }
+                    if (ActList[0].no == 6)
+                    {                     
+                        ActList[0].myE.transform.DOMove(ActList[0].myE.transform.position + new Vector3(0, 0.5f, 0), 0.1f);
+                        yield return new WaitForSeconds(0.1f);
+                    }
+                    if (ActList[0].no == 7)//공격력 올리기
+                    {
+                        ActList[0].targetE.GetAtk(ActList[0].mount);
+                      
                     }
                 }
             }

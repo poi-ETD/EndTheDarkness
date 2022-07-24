@@ -181,7 +181,7 @@ public class Card : MonoBehaviour
                 }
                 if (cardNo == 23)
                 {
-                    BM.card23();
+                    //BM.card23();
                 }
                 if (cardNo == 25)
                 {
@@ -441,12 +441,13 @@ public class Card : MonoBehaviour
         if (iscard20Mode)
         {
             
-            Destroy(gameObject);
-            Destroy(gameObject);
+           
+            
             // BM.log.logContent.text += "\n" + BM.actCharacter.Name + "이(가) " + BM.usedInCard20.GetComponent<Card>().Name.text + " 발동!";
             BM.useCost(BM.usedInCard20.GetComponent<Card>().cardcost,gameObject);
             BM.usedInCard20.GetComponent<Card>().CardUse();
             BM.usedInCard20 = null;
+            Destroy(gameObject);
             return;
         }
         CM.UseCard(gameObject);
@@ -596,8 +597,10 @@ public class Card : MonoBehaviour
         {
             BM.characters[i].myPassive.CardRemove();
         }
+        
         CM.Deck.Remove(gameObject);
         CM.RemoveCard.Add(gameObject);
+        transform.parent = CM.RemoveContent.transform;
         gameObject.SetActive(false);
     }
     public void RemoveThisCardInField()
@@ -607,7 +610,8 @@ public class Card : MonoBehaviour
             BM.characters[i].myPassive.CardRemove();
         }
         CM.field.Remove(gameObject);
-        CM.RemoveCard.Add(gameObject);             
+        CM.RemoveCard.Add(gameObject);
+        transform.parent = CM.RemoveContent.transform;
     }
     public void GetPercentDmgToAllTarget(int dmg)
     {

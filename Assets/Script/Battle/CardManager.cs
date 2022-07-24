@@ -22,7 +22,7 @@ public class CardManager : MonoBehaviour
     [SerializeField] GameObject CardPrefebs;
   
     [SerializeField] GameObject GraveContent;
-    [SerializeField] GameObject RemoveContent;
+    public GameObject RemoveContent;
     public TurnManager TM;
     public int FiledCardCount;//현재 필드에 카드가 몇 장 있나
     public int specialDrow;//카드를 통한 드로우
@@ -155,8 +155,10 @@ public class CardManager : MonoBehaviour
     {
         if (usingCard.GetComponent<Card>().isRemove)
         {
+        
             usingCard.GetComponent<Card>().RemoveThisCardInField();
             usingCard.transform.parent = RemoveContent.transform;
+            usingCard.GetComponent<Card>().isGrave = true;
             usingCard.SetActive(false);
         }
         else

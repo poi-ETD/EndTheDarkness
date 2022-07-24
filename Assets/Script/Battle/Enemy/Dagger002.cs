@@ -2,70 +2,80 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using TMPro;
 public class Dagger002 : MonoBehaviour
 {
     public TurnManager TM;
     public int curTurn;
     public Enemy myEnemy;
     public BattleManager BM;
-    [SerializeField] Text t;
-    [SerializeField] Enemy another;
-    bool pattern;
+    public List<Character> HaveArmor = new List<Character>();
+    public List<Character> ForwardHaveArmor = new List<Character>();
+    bool pattern2done;
+    
+    int myturn;
+
+    // YH
+    public Image image_character;
+    public Sprite sprite_idle;
+    public Sprite sprite_highlight;
+
+    [SerializeField] TextMeshProUGUI NameT;
 
     private void Start()
     {
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
+        myEnemy = GetComponent<Enemy>();
         myEnemy.Name = "단검";
-        StartPattern();
+        NameT.text = myEnemy.Name;
+
     }
     private void Update()
     {
-        if (curTurn != TM.turn)
+        if (myEnemy.isAct)
         {
             StartPattern();
+            myEnemy.isAct = false;
         }
     }
-
     void StartPattern()
     {
         if (BM.teamDieCount < BM.characters.Count)
         {
-            myEnemy.goingShadow = false;
-            if (!myEnemy.isDie)
+            if (pattern2done)
             {
-                if (pattern)
+                BM.EnemyGetAromor(5, myEnemy, myEnemy);
+                pattern2done = false;
+            }
+            else
+            {
+                int rand = Random.Range(0, 2);
+                if (rand == 0)
                 {
-                    
-                    pattern = false;
-                    BM.EnemyGetAromor(5, myEnemy, myEnemy);
+                    BM.HitFront(3, 1, myEnemy, 50);
+                    BM.HitFront(3, 1, myEnemy, 50);
                 }
                 else
                 {
-                    int rand = Random.Range(0, 2);
-                    if (rand == 0)
+                    if (myEnemy.CanShadow())
                     {
-                        BM.HitFront(3, 1, myEnemy, true);
-                        BM.HitFront(3, 1, myEnemy, true);
+                        BM.EnemyStateChange(myEnemy, 0);
                     }
-                    if (rand == 1)
-                    {if (myEnemy.CanShadow())
-                            BM.EnemyStateChange(myEnemy, 0);
-                        else
-                        {
-                            BM.HitFront(3, 0, myEnemy, false);
-                            BM.HitFront(3, 0, myEnemy, false);
-                            BM.HitFront(3, 0, myEnemy, false);
-
-                        }
-                        BM.HitBack(1, 0, myEnemy, false);
-                        pattern = true;
+                    else
+                    {
+                        BM.HitFront(3,0, myEnemy, 0);
+                        BM.HitFront(3, 0, myEnemy, 0);
+                        BM.HitFront(3, 0, myEnemy, 0);
                     }
+                    pattern2done = true;
                 }
-            }                
+            }
         }
-        myEnemy.EnemyEndTurn();
-        curTurn++;
+        myEnemy.BM.AM.EnemyAct();
+
+        // myEnemy.EnemyEndTurn();
+
+
     }
 }

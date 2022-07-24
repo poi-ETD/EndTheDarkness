@@ -226,18 +226,14 @@ public class Character : MonoBehaviour
     }
 
   
-    public void onMinusAct(int i)
+    public void OnSpeedText(float amount)
     {
-        turnAct -= i;
-        if (i > 0)
-        {
+       
+      
             GameObject dmgText = Instantiate(BM.DmgPrefebs, gameObject.transform);
             dmgText.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
-            dmgText.GetComponent<DMGtext>().GetType(1, i);
-        }
-        if (turnAct < 0) turnAct = 0;
-        actT.text = "" + turnAct;
-        NextTurnMinusAct = 0;
+            dmgText.GetComponent<DMGtext>().GetType(1, amount);
+      
     }
     public void TurnAtkUp(int i)
     {

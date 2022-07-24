@@ -30,7 +30,7 @@ public class Enemy : MonoBehaviour
     public Image myImage;
     ActManager AM;
     public int myNo;
-    public bool goingShadow;
+
 
     public int[] status = new int[10];
 
@@ -71,7 +71,7 @@ public class Enemy : MonoBehaviour
         {
             if (BM.Enemys[i] == gameObject)
                 continue;
-            if (!BM.Enemys[i].GetComponent<Enemy>().isDie && !BM.Enemys[i].GetComponent<Enemy>().goingShadow)
+            if (!BM.Enemys[i].GetComponent<Enemy>().isDie && !BM.Enemys[i].GetComponent<Enemy>().Shadow)
             {
                 can = true;
             }
@@ -88,7 +88,8 @@ public class Enemy : MonoBehaviour
         if (BM.EnemySelectMode)
         {
             Debug.Log("OnSelect");
-            BM.EnemySelect(gameObject); }
+            BM.EnemySelect(gameObject);
+        }
     }
     public void onEnterEvnent()
     {
@@ -227,70 +228,29 @@ public class Enemy : MonoBehaviour
 
     public void GetHp(int amount)
     {
-
-
-
         Hp += amount;
         if (Hp > maxHp) Hp = maxHp;
         hpSlider.value = Hp / (float)maxHp;
 
     }
-
-
-
-    public void GetDynamicHp(int amount,string enemyname)
+    public void GetAtk(int amount)
     {
-        
-        string newstring = Board.text;
-        bool isThere = false;
-        for(int i = 0; i < HpS.Count; i++)
-        {
-            if (HpS[i] == enemyname)
-            {
-                isThere = true;
-                int curR = HpI[i];
-                if (amount > 0)
-                {
-                    newstring = newstring.Replace("<sprite name=" + enemyname + "><sprite name=recover>" + curR + "\n"
-                    , "<sprite name=" + enemyname + "><sprite name=recover>" + amount + "\n");
-                    HpS.RemoveAt(i);
-                    HpI.RemoveAt(i);
-                    HpS.Add(enemyname);
-                    HpI.Add(amount);
-                }
-                else
-                {
-                    newstring = newstring.Replace("<sprite name=" + enemyname + "><sprite name=recover>" + curR + "\n"
-                  , "");
-                    HpS.RemoveAt(i);
-                    HpI.RemoveAt(i);
-                }
-                RecoverHp -= curR;
-                RecoverHp += amount;            
-                break;
-            }
-        }
-        if (!isThere && amount !=0)
-        {
-            RecoverHp += amount;
-            HpS.Add(enemyname);
-            HpI.Add(amount);
-            newstring = "<sprite name=" + enemyname + "><sprite name=recover>" + amount + "\n";
-        }
-        Board.text = newstring;
+        GameObject Dmg = Instantiate(BM.DmgPrefebs, transform);
+        Dmg.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+        Dmg.GetComponent<DMGtext>().GetType(4, amount);
+        Atk += amount;
     }
-
-
+  
     public void onShadow()
     {
+        
         Shadow = true;      
     }
 
 
     public void onEnemyHit(int dmg, string Name)
     {
-        EndTurnDmg += dmg;
-        
+        EndTurnDmg += dmg;       
         string newstring = "<sprite name=" + Name+ "><sprite name=dmg>" + dmg + "\n";
         Board.text += newstring;
     }
