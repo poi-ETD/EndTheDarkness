@@ -346,14 +346,9 @@ public class BattleManager : MonoBehaviour
         {
             characters[i].curNo = i;
         }
-        if (GD.BattleNo == 3 || GD.BattleNo == 6) //폴리만 예외,추후에 폴리 다시 작업할 때 수정예정
-        {
-            GameObject EnemySummon = Instantiate(Enemys[GD.BattleNo], new Vector2(0, 6), transform.rotation, GameObject.Find("CharacterCanvas").transform);
-        }
-        else
-        {
+      
             GameObject EnemySummon = Instantiate(Enemys[0], new Vector2(-2, -2), transform.rotation, GameObject.Find("CharacterCanvas").transform);
-        }
+        
         Enemys = GameObject.FindGameObjectsWithTag("Enemy");
         for (int i = 0; i < Enemys.Length; i++)
         {
@@ -459,7 +454,8 @@ public class BattleManager : MonoBehaviour
     public void useCost(int amount,GameObject card) //코스트 사용 함수
     {
         if (actCharacter.characterNo==5&&actCharacter.passive[3]>0) 
-        {   leftCost -= 1;
+        {   
+            leftCost -= 1;
             card.GetComponent<Card>().GetRemove();
         }
         else 
@@ -468,12 +464,14 @@ public class BattleManager : MonoBehaviour
     }
     public void SpeedChange(Character character,float amount)
     {
+        character.OnSpeedText(amount);
         character.speed += amount;
         character.curSpeed += amount;
         AM.SpeedChangeByEffect(0,character.curNo);
     }
     public void TurnSpeedChange(Character character, float amount)
-    {       
+    {
+        character.OnSpeedText(amount);
         character.curSpeed += amount;
         AM.SpeedChangeByEffect(0,character.curNo);
     }
@@ -482,6 +480,7 @@ public class BattleManager : MonoBehaviour
         if (!otherCanvasOn)
         {
             selectedEnemy = SelectedEnemyInSelectMode.GetComponent<Enemy>();
+            if(!selectedEnemy.Shadow)//은신일 때는 카드 지정 x
             selectedCard.GetComponent<Card>().EnemySelectCard();
         }
     }
@@ -1080,8 +1079,8 @@ public class BattleManager : MonoBehaviour
     }
     //type==0 랜덤 대상 type==1 방어도 높은 적 우선 type==2 체력 높은 적 우선 type==3 방어도 있는 적 우선
     //type==4 모든 대상
-    //ActM =>true 일 시 행동력 감소 포함
-    public void HitFront(int dmg, int type, Enemy enemy, bool ActM) //타켓을 전방으로
+    
+    public void HitFront(int dmg, int type, Enemy enemy, int spd) //타켓을 전방으로
     {
         bool Alive = false;
 
@@ -1091,8 +1090,7 @@ public class BattleManager : MonoBehaviour
         }
         if (!Alive)
         {
-
-            HitAll(dmg, type, enemy, ActM);//전방에 아무도 없다면 타겟을 모두로
+            HitAll(dmg, type, enemy, spd);//전방에 아무도 없다면 타겟을 모두로
         }
         else
         {
@@ -1101,11 +1099,10 @@ public class BattleManager : MonoBehaviour
             {
                 rand2 = Random.Range(0, line);
                 while (characters[rand2].isDie) rand2 = Random.Range(0, line);
-               AM.MakeLateAct(0, dmg, characters[rand2], enemy, null);
-             
-                if (ActM)
-                {
-                    AM.MakeEarlyAct(1, 1, characters[rand2], enemy, null);                   
+               AM.MakeEnemyAct(0, dmg, characters[rand2], enemy, null);       
+                if (spd>0)
+                { 
+                    AM.SpdIncreaseByEnemy(1, spd, characters[rand2], enemy, null);                   
                 }
             }
             if (type == 1)
@@ -1128,11 +1125,13 @@ public class BattleManager : MonoBehaviour
                 rand2 = Random.Range(0, MaxArmor.Count);
                 while (MaxArmor[rand2].isDie) rand2 = Random.Range(0, MaxArmor.Count);
 
-               AM.MakeLateAct(0, dmg, MaxArmor[rand2], enemy, null);
+               AM.MakeEnemyAct(0, dmg, MaxArmor[rand2], enemy, null);
               
-                if (ActM)
+                if (spd > 0)
                 {
-                  AM.MakeEarlyAct(1, 1, MaxArmor[rand2], enemy, null);
+                
+
+                  AM.SpdIncreaseByEnemy(1, spd, MaxArmor[rand2], enemy, null);
                    
                 }
             }
@@ -1157,11 +1156,11 @@ public class BattleManager : MonoBehaviour
                 while (MaxHp[rand2].isDie) rand2 = Random.Range(0, MaxHp.Count);
 
 
-              AM.MakeLateAct(0, dmg, MaxHp[rand2], enemy, null);
+              AM.MakeEnemyAct(0, dmg, MaxHp[rand2], enemy, null);
              
-                if (ActM)
+                if (spd > 0)
                 {
-                    AM.MakeEarlyAct(1, 1, MaxHp[rand2], enemy, null);
+                    AM.SpdIncreaseByEnemy(1, spd, MaxHp[rand2], enemy, null);
                    
                 }
             }
@@ -1172,17 +1171,17 @@ public class BattleManager : MonoBehaviour
                 {
                     if (forward[i].armor > 0) HaveArmor.Add(forward[i]);
                 }
-                if (HaveArmor.Count == 0) HitFront(dmg, 0, enemy, ActM);
+                if (HaveArmor.Count == 0) HitFront(dmg, 0, enemy, spd);
                 else
                 {
                     rand2 = Random.Range(0, HaveArmor.Count);
 
 
-                   AM.MakeLateAct(0, dmg, HaveArmor[rand2], enemy, null);
+                   AM.MakeEnemyAct(0, dmg, HaveArmor[rand2], enemy, null);
                     
-                    if (ActM)
+                    if (spd > 0)
                     {
-                        AM.MakeEarlyAct(1, 1, HaveArmor[rand2], enemy, null);
+                        AM.SpdIncreaseByEnemy(1, spd, HaveArmor[rand2], enemy, null);
                    
                     }
                 }
@@ -1192,11 +1191,11 @@ public class BattleManager : MonoBehaviour
                 for (int i = 0; i < line; i++)
                 {
 
-                    AM.MakeLateAct(0, dmg, characters[i], enemy, null);
+                    AM.MakeEnemyAct(0, dmg, characters[i], enemy, null);
 
-                    if (ActM)
+                    if (spd > 0)
                     {
-                        AM.MakeEarlyAct(1, 1, characters[i], enemy, null);
+                        AM.SpdIncreaseByEnemy(1, spd, characters[i], enemy, null);
                     }
                 }
             }
@@ -1204,13 +1203,13 @@ public class BattleManager : MonoBehaviour
             {
                 for (int i = 0; i < line; i++)
                 {
-                    AM.MakeEarlyAct(1, dmg, characters[i], enemy, null);
+                    AM.SpdIncreaseByEnemy(1, dmg, characters[i], enemy, null);
                  
                 }
             }
         }
     }
-    public void HitAll(int dmg, int type, Enemy enemy, bool ActM) //타겟을 모두로
+    public void HitAll(int dmg, int type, Enemy enemy, int spd) //타겟을 모두로
     {
       
         int rand2 = 0;
@@ -1219,11 +1218,11 @@ public class BattleManager : MonoBehaviour
             rand2 = Random.Range(0, characters.Count);
             while (characters[rand2].isDie) rand2 = Random.Range(0, characters.Count);
 
-            AM.MakeLateAct(0, dmg, characters[rand2], enemy, null);
+            AM.MakeEnemyAct(0, dmg, characters[rand2], enemy, null);
 
-            if (ActM)
+            if (spd > 0)
             {
-                AM.MakeEarlyAct(1, 1, characters[rand2], enemy, null);
+                AM.SpdIncreaseByEnemy(1, spd, characters[rand2], enemy, null);
             }
         }
         if (type == 1)
@@ -1247,11 +1246,11 @@ public class BattleManager : MonoBehaviour
             while (MaxArmor[rand2].isDie) rand2 = Random.Range(0, MaxArmor.Count);
 
 
-            AM.MakeLateAct(0, dmg, MaxArmor[rand2], enemy, null);
+            AM.MakeEnemyAct(0, dmg, MaxArmor[rand2], enemy, null);
 
-            if (ActM)
+            if (spd > 0)
             {
-                AM.MakeEarlyAct(1, 1, MaxArmor[rand2], enemy, null);
+                AM.SpdIncreaseByEnemy(1, spd, MaxArmor[rand2], enemy, null);
 
             }
         }
@@ -1277,11 +1276,11 @@ public class BattleManager : MonoBehaviour
 
 
 
-            AM.MakeLateAct(0, dmg, MaxHp[rand2], enemy, null);
+            AM.MakeEnemyAct(0, dmg, MaxHp[rand2], enemy, null);
 
-            if (ActM)
+            if (spd > 0)
             {
-                AM.MakeEarlyAct(1, 1, MaxHp[rand2], enemy, null);
+                AM.SpdIncreaseByEnemy(1, spd, MaxHp[rand2], enemy, null);
 
             }
         }
@@ -1292,17 +1291,17 @@ public class BattleManager : MonoBehaviour
             {
                 if (characters[i].armor > 0) HaveArmor.Add(characters[i]);
             }
-            if (HaveArmor.Count == 0) HitAll(dmg, 0, enemy, ActM);
+            if (HaveArmor.Count == 0) HitAll(dmg, 0, enemy, spd);
             else
             {
                 rand2 = Random.Range(0, HaveArmor.Count);
 
 
-                AM.MakeLateAct(0, dmg, HaveArmor[rand2], enemy, null);
+                AM.MakeEnemyAct(0, dmg, HaveArmor[rand2], enemy, null);
 
-                if (ActM)
+                if (spd > 0)
                 {
-                    AM.MakeEarlyAct(1, 1, HaveArmor[rand2], enemy, null);
+                    AM.SpdIncreaseByEnemy(1, spd, HaveArmor[rand2], enemy, null);
 
                 }
             }
@@ -1313,11 +1312,11 @@ public class BattleManager : MonoBehaviour
             {
 
 
-                AM.MakeLateAct(0, dmg, characters[i], enemy, null);
+                AM.MakeEnemyAct(0, dmg, characters[i], enemy, null);
 
-                if (ActM)
+                if (spd > 0)
                 {
-                    AM.MakeEarlyAct(1, 1, characters[i], enemy, null);
+                    AM.SpdIncreaseByEnemy(1, spd, characters[i], enemy, null);
                 }
             }
         }
@@ -1325,11 +1324,11 @@ public class BattleManager : MonoBehaviour
         {
             for (int i = 0; i < characters.Count; i++)
             {
-                AM.MakeEarlyAct(1, dmg, characters[i], enemy, null);
+                AM.SpdIncreaseByEnemy(1, dmg, characters[i], enemy, null);
             }
         }
     }
-    public void HitBack(int dmg, int type, Enemy enemy, bool ActM) //타겟을 후방으로
+    public void HitBack(int dmg, int type, Enemy enemy, int spd) //타겟을 후방으로
     {
         bool Alive = false;
 
@@ -1339,7 +1338,7 @@ public class BattleManager : MonoBehaviour
         }
         if (!Alive)
         {
-            HitAll(dmg, type, enemy, ActM);//후방에 아무도 없다면 타겟을 전체로
+            HitAll(dmg, type, enemy, spd);//후방에 아무도 없다면 타겟을 전체로
         }
         else
         {
@@ -1349,11 +1348,11 @@ public class BattleManager : MonoBehaviour
                 rand2 = Random.Range(line, characters.Count);
                 while (characters[rand2].isDie) rand2 = Random.Range(line, characters.Count);
 
-                AM.MakeLateAct(0, dmg, characters[rand2], enemy, null);
+                AM.MakeEnemyAct(0, dmg, characters[rand2], enemy, null);
 
-                if (ActM)
+                if (spd > 0)
                 {
-                    AM.MakeEarlyAct(1, 1, characters[rand2], enemy, null);
+                    AM.SpdIncreaseByEnemy(1, spd, characters[rand2], enemy, null);
                 }
             }
             if (type == 1)
@@ -1377,11 +1376,11 @@ public class BattleManager : MonoBehaviour
                 while (MaxArmor[rand2].isDie) rand2 = Random.Range(0, MaxArmor.Count);
 
 
-                AM.MakeLateAct(0, dmg, MaxArmor[rand2], enemy, null);
+                AM.MakeEnemyAct(0, dmg, MaxArmor[rand2], enemy, null);
 
-                if (ActM)
+                if (spd > 0)
                 {
-                    AM.MakeEarlyAct(1, 1, MaxArmor[rand2], enemy, null);
+                    AM.SpdIncreaseByEnemy(1, spd, MaxArmor[rand2], enemy, null);
 
                 }
             }
@@ -1406,12 +1405,10 @@ public class BattleManager : MonoBehaviour
                 while (MaxHp[rand2].isDie) rand2 = Random.Range(0, MaxHp.Count);
 
 
-
-                AM.MakeLateAct(0, dmg, MaxHp[rand2], enemy, null);
-
-                if (ActM)
+                AM.MakeEnemyAct(0, dmg, MaxHp[rand2], enemy, null);
+                if (spd > 0)
                 {
-                    AM.MakeEarlyAct(1, 1, MaxHp[rand2], enemy, null);
+                    AM.SpdIncreaseByEnemy(1, spd, MaxHp[rand2], enemy, null);
 
                 }
             }
@@ -1422,17 +1419,17 @@ public class BattleManager : MonoBehaviour
                 {
                     if (characters[i].armor > 0) HaveArmor.Add(characters[i]);
                 }
-                if (HaveArmor.Count == 0) HitBack(dmg, 0, enemy, ActM);
+                if (HaveArmor.Count == 0) HitBack(dmg, 0, enemy, spd);
                 else
                 {
                     rand2 = Random.Range(0, HaveArmor.Count);
 
 
-                    AM.MakeLateAct(0, dmg, HaveArmor[rand2], enemy, null);
+                    AM.MakeEnemyAct(0, dmg, HaveArmor[rand2], enemy, null);
 
-                    if (ActM)
+                    if (spd > 0)
                     {
-                        AM.MakeEarlyAct(1, 1, HaveArmor[rand2], enemy, null);
+                        AM.SpdIncreaseByEnemy(1, spd, HaveArmor[rand2], enemy, null);
 
                     }
                 }
@@ -1442,11 +1439,11 @@ public class BattleManager : MonoBehaviour
                 for (int i = line; i < characters.Count; i++)
                 {
 
-                  AM.MakeLateAct(0, dmg, characters[i], enemy, null);
+                  AM.MakeEnemyAct(0, dmg, characters[i], enemy, null);
                  
-                    if (ActM)
+                    if (spd > 0)
                     {
-                        AM.MakeEarlyAct(1, 1, characters[i], enemy, null);
+                        AM.SpdIncreaseByEnemy(1, spd, characters[i], enemy, null);
                     }
                 }
             }
@@ -1454,7 +1451,7 @@ public class BattleManager : MonoBehaviour
             {
                 for (int i = line; i < characters.Count; i++)
                 {
-                    AM.MakeEarlyAct(1, dmg, characters[i], enemy, null);
+                    AM.SpdIncreaseByEnemy(1, dmg, characters[i], enemy, null);
                 }
             }
         }
@@ -1462,24 +1459,29 @@ public class BattleManager : MonoBehaviour
 
     public void EnemyGetAromor(int mount, Enemy myEnemy, Enemy target)
     {
-       AM.MakeLateAct(2, mount, null, myEnemy, target);    
+       AM.MakeEnemyAct(2, mount, null, myEnemy, target);    
     }
 
     public void EnemyGetHp(int mount, Enemy myEnemy, Enemy target)
     {
-        AM.MakeLateAct(3, mount, null, myEnemy, target);     
+        AM.MakeEnemyAct(3, mount, null, myEnemy, target);     
     }
 
 
     public void EnemyStateChange(Enemy myEnemy, int mount) //0->은신 1->무적 2->불사
     {
-        if (mount == 0) myEnemy.goingShadow = true;
-        AM.MakeEarlyAct(4, mount, null, myEnemy, null);
+
+        AM.MakeEnemyAct(4, mount, null, myEnemy, null);
     }
 
     public void EnemyFormationCollapse(Enemy myEnemy) //적이 선 행동으로 진형붕괴를 선택했을 때
     {
-       AM.MakeEarlyAct(6, 0, null, myEnemy, null);
+       AM.SpdIncreaseByEnemy(6, 0, null, myEnemy, null);
+    }
+
+    public void EnemyAtkUp(Enemy targetEnemy,int mount,Enemy actEnemy)
+    {
+        AM.MakeEnemyAct(7, mount, null, actEnemy, targetEnemy);
     }
     public void card22()  //결의
     {
@@ -1504,23 +1506,7 @@ public class BattleManager : MonoBehaviour
         }
         getArmor(10, characters[minArmorList[Random.Range(0, minArmorList.Count)]]);
     }
-    public void card23() //매치포인트
-    {
-        
-        for (int i = 0; i < characters.Count; i++)
-        {
-            if(characters[i].characterNo!=2)
-            characters[i].onMinusAct(characters[i].turnAct);
-            else
-            {
-                characters[i].TurnAtkUp(3);
-            }
-        }
-
-      
-
-       
-    }
+ 
     public void card24() //사이코키네시스
     {
         StartCoroutine("card24cor");

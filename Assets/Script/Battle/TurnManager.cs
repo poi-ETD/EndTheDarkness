@@ -114,7 +114,7 @@ public class TurnManager : MonoBehaviour
 
     public void PlayerTurnEndButton()
     {
-        
+       
         turnEndImage.color = new Color(0.3f, 0.3f, 0.3f);
         //HandManager.Instance.go_UseButton.SetActive(false); //YH
         HandManager.Instance.go_SelectedCardTooltip.SetActive(false); //YH
@@ -141,7 +141,7 @@ public class TurnManager : MonoBehaviour
         for (int i = 0; i < BM.characters.Count; i++) gameCost += BM.characters[i].cost;
         BM.leftCost = gameCost+BM.nextTurnStartCost;//턴 시작 시 전 턴에 코스트 증가하는 효과가 있었다면 적용.
 
-       BM.costT.text = "" + BM.leftCost;
+        BM.costT.text = "" + BM.leftCost;
 
         BM.nextTurnStartCost = 0;
         PlayerTurn =true;
@@ -159,7 +159,7 @@ public class TurnManager : MonoBehaviour
                 if (BM.GD.blessbool[12] && turn == 1)BM.characters[i].turnAct = 0;
                 BM.characters[i].curSpeed = BM.characters[i].speed;
                 BM.characters[i].curTurnActTime = 0;
-                BM.characters[i].onMinusAct(BM.characters[i].NextTurnMinusAct);
+              
                 BM.characters[i].turnAtk = BM.characters[i].atk;
                 BM.characters[i].TurnAtkUp(turnAtk);
                 BM.characters[i].turnDef = BM.characters[i].def;

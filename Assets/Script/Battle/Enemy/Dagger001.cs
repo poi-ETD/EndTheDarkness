@@ -14,7 +14,7 @@ public class Dagger001 : MonoBehaviour
     [SerializeField] Text t;
     [SerializeField] int plusname;
     [SerializeField] Dagger001 anotherDagger;
-    int pattern;
+    public int pattern;
     bool[] done = new bool[3];
     int myturn;
     
@@ -61,26 +61,26 @@ public class Dagger001 : MonoBehaviour
 
                       if (pattern == 0)
                       {
-                          BM.HitFront(3, 0, myEnemy, false);
-                          BM.HitFront(3, 0, myEnemy, false);
+                          BM.HitFront(3, 0, myEnemy, 0);
+                          BM.HitFront(3, 0, myEnemy, 0);
                       }
                       if (pattern == 1)
                       {
                           BM.EnemyGetAromor(3, myEnemy, myEnemy);
-                          BM.HitFront(3, 0, myEnemy, false);
+                          BM.HitFront(3, 0, myEnemy,0);
                       }
                  
                   }
                   else
                   {
-                      BM.HitFront(3, 0, myEnemy, false);
-                      BM.HitFront(3, 0, myEnemy, false);
-                      BM.HitFront(3, 0, myEnemy, false);
-                      BM.HitBack(1, 0, myEnemy, false);
+                      BM.HitFront(3, 0, myEnemy, 0);
+                      BM.HitFront(3, 0, myEnemy, 0);
+                      BM.HitFront(3, 0, myEnemy,0);
+                      BM.HitBack(1, 0, myEnemy, 0);
                   }
               }
            }
-        myEnemy.BM.AM.LateAct();
+        myEnemy.BM.AM.EnemyAct();
                
               // myEnemy.EnemyEndTurn();
 

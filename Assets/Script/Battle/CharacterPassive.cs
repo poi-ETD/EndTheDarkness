@@ -434,7 +434,7 @@ public class CharacterPassive : MonoBehaviour
         }
     }
   
-    public void ActMinus(int m)
+    public void ActMinus(float m)
     {
         if (myCharacter.isDie) return;                    
        

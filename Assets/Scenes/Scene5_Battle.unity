@@ -932,6 +932,7 @@ MonoBehaviour:
   text_TooltipCardName: {fileID: 9053282549421450790}
   text_TooltipCardNo: {fileID: 9053282548953910597}
   text_TooltipCardContext: {fileID: 9053282549770701055}
+  selectedCard: {fileID: 0}
   isSelectedCard: 0
   go_selectedCardImage: {fileID: 1055180424}
   isEnableOtherButton: 0
@@ -2354,18 +2355,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1494894260}
-        m_MethodName: ActComplete
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1494894260}
-        m_MethodName: Act
+        m_MethodName: EndButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2898,6 +2888,8 @@ MonoBehaviour:
   selectedCharacter: {fileID: 0}
   selectedCard: {fileID: 0}
   previousSelectedCard: {fileID: 0}
+  previousEnemy: {fileID: 0}
+  previousCharacter: {fileID: 0}
   costT: {fileID: 45218142}
   leftCost: 0
   nextTurnStartCost: 0
@@ -2906,7 +2898,7 @@ MonoBehaviour:
   CM: {fileID: 2043666056}
   AM: {fileID: 1494894260}
   Enemys:
-  - {fileID: 8526652786934175351, guid: 97414c795e2149a43a018fd8de173a23, type: 3}
+  - {fileID: 8529118291676376678, guid: bf2aac8b33f629a4ea36d12c730e55c3, type: 3}
   - {fileID: 4683036356863319242, guid: 0b358fe23b42c514fb7e1e211c9351d8, type: 3}
   - {fileID: 3104608646525041465, guid: af64e7082df220545ae667f664153da1, type: 3}
   - {fileID: 1233573338231355905, guid: f5632c08302212b439772558243ed323, type: 3}
