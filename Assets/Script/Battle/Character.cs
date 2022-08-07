@@ -74,6 +74,7 @@ public class Character : MonoBehaviour
        // turnAct -= i;
         if (turnAct < 0) turnAct = 0;
         actT.text = "" + turnAct;
+       
     }
  
     public void Acting()

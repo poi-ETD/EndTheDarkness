@@ -13,7 +13,6 @@ public class LobbyManager : MonoBehaviour
     public CharacterData ChD;
     public GameData GD = new GameData();
     CharacterInfo ChaInfo = new CharacterInfo();
-    CardInfo CaInfo = new CardInfo();
     [SerializeField] GameObject PopUpCanvas;
     [SerializeField] GameObject day;
     [SerializeField] GameObject night;
@@ -143,11 +142,11 @@ public class LobbyManager : MonoBehaviour
             canvasOn = true;
             ResetCanvas.SetActive(true);
             resetmara = true;
-            for (int i = 1; i < CaInfo.cd.Length; i++)
+            for (int i = 1; i < CardInfo.Instance.cd.Length; i++)
             {
-                if (CaInfo.cd[i].Deck == ChD.characterDatas[rc].No)
+                if (CardInfo.Instance.cd[i].Deck == ChD.characterDatas[rc].No)
                 {
-                    if (CaInfo.cd[i].type != 2)
+                    if (CardInfo.Instance.cd[i].type != 2)
                         RandomCardList.Add(i);//
                 }
             }
@@ -206,7 +205,7 @@ public class LobbyManager : MonoBehaviour
         if (t)
         {
             CD.cardNo.Add(ShopSelectedCardNo);
-            CD.cardCost.Add(CaInfo.cd[ShopSelectedCardNo].Cost);
+            CD.cardCost.Add(CardInfo.Instance.cd[ShopSelectedCardNo].Cost);
             CD.cardGet.Add(CD.get);
             CD.get++;
         }            
@@ -610,7 +609,7 @@ public class LobbyManager : MonoBehaviour
         if (t)
         {
             CD.cardNo.Add(ShopSelectedCardNo);
-            CD.cardCost.Add(CaInfo.cd[ShopSelectedCardNo].Cost);
+            CD.cardCost.Add(CardInfo.Instance.cd[ShopSelectedCardNo].Cost);
             CD.cardGet.Add(CD.get);
             CD.get++;
 
@@ -635,13 +634,13 @@ public class LobbyManager : MonoBehaviour
         if (type == 10)
         {
             cancleInShop.SetActive(false);
-            for (int i = 1; i < CaInfo.cd.Length; i++)
+            for (int i = 1; i < CardInfo.Instance.cd.Length; i++)
             {
                 for (int j = 0; j < ChD.characterDatas.Length; j++)
                 {
-                    if (CaInfo.cd[i].Deck == ChD.characterDatas[j].No)
+                    if (CardInfo.Instance.cd[i].Deck == ChD.characterDatas[j].No)
                     {
-                        if (CaInfo.cd[i].type != 2)
+                        if (CardInfo.Instance.cd[i].type != 2)
                             RandomCardList.Add(i);//
                         break;
                     }
@@ -653,13 +652,13 @@ public class LobbyManager : MonoBehaviour
         }
         else if (type == 100)
         {
-            for (int i = 1; i < CaInfo.cd.Length; i++)
+            for (int i = 1; i < CardInfo.Instance.cd.Length; i++)
             {
                 for (int j = 0; j < ChD.characterDatas.Length; j++)
                 {
-                    if (CaInfo.cd[i].Deck == ChD.characterDatas[j].No || CaInfo.cd[i].Deck == 0)
+                    if (CardInfo.Instance.cd[i].Deck == ChD.characterDatas[j].No || CardInfo.Instance.cd[i].Deck == 0)
                     {
-                        if (CaInfo.cd[i].type != 2)
+                        if (CardInfo.Instance.cd[i].type != 2)
                             RandomCardList.Add(i);//
                         break;
                     }
@@ -679,12 +678,12 @@ public class LobbyManager : MonoBehaviour
         }
         else if (type == 300)
         {
-            for (int i = 1; i < CaInfo.cd.Length; i++)
+            for (int i = 1; i < CardInfo.Instance.cd.Length; i++)
             {
 
-                if (CaInfo.cd[i].Deck == ChD.characterDatas[SelectedCharacter].No)
+                if (CardInfo.Instance.cd[i].Deck == ChD.characterDatas[SelectedCharacter].No)
                 {
-                    if (CaInfo.cd[i].type != 2)
+                    if (CardInfo.Instance.cd[i].type != 2)
                         RandomCardList.Add(i);//
 
 

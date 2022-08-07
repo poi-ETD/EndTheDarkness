@@ -8,7 +8,6 @@ public class SetCardInGM : MonoBehaviour
     [SerializeField] TextMeshProUGUI count;
     [SerializeField] TextMeshProUGUI content;
     [SerializeField] TextMeshProUGUI noT;
-    CardInfo CaInfo = new CardInfo();
     GMmode gm;
     int no;
     int size;
@@ -16,8 +15,8 @@ public class SetCardInGM : MonoBehaviour
     {
         this.gm = gm;
         noT.text = no+"";
-        title.text = CaInfo.cd[no].Name;
-        content.text = CaInfo.cd[no].Content;
+        title.text = CardInfo.Instance.cd[no].Name;
+        content.text = CardInfo.Instance.cd[no].Content;
         this.no = no;
         this.size = size;
         count.text = this.size + "";

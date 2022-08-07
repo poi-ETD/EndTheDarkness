@@ -115,6 +115,7 @@ public class HandManager : MonoBehaviour
         if (isSelectedCard)
         {
             CardDrag();
+            go_selectedCardImage.GetComponent<Image>().sprite = BM.selectedCard.GetComponent<Card>().cardImage.sprite;
             go_selectedCardImage.SetActive(true);
         }
     }

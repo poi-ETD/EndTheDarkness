@@ -256,6 +256,10 @@ public class Card : MonoBehaviour
                         BM.AllAttack(2, BM.actCharacter, 1);
                     }
                 }
+                if (cardNo == 32)
+                {
+                    BM.OnRandomAttack(6, BM.actCharacter, 3);
+                }
                 if (!iscard20Mode)
                 {
                     BM.useCost(cardcost, gameObject);
@@ -440,10 +444,8 @@ public class Card : MonoBehaviour
         }
         if (iscard20Mode)
         {
-            
+         
            
-            
-            // BM.log.logContent.text += "\n" + BM.actCharacter.Name + "이(가) " + BM.usedInCard20.GetComponent<Card>().Name.text + " 발동!";
             BM.useCost(BM.usedInCard20.GetComponent<Card>().cardcost,gameObject);
             BM.usedInCard20.GetComponent<Card>().CardUse();
             BM.usedInCard20 = null;

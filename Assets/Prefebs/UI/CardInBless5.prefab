@@ -559,15 +559,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2bc6fb9d40965041a9821b62c15ae65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CardInfo:
-  - {fileID: 352303301870433010}
-  - {fileID: 352303302236331051}
-  - {fileID: 352303302471915921}
-  - {fileID: 6693942573330889838}
-  - {fileID: 988173268472265191}
-  - {fileID: 0}
+  CardInfoText: []
   deckNo: 0
-  B5: 0
+  select: 0
 --- !u!114 &7167888940622588584
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -586,7 +580,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 2036563951358620400}
-          m_MethodName: SelectInBless5
+          m_MethodName: SelectInBless
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}

@@ -1,10 +1,62 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class CardInfo
+public class CardInfo : MonoBehaviour
 {
-   public struct cardData
+    private static CardInfo instance;
+
+    public static CardInfo Instance
+    {
+        get
+        {
+            if (null == instance)
+            {
+
+                instance = new CardInfo();
+            }
+            return instance;
+        }
+    }
+    public Sprite[] CardSpr = {
+         Resources.Load<Sprite>("CardSprite/Card-13"), //0
+         Resources.Load<Sprite>("CardSprite/Card-13"), //1
+         Resources.Load<Sprite>("CardSprite/Card-13"), //2
+         Resources.Load<Sprite>("CardSprite/Card-13"), //3
+         Resources.Load<Sprite>("CardSprite/Card-13"), //4
+         Resources.Load<Sprite>("CardSprite/Card-13"), //5
+         Resources.Load<Sprite>("CardSprite/Card-5"), //6
+         Resources.Load<Sprite>("CardSprite/Card-6"), //7
+         Resources.Load<Sprite>("CardSprite/Card-7"), //8
+         Resources.Load<Sprite>("CardSprite/Card-13"), //9
+         Resources.Load<Sprite>("CardSprite/Card-13"), //10
+         Resources.Load<Sprite>("CardSprite/Card-13"), //11
+         Resources.Load<Sprite>("CardSprite/Card-13"), //12
+         Resources.Load<Sprite>("CardSprite/Card-13"), //13
+         Resources.Load<Sprite>("CardSprite/Card-13"), //14
+         Resources.Load<Sprite>("CardSprite/Card-13"), //15
+         Resources.Load<Sprite>("CardSprite/Card-13"), //16
+         Resources.Load<Sprite>("CardSprite/Card-13"), //17
+         Resources.Load<Sprite>("CardSprite/Card-13"), //18
+         Resources.Load<Sprite>("CardSprite/Card-13"), //19
+         Resources.Load<Sprite>("CardSprite/Card-20"), //20
+         Resources.Load<Sprite>("CardSprite/Card-13"), //21
+         Resources.Load<Sprite>("CardSprite/Card-13"), //22
+         Resources.Load<Sprite>("CardSprite/Card-13"), //23
+         Resources.Load<Sprite>("CardSprite/Card-24"), //24
+         Resources.Load<Sprite>("CardSprite/Card-25"), //25
+         Resources.Load<Sprite>("CardSprite/Card-26"), //26
+         Resources.Load<Sprite>("CardSprite/Card-13"), //27
+         Resources.Load<Sprite>("CardSprite/Card-13"), //28
+         Resources.Load<Sprite>("CardSprite/Card-13"), //29
+         Resources.Load<Sprite>("CardSprite/Card-13"), //30
+         Resources.Load<Sprite>("CardSprite/Card-13"), //31
+         Resources.Load<Sprite>("CardSprite/Card-13"), //32
+         Resources.Load<Sprite>("CardSprite/Card-13"), //33
+         Resources.Load<Sprite>("CardSprite/Card-13"), //34
+         Resources.Load<Sprite>("CardSprite/Card-13"), //35
+         Resources.Load<Sprite>("CardSprite/Card-13"), //36
+         };
+    public struct cardData
     {
         public string Name;
         public string Content;
@@ -13,7 +65,7 @@ public class CardInfo
         public int Deck; // 이 카드가 어떤 캐릭터 소유의 덱인지 나타내는 변수 0:기본, 1:Q, 2:스파키, 3:반가라, 4:포르테, 5:령
         public int type; // 기본&스타터,에디셔녈,토큰
         public int select; // 0->선택X 1->적 선택2->묘지on,묘지 선택 3 ->덱 on,덱 선택 4->스케치반복 5->아군 선택
-     
+
         public cardData(string Name, string Content, int No, int Cost, int Deck,int type,int select)
         {
             this.Name = Name;
@@ -25,7 +77,7 @@ public class CardInfo
             this.select = select;
         }
     }
-    public cardData[] cd = new cardData[32]
+    public cardData[] cd = new cardData[37]
     {  new cardData("이름자리입니다","내용입니다",0,0,0,0,0),
 
        new cardData("기본공격","-적 한명에게 데미지: <color=red><b>7</color></b>",1,1,0,0,1),
@@ -49,7 +101,6 @@ public class CardInfo
        new cardData("우렁찬 표효","-턴 종료시까지 모든 아군의 공격력:+1\n-자신의 SP-0.1",10,0,2,0,0),
 
        new cardData("스트레이트 펀치","-카드를 4장 이상 사용했을 때 패에 있는 이 카드의 소비 코스트를 3감소한다\n-적 한명에게 데미지:15",11,3,2,0,1),
-
        new cardData("칠흑/핏빛","-패에 있는 카드를 덱에 넣는다\n-드로우:덱에 넣은 카드 장 수",12,1,4,0,0),
 
        new cardData("검은 아리아","-묘지에 패로 카드 1장을 선택해 가지고 온다.\n-소비 코스트+2",13,0,4,0,2),
@@ -71,7 +122,7 @@ public class CardInfo
        new cardData("찢겨진 커튼콜","-묘지에서 패로 카드 3장을 무작위로 가지고 온다.\n가지고 온 카드의 소비 코스트를 0으로 고정한다.",21,1,4,1,0),
 
        new cardData("결의","-아군 전체에게 방어도:4\n-방어도가 제일 낮은 아군 한명에게 방어도:10",22,2,3,1,0),
-    
+
        new cardData("매치 포인트","-스파키를 제외한 파티 전체의 행동력이 0이 된다.\n-턴 종료시까지 스파키의 공격력:+3",23,2,2,1,0),
 
        new cardData("끔찍한 화음, 비명","-패에있는 카드를 묘지에 버린다.\n-덱에 있는 카드를 1장 선택해 가지고 온다.",24,2,4,1,3),
@@ -88,6 +139,12 @@ public class CardInfo
 
        new cardData("무(舞)","-적 전체에게 쌓인 해로운 효과를 제거한다.\n-령이 사용할 시,적 전체에게 데미지:5(제거한 해로운 효과 스택 횟수)",30,5,5,1,0),
 
-       new cardData("내려오는 귀신님","패에 있는 카드에 [적 전체에게 약화를 1부여한다]를 부여한다.\n-령이 사용할 시,적 전체에게 데미지:2",31,2,5,1,0),
+       new cardData("내려오는 귀신님","-패에 있는 카드에 [적 전체에게 약화를 1부여한다]를 부여한다.\n-령이 사용할 시,적 전체에게 데미지:2",31,2,5,1,0),
+       new cardData("무차별","-무작위 적에게 데미지:6 (3번)",32,2,6,0,0),
+       new cardData("숨통끊기","-적 한명에게 데미지:10 .\n-해당 적의 현재 HP가 최대 체력의 20% 이하일시 반복한다.",33,3,6,0,1),
+       new cardData("살기 감지","-흉귀의 공격력: +1\n-사용한 아군의 방어도가 0일시 흉귀의 공격력: -1, 흉귀의 방어도: 10",34,2,6,1,0),
+       new cardData("육참 생단","-패에 있는 카드를 소멸한다.\n-무작위 적에게 데미지: 10(소멸한 패의 장수만큼 반복)",35,5,6,1,0),
+       new cardData("백","-무작위 적에게 데미지: 공격력의 4배",36,3,6,1,0),
+
     };
 }

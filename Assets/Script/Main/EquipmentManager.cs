@@ -6,14 +6,13 @@ public class EquipmentManager : MonoBehaviour
 {
     private static EquipmentManager instance;
 
-    //게임 매니저 인스턴스에 접근할 수 있는 프로퍼티. static이므로 다른 클래스에서 맘껏 호출할 수 있다.
     public static EquipmentManager Instance
     {
         get
         {
             if (null == instance)
             {
-                //게임 인스턴스가 없다면 하나 생성해서 넣어준다.
+              
                 instance = new EquipmentManager();
             }
             return instance;
@@ -30,6 +29,7 @@ Resources.Load<Sprite>("temporal/axe_008"),
 Resources.Load<Sprite>("temporal/axe_009"),
 Resources.Load<Sprite>("temporal/axe_010")
         };
+    
     string[] prefix = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" };
     string[] equipName = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
     public equipment makeEquipment()
