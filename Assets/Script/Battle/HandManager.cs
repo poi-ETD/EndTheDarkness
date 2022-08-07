@@ -220,7 +220,7 @@ public class HandManager : MonoBehaviour
 
     public void CardMouseEnter(Card card)
     {
-        if (!card.isGrave && !BM.isGraveWindowOn)
+        if ((!card.isGrave && !BM.isGraveWindowOn) || (!card.isDeck && !BM.isDeckWindowOn))
         {
             if (BM.turnStarting) return;
 
