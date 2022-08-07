@@ -22,7 +22,7 @@ public class CardManager : MonoBehaviour
     [SerializeField] GameObject graveWarn;
     [SerializeField] GameObject selectedWarn;
     [SerializeField] GameObject CardPrefebs;
-  
+
     [SerializeField] GameObject GraveContent;
     public GameObject RemoveContent;
     public TurnManager TM;
@@ -93,10 +93,10 @@ public class CardManager : MonoBehaviour
         if (Deck.Count > 0)
         {
             int rand = Random.Range(0, Deck.Count);
-          
+
             field.Add(Deck[rand]);
             HM.AddCard(Deck[rand]);
-            Deck.RemoveAt(rand);           
+            Deck.RemoveAt(rand);
         }
     }
     public void TurnStartCardSet()  //해당 턴에서 적용 됐던 설정들을 초기화 하는 과정
@@ -107,7 +107,7 @@ public class CardManager : MonoBehaviour
             Deck[i].GetComponent<Card>().cardcost = Deck[i].GetComponent<Card>().realCost;
             Deck[i].GetComponent<Card>().textSet();
             Deck[i].SetActive(false);
-          
+
         }
         for (int i = 0; i < Grave.Count; i++)
         {
@@ -121,7 +121,7 @@ public class CardManager : MonoBehaviour
     IEnumerator turnStartDrow()//턴 시작시 드로우
     {
         BM.otherCor = true;
-     
+
         for (int i = 0; i < BM.TurnCardCount; i++)
         {
             CardToField();
@@ -132,10 +132,10 @@ public class CardManager : MonoBehaviour
         GameObject.Find("HandManager").GetComponent<HandManager>().InitCard();
         TM.TurnStartPassive();
         BM.otherCor = false;
-        
+
     }
     public void SpecialCardToField(GameObject card)//카드를 통한 드로우
-    {     
+    {
         HM.AddCard(card);
         //Rebatch();   
     }
@@ -151,15 +151,15 @@ public class CardManager : MonoBehaviour
         newCard.GetComponent<Card>().cardcost = CardInfo.Instance.cd[i].Cost;
         newCard.GetComponent<Card>().realCost = CardInfo.Instance.cd[i].Cost;
         newCard.GetComponent<Card>().selectType = CardInfo.Instance.cd[CD.cardNo[i]].select;
-        
-         Deck.Add(newCard);
+
+        Deck.Add(newCard);
         newCard.SetActive(false);
     }
     public void UseCard(GameObject usingCard)//사용된 카드를 무덤에 넣는 과정
     {
         if (usingCard.GetComponent<Card>().isRemove)
         {
-        
+
             usingCard.GetComponent<Card>().RemoveThisCardInField();
             usingCard.transform.parent = RemoveContent.transform;
             usingCard.GetComponent<Card>().isGrave = true;
@@ -189,9 +189,9 @@ public class CardManager : MonoBehaviour
             usingCard.transform.parent = GraveContent.transform;
             usingCard.GetComponent<Card>().isGrave = true;
             usingCard.SetActive(false);
-        }   
-        if(BM.actCharacter!=null)
-        BM.actCharacter.Acting();
+        }
+        if (BM.actCharacter != null)
+            BM.actCharacter.Acting();
         BM.previousCharacter = null;
         BM.previousEnemy = null;
         if (usingCard.GetComponent<Card>().selectType == 1)
@@ -204,16 +204,16 @@ public class CardManager : MonoBehaviour
         }
         HandManager.Instance.CancelToUse();
         TM.BM.previousSelectedCard = usingCard; //스케치 반복을 위해 이전 카드를 기록함
- 
+
         BM.actCharacter.SelectBox.SetActive(false);
         Character curC = BM.actCharacter;
         curC.myPassive.CardUse(usingCard.GetComponent<Card>());
-        curC.GetComponent<CharacterPassive>().myAct();     
-        for(int i = 0; i < BM.ChD.size; i++)
+        curC.GetComponent<CharacterPassive>().myAct();
+        for (int i = 0; i < BM.ChD.size; i++)
         {
-            BM.characters[i].myPassive.CardUseInTeam();        
-        }   
-      
+            BM.characters[i].myPassive.CardUseInTeam();
+        }
+
         if (usingCard.GetComponent<Card>().Name.text != "스케치 반복")
         {
             BM.cancleCard();
@@ -221,9 +221,9 @@ public class CardManager : MonoBehaviour
         }
         // StartCoroutine("CardUseCor",curC);
         HandManager.Instance.ArrangeCard();
-      
+
     }
-    
+
     public void FieldToGrave(GameObject c) //사용하지 않고 바로 필드에서 무덤으로 버리는 함수
     {
         for (int i = field.Count - 1; i >= 0; i--)
@@ -304,16 +304,16 @@ public class CardManager : MonoBehaviour
                 Grave[i].SetActive(true);
                 Grave[i].GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0.5f);
                 Grave[i].GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0.5f);
-             
-                
-                Grave[i].GetComponent<Card>().isGrave = false;          
+
+
+                Grave[i].GetComponent<Card>().isGrave = false;
                 Grave[i].GetComponent<Transform>().localScale = new Vector2(1, 1);
                 Grave.RemoveAt(i);
                 break;
             }
         }
-   
-        
+
+
 
     }
     public void FieldToDeck(GameObject FieldCard) //선택된 카드를 필드에서 덱으로 보내는 함수
@@ -344,7 +344,7 @@ public class CardManager : MonoBehaviour
             ReviveCard.RemoveAt(i);
             yield return new WaitForSeconds(0.5f);
         }
-      
+
     }
     public void ReviveCountOver() //무덤에서 너무 많이 고를 때
     {
@@ -498,9 +498,9 @@ public class CardManager : MonoBehaviour
     {
         BM.otherCor = true;
 
-      
-            CardToField();
-            yield return new WaitForSeconds(0.25f);
+
+        CardToField();
+        yield return new WaitForSeconds(0.25f);
 
 
         HandManager.Instance.InitCard();
@@ -508,7 +508,7 @@ public class CardManager : MonoBehaviour
     }
     public void RemoveCardRemove()
     {
-        for(int i = 0; i < field.Count; i++)
+        for (int i = 0; i < field.Count; i++)
         {
             if (field[i].GetComponent<Card>().isRemove)
             {

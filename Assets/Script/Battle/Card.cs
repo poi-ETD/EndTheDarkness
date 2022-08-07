@@ -260,7 +260,37 @@ public class Card : MonoBehaviour
                 {
                     BM.OnRandomAttack(6, BM.actCharacter, 3);
                 }
-                if (!iscard20Mode)
+                if (cardNo == 34)
+                { 
+                    for(int i = 0; i < BM.characters.Count; i++)
+                    {
+                        if (BM.characters[i].characterNo == 6) BM.AtkUp(BM.characters[i],1);
+                    }
+                    if (BM.actCharacter.armor == 0)
+                    {
+                        for (int i = 0; i < BM.characters.Count; i++)
+                        {
+                            if (BM.characters[i].characterNo == 6)
+                            {
+                                BM.AtkUp(BM.characters[i], -1);
+                                BM.getArmor(10, BM.characters[i]);
+                            }
+                        }
+
+                    }
+                }
+                if (cardNo == 35)
+                {
+
+                    BM.card35(gameObject);
+                    return;
+                }
+                if (cardNo == 36)
+                {
+                    BM.OnRandomAttack(BM.actCharacter.atk*3, BM.actCharacter, 1);
+                }
+
+                    if (!iscard20Mode)
                 {
                     BM.useCost(cardcost, gameObject);
                     BM.actCharacter.useAct(1);
@@ -276,6 +306,7 @@ public class Card : MonoBehaviour
             BM.EnemySelectMode = false;
         }
     }
+  
     public void EnemySelectCard()
     {
        // Debug.Log("Aaa");
@@ -331,6 +362,14 @@ public class Card : MonoBehaviour
                 BM.characters[i].myPassive.EnemyGetWeak();
             }
             BM.selectedEnemy.GetComponent<Enemy>().StatusChange((int)Enums.Status.weak, 10);
+        }
+        if (cardNo == 33)
+        {
+            BM.OnDmgOneTarget(10, BM.selectedEnemy, BM.actCharacter, 1);
+            if (BM.selectedEnemy.Hp <= BM.selectedEnemy.maxHp * 0.2f)
+            {
+                BM.OnDmgOneTarget(10, BM.selectedEnemy, BM.actCharacter, 1);
+            }
         }
         if (!iscard20Mode)
         {
@@ -607,6 +646,7 @@ public class Card : MonoBehaviour
     }
     public void RemoveThisCardInField()
     {
+     
         for (int i = 0; i < BM.characters.Count; i++)
         {
             BM.characters[i].myPassive.CardRemove();

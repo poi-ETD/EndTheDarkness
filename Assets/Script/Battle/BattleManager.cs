@@ -645,7 +645,7 @@ public class BattleManager : MonoBehaviour
         for (int k = 0; k < time; k++)
         {
             Enemy enemy = Enemys[Random.Range(0, Enemys.Length)].GetComponent<Enemy>();
-            enemy.OnHitCal(dmg, character.curNo, false);
+            enemy.OnHitCal(dmg + +character.turnAtk, character.curNo, false);
         }
     }
     public void AllAttack(int dmg, Character character, int time) //흑백등을 이용해 데미지를 전체에게 입힐 경우
@@ -1519,6 +1519,7 @@ public class BattleManager : MonoBehaviour
     {
         StartCoroutine("card24cor");
     }
+  
     IEnumerator card24cor() //덱에있는 모든 패를 무덤으로 보내는 과정
     {
         while (CM.field.Count > 1)
@@ -1529,7 +1530,34 @@ public class BattleManager : MonoBehaviour
         }
 
     }
+    public void card35(GameObject MyCard)
+    {
+        StartCoroutine(card35cor(MyCard));
+    }
+    IEnumerator card35cor(GameObject MyCard) //덱에있는 모든 패를 무덤으로 보내는 과정
+    {
+        otherCor = true;
+        int myFieldCount = CM.field.Count - 1;
+        for (int i = CM.field.Count - 1; i >= 0; i--)
+        {
 
+            if (CM.field[i]!= MyCard)
+            {
+                CM.field[i].GetComponent<Card>().RemoveThisCardInField();
+            }
+            yield return new WaitForSeconds(0.1f);
+        }
+        otherCor = false;
+        OnRandomAttack(10, actCharacter, myFieldCount);
+        if (!MyCard.GetComponent<Card>().iscard20Mode)
+        {
+            useCost(MyCard.GetComponent<Card>().cardcost, gameObject);
+            actCharacter.useAct(1);
+        }
+        MyCard.GetComponent<Card>().CardUse();
+        AM.Act();
+
+    }
     public void SelectDeckCard(int count)
     {
         DeckOn();
