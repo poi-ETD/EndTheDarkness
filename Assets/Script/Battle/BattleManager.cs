@@ -640,7 +640,14 @@ public class BattleManager : MonoBehaviour
            enemy.OnHitCal(dmg, character.curNo, false);
         }     
     }
-
+    public void OnRandomAttack(int dmg,Character character,int time)
+    {
+        for (int k = 0; k < time; k++)
+        {
+            Enemy enemy = Enemys[Random.Range(0, Enemys.Length)].GetComponent<Enemy>();
+            enemy.OnHitCal(dmg, character.curNo, false);
+        }
+    }
     public void AllAttack(int dmg, Character character, int time) //흑백등을 이용해 데미지를 전체에게 입힐 경우
     {
         log.logContent.text += "\n적 전체에게 " + dmg + character.turnAtk + "의 데미지!(" + time + ")";

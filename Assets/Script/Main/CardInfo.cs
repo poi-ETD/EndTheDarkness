@@ -50,7 +50,11 @@ public class CardInfo : MonoBehaviour
          Resources.Load<Sprite>("CardSprite/Card-13"), //29
          Resources.Load<Sprite>("CardSprite/Card-13"), //30
          Resources.Load<Sprite>("CardSprite/Card-13"), //31
-
+         Resources.Load<Sprite>("CardSprite/Card-13"), //32
+         Resources.Load<Sprite>("CardSprite/Card-13"), //33
+         Resources.Load<Sprite>("CardSprite/Card-13"), //34
+         Resources.Load<Sprite>("CardSprite/Card-13"), //35
+         Resources.Load<Sprite>("CardSprite/Card-13"), //36
          };
     public struct cardData
     {
@@ -73,7 +77,7 @@ public class CardInfo : MonoBehaviour
             this.select = select;
         }
     }
-    public cardData[] cd = new cardData[32]
+    public cardData[] cd = new cardData[37]
     {  new cardData("이름자리입니다","내용입니다",0,0,0,0,0),
 
        new cardData("기본공격","-적 한명에게 데미지: <color=red><b>7</color></b>",1,1,0,0,1),
@@ -135,6 +139,12 @@ public class CardInfo : MonoBehaviour
 
        new cardData("무(舞)","-적 전체에게 쌓인 해로운 효과를 제거한다.\n-령이 사용할 시,적 전체에게 데미지:5(제거한 해로운 효과 스택 횟수)",30,5,5,1,0),
 
-       new cardData("내려오는 귀신님","패에 있는 카드에 [적 전체에게 약화를 1부여한다]를 부여한다.\n-령이 사용할 시,적 전체에게 데미지:2",31,2,5,1,0),
+       new cardData("내려오는 귀신님","-패에 있는 카드에 [적 전체에게 약화를 1부여한다]를 부여한다.\n-령이 사용할 시,적 전체에게 데미지:2",31,2,5,1,0),
+       new cardData("무차별","-무작위 적에게 데미지:6 (3번)",32,2,6,0,0),
+       new cardData("숨통끊기","-적 한명에게 데미지:10 .\n-해당 적의 현재 HP가 최대 체력의 20% 이하일시 반복한다.",33,3,6,0,1),
+       new cardData("살기 감지","-흉귀의 공격력: +1\n-사용한 아군의 방어도가 0일시 흉귀의 공격력: -1, 흉귀의 방어도: 10",34,2,6,1,0),
+       new cardData("육참 생단","-패에 있는 카드를 소멸한다.\n-무작위 적에게 데미지: 10(소멸한 패의 장수만큼 반복)",35,5,6,1,0),
+       new cardData("백","-무작위 적에게 데미지: 공격력의 4배",36,3,6,1,0),
+
     };
 }
