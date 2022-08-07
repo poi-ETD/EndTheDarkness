@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+ 
     [HideInInspector] public bool isInit; // 게임 최초 실행자일시 false지만 한번 실행하고 난뒤로부터는 항상 true
                                           // 즉, path에 UserMainData.json이 없을 시 false, 있을 시 true
 
@@ -48,9 +49,10 @@ public class GameManager : MonoBehaviour
         slot_CharacterDatas = new string[10];
         slot_CardDatas = new string[10];
     }
-
+  
     void Start()
     {
+       
         slot_CharacterDatas[0] = "CharacterData1.json";
         slot_CharacterDatas[1] = "CharacterData2.json";
         slot_CharacterDatas[2] = "CharacterData3.json";
@@ -83,7 +85,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-
+        if (Input.GetKeyDown(KeyCode.Escape)) Application.Quit();
     }
 
     private void Init()

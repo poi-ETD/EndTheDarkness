@@ -105,7 +105,7 @@ public class BattleManager : MonoBehaviour
     [SerializeField] GameObject noSelect;
     int listlength = 3;
     List<int> RandomCardList = new List<int>();
-    CardInfo data2 = new CardInfo();
+
     List<int> RancomSelectCard = new List<int>();
     [SerializeField] TextMeshProUGUI[] RewardEquipmentString;
     //승리 시 보상 선택하는 창에 들어갈 변수들
@@ -961,11 +961,11 @@ public class BattleManager : MonoBehaviour
         //정해진 공식에 따라 이그넘을 획득 후
         if (GD.blessbool[16]) listlength = 4; //축복 16번이 true라면 4개를 보여줘야함
         if (!GD.blessbool[9]) noSelect.SetActive(false); //축복 9번이 없다면 아무것도 선택 안하는 버튼을 없앰
-        for (int i = 0; i < data2.cd.Length; i++)
+        for (int i = 0; i < CardInfo.Instance.cd.Length; i++)
         {
             for (int j = 0; j < characters.Count; j++)
             {
-                if (data2.cd[i].Deck == characters[j].characterNo && data2.cd[i].type != 2)
+                if (CardInfo.Instance.cd[i].Deck == characters[j].characterNo && CardInfo.Instance.cd[i].type != 2)
                 {
                     RandomCardList.Add(i);//획득 할 수 있는 모든 카드를 리스트에 넣은 후
                 }
@@ -1015,7 +1015,7 @@ public class BattleManager : MonoBehaviour
             if (RewardCanvas.transform.GetChild(i).GetComponent<NoBattleCard>().select)
             {
                 CardD.cardNo.Add(RancomSelectCard[i]);
-                CardD.cardCost.Add(data2.cd[RancomSelectCard[i]].Cost);
+                CardD.cardCost.Add(CardInfo.Instance.cd[RancomSelectCard[i]].Cost);
                 CardD.cardGet.Add(CardD.get);
                 CardD.get++;
             }

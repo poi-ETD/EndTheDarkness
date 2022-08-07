@@ -6,50 +6,50 @@ using TMPro;
 public class NoBattleCard : MonoBehaviour //대략적으로 배틀이 아닐 때 카드를 관리하기 위함 ex)로비나, 세팅
 {
     int no=1;
-    [SerializeField] TextMeshProUGUI[] CardInfo;
-    CardInfo cd=new CardInfo();
+    [SerializeField] TextMeshProUGUI[] CardInfoText;
+   
     CardSetManager csm;
     public int deckNo;
     public bool select;
     public void setCost(int cost)
     {
-        CardInfo[3].text = "" + cost;//코스트
+        CardInfoText[3].text = "" + cost;//코스트
     }
     public void setCardInfo(int i)
     {
         csm = GameObject.Find("CardSetManager").GetComponent<CardSetManager>();   
-        no = cd.cd[i].No;
-        CardInfo[0].text=cd.cd[i].Name;//이름
-        CardInfo[1].text = cd.cd[i].Content;//내용
-        CardInfo[2].text="NO."+ cd.cd[i].No.ToString("D3");//넘버
-        CardInfo[3].text = "" + cd.cd[i].Cost;//코스트
+        no = CardInfo.Instance.cd[i].No;
+        CardInfoText[0].text=CardInfo.Instance.cd[i].Name;//이름
+        CardInfoText[1].text = CardInfo.Instance.cd[i].Content;//내용
+        CardInfoText[2].text="NO."+ CardInfo.Instance.cd[i].No.ToString("D3");//넘버
+        CardInfoText[3].text = "" + CardInfo.Instance.cd[i].Cost;//코스트
         string Name="";
-        if (cd.cd[i].Deck==0)
+        if (CardInfo.Instance.cd[i].Deck==0)
         {
             Name = "BASE";
         }
-        if (cd.cd[i].Deck == 1)
+        if (CardInfo.Instance.cd[i].Deck == 1)
         {
             Name = "Q";
         }
-        if (cd.cd[i].Deck ==2)
+        if (CardInfo.Instance.cd[i].Deck ==2)
         {
             Name = "SPARKY";
         }
-        if (cd.cd[i].Deck == 3)
+        if (CardInfo.Instance.cd[i].Deck == 3)
         {
             Name = "VANGARA";
         }
-        if (cd.cd[i].Deck == 4)
+        if (CardInfo.Instance.cd[i].Deck == 4)
         {
             Name = "PORTE";
         }
-        if (cd.cd[i].Deck == 5)
+        if (CardInfo.Instance.cd[i].Deck == 5)
         {
             Name = "RHYNG";
         }
-        CardInfo[4].text = Name;
-        CardInfo[5].text = csm.CardCount[no] + "";
+        CardInfoText[4].text = Name;
+        CardInfoText[5].text = csm.CardCount[no] + "";
     }
     public void SelectInBless() //축복 5나 12 캔버스에서 선택.
     {       
@@ -128,37 +128,38 @@ public class NoBattleCard : MonoBehaviour //대략적으로 배틀이 아닐 때
    
     public void setCardInfoInLobby(int num,int d) //로비에서 카드 목록을 볼 때
     {
+        Debug.Log(num);
         deckNo = d;
-        no = cd.cd[num].No;
-        CardInfo[0].text = cd.cd[num].Name;//제목
-        CardInfo[1].text = cd.cd[num].Content;//내용
-        CardInfo[2].text = "NO." + cd.cd[num].No.ToString("D3");//넘버
+        no = CardInfo.Instance.cd[num].No;
+        CardInfoText[0].text = CardInfo.Instance.cd[num].Name;//제목
+        CardInfoText[1].text = CardInfo.Instance.cd[num].Content;//내용
+        CardInfoText[2].text = "NO." + CardInfo.Instance.cd[num].No.ToString("D3");//넘버
         string Name = "";
-        if (cd.cd[num].Deck == 0)
+        if (CardInfo.Instance.cd[num].Deck == 0)
         {
             Name = "BASE";
         }
-        if (cd.cd[num].Deck == 1)
+        if (CardInfo.Instance.cd[num].Deck == 1)
         {
             Name = "Q";
         }
-        if (cd.cd[num].Deck == 2)
+        if (CardInfo.Instance.cd[num].Deck == 2)
         {
             Name = "SPARKY";
         }
-        if (cd.cd[num].Deck == 3)
+        if (CardInfo.Instance.cd[num].Deck == 3)
         {
             Name = "VANGARA";
         }
-        if (cd.cd[num].Deck == 4)
+        if (CardInfo.Instance.cd[num].Deck == 4)
         {
             Name = "PORTE";
         }
-        if (cd.cd[num].Deck == 4)
+        if (CardInfo.Instance.cd[num].Deck == 4)
         {
             Name = "RHYNG";
         }
-        CardInfo[4].text = Name;
+        CardInfoText[4].text = Name;
     }
     public void CardPlus(int i) //서브 세팅에서 캐릭터별 카드 고를 때 PLUS혹은 MINUS
     {
@@ -187,7 +188,7 @@ public class NoBattleCard : MonoBehaviour //대략적으로 배틀이 아닐 때
                 csm.CardOver();
             }
         }
-        CardInfo[5].text = csm.CardCount[no] + "";
+        CardInfoText[5].text = csm.CardCount[no] + "";
         csm.AllCard += csm.CardCount[no];
     }
     public void CardSee() //로비 카드 보기에서 누르면 크게 적용

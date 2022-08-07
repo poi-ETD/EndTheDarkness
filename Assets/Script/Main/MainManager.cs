@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using System.IO;
 using UnityEngine.SceneManagement;
 using TMPro;
-
+using Newtonsoft.Json;
 public class MainManager : MonoBehaviour
 {
     bool smallmode;
@@ -33,8 +33,44 @@ public class MainManager : MonoBehaviour
         }
 
     }
+    public void Click_DeleteMemory()
+    {
+       
+        string path_GameData = Path.Combine(Application.persistentDataPath, "GameData.json");
+        if (File.Exists(path_GameData))
+            File.Delete(path_GameData);
+        string path_UserData = Path.Combine(Application.persistentDataPath, "UserMainData");
+        if (File.Exists(path_UserData))
+        {
+
+            string fileName = "UserMainData";
+            string path = Application.persistentDataPath + "/" + fileName;
+            string json = File.ReadAllText(path);
+            UserSaveData userData = JsonUtility.FromJson<UserSaveData>(json);
+            userData.isInit = false;
+            for (int i = 0; i < 10; i++) userData.slot_Names[i] = "";
+            userData.nowPlayingSlot = 0;
+            json = JsonUtility.ToJson(userData);
+            File.WriteAllText(path, json);
+        }
+        for (int i = 0; i < 10; i++)
+        {
+            string path_CharacterData = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CharacterDatas[i]);
+            if (File.Exists(path_CharacterData))
+                File.Delete(path_CharacterData);
+            string path_CardData = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CardDatas[i]);
+            if (File.Exists(path_CardData))
+                File.Delete(path_CardData);
+        }
+        SceneManager.LoadScene(0);
+    }
     private void Awake()
     {
+        {
+            if (SceneManager.sceneCount==1)
+                SceneManager.LoadScene(1, LoadSceneMode.Additive);
+        }
+        Debug.Log(Resources.Load<Sprite>("CardSprite/Card-13"));
         //string path = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CharacterDatas[GameManager.Instance.nowSlot]);
 
         //if (!File.Exists(path))

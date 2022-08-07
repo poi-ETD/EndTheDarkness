@@ -13,7 +13,6 @@ public class GMmode : MonoBehaviour
     public CharacterData ChD;
     public GameData GD = new GameData();
     CharacterInfo ChaInfo = new CharacterInfo();
-    CardInfo CaInfo = new CardInfo();
     [SerializeField] GameObject CardView;
     [SerializeField] GameObject CharacterView;
     int[] CardCount = new int[200];
@@ -90,7 +89,7 @@ public void GoLobby()
             while (count < CardCount[i])
             {
                 CD.cardNo.Add(i);
-                CD.cardCost.Add(CaInfo.cd[i].Cost);
+                CD.cardCost.Add(CardInfo.Instance.cd[i].Cost);
                 CD.cardGet.Add(get);
                 CD.get = get;
                 get++;
@@ -100,7 +99,7 @@ public void GoLobby()
     }
     public void OpenCardView()
     {
-        for (int i = 0; i <CaInfo.cd.Length; i++)
+        for (int i = 0; i < CardInfo.Instance.cd.Length; i++)
         {
             CardCount[i] = 0;
         }
@@ -108,7 +107,7 @@ public void GoLobby()
         {
             CardCount[CD.cardNo[i]]++;
         }
-        for(int i = 0; i < CaInfo.cd.Length-1; i++)
+        for(int i = 0; i < CardInfo.Instance.cd.Length-1; i++)
         {
             CardView.transform.GetChild(i).gameObject.SetActive(true);
             CardView.transform.GetChild(i).GetComponent<SetCardInGM>().set(i+1,this,CardCount[i+1]);
