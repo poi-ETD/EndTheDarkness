@@ -168,5 +168,9 @@ public void GoLobby()
         else equipStrings[1].text = sList[1];
         GD.EquipmentList.Add(curEquip);
     }
+    public void SetBattleByNum(int battle)
+    {
+        GD.BattleNo = battle;
+    }
 }
 

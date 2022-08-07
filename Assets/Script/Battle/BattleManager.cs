@@ -137,7 +137,82 @@ public class BattleManager : MonoBehaviour
     private EnemyInfo ei;
 
     public GameObject DmgPrefebs;//데미지 프리펩
-    
+
+    private void Start()
+    {
+        ei = GameObject.Find("SelectEnemyInformation").GetComponent<EnemyInfo>();
+        string path = Path.Combine(Application.persistentDataPath, "GameData.json");
+        string gameData = File.ReadAllText(path);
+        GD = JsonConvert.DeserializeObject<GameData>(gameData);
+        path = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CharacterDatas[GameManager.Instance.nowPlayingSlot]);
+        string characterData = File.ReadAllText(path);
+        ChD = JsonConvert.DeserializeObject<CharacterData>(characterData);
+        line = ChD.line;
+        for (int i = 0; i < ChD.size; i++)
+        {
+            GameObject CharacterC = null;
+
+            if (ChD.characterDatas[i].curFormation == 0) //전방
+            {
+
+                CharacterC = Instantiate(CharacterPrefebs[ChD.characterDatas[i].No], new Vector2(-880 / 45f, 375 / 45f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
+                forward.Add(CharacterC.GetComponent<Character>());
+            }
+            else //후방
+            {
+                CharacterC = Instantiate(CharacterPrefebs[ChD.characterDatas[i].No], new Vector2(-880 / 45f, (330 - 150 * characters.Count) / 45f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
+                back.Add(CharacterC.GetComponent<Character>());
+            } //전방과 후방 목록에 각각 캐릭터를 넣음
+            characterOriginal.Add(CharacterC.GetComponent<Character>());
+            CharacterC.GetComponent<Character>().atk = ChD.characterDatas[i].Atk;
+            CharacterC.GetComponent<Character>().Hp = ChD.characterDatas[i].curHp;
+            CharacterC.GetComponent<Character>().maxHp = ChD.characterDatas[i].maxHp;
+            CharacterC.GetComponent<Character>().def = ChD.characterDatas[i].def;
+            CharacterC.GetComponent<Character>().cost = ChD.characterDatas[i].Cost;
+            CharacterC.GetComponent<Character>().passive = ChD.characterDatas[i].passive;
+            CharacterC.GetComponent<Character>().Name = ChD.characterDatas[i].Name;
+            CharacterC.GetComponent<Character>().speed = ChD.characterDatas[i].speed;
+            //캐릭터들의 기본 스탯을 데이터와 같게 설정
+            CharacterC.GetComponent<Character>().lobbyNum = i; //로비에 있는 순서대로 불러오기 떄문에 미리 저장
+        }
+
+        for (int i = 0; i < line; i++)
+        {
+            forward[i].transform.position = new Vector2(-880 / 45f, (300 - 150 * characters.Count) / 45f);
+            characters.Add(forward[i]);
+        }//위치가 전방인 캐릭터들을 목록에 넣음
+        for (int i = line; i < ChD.size; i++)
+        {
+            back[i - line].transform.position = new Vector2(-880 / 45f, (270 - 150 * characters.Count) / 45f);
+            characters.Add(back[i - line]);
+        }//위치가 후방인 캐릭터들을 목록에 넣음
+        for (int i = 1; i < ChD.size; i++)
+        {
+            characters[i].curNo = i;
+        }
+
+        GameObject EnemySummon = Instantiate(Enemys[GD.BattleNo], new Vector2(-2, -2), transform.rotation, GameObject.Find("CharacterCanvas").transform);
+
+        Enemys = GameObject.FindGameObjectsWithTag("Enemy");
+        for (int i = 0; i < Enemys.Length; i++)
+        {
+            Enemys[i].GetComponent<Enemy>().myNo = i;
+        }
+        TurnCardCount = CardCount;
+
+        LineObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-820, 360 - 150 * line);
+        HM = GameObject.Find("HandManager").GetComponent<HandManager>();
+        if (GD.blessbool[20])
+        {
+            SetBless20();
+        }
+        if (GD.blessbool[4])
+        {
+            for (int i = 0; i < characters.Count; i++)
+                characters[i].turnAct++;
+        }
+    }
+
     public void SetBless20() //bless20이 켜져있다면 적용 될 함수
     {
         for(int i = 0; i < forward.Count; i++)
@@ -294,81 +369,7 @@ public class BattleManager : MonoBehaviour
             go_Menus.SetActive(true);
     }
 
-    private void Start()
-    {
-        ei = GameObject.Find("SelectEnemyInformation").GetComponent<EnemyInfo>();
-        string path = Path.Combine(Application.persistentDataPath, "GameData.json");
-        string gameData = File.ReadAllText(path);
-        GD = JsonConvert.DeserializeObject<GameData>(gameData);
-        path = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CharacterDatas[GameManager.Instance.nowPlayingSlot]);
-        string characterData = File.ReadAllText(path);
-        ChD = JsonConvert.DeserializeObject<CharacterData>(characterData);
-        line = ChD.line;
-        for (int i = 0; i < ChD.size; i++)
-        {
-            GameObject CharacterC = null;
-
-            if (ChD.characterDatas[i].curFormation == 0) //전방
-            {
-                
-                CharacterC = Instantiate(CharacterPrefebs[ChD.characterDatas[i].No], new Vector2(-880 / 45f, 375 / 45f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
-                forward.Add(CharacterC.GetComponent<Character>());
-            }
-            else //후방
-            {
-                CharacterC = Instantiate(CharacterPrefebs[ChD.characterDatas[i].No], new Vector2(-880 / 45f, (330 - 150 * characters.Count) / 45f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
-                back.Add(CharacterC.GetComponent<Character>());
-            } //전방과 후방 목록에 각각 캐릭터를 넣음
-            characterOriginal.Add(CharacterC.GetComponent<Character>());
-            CharacterC.GetComponent<Character>().atk = ChD.characterDatas[i].Atk;
-            CharacterC.GetComponent<Character>().Hp = ChD.characterDatas[i].curHp;
-            CharacterC.GetComponent<Character>().maxHp = ChD.characterDatas[i].maxHp;
-                 CharacterC.GetComponent<Character>().def = ChD.characterDatas[i].def;
-            CharacterC.GetComponent<Character>().cost = ChD.characterDatas[i].Cost;
-            CharacterC.GetComponent<Character>().passive = ChD.characterDatas[i].passive;
-            CharacterC.GetComponent<Character>().Name = ChD.characterDatas[i].Name;
-            CharacterC.GetComponent<Character>().speed = ChD.characterDatas[i].speed;
-            //캐릭터들의 기본 스탯을 데이터와 같게 설정
-            CharacterC.GetComponent<Character>().lobbyNum = i; //로비에 있는 순서대로 불러오기 떄문에 미리 저장
-        }
-       
-        for (int i = 0; i < line; i++)
-        {
-            forward[i].transform.position = new Vector2(-880 / 45f, (300 - 150 * characters.Count) / 45f);
-            characters.Add(forward[i]);
-        }//위치가 전방인 캐릭터들을 목록에 넣음
-        for (int i = line; i < ChD.size; i++)
-        {
-            back[i - line].transform.position = new Vector2(-880 / 45f, (270 - 150 * characters.Count) / 45f);
-            characters.Add(back[i - line]);
-        }//위치가 후방인 캐릭터들을 목록에 넣음
-        for (int i = 1; i < ChD.size; i++)
-        {
-            characters[i].curNo = i;
-        }
-      
-            GameObject EnemySummon = Instantiate(Enemys[0], new Vector2(-2, -2), transform.rotation, GameObject.Find("CharacterCanvas").transform);
-        
-        Enemys = GameObject.FindGameObjectsWithTag("Enemy");
-        for (int i = 0; i < Enemys.Length; i++)
-        {
-            Enemys[i].GetComponent<Enemy>().myNo = i;
-        }
-        TurnCardCount = CardCount;
-
-        LineObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-820, 360 - 150 * line);
-        HM = GameObject.Find("HandManager").GetComponent<HandManager>();
-        if (GD.blessbool[20])
-        {
-            SetBless20();
-        }
-        if (GD.blessbool[4])
-        {
-            for (int i = 0; i < characters.Count; i++)
-                characters[i].turnAct++;
-        }
-    }
-
+    
 
     private void Update()
     {
