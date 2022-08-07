@@ -47,7 +47,7 @@ public class BattleManager : MonoBehaviour
     public bool otherCanvasOn;//다른 캔버스(무덤이나 로그,덱 등)이 켜져 있을 때
     public Log log;
 
-    [SerializeField] GameObject window_Grave;
+    [SerializeField] GameObject window_Grave; // YH
     public int reviveCount;
     public bool card7mode;
     bool card12On;
@@ -75,6 +75,11 @@ public class BattleManager : MonoBehaviour
     public bool card20Activing;
     [SerializeField] GameObject go_GraveView_Button_Revive; // YH
     public bool CancleReviveMode;
+
+    [SerializeField] GameObject window_Deck; // YH
+    [HideInInspector] public bool isDeckWindowOn; // YH
+    [SerializeField] GameObject go_DeckView_Button_OK; // YH
+    [SerializeField] GameObject go_DeckView_Button_Cancel; // YH
 
     public GameObject DeckView;
     public GameObject SelectedCard;
@@ -110,8 +115,7 @@ public class BattleManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI[] RewardEquipmentString;
     //승리 시 보상 선택하는 창에 들어갈 변수들
 
-    [SerializeField] GameObject Sless;//덱에서 카드 선택할 때 아무것도 선택 안 되어 있으 면
-
+    [SerializeField] GameObject go_Warning_LessSelectedCard_DeckSelectMode; // 덱 선택 모드에서 확인 버튼을 클릭 했을 시 선택된 카드가 부족하면 실행되는 경고창 오브젝트
 
     public bool ReviveMode;
     public int SelectDeckCount;//덱에서 선택 할 카드 수
@@ -811,7 +815,7 @@ public class BattleManager : MonoBehaviour
 
     public void Click_GraveOn() //무덤 열기. 특정 경우에는 클릭 안 해도 자동으로 열림
     {
-        if (!HandManager.Instance.isEnableOtherButton)
+        if (HandManager.Instance.isEnableOtherButton)
         {
             otherCanvasOn = true;
             isGraveWindowOn = true;
@@ -828,16 +832,14 @@ public class BattleManager : MonoBehaviour
 
     public void Click_GraveOff() //무덤에서 그냥 종료 버튼
     {
+        otherCanvasOn = false;
         isGraveWindowOn = false;
 
         if (GraveReviveMode) //만약에 무덤에서 카드를 고르는 카드 사용 중일 때는 그 카드의 발동을 취소하는 함수 호출
-        {
             Grave_ReviveCancel();
-        }
         else
         {
             CM.GraveOff();
-            otherCanvasOn = false;
             cancleCard();
             //CancleCharacter();
             CancleEnemy();
@@ -870,18 +872,33 @@ public class BattleManager : MonoBehaviour
         reviveCount = 0;
        
         CM.GraveOff();
-        otherCanvasOn = false;
         window_Grave.SetActive(false);
     }
 
-    public void DeckOn()
+    public void Click_DeckOn()
     {
-        otherCanvasOn = true;
-        CM.DeckOn();
-        DeckView.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
+        if (HandManager.Instance.isEnableOtherButton)
+        {
+            otherCanvasOn = true;
+            isDeckWindowOn = true;
+
+            if (DeckSelectMode)
+            {
+                go_DeckView_Button_OK.SetActive(true);
+                go_DeckView_Button_Cancel.SetActive(true);
+            }
+            else
+            {
+                go_DeckView_Button_OK.SetActive(false);
+                go_DeckView_Button_Cancel.SetActive(false);
+            }
+
+            CM.DeckOn();
+            window_Deck.SetActive(true);
+        }
     }
 
-    public void DeckOff()
+    public void Click_DeckOff()
     {
         SelectDeckCount = 0;
         otherCanvasOn = false;
@@ -1560,18 +1577,21 @@ public class BattleManager : MonoBehaviour
     }
     public void SelectDeckCard(int count)
     {
-        DeckOn();
         SelectDeckCount = count;
         DeckSelectMode = true;
-    }
-    public void Click_DeckCancle() //덱에서 선택을 취소하는 함수
-    {
-        DeckOff();
-        DeckSelectCancle = true;
-        DeckSelectMode = false;
+
+        Click_DeckOn();
     }
 
-    public void Click_DeckComplete() //덱에서 패로 가져올 카드 선택
+    public void Click_Cancle_DeckWindow() //덱에서 선택을 취소하는 함수
+    {
+        DeckSelectCancle = true;
+        DeckSelectMode = false;
+
+        Click_DeckOff();
+    }
+
+    public void Click_OK_DeckWindow() //덱에서 패로 가져올 카드 선택
     {
         if (SelectDeckCount == CM.SelectedCard.Count)
         {
@@ -1580,16 +1600,17 @@ public class BattleManager : MonoBehaviour
             CM.DeckToField();
             DeckSelectMode = false;
             DeckSelect = true;
-            DeckOff();
+            Click_DeckOff();
         }
         else
         {
-            Sless.SetActive(true);
-            Invoke("SlessOff", 1f);
+            go_Warning_LessSelectedCard_DeckSelectMode.SetActive(true);
+            Invoke("go_Warning_LessSelectedCard_DeckSelectMode_Off", 1f);
         }
     }
-    void SlessOff() //선택된 카드가 적을 때
+
+    void go_Warning_LessSelectedCard_DeckSelectMode_Off() //선택된 카드가 적을 때
     {
-        Sless.SetActive(false);
+        go_Warning_LessSelectedCard_DeckSelectMode.SetActive(false);
     }
 }

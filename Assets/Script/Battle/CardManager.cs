@@ -39,6 +39,8 @@ public class CardManager : MonoBehaviour
 
     string[] deckText = new string[7];
 
+    [SerializeField] private GameObject go_Content_Deck;
+
 
     private void Update()
     {
@@ -239,6 +241,7 @@ public class CardManager : MonoBehaviour
         c.GetComponent<Card>().isGrave = true;
         c.SetActive(false);
     }
+
     public void GraveOn() //무덤 팝업을 킴
     {
         for (int i = 0; i < Grave.Count; i++)
@@ -247,16 +250,18 @@ public class CardManager : MonoBehaviour
             Grave[i].transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
         }
     }
+
     public void DeckOn() //덱 팝업을 킴
     {
         for (int i = 0; i < Deck.Count; i++)
         {
             Deck[i].GetComponent<Card>().isDeck = true;
-            Deck[i].transform.parent = GameObject.Find("DeckContent").transform;
+            Deck[i].transform.parent = go_Content_Deck.transform;
             Deck[i].SetActive(true);//덱에 있는 카드들을 활성화
             Deck[i].transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
         }
     }
+
     public void GraveOff()
     {
         for (int i = 0; i < Grave.Count; i++)
@@ -264,6 +269,7 @@ public class CardManager : MonoBehaviour
             Grave[i].SetActive(false);
         }
     }
+
     public void DeckOff()
     {
         SelectedCard.Clear();

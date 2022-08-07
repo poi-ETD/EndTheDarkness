@@ -506,7 +506,7 @@ public class Card : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (!isGrave && !isDeck)
+        if (!isGrave && !isDeck && !BM.otherCanvasOn)
         {
             if (BM.otherCor) return;
            
@@ -552,20 +552,22 @@ public class Card : MonoBehaviour
 
     private void OnMouseUp()
     {
-        HandManager.Instance.CardMouseUp();
+        if (!BM.otherCanvasOn)
+            HandManager.Instance.CardMouseUp();
     }
 
     private void OnMouseEnter()
     {
-        if (!HandManager.Instance.isSelectedCard)
+        if (!HandManager.Instance.isSelectedCard && !BM.otherCanvasOn)
         {
             if (!BM.EnemySelectMode && !BM.otherCanvasOn && !isDeck)
                 HandManager.Instance.CardMouseEnter(this);
-            if (BM.otherCanvasOn && BM.isGraveWindowOn)
+            if (BM.otherCanvasOn && (BM.isGraveWindowOn || BM.isDeckWindowOn))
             {
-                if (isGrave)
-                    HandManager.Instance.CardTooltipOn(this);
-                // if(isGrave||isDeck) HandManager.Instance.CardMouseEnter(this); 
+                //if (isGrave)
+                //    HandManager.Instance.CardTooltipOn(this);
+                // if(isGrave||isDeck) HandManager.Instance.CardMouseEnter(this);
+                HandManager.Instance.CardTooltipOn(this);
             }
         }
     }
@@ -586,7 +588,7 @@ public class Card : MonoBehaviour
             }
             else
             {
-                if (BM.isGraveWindowOn)
+                if (BM.isGraveWindowOn || BM.isDeckWindowOn)
                     HandManager.Instance.go_SelectedCardTooltip.SetActive(false);
             }
         }
