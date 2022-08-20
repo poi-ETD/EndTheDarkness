@@ -10,7 +10,7 @@ public class CharacterManager : MonoBehaviour
 {
     CharacterData CD = new CharacterData();
     float timer;
-    CharacterInfo CI = new CharacterInfo();
+
     [SerializeField] Sprite[] CharacterImgae;
     [SerializeField] Sprite[] CharacterFaceImgae;
     [SerializeField] GameObject Canvas;
@@ -68,10 +68,10 @@ public class CharacterManager : MonoBehaviour
         curPassive = -1;
         curFormation = -1;
         counter = -1; //초기 값 세팅
-        for (int i = 1; i < CI.cd.Length; i++)
+        for (int i = 1; i < CharacterInfo.Instance.cd.Length; i++)
         {
             GameObject cha = Instantiate(Prefebs, Canvas.transform);
-            cha.GetComponent<CharacterSetting>().SetCharacter(i, CharacterImgae[i]);
+            cha.GetComponent<CharacterSetting>().SetCharacter(i);
         }
     }
 
@@ -98,7 +98,7 @@ public class CharacterManager : MonoBehaviour
     {
         for(int i = 0; i < CharacterList.Count; i++)
         {
-            listImage[i].sprite = CharacterFaceImgae[CharacterList[i]];
+            listImage[i].sprite = CharacterInfo.Instance.cd[CharacterList[i]].characterFace;
             listImage[i].color = new Color(1, 1, 1, 1);
         }
 
@@ -147,7 +147,7 @@ public class CharacterManager : MonoBehaviour
             //int maxHp, int curHp, int passive1, int passive2, int passive3, int passive4, int curFormation)
             int[] passiveO = new int[4];
             CD.characterDatas[counter] = new CharacterData.curCharacterData(
-                CI.cd[no].Name, no, CI.cd[no].Cost, CI.cd[no].Atk, CI.cd[no].Def, CI.cd[no].speed, CI.cd[no].maxHp, CI.cd[no].maxHp, passiveO, curFormation, -1);
+                CharacterInfo.Instance.cd[no].Name, no, CharacterInfo.Instance.cd[no].Cost, CharacterInfo.Instance.cd[no].Atk, CharacterInfo.Instance.cd[no].Def, CharacterInfo.Instance.cd[no].speed, CharacterInfo.Instance.cd[no].maxHp, CharacterInfo.Instance.cd[no].maxHp, passiveO, curFormation, -1);
             CD.characterDatas[counter].passive[curPassive]++;
 
         }
@@ -166,12 +166,12 @@ public class CharacterManager : MonoBehaviour
         else
             cardManager.getStarterCard(CharacterList[counter], 1);
 
-        SubImage.sprite = CharacterImgae[CharacterList[counter]];
-        SetText[0].text = CI.cd[CharacterList[counter]].Name;
-        SetText[1].text = CI.cd[CharacterList[counter]].passive[0];
-        SetText[2].text = CI.cd[CharacterList[counter]].passive[1];
-        SetText[3].text = CI.cd[CharacterList[counter]].passive[2];
-        SetText[4].text = CI.cd[CharacterList[counter]].passive[3];   
+        SubImage.sprite = CharacterInfo.Instance.cd[CharacterList[counter]].characterSprtie;
+        SetText[0].text = CharacterInfo.Instance.cd[CharacterList[counter]].Name;
+        SetText[1].text = CharacterInfo.Instance.cd[CharacterList[counter]].passive[0];
+        SetText[2].text = CharacterInfo.Instance.cd[CharacterList[counter]].passive[1];
+        SetText[3].text = CharacterInfo.Instance.cd[CharacterList[counter]].passive[2];
+        SetText[4].text = CharacterInfo.Instance.cd[CharacterList[counter]].passive[3];   
         //다음 캐릭터를 보여줌
         Canvas.SetActive(false);
         curPassive = -1;
@@ -191,7 +191,7 @@ public class CharacterManager : MonoBehaviour
         {
             PassivePopup.SetActive(true); //패시브 설명을 킴
 
-            SetText[5].text = CI.cd[CharacterList[counter]].passiveContent[selectedPassive];
+            SetText[5].text = CharacterInfo.Instance.cd[CharacterList[counter]].passiveContent[selectedPassive];
             //설명에 있는 텍스트를 변경함
             if (curPassive != -1)
                 Arrows[curPassive].SetActive(false); //이미 패시브 다른게 있었다면 화살표 없앰.
@@ -234,7 +234,7 @@ public class CharacterManager : MonoBehaviour
     }
 }
 
-public class CharacterData //json으로 저장 될 인게임ㄴ 캐릭터 정보
+public class CharacterData //json으로 저장 될 인게임 캐릭터 정보
 {
   
     public struct curCharacterData

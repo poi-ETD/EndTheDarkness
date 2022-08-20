@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class NoBattleCard : MonoBehaviour //대략적으로 배틀이 아닐 때 카드를 관리하기 위함 ex)로비나, 세팅
@@ -11,18 +12,21 @@ public class NoBattleCard : MonoBehaviour //대략적으로 배틀이 아닐 때
     CardSetManager csm;
     public int deckNo;
     public bool select;
+    [SerializeField] Image myImage;
     public void setCost(int cost)
     {
         CardInfoText[3].text = "" + cost;//코스트
     }
     public void setCardInfo(int i)
     {
+       
         csm = GameObject.Find("CardSetManager").GetComponent<CardSetManager>();   
         no = CardInfo.Instance.cd[i].No;
         CardInfoText[0].text=CardInfo.Instance.cd[i].Name;//이름
         CardInfoText[1].text = CardInfo.Instance.cd[i].Content;//내용
         CardInfoText[2].text="NO."+ CardInfo.Instance.cd[i].No.ToString("D3");//넘버
         CardInfoText[3].text = "" + CardInfo.Instance.cd[i].Cost;//코스트
+        myImage.sprite = CardInfo.Instance.CardSpr[i];
         string Name="";
         if (CardInfo.Instance.cd[i].Deck==0)
         {
@@ -42,11 +46,15 @@ public class NoBattleCard : MonoBehaviour //대략적으로 배틀이 아닐 때
         }
         if (CardInfo.Instance.cd[i].Deck == 4)
         {
-            Name = "PORTE";
+            Name = "FORTE";
         }
         if (CardInfo.Instance.cd[i].Deck == 5)
         {
             Name = "RHYNG";
+        }
+        if (CardInfo.Instance.cd[i].Deck == 5)
+        {
+            Name = "凶鬼";
         }
         CardInfoText[4].text = Name;
         CardInfoText[5].text = csm.CardCount[no] + "";
@@ -110,16 +118,16 @@ public class NoBattleCard : MonoBehaviour //대략적으로 배틀이 아닐 때
     {
         if (select)
         {
-            GameObject.Find("BattleManager").GetComponent<BattleManager>().SelectedRewardCount--;
+            GameObject.Find("BattleManager").GetComponent<BattleManager>().selectedRewardCount--;
             transform.localScale /= 1.2f;
             select = false;
         }
         else
         {
 
-            if (GameObject.Find("BattleManager").GetComponent<BattleManager>().SelectedRewardCount<1)
+            if (GameObject.Find("BattleManager").GetComponent<BattleManager>().selectedRewardCount<1)
             {
-                GameObject.Find("BattleManager").GetComponent<BattleManager>().SelectedRewardCount++;
+                GameObject.Find("BattleManager").GetComponent<BattleManager>().selectedRewardCount++;
                 transform.localScale *= 1.2f;
                 select = true;
             }
@@ -127,13 +135,14 @@ public class NoBattleCard : MonoBehaviour //대략적으로 배틀이 아닐 때
     }
    
     public void setCardInfoInLobby(int num,int d) //로비에서 카드 목록을 볼 때
-    {
-        Debug.Log(num);
+    {      
         deckNo = d;
         no = CardInfo.Instance.cd[num].No;
         CardInfoText[0].text = CardInfo.Instance.cd[num].Name;//제목
         CardInfoText[1].text = CardInfo.Instance.cd[num].Content;//내용
         CardInfoText[2].text = "NO." + CardInfo.Instance.cd[num].No.ToString("D3");//넘버
+        CardInfoText[3].text = CardInfo.Instance.cd[num].Cost+"";
+        myImage.sprite = CardInfo.Instance.CardSpr[num];
         string Name = "";
         if (CardInfo.Instance.cd[num].Deck == 0)
         {

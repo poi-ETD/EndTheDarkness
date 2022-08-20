@@ -122,7 +122,7 @@ public class CardManager : MonoBehaviour
     }
     IEnumerator turnStartDrow()//턴 시작시 드로우
     {
-        BM.otherCor = true;
+        BM.otherCorIsRun = true;
 
         for (int i = 0; i < BM.TurnCardCount; i++)
         {
@@ -133,7 +133,7 @@ public class CardManager : MonoBehaviour
 
         GameObject.Find("HandManager").GetComponent<HandManager>().InitCard();
         TM.TurnStartPassive();
-        BM.otherCor = false;
+        BM.otherCorIsRun = false;
 
     }
     public void SpecialCardToField(GameObject card)//카드를 통한 드로우
@@ -268,6 +268,7 @@ public class CardManager : MonoBehaviour
         {
             Grave[i].SetActive(false);
         }
+        BM.GraveReviveMode = false;
     }
 
     public void DeckOff()
@@ -502,7 +503,7 @@ public class CardManager : MonoBehaviour
     }
     IEnumerator DrowCor()
     {
-        BM.otherCor = true;
+        BM.otherCorIsRun = true;
 
 
         CardToField();
@@ -510,7 +511,7 @@ public class CardManager : MonoBehaviour
 
 
         HandManager.Instance.InitCard();
-        BM.otherCor = false;
+        BM.otherCorIsRun = false;
     }
     public void RemoveCardRemove()
     {

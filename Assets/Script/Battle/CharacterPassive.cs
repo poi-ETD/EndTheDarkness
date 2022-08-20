@@ -24,7 +24,7 @@ public class CharacterPassive : MonoBehaviour
 
     int sparkyCardDrow;//리플리 전용 변수
     public bool sparkyAttackDone;//리플리 전용 변수
-    bool sparkyIsUp;//리플리 전용 변수
+    
     int sparkyAttackCount;
 
     float[] passiveCount=new float[4];
@@ -49,6 +49,12 @@ public class CharacterPassive : MonoBehaviour
             myCharacter.MaxHpChange(-5);
             myCharacter.AtkUp(1);
             myCharacter.cost += 1;
+        }
+        if (myNo == 6 && myPassvie[0] > 0)
+        {
+            for (int i = 0; i < myPassvie[0]; i++)
+                myCharacter.atk *= 2;
+            myCharacter.SetTurnAtk();
         }
     }
 
@@ -85,6 +91,7 @@ public class CharacterPassive : MonoBehaviour
         }
        
     }
+ 
     public void Sparky4()
     {
         if (myCharacter.isDie) return;
@@ -185,6 +192,10 @@ public class CharacterPassive : MonoBehaviour
                     BM.characters[i].getArmor(myCharacter.armor);
                 }
             }
+        }
+        if (myNo == 6 && myPassvie[1] > 0)
+        {
+            AM.MakeAct(0, 22, 0, null, null, myCharacter, null, myPassvie[1]);
         }
     } 
 

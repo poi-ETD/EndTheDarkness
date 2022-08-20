@@ -23,14 +23,14 @@ public class CardInfo : MonoBehaviour
          Resources.Load<Sprite>("CardSprite/Card-13"), //2
          Resources.Load<Sprite>("CardSprite/Card-13"), //3
          Resources.Load<Sprite>("CardSprite/Card-13"), //4
-         Resources.Load<Sprite>("CardSprite/Card-13"), //5
-         Resources.Load<Sprite>("CardSprite/Card-5"), //6
-         Resources.Load<Sprite>("CardSprite/Card-6"), //7
-         Resources.Load<Sprite>("CardSprite/Card-7"), //8
+         Resources.Load<Sprite>("CardSprite/Card-5"), //5
+         Resources.Load<Sprite>("CardSprite/Card-6"), //6
+         Resources.Load<Sprite>("CardSprite/Card-7"), //7
+         Resources.Load<Sprite>("CardSprite/Card-13"), //8
          Resources.Load<Sprite>("CardSprite/Card-13"), //9
          Resources.Load<Sprite>("CardSprite/Card-13"), //10
          Resources.Load<Sprite>("CardSprite/Card-13"), //11
-         Resources.Load<Sprite>("CardSprite/Card-13"), //12
+         Resources.Load<Sprite>("CardSprite/Card-12"), //12
          Resources.Load<Sprite>("CardSprite/Card-13"), //13
          Resources.Load<Sprite>("CardSprite/Card-13"), //14
          Resources.Load<Sprite>("CardSprite/Card-13"), //15

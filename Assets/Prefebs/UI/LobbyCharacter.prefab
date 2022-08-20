@@ -843,14 +843,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f3d6231841b60e458a6e39532c818d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Delegates: []
-  CharacterInfo:
+  Info:
   - {fileID: 8302398869696478849}
   - {fileID: 8302398869697899625}
   - {fileID: 1194975363244431137}
   - {fileID: 3506784642813991580}
-  - {fileID: 0}
-  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   myImage: {fileID: 3506784643141701632}

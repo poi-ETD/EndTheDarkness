@@ -17,7 +17,6 @@ public class Bless : MonoBehaviour
     [SerializeField] GameObject noIgn;
     [SerializeField] TextMeshProUGUI[] blessT;
     blessData bd = new blessData();
-    CharacterInfo chainfo = new CharacterInfo();
     [SerializeField] GameObject bless6;
     [SerializeField] GameObject bless5;
     [SerializeField] GameObject bless5Content;
@@ -348,7 +347,7 @@ public class Bless : MonoBehaviour
                 else
                 {
                     bless6.transform.GetChild(i).GetChild(j).gameObject.SetActive(true);
-                    bless6.transform.GetChild(i).GetChild(j).GetChild(0).GetComponent<Text>().text = chainfo.cd[lobby.ChD.characterDatas[i].No].passive[j];
+                    bless6.transform.GetChild(i).GetChild(j).GetChild(0).GetComponent<Text>().text = CharacterInfo.Instance.cd[lobby.ChD.characterDatas[i].No].passive[j];
                 }
             }
         }

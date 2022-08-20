@@ -61,11 +61,11 @@ public class Log : MonoBehaviour
     string SetPassiveName(int i,int c) //패시브 번호에 따라 로그 출력을 위한 함수
     {
         string s = "";
-        CharacterInfo chD = new CharacterInfo();
+        
         int k = i % 4 - 1;
         int m = i / 4 + 1;
         if (k == -1) { k = 3; m--; }
-        s ="\n"+ chD.cd[m].Name+"이 "+chD.cd[m].passive[k]+" 발동("+c+")";
+        s ="\n"+ CharacterInfo.Instance.cd[m].Name+"이 "+ CharacterInfo.Instance.cd[m].passive[k]+" 발동("+c+")";
         return s;
     }
 }

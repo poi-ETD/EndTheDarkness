@@ -104,11 +104,11 @@ public class BattleManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI rewardIgnum;
     [SerializeField] TextMeshProUGUI rewardTribute;
     [SerializeField] GameObject RewardCanvas;
-    public bool isV;//승리 팝업이 켜져있을 때
-    [SerializeField] GameObject RewardCardPrefebs;
-    public int SelectedRewardCount;
-    [SerializeField] GameObject noSelect;
-    int listlength = 3;
+    public bool isVictoryPopupOn;//승리 팝업이 켜져있을 때
+    [SerializeField] GameObject rewardCardPrefebs;
+    public int selectedRewardCount;
+    [SerializeField] GameObject noSelectCard;
+    int rewardListlength = 3;
     List<int> RandomCardList = new List<int>();
 
     List<int> RancomSelectCard = new List<int>();
@@ -128,12 +128,11 @@ public class BattleManager : MonoBehaviour
 
 
 
-    public bool otherCor; //코루틴이 동작 중일 때
+    public bool otherCorIsRun; //코루틴이 동작 중일 때
  
-    public bool turnStarting;//턴 시작 코루틴이 동작 중일 때
+    public bool turnStartIsRun;//턴 시작 코루틴이 동작 중일 때
 
-    public int turnEndu;//턴 종료 코루틴이 동작중일 때
-
+  
 
     //YH
     [HideInInspector] public bool isPointerinHand = false;
@@ -327,7 +326,7 @@ public class BattleManager : MonoBehaviour
         }
         //캐릭터들의 현재 위치 정보 재설정
         otherCanvasOn = false; //진형붕괴 팝업이 꺼졌기 때문
-        otherCor = false; //턴 시작 코루틴을 진행시킴
+        otherCorIsRun = false; //턴 시작 코루틴을 진행시킴
         FormationCollapsePopup.SetActive(false);
         if (GD.blessbool[20])
         {
@@ -557,20 +556,24 @@ public class BattleManager : MonoBehaviour
         }
         else if (selectedCard.GetComponent<Card>().selectType == 1)
         {
-            if (ei.SelectedEnemy != null)
+            
+            if (actCharacter.passive[0] > 0 && actCharacter.characterNo == 6)
             {
-              /*  if (usedInCard20 != null)
+                GameObject randomEnemy = Enemys[Random.Range(0, Enemys.Length)];
+                while (randomEnemy.GetComponent<Enemy>().isDie)
                 {
-                    Destroy(selectedCard);
-                    selectedCard = usedInCard20;
-                    otherCanvasOn = false;
-                }*/
-
+                    randomEnemy = Enemys[Random.Range(0, Enemys.Length)];
+                }
+                EnemySelect(randomEnemy);
+            }
+           else if (ei.SelectedEnemy != null)
+            {              
                 EnemySelect(ei.SelectedEnemy.gameObject);
 
-                CardUseText.text = "사용";
-                EnemySelectMode = false;
+                
             }
+            CardUseText.text = "사용";
+            EnemySelectMode = false;
         }
         else if (selectedCard.GetComponent<Card>().selectType == 5)
         {
@@ -976,7 +979,7 @@ public class BattleManager : MonoBehaviour
     {
         otherCanvasOn = true;
         victory_window.SetActive(true);
-        isV = true;
+        isVictoryPopupOn = true;
         int ignum = Random.Range(15, 26) * 10 + GD.victory * 20;
         int tribute = Random.Range(5, 11) * 10;
         if (GD.blessbool[15]) ignum *= 3;
@@ -984,8 +987,8 @@ public class BattleManager : MonoBehaviour
         rewardTribute.text = tribute + "공물 획득";
         GD.Ignum += ignum;
         //정해진 공식에 따라 이그넘을 획득 후
-        if (GD.blessbool[16]) listlength = 4; //축복 16번이 true라면 4개를 보여줘야함
-        if (!GD.blessbool[9]) noSelect.SetActive(false); //축복 9번이 없다면 아무것도 선택 안하는 버튼을 없앰
+        if (GD.blessbool[16]) rewardListlength = 4; //축복 16번이 true라면 4개를 보여줘야함
+        if (!GD.blessbool[9]) noSelectCard.SetActive(false); //축복 9번이 없다면 아무것도 선택 안하는 버튼을 없앰
         for (int i = 0; i < CardInfo.Instance.cd.Length; i++)
         {
             for (int j = 0; j < characters.Count; j++)
@@ -997,17 +1000,17 @@ public class BattleManager : MonoBehaviour
             }
         }
         int rand = Random.Range(0, RandomCardList.Count);
-        for (int i = 1; i <= listlength; i++)
+        for (int i = 1; i <= rewardListlength; i++)
         {
             int temp = RandomCardList[rand];
             RandomCardList[rand] = RandomCardList[RandomCardList.Count - i];
             RandomCardList[RandomCardList.Count - i] = temp;
             rand = Random.Range(0, RandomCardList.Count - i);
         }
-        for (int i = 1; i <= listlength; i++)
+        for (int i = 1; i <= rewardListlength; i++)
         {
             Debug.Log(RandomCardList[RandomCardList.Count - i]);
-            GameObject newCard = Instantiate(RewardCardPrefebs, RewardCanvas.transform);
+            GameObject newCard = Instantiate(rewardCardPrefebs, RewardCanvas.transform);
             newCard.GetComponent<NoBattleCard>().setCardInfoInLobby(RandomCardList[RandomCardList.Count - i], 0);
             RancomSelectCard.Add(RandomCardList[RandomCardList.Count - i]);
         }
@@ -1553,7 +1556,7 @@ public class BattleManager : MonoBehaviour
     }
     IEnumerator card35cor(GameObject MyCard) //덱에있는 모든 패를 무덤으로 보내는 과정
     {
-        otherCor = true;
+        otherCorIsRun = true;
         int myFieldCount = CM.field.Count - 1;
         for (int i = CM.field.Count - 1; i >= 0; i--)
         {
@@ -1564,7 +1567,7 @@ public class BattleManager : MonoBehaviour
             }
             yield return new WaitForSeconds(0.1f);
         }
-        otherCor = false;
+        otherCorIsRun = false;
         OnRandomAttack(10, actCharacter, myFieldCount);
         if (!MyCard.GetComponent<Card>().iscard20Mode)
         {
