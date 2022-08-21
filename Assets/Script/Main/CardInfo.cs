@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 public class CardInfo : MonoBehaviour
 {
     private static CardInfo instance;
@@ -11,12 +12,12 @@ public class CardInfo : MonoBehaviour
         {
             if (null == instance)
             {
-
                 instance = new CardInfo();
             }
             return instance;
         }
     }
+
     public Sprite[] CardSpr = {
          Resources.Load<Sprite>("CardSprite/Card-13"), //0
          Resources.Load<Sprite>("CardSprite/Card-13"), //1
@@ -56,6 +57,7 @@ public class CardInfo : MonoBehaviour
          Resources.Load<Sprite>("CardSprite/Card-13"), //35
          Resources.Load<Sprite>("CardSprite/Card-13"), //36
          };
+
     public struct cardData
     {
         public string Name;
@@ -66,7 +68,7 @@ public class CardInfo : MonoBehaviour
         public int type; // 기본&스타터,에디셔녈,토큰
         public int select; // 0->선택X 1->적 선택2->묘지on,묘지 선택 3 ->덱 on,덱 선택 4->스케치반복 5->아군 선택
 
-        public cardData(string Name, string Content, int No, int Cost, int Deck,int type,int select)
+        public cardData(string Name, string Content, int No, int Cost, int Deck, int type, int select)
         {
             this.Name = Name;
             this.Content = Content;
@@ -77,6 +79,7 @@ public class CardInfo : MonoBehaviour
             this.select = select;
         }
     }
+
     public cardData[] cd = new cardData[37]
     {  new cardData("이름자리입니다","내용입니다",0,0,0,0,0),
 
@@ -145,6 +148,5 @@ public class CardInfo : MonoBehaviour
        new cardData("살기 감지","-흉귀의 공격력: +1\n-사용한 아군의 방어도가 0일시 흉귀의 공격력: -1, 흉귀의 방어도: 10",34,2,6,1,0),
        new cardData("육참 생단","-패에 있는 카드를 소멸한다.\n-무작위 적에게 데미지: 10(소멸한 패의 장수만큼 반복)",35,5,6,1,0),
        new cardData("백","-무작위 적에게 데미지: 공격력의 4배",36,3,6,1,0),
-
     };
 }
