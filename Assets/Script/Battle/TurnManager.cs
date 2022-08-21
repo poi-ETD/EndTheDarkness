@@ -93,7 +93,7 @@ public class TurnManager : MonoBehaviour
         AM.Act();//턴 종료 패시브 발동
 
         
-        while (BM.otherCor)
+        while (BM.otherCorIsRun)
         {
             yield return new WaitForSeconds(0.1f);
         }
@@ -132,7 +132,7 @@ public class TurnManager : MonoBehaviour
     {
 
 
-        BM.turnStarting = true;
+        BM.turnStartIsRun = true;
         GameObject.Find("HandManager").GetComponent<HandManager>().isInited = false;
         
         BM.log.logContent.text += "\n" + turn + "턴 시작!";
@@ -161,7 +161,7 @@ public class TurnManager : MonoBehaviour
                 BM.characters[i].curTurnActTime = 0;
               
                 BM.characters[i].turnAtk = BM.characters[i].atk;
-                BM.characters[i].TurnAtkUp(turnAtk);
+                BM.characters[i].SetTurnAtk();
                 BM.characters[i].turnDef = BM.characters[i].def;
                 BM.characters[i].getArmor(BM.characters[i].nextarmor);
                 if (BM.characters[i].armor < 0) BM.characters[i].armor = 0;

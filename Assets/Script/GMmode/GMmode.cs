@@ -12,7 +12,6 @@ public class GMmode : MonoBehaviour
     public CardData CD;
     public CharacterData ChD;
     public GameData GD = new GameData();
-    CharacterInfo ChaInfo = new CharacterInfo();
     [SerializeField] GameObject CardView;
     [SerializeField] GameObject CharacterView;
     int[] CardCount = new int[200];
@@ -121,7 +120,7 @@ public void GoLobby()
             CharacterView.transform.GetChild(i).GetChild(0).GetComponent<TextMeshProUGUI>().text = ChD.characterDatas[i].Name;
             for (int j = 0; j < 4; j++)
             {
-                CharacterView.transform.GetChild(i).GetChild(1 + j).GetComponent<TextMeshProUGUI>().text = ChaInfo.cd[ChD.characterDatas[i].No].passive[j];
+                CharacterView.transform.GetChild(i).GetChild(1 + j).GetComponent<TextMeshProUGUI>().text = CharacterInfo.Instance.cd[ChD.characterDatas[i].No].passive[j];
                 CharacterView.transform.GetChild(i).GetChild(1 + j).GetChild(0).GetComponent<TextMeshProUGUI>().text = ChD.characterDatas[i].passive[j]+"";
             }
         }

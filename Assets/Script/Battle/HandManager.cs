@@ -223,7 +223,7 @@ public class HandManager : MonoBehaviour
     {
         if ((!card.isGrave && !BM.isGraveWindowOn) || (!card.isDeck && !BM.isDeckWindowOn))
         {
-            if (BM.turnStarting) return;
+            if (BM.turnStartIsRun) return;
 
             onPointerCard = card;
             BM.isPointerinHand = true;

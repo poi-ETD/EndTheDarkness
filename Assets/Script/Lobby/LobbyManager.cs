@@ -12,7 +12,6 @@ public class LobbyManager : MonoBehaviour
     public CardData CD;
     public CharacterData ChD;
     public GameData GD = new GameData();
-    CharacterInfo ChaInfo = new CharacterInfo();
     [SerializeField] GameObject PopUpCanvas;
     [SerializeField] GameObject day;
     [SerializeField] GameObject night;
@@ -299,7 +298,7 @@ public class LobbyManager : MonoBehaviour
                     spr = EquipmentManager.Instance.equipSpr[e.equipNum];
                 }
                 CharacterView.transform.GetChild(i).gameObject.SetActive(true);
-                CharacterView.transform.GetChild(i).gameObject.GetComponent<CharacterSetting>().SetCharacterInLobby(ChD.characterDatas[i].No, CharacterSprtie[ChD.characterDatas[i].No],
+                CharacterView.transform.GetChild(i).gameObject.GetComponent<CharacterSetting>().SetCharacterInLobby(ChD.characterDatas[i].No, CharacterInfo.Instance.cd[ChD.characterDatas[i].No].characterSprtie,
                     ChD.characterDatas[i].Atk, ChD.characterDatas[i].def, ChD.characterDatas[i].Cost, ChD.characterDatas[i].curHp, ChD.characterDatas[i].maxHp,
                     ChD.characterDatas[i].curFormation, ChD.characterDatas[i].passive,s1,s2,spr
                     );
@@ -403,7 +402,6 @@ public class LobbyManager : MonoBehaviour
     }
     public void ThisCardSee(int i)
     {
-
         OneCardCanvas.SetActive(true);
         OneCard.GetComponent<NoBattleCard>().setCardInfoInLobby(CD.cardNo[i], 0);
         OneCard.GetComponent<NoBattleCard>().setCost(CD.cardCost[i]);
@@ -427,10 +425,10 @@ public class LobbyManager : MonoBehaviour
         {
             ByPassive[i].SetActive(true);
             ByPassiveNames[i].text = ChD.characterDatas[i].Name;
-            ByPassiveButtons[i * 4].text = ChaInfo.cd[ChD.characterDatas[i].No].passive[0];
-            ByPassiveButtons[i * 4 + 1].text = ChaInfo.cd[ChD.characterDatas[i].No].passive[1];
-            ByPassiveButtons[i * 4 + 2].text = ChaInfo.cd[ChD.characterDatas[i].No].passive[2];
-            ByPassiveButtons[i * 4 + 3].text = ChaInfo.cd[ChD.characterDatas[i].No].passive[3];
+            ByPassiveButtons[i * 4].text = CharacterInfo.Instance.cd[ChD.characterDatas[i].No].passive[0];
+            ByPassiveButtons[i * 4 + 1].text = CharacterInfo.Instance.cd[ChD.characterDatas[i].No].passive[1];
+            ByPassiveButtons[i * 4 + 2].text = CharacterInfo.Instance.cd[ChD.characterDatas[i].No].passive[2];
+            ByPassiveButtons[i * 4 + 3].text = CharacterInfo.Instance.cd[ChD.characterDatas[i].No].passive[3];
         }
     }
     public void GetItem()
@@ -919,10 +917,10 @@ public class LobbyManager : MonoBehaviour
         {
             ByPassive[i].SetActive(true);
             ByPassiveNames[i].text = ChD.characterDatas[i].Name;
-            ByPassiveButtons[i * 4].text = ChaInfo.cd[ChD.characterDatas[i].No].passive[0];
-            ByPassiveButtons[i * 4 + 1].text = ChaInfo.cd[ChD.characterDatas[i].No].passive[1];
-            ByPassiveButtons[i * 4 + 2].text = ChaInfo.cd[ChD.characterDatas[i].No].passive[2];
-            ByPassiveButtons[i * 4 + 3].text = ChaInfo.cd[ChD.characterDatas[i].No].passive[3];
+            ByPassiveButtons[i * 4].text = CharacterInfo.Instance.cd[ChD.characterDatas[i].No].passive[0];
+            ByPassiveButtons[i * 4 + 1].text = CharacterInfo.Instance.cd[ChD.characterDatas[i].No].passive[1];
+            ByPassiveButtons[i * 4 + 2].text = CharacterInfo.Instance.cd[ChD.characterDatas[i].No].passive[2];
+            ByPassiveButtons[i * 4 + 3].text = CharacterInfo.Instance.cd[ChD.characterDatas[i].No].passive[3];
         }
     }
     

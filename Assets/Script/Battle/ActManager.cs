@@ -49,7 +49,7 @@ public class ActManager : MonoBehaviour
     }
     public void EndButton()
     {
-        if (BM.otherCor) return;
+        if (BM.otherCorIsRun) return;
         ActComplete();
         Act();
     }
@@ -321,14 +321,14 @@ public class ActManager : MonoBehaviour
             yield return new WaitForSeconds(0.01f);
            
         }
-        while (BM.otherCor)
+        while (BM.otherCorIsRun)
         {
           
             yield return new WaitForSeconds(0.01f);
           
         }
 
-        BM.otherCor = true;  
+        BM.otherCorIsRun = true;  
         
         yield return new WaitForSeconds(0.2f);    
         while (ActList.Count != 0)
@@ -519,7 +519,7 @@ public class ActManager : MonoBehaviour
             TM.turnEndImage.color = new Color(1, 1, 1);
         }
         
-        if (BM.turnStarting)
+        if (BM.turnStartIsRun)
         {       
             //earlyAct();
             //isEarlyActing = true;
@@ -554,8 +554,8 @@ public class ActManager : MonoBehaviour
      
         sum = 1;
         BM.log.writePassiveInLog();
-        BM.turnStarting = false;
-        BM.otherCor = false;
+        BM.turnStartIsRun = false;
+        BM.otherCorIsRun = false;
         yield return null;
      
     }

@@ -195,7 +195,7 @@ public class Enemy : MonoBehaviour
                         }
                     }
                     die();
-                    if (V&&!BM.isV) BM.Victory();
+                    if (V&&!BM.isVictoryPopupOn) BM.Victory();
                     Hp = 0;
                     Color color = new Color(0.3f, 0.3f, 0.3f);
                     myImage.color = color;

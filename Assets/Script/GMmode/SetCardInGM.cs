@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 public class SetCardInGM : MonoBehaviour
 {
@@ -8,11 +9,14 @@ public class SetCardInGM : MonoBehaviour
     [SerializeField] TextMeshProUGUI count;
     [SerializeField] TextMeshProUGUI content;
     [SerializeField] TextMeshProUGUI noT;
+    Image myImage;
     GMmode gm;
     int no;
     int size;
     public void set(int no, GMmode gm,int size)
     {
+        myImage = transform.GetChild(5).GetComponent<Image>();
+        myImage.sprite = CardInfo.Instance.CardSpr[no];
         this.gm = gm;
         noT.text = no+"";
         title.text = CardInfo.Instance.cd[no].Name;

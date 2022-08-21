@@ -3105,6 +3105,7 @@ MonoBehaviour:
   - {fileID: 7610119031415292893, guid: 3f494e0bd39cbb24f94b4319d253cd72, type: 3}
   - {fileID: 2849677773793961653, guid: faf3922781ffce64ca1d7550e147515f, type: 3}
   - {fileID: 4630558257119894034, guid: 4bbb9aab278310248be800c8d8a97bea, type: 3}
+  - {fileID: 7970799410297521918, guid: a3914378d9329a94bba015cce20b184e, type: 3}
   characters: []
   CharacterSelectMode: 0
   EnemySelectMode: 0
@@ -3183,11 +3184,10 @@ MonoBehaviour:
   rewardIgnum: {fileID: 37241271}
   rewardTribute: {fileID: 907004769}
   RewardCanvas: {fileID: 2143467915}
-  isV: 0
-  RewardCardPrefebs: {fileID: 8261684784746718993, guid: 870438decc0041b469551b69d948237d,
-    type: 3}
-  SelectedRewardCount: 0
-  noSelect: {fileID: 763768639}
+  isVictoryPopupOn: 0
+  rewardCardPrefebs: {fileID: 0}
+  selectedRewardCount: 0
+  noSelectCard: {fileID: 0}
   RewardEquipmentString:
   - {fileID: 689694848}
   - {fileID: 955958757}
@@ -3198,9 +3198,8 @@ MonoBehaviour:
   DeckSelect: 0
   DeckSelectCancle: 0
   usedInCard20: {fileID: 0}
-  otherCor: 0
-  turnStarting: 0
-  turnEndu: 0
+  otherCorIsRun: 0
+  turnStartIsRun: 0
   isPointerinHand: 0
   isSelectedCardinHand: 0
   DmgPrefebs: {fileID: 3516283684887914833, guid: dd90e8f3edae7fc489918575a58fd894,

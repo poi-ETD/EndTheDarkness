@@ -508,7 +508,7 @@ public class Card : MonoBehaviour
     {
         if (!isGrave && !isDeck && !BM.otherCanvasOn)
         {
-            if (BM.otherCor) return;
+            if (BM.otherCorIsRun) return;
            
             if (isSelected) return;
 

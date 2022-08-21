@@ -15,7 +15,6 @@ public class CardSetManager : MonoBehaviour
     public int AllCard;
     public GameObject Canvas;
     public GameObject CardPrefebs;
-    CardInfo cd = new CardInfo();
     public int curCardCount;
     public int maxiumCardCount;
     [SerializeField] TextMeshProUGUI cardCount;
@@ -43,9 +42,9 @@ public class CardSetManager : MonoBehaviour
         curCardCount = 0;
         maxiumCardCount = counter;
         cardCount.text = "선택 가능한 최대 카드 수 : " + maxiumCardCount;
-        for (int i = 1; i < cd.cd.Length; i++)
+        for (int i = 1; i < CardInfo.Instance.cd.Length; i++)
         {
-            if (cd.cd[i].Deck == no && cd.cd[i].type == 0)
+            if (CardInfo.Instance.cd[i].Deck == no && CardInfo.Instance.cd[i].type == 0)
             {
                 //Debug.Log(cd.cd[i].No);
                 GameObject newCard = Instantiate(CardPrefebs, Canvas.transform);
@@ -95,18 +94,18 @@ public class CardSetManager : MonoBehaviour
             for (int j = 0; j < 5; j++)
             {
                 CD.cardNo.Add(i);
-                CD.cardCost.Add(cd.cd[i].Cost);
+                CD.cardCost.Add(CardInfo.Instance.cd[i].Cost);
                 CD.cardGet.Add(CD.get);
                 CD.get++;
             }
         }
-        for (int i = 0; i < cd.cd.Length; i++)
+        for (int i = 0; i < CardInfo.Instance.cd.Length; i++)
         {
             while (CardCount[i] != 0)
             {
                 CardCount[i]--;
                 CD.cardNo.Add(i);
-                CD.cardCost.Add(cd.cd[i].Cost);
+                CD.cardCost.Add(CardInfo.Instance.cd[i].Cost);
                 CD.cardGet.Add(CD.get);
                 CD.get++;
 

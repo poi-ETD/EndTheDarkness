@@ -236,10 +236,28 @@ public class Character : MonoBehaviour
             dmgText.GetComponent<DMGtext>().GetType(1, amount);
       
     }
+    public void SetTurnAtk()
+    {
+        turnAtk = atk;
+        if (bless[6])
+        {
+            turnAtk = 1;
+        }
+        atkT.text = turnAtk + "";
+    }
     public void TurnAtkUp(int i)
     {
         
         turnAtk += i;
+        int newAtk = i;
+        if (characterNo == 6 && passive[0] > 0)
+        {
+            for (int j = 0; j < passive[0]; j++)
+            {                
+                turnAtk += newAtk;
+                newAtk += newAtk;
+            }
+        }
         if (bless[6])
         {
             turnAtk = 1;
@@ -252,6 +270,17 @@ public class Character : MonoBehaviour
     {
         atk += i;
         turnAtk += i;
+        int newAtk = i;
+        if (characterNo == 6 && passive[0] > 0)
+        {
+            for (int j = 0; j < passive[0]; j++)
+            {
+                Debug.Log(atk);
+                atk += newAtk;
+                turnAtk += newAtk;
+                newAtk += newAtk;
+            }
+        }
         if (bless[6])
         {
             atk = 1;
