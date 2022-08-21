@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-public class CharacterSetting :MonoBehaviour
+public class CharacterSetting :EventTrigger
 {
     int no;
     [SerializeField] TextMeshProUGUI[] Info;//0->이름 1->설명 2,3,4,5->패시브 6->패시브상세이름 7->패시브 상세 내용
@@ -77,12 +77,12 @@ public class CharacterSetting :MonoBehaviour
         transform.GetChild(1).GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().text = s1;
         transform.GetChild(1).GetChild(0).GetChild(1).GetComponent<TextMeshProUGUI>().text = s2;
     }
-   /*public override void OnPointerClick(PointerEventData data)
+   public override void OnPointerClick(PointerEventData data)
     {   //파티 만들기 형태에서 캐릭터를 누르면 적용됨
         //이미 파티에 있는 캐릭터면 목록에서 없애고, 파티에 없는 캐릭터면 목록에 추가함
         if (isSet)
         GameObject.Find("CharacterManager").GetComponent<CharacterManager>().setCharacter(no);
-   }*/
+   }
     public void SetPassiveContent(int i)
     {
        
