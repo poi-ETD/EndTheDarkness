@@ -98,7 +98,7 @@ public class Character : MonoBehaviour
     }
     public void getArmor(int a)
     {
-           
+         
         if (a != 0)
         {
             GameObject Dmg = Instantiate(BM.DmgPrefebs, transform);
@@ -113,7 +113,13 @@ public class Character : MonoBehaviour
         }
         stringArmor = armor;
         armorT.text = "" + armor;
-        
+        myPassive.GetArmor(a);
+    }
+    public void ArmorValueGoZero()
+    {
+        armor = 0;
+        stringArmor = armor;
+        armorT.text = "" + armor;
     }
     public void StatusAbnom(int status,int count)
     {
@@ -268,6 +274,7 @@ public class Character : MonoBehaviour
 
     public void AtkUp(int i)
     {
+        
         atk += i;
         turnAtk += i;
         int newAtk = i;
@@ -275,7 +282,7 @@ public class Character : MonoBehaviour
         {
             for (int j = 0; j < passive[0]; j++)
             {
-                Debug.Log(atk);
+               
                 atk += newAtk;
                 turnAtk += newAtk;
                 newAtk += newAtk;
