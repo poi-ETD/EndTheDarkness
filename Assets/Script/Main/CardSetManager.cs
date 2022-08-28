@@ -8,6 +8,8 @@ using TMPro;
 using Newtonsoft.Json;
 public class CardSetManager : MonoBehaviour
 {
+    [SerializeField] private SO_CardList so_CardList;
+
 
     public Text AllCardT;
     CardData CD = new CardData();
@@ -115,6 +117,8 @@ public class CardSetManager : MonoBehaviour
         string cardData = JsonConvert.SerializeObject(CD);
         string path = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CardDatas[GameManager.Instance.selectedSlot_Main]);
         File.WriteAllText(path, cardData);
+
+        //cardImage.sprite =  so_CardList.cardDetails[0].sprite_Card;
     }
 }
 

@@ -1,0 +1,135 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7df3456a6a639624386c2b6bd35f3f46, type: 3}
+  m_Name: so_CardList
+  m_EditorClassIdentifier: 
+  cardDetails:
+  - cardCode: 0
+    name: 
+    description_KR: 
+    description_EN: 
+    sprite_Card: {fileID: 21300000, guid: 525adf989bbde5a46a3b68dfbd07a7ba, type: 3}
+  - cardCode: 0
+    name: 
+    description_KR: 
+    description_EN: 
+    sprite_Card: {fileID: 0}
+  - cardCode: 0
+    name: 
+    description_KR: 
+    description_EN: 
+    sprite_Card: {fileID: 0}
+  - cardCode: 0
+    name: 
+    description_KR: 
+    description_EN: 
+    sprite_Card: {fileID: 0}
+  - cardCode: 0
+    name: 
+    description_KR: 
+    description_EN: 
+    sprite_Card: {fileID: 0}
+  - cardCode: 0
+    name: 
+    description_KR: 
+    description_EN: 
+    sprite_Card: {fileID: 0}
+  - cardCode: 0
+    name: 
+    description_KR: 
+    description_EN: 
+    sprite_Card: {fileID: 0}
+  - cardCode: 0
+    name: 
+    description_KR: 
+    description_EN: 
+    sprite_Card: {fileID: 0}
+  - cardCode: 0
+    name: 
+    description_KR: 
+    description_EN: 
+    sprite_Card: {fileID: 0}
+  - cardCode: 0
+    name: 
+    description_KR: 
+    description_EN: 
+    sprite_Card: {fileID: 0}
+  - cardCode: 0
+    name: 
+    description_KR: 
+    description_EN: 
+    sprite_Card: {fileID: 0}
+  - cardCode: 0
+    name: 
+    description_KR: 
+    description_EN: 
+    sprite_Card: {fileID: 0}
+  - cardCode: 0
+    name: 
+    description_KR: 
+    description_EN: 
+    sprite_Card: {fileID: 0}
+  - cardCode: 0
+    name: 
+    description_KR: 
+    description_EN: 
+    sprite_Card: {fileID: 0}
+  - cardCode: 0
+    name: 
+    description_KR: 
+    description_EN: 
+    sprite_Card: {fileID: 0}
+  - cardCode: 0
+    name: 
+    description_KR: 
+    description_EN: 
+    sprite_Card: {fileID: 0}
+  - cardCode: 0
+    name: 
+    description_KR: 
+    description_EN: 
+    sprite_Card: {fileID: 0}
+  - cardCode: 0
+    name: 
+    description_KR: 
+    description_EN: 
+    sprite_Card: {fileID: 0}
+  - cardCode: 0
+    name: 
+    description_KR: 
+    description_EN: 
+    sprite_Card: {fileID: 0}
+  - cardCode: 0
+    name: 
+    description_KR: 
+    description_EN: 
+    sprite_Card: {fileID: 0}
+  - cardCode: 0
+    name: 
+    description_KR: 
+    description_EN: 
+    sprite_Card: {fileID: 0}
+  - cardCode: 0
+    name: 
+    description_KR: 
+    description_EN: 
+    sprite_Card: {fileID: 0}
+  - cardCode: 0
+    name: 
+    description_KR: 
+    description_EN: 
+    sprite_Card: {fileID: 0}
+  - cardCode: 0
+    name: 
+    description_KR: 
+    description_EN: 
+    sprite_Card: {fileID: 0}

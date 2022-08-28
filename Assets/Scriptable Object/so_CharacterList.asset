@@ -1,0 +1,177 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bae52f9e7c0667b41b95f6d12fad9ecd, type: 3}
+  m_Name: so_CharacterList
+  m_EditorClassIdentifier: 
+  characterDetails:
+  - characterCode: 0
+    name: Q
+    hp: 35
+    attackPower: 1
+    cost: 3
+    endurance: 0
+    inventorySize: 1
+    speed: 8.9
+    passive0_Name: "\uBC31\uC625\uC758 \uC655"
+    passive0_Description: "\uD589\uB3D9 \uC885\uB8CC \uC2DC \uB9DD\uC790\uAC00 50\uBA85\uC77C
+      \uB54C. [\uBC31\uC625\uC758 \uC655 Q]\uB85C \uBCC0\uC2E0\uD55C\uB2E4."
+    passive1_Name: "\uAD70\uB2E8"
+    passive1_Description: "\uD574\uB2F9 \uC804\uD22C \uB3D9\uC548 \uB9DD\uC790\uAC00
+      4\uBA85 \uC774\uC0C1 \uBD80\uD65C\uD560 \uB54C\uB9C8\uB2E4 \uD6C4\uBC29 \uC9C4\uD615\uC758
+      \uC544\uAD70 1\uBA85\uC740 \uACF5\uACA9\uB825 +1 \uB610\uB294 SP -0.1 (4\uC758
+      \uBC30\uC218 \uD310\uC815)"
+    passive2_Name: "\uD751\uBC31"
+    passive2_Description: "\uD574\uB2F9 \uC804\uD22C \uB3D9\uC548 \uB4DC\uB85C\uC6B0\uB41C
+      \uCE74\uB4DC\uC5D0 [\uBAA8\uB4E0 \uC801\uC5D0\uAC8C \uB370\uBBF8\uC9C0 : 1]\uC744
+      \uBD80\uC5EC"
+    passive3_Name: "\uC808\uB9DD"
+    passive3_Description: "\uD589\uB3D9 \uC2DC\uC791 \uC2DC \uBB34\uB364\uC5D0\uC11C
+      \uC784\uC758\uB85C \uCE74\uB4DC\uB97C \uD328\uB85C \uAC00\uC838\uC628\uB2E4.
+      \uD574\uB2F9 \uC804\uD22C \uB3D9\uC548 \uAC00\uC838\uC628 \uCE74\uB4DC\uC5D0
+      [\uBAA8\uB4E0 \uC801\uC5D0\uAC8C \uB370\uBBF8\uC9C0 : 1]\uC744 \uBD80\uC5EC"
+  - characterCode: 1
+    name: "\uBC18\uAC00\uB77C"
+    hp: 60
+    attackPower: 0
+    cost: 1
+    endurance: 1
+    inventorySize: 1
+    speed: 9.9
+    passive0_Name: "\uAD73\uAC74\uD55C \uC704\uCE58"
+    passive0_Description: "\uC790\uC2E0\uC744 \uC81C\uC678\uD55C \uC544\uAD70, \uC801\uC758
+      \uCCB4\uB825\uC774 \uAC10\uC18C\uD560 \uB54C\uB9C8\uB2E4 \uC790\uC2E0\uC5D0\uAC8C
+      \uBC29\uC5B4\uB3C4 : 1"
+    passive1_Name: "\uC120\uBD09\uC758 \uD638\uB839"
+    passive1_Description: "\uD134 \uC2DC\uC791 \uC2DC \uBC29\uC5B4\uB3C4\uAC00 \uC788\uC744
+      \uACBD\uC6B0 \uBD80\uC5EC \uCF54\uC2A4\uD2B8 + 1, \uBC29\uC5B4\uB3C4\uAC00
+      \uC5C6\uC744 \uACBD\uC6B0 \uC790\uC2E0\uC5D0\uAC8C \uBC29\uC5B4\uB3C4 : 3"
+    passive2_Name: "\uBB34\uC7A5"
+    passive2_Description: "\uC801\uC758 \uACF5\uACA9\uC774 \uC131\uACF5\uD560 \uB54C\uB9C8\uB2E4
+      \uBC29\uC5B4\uB3C4\uAC00 \uC874\uC7AC\uD558\uBA74 \uAE4E\uC778 \uBC29\uC5B4\uB3C4
+      \uC808\uBC18\uB9CC\uD07C(\uC18C\uC218\uC810 \uBC84\uB9BC) \uD574\uB2F9 \uC801\uC5D0\uAC8C
+      \uB370\uBBF8\uC9C0\uB97C \uC900\uB2E4"
+    passive3_Name: "\uB3C5\uBD88\uC7A5\uAD70"
+    passive3_Description: "\uD134 \uC2DC\uC791 \uC2DC \uD55C \uC9C4\uD615\uC5D0 \uBC18\uAC00\uB77C
+      \uD63C\uC790 \uC788\uC744 \uACBD\uC6B0, \uBC18\uAC00\uB77C\uC5D0\uAC8C \uBC29\uC5B4\uB3C4
+      : 7 \uADF8\uB9AC\uACE0 SP -0.2 (\uCD5C\uB300 5.0)"
+  - characterCode: 2
+    name: "\uC2A4\uD30C\uD0A4"
+    hp: 45
+    attackPower: 1
+    cost: 2
+    endurance: 0
+    inventorySize: 1
+    speed: 5.5
+    passive0_Name: "\uC9C0\uCE58\uC9C0 \uC54A\uB294 \uD3ED\uC8FC"
+    passive0_Description: "\uD574\uB2F9 \uD134 \uB3D9\uC548 \uCE74\uB4DC\uB97C 3\uC7A5
+      \uC0AC\uC6A9\uD560 \uB54C\uB9C8\uB2E4 \uC2A4\uD30C\uD0A4\uC5D0\uAC8C SP -1.0
+      (\uCD5C\uB300 2.0)"
+    passive1_Name: "\uB3C5\uB2E8\uC801\uC778 \uD300\uD50C\uB808\uC774"
+    passive1_Description: "\uD574\uB2F9 \uC804\uD22C \uB3D9\uC548 \uC544\uAD70\uC774
+      \uACF5\uACA9\uC774 \uC131\uACF5\uD560 \uB54C\uB9C8\uB2E4 \uD574\uB2F9 \uC801\uC5D0\uAC8C
+      \uB370\uBBF8\uC9C0 : \uC790\uC2E0\uC758 \uACF5\uACA9\uB825"
+    passive2_Name: "\uBD80\uC11C\uC9C4 \uC871\uC1C4"
+    passive2_Description: "\uC2A4\uD30C\uD0A4\uC758 \uD589\uB3D9 \uC885\uB8CC \uC2DC
+      \uD328\uC5D0 \uC788\uB294 \uC784\uC758\uB85C \uCE74\uB4DC 1\uC7A5\uC758 \uC18C\uBE44
+      \uCF54\uC2A4\uD2B8\uB97C \uC804 \uC885\uB8CC\uAE4C\uC9C0 0\uC73C\uB85C \uB9CC\uB4E0\uB2E4"
+    passive3_Name: "\uBAB0\uC544\uCE58\uAE30"
+    passive3_Description: "\uD574\uB2F9 \uC804\uD22C \uB3D9\uC548 \uC2A4\uD30C\uD0A4\uAC00
+      \uC801\uC5D0\uAC8C \uB370\uBBF8\uC9C0\uB97C 10\uBC88\uC774\uC0C1 \uC131\uACF5\uD588\uC744
+      \uB54C\uB9C8\uB2E4 \uACF5\uACA9\uB825 +1"
+  - characterCode: 3
+    name: "\uD3EC\uB974\uD14C"
+    hp: 20
+    attackPower: 0
+    cost: 3
+    endurance: 0
+    inventorySize: 1
+    speed: 4.9
+    passive0_Name: "\uCC3D\uC870\uC758 \uC7A0\uC7AC\uB825"
+    passive0_Description: "\uD589\uB3D9 \uC885\uB8CC \uC2DC \uD328\uAC00 5\uC7A5
+      \uC774\uC0C1 \uB0A8\uC544 \uC788\uC744 \uACBD\uC6B0 \uB2E4\uC74C \uD134 \uC2DC\uC791\uD560
+      \uB54C \uB4DC\uB85C\uC6B0 : 2"
+    passive1_Name: "\uBBF8\uB77C\uD074 \uB4DC\uB85C\uC6B0"
+    passive1_Description: "\uD574\uB2F9 \uD134 \uB3D9\uC548 \uCE74\uB4DC\uB97C \uD1B5\uD574
+      \uB4DC\uB85C\uC6B0 \uD588\uC744 \uB54C \uD3EC\uB974\uD14C\uC758 \uBD80\uC5EC
+      \uCF54\uC2A4\uD2B8 +2"
+    passive2_Name: "\uC2A4\uD0C0\uCE74\uD2F0\uC2DC\uBAA8"
+    passive2_Description: "\uD134 \uC2DC\uC791 \uC2DC \uD328 \uD55C \uC7A5\uC744
+      \uC120\uD0DD\uD574\uC11C \uB371\uC73C\uB85C \uB418\uB3CC\uB9AC\uACE0 \uB4DC\uB85C\uC6B0
+      : 1, \uB4DC\uB85C\uC6B0\uB41C \uCE74\uB4DC\uC758 \uC18C\uBE44 \uCF54\uC2A4\uD2B8\uB294
+      2 \uAC10\uC18C\uD55C\uB2E4"
+    passive3_Name: "\uD3C9\uADE0\uC728"
+    passive3_Description: "\uD134 \uC2DC\uC791\uC2DC \uBB18\uC9C0\uC640 \uB371 \uC911
+      \uCE74\uB4DC\uAC00 \uB9CE\uC740 \uCABD\uC5D0\uC11C \uC801\uC740 \uCABD\uC73C\uB85C
+      \uCE74\uB4DC 1\uC7A5\uC744 \uC120\uD0DD\uD558\uACE0 \uC774\uB3D9\uC2DC\uD0A8\uB2E4."
+  - characterCode: 4
+    name: "\uB839"
+    hp: 35
+    attackPower: 0
+    cost: 2
+    endurance: 0
+    inventorySize: 1
+    speed: 6
+    passive0_Name: "\uC870\uC6B0\uD558\uB294 \uD63C\uB839\uB4E4"
+    passive0_Description: "\uB839\uC758 \uD589\uB3D9 \uC2DC\uC791 \uC2DC \uBB18\uC9C0\uC5D0
+      \uC788\uB294 \uCE74\uB4DC 1\uC7A5\uC744 \uBB34\uC791\uC704\uB85C \uD328\uC5D0
+      \uAC00\uC9C0\uACE0 \uC628\uB2E4. \uD574\uB2F9 \uCE74\uB4DC\uB294 \uD589\uB3D9
+      \uC885\uB8CC \uC2DC \uD639\uC740 \uC0AC\uC6A9\uD588\uC744 \uB54C \uC18C\uBA78\uB41C\uB2E4"
+    passive1_Name: "\uBD80\uC720 \uCC9C\uD558"
+    passive1_Description: "3\uBC88\uC758 \uC804\uD22C \uC885\uB8CC \uC2DC 1000\uC774\uADF8\uB118\uC744
+      \uD68D\uB4DD\uD55C\uB2E4"
+    passive2_Name: "\uD63C\uB839\uC758 \uC815\uAE30"
+    passive2_Description: "\uD574\uB2F9 \uD134 \uB3D9\uC548 \uC57D\uD654\uAC00 \uBD80\uC5EC
+      \uD639\uC740 \uCE74\uB4DC\uAC00 \uC18C\uBA78\uB420 \uACBD\uC6B0 \uC544\uAD70\uC758
+      SP -0.1"
+    passive3_Name: "\uBC14\uB78C \uAC19\uC740 \uC874\uC7AC"
+    passive3_Description: "\uB839\uC774 \uC0AC\uC6A9\uD558\uB294 \uCE74\uB4DC\uC758
+      \uC18C\uBE44 \uCF54\uC2A4\uD2B8\uB294 1\uB85C \uACE0\uC815\uB41C\uB2E4. \uC0AC\uC6A9\uD55C
+      \uCE74\uB4DC\uB294 \uC18C\uBA78\uB41C"
+  - characterCode: 5
+    name: "\uD749\uADC0"
+    hp: 25
+    attackPower: 2
+    cost: 2
+    endurance: 0
+    inventorySize: 1
+    speed: 11.5
+    passive0_Name: "\uD3ED\uD638"
+    passive0_Description: "\uACF5\uACA9\uB825\uC774 2\uBC30\uAC00 \uB418\uACE0 \uCE74\uB4DC
+      \uC0AC\uC6A9\uC2DC \uC801\uC774 \uBB34\uC791\uC704\uB85C \uC120\uD0DD\uB41C\uB2E4"
+    passive1_Name: "\uC0B0\uC911\uD638\uAC78"
+    passive1_Description: "\uD574\uB2F9 \uC804\uD22C \uB3D9\uC548 \uD134 \uC2DC\uC791
+      \uC2DC \uC784\uC758\uC758 \uC544\uAD70 \uACF5\uACA9\uB825\uC744 1 \uAC10\uC18C\uD558\uACE0
+      \uD749\uADC0\uC758 \uACF5\uACA9\uB825\uC744 2 \uC99D\uAC00\uC2DC\uD0A8\uB2E4"
+    passive2_Name: "\uD0C0\uC624\uB974\uB294 \uAC00\uC8FD"
+    passive2_Description: "\uD749\uADC0\uC758 \uBC29\uC5B4\uB825\uC774 10 \uC774\uC0C1\uC77C
+      \uB54C \uACF5\uACA9\uB825\uC774 1 \uC99D\uAC00\uD558\uACE0 \uBC29\uC5B4\uB825\uC744
+      0\uC73C\uB85C \uD55C\uB2E4"
+    passive3_Name: "\uC9C1\uC804\uC758 \uB300\uC7AC\uC559"
+    passive3_Description: "\uC804\uD22C \uC2DC\uC791 \uC2DC \uACF5\uBB3C\uC758 10%\uB97C
+      \uAC10\uC18C\uD558\uACE0 \uAC10\uC18C\uD55C \uACF5\uBB3C\uC758 10%\uB9CC\uD07C
+      \uACF5\uACA9\uB825\uC774 \uC99D\uAC00\uD55C\uB2E4"
+  - characterCode: 6
+    name: "\uD398\uB2C8"
+    hp: 25
+    attackPower: 2
+    cost: 2
+    endurance: 0
+    inventorySize: 1
+    speed: 11.5
+    passive0_Name: 
+    passive0_Description: 
+    passive1_Name: 
+    passive1_Description: 
+    passive2_Name: 
+    passive2_Description: 
+    passive3_Name: 
+    passive3_Description: 

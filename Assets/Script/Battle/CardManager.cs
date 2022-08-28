@@ -9,8 +9,6 @@ using TMPro;
 
 public class CardManager : MonoBehaviour
 {
-
-
     public List<GameObject> Deck = new List<GameObject>(); //덱에 있는 카드들의 리스트
     public List<GameObject> Grave = new List<GameObject>(); //무덤에 있는 카드들의 리스트
     public List<GameObject> field = new List<GameObject>(); //필드에 있는 카드들의 리스트
