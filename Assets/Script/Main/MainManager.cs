@@ -70,7 +70,7 @@ public class MainManager : MonoBehaviour
             if (SceneManager.sceneCount==1)
                 SceneManager.LoadScene(1, LoadSceneMode.Additive);
         }
-        Debug.Log(Resources.Load<Sprite>("CardSprite/Card-13"));
+       
         //string path = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CharacterDatas[GameManager.Instance.nowSlot]);
 
         //if (!File.Exists(path))

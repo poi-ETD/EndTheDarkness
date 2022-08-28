@@ -56,6 +56,7 @@ public class CharacterPassive : MonoBehaviour
                 myCharacter.atk *= 2;
             myCharacter.SetTurnAtk();
         }
+       
     }
 
 
@@ -197,9 +198,34 @@ public class CharacterPassive : MonoBehaviour
         {
             AM.MakeAct(0, 22, 0, null, null, myCharacter, null, myPassvie[1]);
         }
-    } 
-
-
+        if (myNo == 6 && myPassvie[3] > 0 && CM.TM.turn == 1)
+        {
+            AM.MakeAct(0, 24, 0, null, null, myCharacter, null, myPassvie[3]);
+        }
+    }
+    public void Hyunggwi4()
+    {
+        int curTribute = BM.GD.tribute;
+        BM.GD.tribute = Mathf.FloorToInt(BM.GD.tribute * 0.9f);
+        myCharacter.AtkUp(Mathf.FloorToInt(curTribute * 0.01f));
+    }
+    public void Hyunggwi2()
+    {
+        List<Character> characters = new List<Character>();
+        for(int i = 0; i < BM.characters.Count; i++)
+        {
+            if (!BM.characters[i].isDie && BM.characters[i].characterNo != 6)
+            {
+                characters.Add(BM.characters[i]);
+            }
+        }
+        if (characters.Count > 0)
+        {
+            int rand = Random.Range(0, characters.Count);
+            characters[rand].AtkUp(-1);
+            myCharacter.AtkUp(2);
+        }
+    }
     public void Vangara2(int type)
     {
         if (myCharacter.isDie) return;
@@ -366,9 +392,23 @@ public class CharacterPassive : MonoBehaviour
         if (myNo == 3 && myPassvie[2] > 0)
         {
             AM.MakeAct(0,11, armor, null,e, myCharacter, null, myPassvie[2]);
-        }
-      
+        }  
        
+    }
+    public void GetArmor(int armor)
+    {
+        if (myCharacter.isDie) return;
+    
+        if (myNo == 6 && myPassvie[2] > 0 && myCharacter.armor >= 10)
+        {
+            
+            AM.MakeAct(0, 23,0, null, null, myCharacter, null, myPassvie[2]);
+        }
+    }
+    public void Hyunggwi3()
+    {
+        myCharacter.AtkUp(1);
+        myCharacter.ArmorValueGoZero();
     }
     public void Vangara3(int dmg,Enemy E)
     {

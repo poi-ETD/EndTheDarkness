@@ -8,7 +8,7 @@ public class TurnManager : MonoBehaviour
     public bool PlayerTurn;//플레이어의 턴인지 확인용
     [SerializeField] GameObject[] enemys;
     [SerializeField] Enemy[] enemy;
-    public int turn;
+    public int turn; //턴
     public GameObject EndButton;
     public BattleManager BM;
     ActManager AM;
@@ -163,6 +163,7 @@ public class TurnManager : MonoBehaviour
                 BM.characters[i].turnAtk = BM.characters[i].atk;
                 BM.characters[i].SetTurnAtk();
                 BM.characters[i].turnDef = BM.characters[i].def;
+                if(BM.characters[i].nextarmor!=0)
                 BM.characters[i].getArmor(BM.characters[i].nextarmor);
                 if (BM.characters[i].armor < 0) BM.characters[i].armor = 0;
                 BM.characters[i].nextarmor = 0;

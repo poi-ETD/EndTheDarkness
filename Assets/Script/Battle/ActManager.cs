@@ -210,7 +210,7 @@ public class ActManager : MonoBehaviour
 
 
     public bool isEarlyActing; //적이 선 행동을 하는 중
-    bool isLateActing; //적이 후 행동을 하는 중
+ 
     List<ActStruct> ActList = new List<ActStruct>();
     List<ActStruct> EnemyActList = new List<ActStruct>();
     
@@ -245,7 +245,6 @@ public class ActManager : MonoBehaviour
    
     public void EnemyAct()
     {
-        isLateActing = true;
       
         for (int i = 0; i < EnemyActList.Count; i++)
         {
@@ -414,6 +413,18 @@ public class ActManager : MonoBehaviour
                     if (ActList[0].no == 17)
                     {
                         ActList[0].myC.myPassive.Ryung1();
+                    }
+                    if (ActList[0].no == 22)
+                    {
+                        ActList[0].myC.myPassive.Hyunggwi2();
+                    }
+                    if (ActList[0].no == 23)
+                    {
+                        ActList[0].myC.myPassive.Hyunggwi3();
+                    }
+                    if (ActList[0].no == 24)
+                    {
+                        ActList[0].myC.myPassive.Hyunggwi4();
                     }
                     if (ActList[0].no == -1)
                     { //캐릭터가 타겟에게 공격
