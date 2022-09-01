@@ -146,16 +146,20 @@ public class TurnManager : MonoBehaviour
         BM.nextTurnStartCost = 0;
         PlayerTurn =true;
 
-   
 
+       
         EndButton.SetActive(true);
 
         for(int i = 0; i < BM.characters.Count; i++)
         {
             if (!BM.characters[i].isDie)
             {
-             
+                if (turn == 2 && BM.GD.blessbool[4])
+                {
+                    BM.characters[i].speed--;
+                }
                 BM.characters[i].curSpeed = BM.characters[i].speed;
+                BM.characters[i].SpeedTextChange();
                 BM.characters[i].curTurnActTime = 0;
               
                 BM.characters[i].turnAtk = BM.characters[i].atk;

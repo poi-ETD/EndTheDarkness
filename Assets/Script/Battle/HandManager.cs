@@ -108,6 +108,7 @@ public class HandManager : MonoBehaviour
 
         if (Input.GetMouseButtonDown(1))
         {
+           
             //isSelectedCard = false;
             CancelToUse();
         }

@@ -141,6 +141,8 @@ public class BattleManager : MonoBehaviour
 
     public GameObject DmgPrefebs;//데미지 프리펩
 
+    private Card curSelectedCardInRevive;
+
     private void Start()
     {
         ei = GameObject.Find("SelectEnemyInformation").GetComponent<EnemyInfo>();
@@ -209,11 +211,7 @@ public class BattleManager : MonoBehaviour
         {
             SetBless20();
         }
-        if (GD.blessbool[4])
-        {
-         
-          
-        }
+    
     }
 
     public void SetBless20() //bless20이 켜져있다면 적용 될 함수
@@ -441,17 +439,15 @@ public class BattleManager : MonoBehaviour
     public void ShowCharacterHaveTurn(GameObject characterHaveTurn)//캐릭터 클릭이 가능 할 때 누르면 발동
     {                 
        //CancleCharacter();//이미 눌러진 캐릭터를 취소
-        while (CM.field.Count < 5)
-        {
-            CM.Drow();
-        }
+       
       
             actCharacter = characterHaveTurn.GetComponent<Character>();
 
         actCharacter.myPassive.ActStart();
         AM.isStartAct = true;
         AM.Act();
-            if (actCharacter != null)
+
+        if (actCharacter != null)
                 actCharacter.SelectBox.SetActive(true);
         
     }
@@ -468,21 +464,34 @@ public class BattleManager : MonoBehaviour
     }
     public void SpeedChange(Character character,float amount)
     {
-        character.OnSpeedText(amount);
         character.speed += amount;
         character.curSpeed += amount;
+        character.OnSpeedText(amount);
+        
         AM.SpeedChangeByEffect(0,character.curNo);
     }
     public void TurnSpeedChange(Character character, float amount)
     {
-        character.OnSpeedText(amount);
         character.curSpeed += amount;
+        character.OnSpeedText(amount);
+        
         AM.SpeedChangeByEffect(0,character.curNo);
     }
     public void EnemySelect(GameObject SelectedEnemyInSelectMode) //공격 카드가 발동되었을 시 적을 선택
-    {       
+    {
+        if (CM.TM.turn == 1)
+        {
+            if (GD.blessbool[4] || GD.blessbool[12])
+                return;
+        }
         if (!otherCanvasOn)
         {
+            if (leftCost < selectedCard.GetComponent<Card>().cardcost)
+            {
+                HandManager.Instance.CancelToUse();
+                costOver();
+                return;
+            }
             selectedEnemy = SelectedEnemyInSelectMode.GetComponent<Enemy>();
             if(!selectedEnemy.Shadow)//은신일 때는 카드 지정 x
             selectedCard.GetComponent<Card>().EnemySelectCard();
@@ -619,6 +628,8 @@ public class BattleManager : MonoBehaviour
     }
     public void costOver()
     {
+        HandManager.Instance.SelectCardToOriginPosition();
+        HandManager.Instance.isSelectedCard = false;
         cancleCard();
         warnObj.SetActive(true);
         warnT.text = "코스트가 부족합니다";
@@ -820,19 +831,27 @@ public class BattleManager : MonoBehaviour
     {
         if (HandManager.Instance.isEnableOtherButton)
         {
+            
             otherCanvasOn = true;
             isGraveWindowOn = true;
 
-            if (GraveReviveMode)
-                go_GraveView_Button_Revive.SetActive(true);
-            else
-                go_GraveView_Button_Revive.SetActive(false);
+            go_GraveView_Button_Revive.SetActive(false);
 
             CM.GraveOn();
             window_Grave.SetActive(true);
         }
     }
+    public void GraveOn_ByCardEffect()
+    {
+        otherCanvasOn = true;
+        isGraveWindowOn = true;
 
+        go_GraveView_Button_Revive.SetActive(true);
+        curSelectedCardInRevive = selectedCard.GetComponent<Card>();
+        HandManager.Instance.CancelToUse();
+        CM.GraveOn();
+        window_Grave.SetActive(true);
+    }
     public void Click_GraveOff() //무덤에서 그냥 종료 버튼
     {
         otherCanvasOn = false;
@@ -852,19 +871,19 @@ public class BattleManager : MonoBehaviour
 
     public void Click_Grave_Revive() //무덤에서 부활버튼 누를 때
     {
-        log.logContent.text += "\n" + actCharacter.Name + "이(가) " + selectedCard.GetComponent<Card>().Name.text + " 발동!";
-        ReviveMode = true;
-       
+        
+   
         GraveReviveMode = false;
        
         reviveCount = 0;
         CM.Revive();
-        selectedCard.GetComponent<Card>().SelectRevive();
+        curSelectedCardInRevive.SelectRevive();
     }
 
-    public void Grave_ReviveCancel() 
+    public void Grave_ReviveCancel()
     {
-        selectedCard.GetComponent<Card>().CancleRevive();
+        GraveReviveMode = false;
+        curSelectedCardInRevive.CancleRevive();
         for (int i = 0; i < CM.ReviveCard.Count; i++)
         {
             CM.ReviveCard[i].GetComponent<Transform>().localScale = new Vector2(1f, 1f);
@@ -912,7 +931,7 @@ public class BattleManager : MonoBehaviour
     public void ReviveToField(int r)
     {
         GraveReviveMode = true;
-        Click_GraveOn();
+        GraveOn_ByCardEffect();
         reviveCount += r;
     }
     public void RandomReviveToField(int n) //랜덤으로 무덤에서 필드로 카드 가져오기
@@ -941,23 +960,7 @@ public class BattleManager : MonoBehaviour
 
     public bool card20done = false;
     GameObject copyCard;
-    /*
-    public void card20Active() //스케치발동이 발동 되었다면
-    {        
-        usedInCard20 = selectedCard; //스케치발동을 c20이라는 오브젝트에 저장후,
-        otherCanvasOn = true; //다른거 터치 안되게 해야 함
-        UseButton.SetActive(true);//사용할 지 말지 정해
-        copyCard = Instantiate(previousSelectedCard, CM.HandCanvas.transform);
-        copyCard.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, -230, 0);
-        copyCard.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
-        copyCard.SetActive(true);
-        HM.go_selectedCardImage.SetActive(false);
-        CancleButton.SetActive(true);
-        copyCard.GetComponent<Card>().iscard20Mode = true;
-        copyCard.GetComponent<Card>().cardcost = 0;
-        selectedCard = copyCard;//현재 지정된 카드를 이전에 사용한 카드의 복사본을 변경
-        //HandManager.Instance.go_UseButton.SetActive(true);
-    }*/
+
     public void UsePreviousCard()
     {
         usedInCard20 = selectedCard;

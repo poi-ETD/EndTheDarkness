@@ -542,18 +542,20 @@ MonoBehaviour:
   characterNo: 1
   maxHp: 30
   Hp: 0
-  Atk: 1
-  Armor: 0
-  Act: 1
+  atk: 0
+  armor: 0
   turnAtk: 0
   def: 0
   turnDef: 0
+  speed: 0
+  curSpeed: 0
+  curTurnActTime: 0
   TM: {fileID: 0}
   BM: {fileID: 0}
   hpT: {fileID: 2347601006634643601}
   atkT: {fileID: 1537922853815473025}
   armorT: {fileID: 5464620002080002855}
-  actT: {fileID: 5514166535073443567}
+  spdT: {fileID: 5514166535073443567}
   defT: {fileID: 3744940364045995462}
   board: {fileID: 2347601005463500816}
   passive: 00000000000000000000000000000000
@@ -579,6 +581,7 @@ MonoBehaviour:
   stringHp: 0
   stringArmor: 0
   beforeArmor: 0
+  lobbyNum: 0
 --- !u!61 &2347601005813970014
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -657,7 +660,8 @@ MonoBehaviour:
   ghostText: {fileID: 2347601005785499624}
   upQ: {fileID: 21300000, guid: 03d954929911ad7458295e8a27497d60, type: 3}
   DMGtext: {fileID: 3516283684887914833, guid: dd90e8f3edae7fc489918575a58fd894, type: 3}
-  ReplyAttackDone: 0
+  sparkyAttackDone: 0
+  haveMyEquip: 0
 --- !u!1 &2347601005822650731
 GameObject:
   m_ObjectHideFlags: 0
@@ -723,7 +727,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: ACT
+  m_text: SPD
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: bdd8e55fa09c5274b894488795262bec, type: 2}
   m_sharedMaterial: {fileID: 9221766285591583883, guid: bdd8e55fa09c5274b894488795262bec,
@@ -1841,8 +1845,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 60, y: 0}
-  m_SizeDelta: {x: 35, y: 15}
+  m_AnchoredPosition: {x: 51.58, y: 0}
+  m_SizeDelta: {x: 51.841248, y: 15}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7726267058221726189
 CanvasRenderer:

@@ -35,8 +35,9 @@ public class BlackWhite : MonoBehaviour
     }   
     
     public void onDamage()
-    {
-        c = BM.actCharacter;
+    {if (BM.actCharacter != null)
+            c = BM.actCharacter;
+        else c = BM.previousCharacter;
         Invoke("BWattack", 0.3f);
     }
     void BWattack()
@@ -45,7 +46,7 @@ public class BlackWhite : MonoBehaviour
       //  BM.curMessage.text = "흑백의 효과로 모든 적에게 " + "1 " + "의 데미지!(" + BlackWhiteStack + ")";
 
     
-        BM.AllAttack(1,c, BlackWhiteStack);
+        BM.AllAttack(BlackWhiteStack, c,1);
 
     }
 }

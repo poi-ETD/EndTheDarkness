@@ -168,8 +168,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 60, y: 0}
-  m_SizeDelta: {x: 35, y: 15}
+  m_AnchoredPosition: {x: 55.37, y: 0}
+  m_SizeDelta: {x: 44.25421, y: 15}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5841639759204405751
 CanvasRenderer:
@@ -676,11 +676,9 @@ MonoBehaviour:
   Hp: 0
   atk: 0
   armor: 0
-  turnAct: 0
   turnAtk: 0
   def: 0
   turnDef: 0
-  Act: 1
   speed: 0
   curSpeed: 0
   curTurnActTime: 0
@@ -689,7 +687,7 @@ MonoBehaviour:
   hpT: {fileID: 6535696081620546607}
   atkT: {fileID: 7409175764306765477}
   armorT: {fileID: 7250151400517112556}
-  actT: {fileID: 7994410936758128457}
+  spdT: {fileID: 7994410936758128457}
   defT: {fileID: 4116720977224659765}
   board: {fileID: 6535696081228754774}
   passive: 00000000000000000000000000000000
@@ -861,7 +859,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: ACT
+  m_text: SPD
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: bdd8e55fa09c5274b894488795262bec, type: 2}
   m_sharedMaterial: {fileID: 9221766285591583883, guid: bdd8e55fa09c5274b894488795262bec,

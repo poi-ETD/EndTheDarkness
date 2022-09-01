@@ -25,7 +25,7 @@ public class Character : MonoBehaviour
     public TextMeshProUGUI hpT;
     public TextMeshProUGUI atkT;
     public TextMeshProUGUI armorT;
-    public TextMeshProUGUI actT;
+    public TextMeshProUGUI spdT;
     public TextMeshProUGUI defT;
 
     public TextMeshProUGUI board;
@@ -160,7 +160,7 @@ public class Character : MonoBehaviour
                                 cost += myEquip.improveMount[i];
                                 break;
                             case 4:
-                             //speed
+                                speed += myEquip.improveMount[i]*0.1f;
                                 break;
                         }
                     }
@@ -178,7 +178,9 @@ public class Character : MonoBehaviour
                         case 3:
                             cost -= myEquip.degradeMount;
                             break;
-
+                        case 4:
+                            speed -= myEquip.degradeMount * 0.1f;
+                            break;
                     }
                 }
             }
@@ -190,7 +192,7 @@ public class Character : MonoBehaviour
                 }
             }
         }
-
+        spdT.text = "" + speed;
         defT.text = "" + def;
         //endurT.text = "" + endur;
 
@@ -219,8 +221,8 @@ public class Character : MonoBehaviour
   
     public void OnSpeedText(float amount)
     {
-       
-      
+
+            SpeedTextChange();
             GameObject dmgText = Instantiate(BM.DmgPrefebs, gameObject.transform);
             dmgText.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
             dmgText.GetComponent<DMGtext>().GetType(1, amount);
@@ -314,6 +316,10 @@ public class Character : MonoBehaviour
           
         }
        
+    }
+    public void SpeedTextChange()
+    {
+        spdT.text = "" + speed;
     }
     public void onDamage(int dmg)
     {

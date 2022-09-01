@@ -111,7 +111,7 @@ public class ActManager : MonoBehaviour
             enemys.Add(BM.Enemys[i].GetComponent<Enemy>());
         }
         for (int i = 0; i < characters.Count; i++)
-        {
+        {   if (characters[i].isDie) continue;
             float s = characters[i].speed;
             if (s <= 1) characters[i].speed=1;
             ord newOrd = new ord(s, 0, i);
@@ -124,7 +124,7 @@ public class ActManager : MonoBehaviour
             }
         }
         for(int i = 0; i < enemys.Count; i++)
-        {
+        {if (enemys[i].isDie) continue;
             float s = enemys[i].speed;
             if (s <= 1) enemys[i].speed = 1;
             ord newOrd = new ord(s, 1, i);
@@ -541,6 +541,10 @@ public class ActManager : MonoBehaviour
         {
             if (isStartAct)
             {
+                while (TM.CM.field.Count < 5)
+                {
+                    TM.CM.Drow();
+                }
                 isStartAct = false;
             }
             else

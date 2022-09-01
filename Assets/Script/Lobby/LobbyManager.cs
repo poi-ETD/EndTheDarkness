@@ -77,7 +77,9 @@ public class LobbyManager : MonoBehaviour
     [SerializeField] GameObject EquipManageButton;
 
     [SerializeField] GameObject tributeView; //공물
-
+    [SerializeField] GameObject bless19View;
+    [SerializeField] GameObject bless19Content;
+    public int bless19Count;
     private void Start()
     {
         string path = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CardDatas[GameManager.Instance.nowPlayingSlot]);
@@ -132,6 +134,7 @@ public class LobbyManager : MonoBehaviour
             night.SetActive(true);
         }
         setDay();
+        GameObject.Find("Bless").GetComponent<Bless>().setBlessIcon();
     }
 
     public void Resetmara(int rc)
@@ -174,6 +177,7 @@ public class LobbyManager : MonoBehaviour
         else if (rc == 5)
         {
             canvasOn = true;
+            
             GetRandomEquipment();
         }
         else if (rc == 6)
@@ -888,6 +892,7 @@ public class LobbyManager : MonoBehaviour
     }
     public void GetRandomEquipment()
     {
+       
         canvasOn = true;
         GetEquipmentCanvas.SetActive(true);
         curEquip=EquipmentManager.Instance.makeEquipment();
@@ -896,12 +901,24 @@ public class LobbyManager : MonoBehaviour
         equipStrings[0].text = sList[0];
         equipStrings[1].text = sList[1] + '\n' + sList[2] + '\n' + sList[3];
         GD.EquipmentList.Add(curEquip);
+       
     }
     public void CloseRandomEquipment()
     {
         canvasOn = false;
         GetEquipmentCanvas.SetActive(false);
+        if (GameObject.Find("Bless").GetComponent<Bless>().bless18_on)
+        {
+            GameObject.Find("Bless").GetComponent<Bless>().Bless_18();
+            return;
+        }
+        if (GameObject.Find("Bless").GetComponent<Bless>().bless19_on)
+        {
+            Bless19PopupOn();
+            return;
+        }
         if (resetmara) Resetmara(6);
+
     }
     public void GetSelectPassive() //개발용
     {
@@ -1120,4 +1137,62 @@ public class LobbyManager : MonoBehaviour
         TributeViewOff();
 
     }
+
+    public void Bless19PopupOn()
+    {
+        if (bless19Count < 1)
+        {
+            GameObject.Find("Bless").GetComponent<Bless>().bless19_on = false;
+            PopUpCanvas.SetActive(false);
+            bless19View.SetActive(false);
+            return;
+        }
+        bless19Count--;
+        canvasOn = true;
+        PopUpCanvas.SetActive(true);
+        bless19View.SetActive(true);
+        equipmode = false;
+        for (int i = 0; i < GD.EquipmentList.Count; i++)
+        {
+            equipment e = GD.EquipmentList[i];
+            List<string> sList = EquipmentManager.Instance.equipmentStrings(e);
+            bless19Content.transform.GetChild(i).gameObject.SetActive(true);
+            bless19Content.transform.GetChild(i).GetChild(0).GetComponent<Image>().sprite = EquipmentManager.Instance.equipSpr[e.equipNum];
+            bless19Content.transform.GetChild(i).GetChild(1).GetComponent<TextMeshProUGUI>().text = sList[0];
+            if (e.special == 0)
+                bless19Content.transform.GetChild(i).GetChild(2).GetComponent<TextMeshProUGUI>().text = sList[1] + '\n'
+                    + sList[2] + '\n' + sList[3];
+            else bless19Content.transform.GetChild(i).GetChild(2).GetComponent<TextMeshProUGUI>().text = sList[1] + '\n'; 
+            bless19Content.transform.GetChild(i).GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>().text = "선택 가능";
+        }
+        for (int i = GD.EquipmentList.Count; i < 50; i++)
+        {
+            bless19Content.transform.GetChild(i).gameObject.SetActive(false);
+        }
+        for (int i = 0; i < ChD.size; i++)
+        {
+            if (ChD.characterDatas[i].curEquip != -1)
+            {
+                bless19Content.transform.GetChild(ChD.characterDatas[i].curEquip).GetChild(3).GetChild(0).
+                    GetComponent<TextMeshProUGUI>().text = ChD.characterDatas[i].Name + "착용 중";
+            }
+        }
+    }
+    public void Bless19_SelectThis(GameObject me)
+    {
+        
+        int num = me.name[7]-48;
+        if (me.name[8] != 41)
+        {
+            num *= 10;
+            num += me.name[8] - 48;
+        }
+        GD.EquipmentList.RemoveAt(num);
+        GetRandomEquipment();
+        PopUpCanvas.SetActive(false);
+        bless19View.SetActive(false);
+
+    
+    }
+
 }

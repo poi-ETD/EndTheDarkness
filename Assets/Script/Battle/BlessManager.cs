@@ -46,7 +46,10 @@ public class BlessManager : MonoBehaviour
             for(int i = 0; i < BM.characters.Count; i++)
             {
                 BM.characters[i].DefUp(1);
+                BM.characters[i].speed += 0.2f;
+                BM.characters[i].speed= Mathf.Round(BM.characters[i].speed*10)*0.1f;
             }
         }
+        
     }
 }

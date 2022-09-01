@@ -19,6 +19,7 @@ public class GMmode : MonoBehaviour
 
     [SerializeField] GameObject GetEquipmentCanvas;
     [SerializeField] TextMeshProUGUI[] equipStrings;
+    [SerializeField] TMP_InputField blessSelect;
     // Start is called before the first frame update
     void Start()
     {
@@ -47,7 +48,9 @@ public class GMmode : MonoBehaviour
     }
 
 public void GoLobby()
-    {
+    {   if(blessSelect.text!="")
+        GD.blessSelect = int.Parse(blessSelect.text);
+        Debug.Log(blessSelect);
         string characterData = JsonConvert.SerializeObject(ChD);
         string path = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CharacterDatas[GameManager.Instance.nowPlayingSlot]);
         File.WriteAllText(path, characterData);

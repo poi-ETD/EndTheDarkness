@@ -149,7 +149,7 @@ Resources.Load<Sprite>("temporal/axe_010")
                         s += " 부여 코스트(" + e.improveMount[i] + ")";
                         break;
                     case (int)Enums.EquipmentStat.act:
-                        s += " 행동력(" + e.improveMount[i] + ")";
+                        s += " 스피드(0." + e.improveMount[i] + ")";
                         break;
                 }
             }
@@ -169,7 +169,9 @@ Resources.Load<Sprite>("temporal/axe_010")
                 case (int)Enums.EquipmentStat.cost:
                     s += " 부여 코스트(" + e.degradeMount + ")";
                     break;
-
+                case (int)Enums.EquipmentStat.act:
+                    s += " 스피드(0." + e.degradeMount + ")";
+                    break;
             }
             names.Add(s);
             return names;
@@ -188,7 +190,7 @@ Resources.Load<Sprite>("temporal/axe_010")
         int degradeMount = 0;
         int improveMount = 0;
         int rand1 = Random.Range(0, 5);
-        int rand2 = Random.Range(0, 4);
+        int rand2 = Random.Range(0, 5);
         while (rand1 == rand2) rand2 = Random.Range(0, 4);
         switch (rand1)
         {
@@ -205,7 +207,7 @@ Resources.Load<Sprite>("temporal/axe_010")
                 improveMount = Random.Range(1, 3);
                 break;
             case (int)Enums.EquipmentStat.act:
-                improveMount = 1;
+                improveMount = Random.Range(1, 4);
                 break;
         }
         switch (rand2)
@@ -221,6 +223,9 @@ Resources.Load<Sprite>("temporal/axe_010")
                 break;
             case (int)Enums.EquipmentStat.cost:
                 degradeMount = 1;
+                break;
+            case (int)Enums.EquipmentStat.act:
+                degradeMount = Random.Range(1, 4);
                 break;
 
         }

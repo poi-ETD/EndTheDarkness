@@ -2318,7 +2318,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 20}
-  m_SizeDelta: {x: 1700, y: 800}
+  m_SizeDelta: {x: 3300, y: 800}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &311354184
 MonoBehaviour:
@@ -2400,7 +2400,7 @@ GameObject:
   - component: {fileID: 314253084}
   - component: {fileID: 314253083}
   m_Layer: 5
-  m_Name: Deck_Old
+  m_Name: Window_Remove
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2844,7 +2844,7 @@ GameObject:
   - component: {fileID: 363764090}
   - component: {fileID: 363764089}
   m_Layer: 5
-  m_Name: DeckContent_temp
+  m_Name: Remove_content
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3185,9 +3185,10 @@ MonoBehaviour:
   rewardTribute: {fileID: 907004769}
   RewardCanvas: {fileID: 2143467915}
   isVictoryPopupOn: 0
-  rewardCardPrefebs: {fileID: 0}
+  rewardCardPrefebs: {fileID: 46094112499304213, guid: 870438decc0041b469551b69d948237d,
+    type: 3}
   selectedRewardCount: 0
-  noSelectCard: {fileID: 0}
+  noSelectCard: {fileID: 763768639}
   RewardEquipmentString:
   - {fileID: 689694848}
   - {fileID: 955958757}
@@ -7177,6 +7178,7 @@ GameObject:
   m_Component:
   - component: {fileID: 909976795}
   - component: {fileID: 909976796}
+  - component: {fileID: 909976797}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -7227,6 +7229,20 @@ MonoBehaviour:
   m_Spacing: {x: 50, y: 70}
   m_Constraint: 1
   m_ConstraintCount: 6
+--- !u!114 &909976797
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 909976794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 0
+  m_VerticalFit: 2
 --- !u!1 &915697554
 GameObject:
   m_ObjectHideFlags: 0
@@ -10788,6 +10804,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1542060230}
   - component: {fileID: 1542060231}
+  - component: {fileID: 1542060232}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -10838,6 +10855,20 @@ MonoBehaviour:
   m_Spacing: {x: 50, y: 70}
   m_Constraint: 1
   m_ConstraintCount: 6
+--- !u!114 &1542060232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1542060229}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 0
+  m_VerticalFit: 2
 --- !u!1 &1549060564
 GameObject:
   m_ObjectHideFlags: 0
@@ -12195,7 +12226,7 @@ GameObject:
   - component: {fileID: 1756809417}
   - component: {fileID: 1756809416}
   m_Layer: 5
-  m_Name: d
+  m_Name: defeat_canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14465,7 +14496,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 20}
-  m_SizeDelta: {x: 1700, y: 800}
+  m_SizeDelta: {x: 3300, y: 800}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2031632873
 MonoBehaviour:
@@ -14576,7 +14607,7 @@ MonoBehaviour:
   CardPrefebs: {fileID: 9053282550429952276, guid: a830569d89a842046baa0b763ba790d8,
     type: 3}
   GraveContent: {fileID: 1542060229}
-  RemoveContent: {fileID: 0}
+  RemoveContent: {fileID: 363764087}
   TM: {fileID: 1818976532}
   FiledCardCount: 0
   specialDrow: 0

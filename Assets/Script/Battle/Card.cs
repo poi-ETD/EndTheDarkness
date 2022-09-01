@@ -52,10 +52,13 @@ public class Card : MonoBehaviour
     }
     public void useCard()
     {
-        
+        if (CM.TM.turn == 1 )
+        {if( BM.GD.blessbool[4]||BM.GD.blessbool[12])
+            return;
+        }
         BM.otherCanvasOn = false;
         if (!BM.EnemySelectMode)
-        {
+        {   
             if (BM.actCharacter == null)
             {
                 BM.TargetOn();
@@ -64,20 +67,20 @@ public class Card : MonoBehaviour
 
             if (BM.leftCost < cardcost)
             {
+                HandManager.Instance.CancelToUse();
                 BM.costOver();
                 return;
             }        
-            if (selectType==1)
+            else if (selectType==1)
             {
                 //BM.goEnemySelectMode();
             }
             else if (selectType == 2) //무덤류
             {
+              
                 if (cardNo == 7)
                 {
-
                     BM.ReviveToField(2);
-
                 }
                 if (cardNo == 13)
                 {
@@ -309,7 +312,7 @@ public class Card : MonoBehaviour
   
     public void EnemySelectCard()
     {
-       // Debug.Log("Aaa");
+      
         BM.log.logContent.text += "\n" + BM.actCharacter.Name + "이(가) " + Name.text + " 발동!";
         if (cardNo == 1)
         {          
@@ -391,12 +394,9 @@ public class Card : MonoBehaviour
         {            
             BM.ghostRevive(4);
         }
-
-
         if (!iscard20Mode)
         {
-            BM.useCost(cardcost, gameObject);
-          
+            BM.useCost(cardcost, gameObject);          
         }
         CardUse();
         BM.AM.Act();
