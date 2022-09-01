@@ -10,11 +10,10 @@ public class Character : MonoBehaviour
     public int Hp;
     public int atk;
     public int armor;
-    public int turnAct;
     public int turnAtk;
     public int def;
     public int turnDef;
-    public int Act=1;
+
 
     public float speed;
     public float curSpeed;
@@ -69,21 +68,7 @@ public class Character : MonoBehaviour
 
     
 
-    public void useAct(int i)
-    {
-       // turnAct -= i;
-        if (turnAct < 0) turnAct = 0;
-        actT.text = "" + turnAct;
-       
-    }
- 
-    public void Acting()
-    {
-        if (Status[0] > 0)
-        {
-            //onDamage(Status[0],null);
-        }
-    }
+
     public void DefUp(int i)
     {
      
@@ -175,7 +160,7 @@ public class Character : MonoBehaviour
                                 cost += myEquip.improveMount[i];
                                 break;
                             case 4:
-                                Act++;
+                             //speed
                                 break;
                         }
                     }
@@ -205,8 +190,7 @@ public class Character : MonoBehaviour
                 }
             }
         }
-        turnAct = Act;
-        actT.text = "" + turnAct;
+
         defT.text = "" + def;
         //endurT.text = "" + endur;
 
@@ -295,15 +279,11 @@ public class Character : MonoBehaviour
         }
         atkT.text = turnAtk + "";
     }
-    public void ActUp(int i)
-    {      
-        turnAct += i;
-        actT.text = "" + turnAct;
-    }
 
     public void onHit(int dmg,Enemy E)
     {
         if (dmg == 0) return;
+        
         BM.log.logContent.text+="\n"+Name+"이(가) "+E.Name+"에게 "+dmg+"의 피해를 입었다.";
         for (int i = 0; i < BM.ChD.size; i++)
         {
@@ -333,6 +313,7 @@ public class Character : MonoBehaviour
             Hp -= dmg;
           
         }
+       
     }
     public void onDamage(int dmg)
     {
@@ -357,6 +338,7 @@ public class Character : MonoBehaviour
         armorT.text = stringArmor + "";
         if (stringHp <= 0)
         {
+            stringHp = 0;
             if (!isDie)
             {
                 stringHp = 0;
@@ -364,8 +346,7 @@ public class Character : MonoBehaviour
             }
         }
         if (Hp < 0) Hp = 0;
-        hpT.text = "<color=#a39fff><b>" + stringHp + "</color></b><size=15>/" + maxHp + "</size>";   
-
+        hpT.text = "<color=#a39fff><b>" + stringHp + "</color></b><size=15>/" + maxHp + "</size>";           
     }
     public void MaxHpChange(int amount)
     {
@@ -387,7 +368,7 @@ public class Character : MonoBehaviour
         hpT.text = "<color=#a39fff><b>" + Hp + "</color></b><size=15>/" + maxHp + "</size>";
         Color color = new Color(0.3f, 0.3f, 0.3f);
         myImage.color = color;
-        turnAct = 0;
+       
         board.text = "";
         armor = 0;
         BM.teamDieCount++;

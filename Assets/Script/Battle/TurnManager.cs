@@ -154,9 +154,7 @@ public class TurnManager : MonoBehaviour
         {
             if (!BM.characters[i].isDie)
             {
-                BM.characters[i].turnAct = BM.characters[i].Act;
-                if (BM.GD.blessbool[4] && turn == 1)  BM.characters[i].turnAct = 0; 
-                if (BM.GD.blessbool[12] && turn == 1)BM.characters[i].turnAct = 0;
+             
                 BM.characters[i].curSpeed = BM.characters[i].speed;
                 BM.characters[i].curTurnActTime = 0;
               

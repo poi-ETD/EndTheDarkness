@@ -211,8 +211,8 @@ public class BattleManager : MonoBehaviour
         }
         if (GD.blessbool[4])
         {
-            for (int i = 0; i < characters.Count; i++)
-                characters[i].turnAct++;
+         
+          
         }
     }
 
@@ -906,7 +906,7 @@ public class BattleManager : MonoBehaviour
         SelectDeckCount = 0;
         otherCanvasOn = false;
         CM.DeckOff();
-        DeckView.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 2000, 0);
+        window_Deck.SetActive(false);
     }
     
     public void ReviveToField(int r)
@@ -934,7 +934,7 @@ public class BattleManager : MonoBehaviour
             if (!characters[i].isDie && characters[i].characterNo == c)
             {
                 log.logContent.text += "\n" + characters[i].Name + "의 행동력이 1증가합니다.";
-                characters[i].ActUp(1);
+               
             }
         }
     }
@@ -1572,7 +1572,7 @@ public class BattleManager : MonoBehaviour
         if (!MyCard.GetComponent<Card>().iscard20Mode)
         {
             useCost(MyCard.GetComponent<Card>().cardcost, gameObject);
-            actCharacter.useAct(1);
+          
         }
         MyCard.GetComponent<Card>().CardUse();
         AM.Act();

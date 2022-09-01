@@ -150,7 +150,7 @@ public class Card : MonoBehaviour
                 if (cardNo == 12)
                 {              
                     BM.useCost(cardcost,gameObject);
-                    BM.actCharacter.useAct(1);
+                   
                     BM.card12();
                    
                     return;
@@ -293,7 +293,7 @@ public class Card : MonoBehaviour
                     if (!iscard20Mode)
                 {
                     BM.useCost(cardcost, gameObject);
-                    BM.actCharacter.useAct(1);
+                   
                 }               
                 CardUse();
                 BM.AM.Act();
@@ -374,7 +374,7 @@ public class Card : MonoBehaviour
         if (!iscard20Mode)
         {
             BM.useCost(cardcost, gameObject);
-            BM.actCharacter.useAct(1);
+          
         }
         
         CardUse();
@@ -396,7 +396,7 @@ public class Card : MonoBehaviour
         if (!iscard20Mode)
         {
             BM.useCost(cardcost, gameObject);
-            BM.actCharacter.useAct(1);
+          
         }
         CardUse();
         BM.AM.Act();
@@ -412,7 +412,7 @@ public class Card : MonoBehaviour
         if (!iscard20Mode)
         {
             BM.useCost(cardcost, gameObject);
-            BM.actCharacter.useAct(1);
+         
         }
         CardUse();
         BM.AM.Act();
@@ -434,9 +434,9 @@ public class Card : MonoBehaviour
         if (!iscard20Mode)
         {
             BM.useCost(cardcost, gameObject);
-            BM.actCharacter.useAct(1);
+            
         }
-        BM.actCharacter.useAct(1);
+      
         CardUse();
        
         BM.AM.Act();

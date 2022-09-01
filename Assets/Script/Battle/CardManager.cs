@@ -190,8 +190,7 @@ public class CardManager : MonoBehaviour
             usingCard.GetComponent<Card>().isGrave = true;
             usingCard.SetActive(false);
         }
-        if (BM.actCharacter != null)
-            BM.actCharacter.Acting();
+      
         BM.previousCharacter = null;
         BM.previousEnemy = null;
         if (usingCard.GetComponent<Card>().selectType == 1)
