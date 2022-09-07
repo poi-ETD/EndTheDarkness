@@ -5,6 +5,11 @@ public class CharacterDetails
 {
     public int characterCode;
     public string name;
+    public string aka;
+
+    public Sprite sprite_Face;
+
+    public bool isReviver;
 
     public int hp;
     public int attackPower;
