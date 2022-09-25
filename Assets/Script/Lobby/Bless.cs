@@ -201,8 +201,7 @@ public class Bless : MonoBehaviour
         }
         else
         {
-            if(lobby.ResetMaraCount!=5&&lobby.resetmara)
-            lobby.Resetmara(5);
+  
             noIgn.SetActive(false);
             lobby.canvasOn = false;
             BlessPopup.SetActive(false);
@@ -403,8 +402,8 @@ public class Bless : MonoBehaviour
         }
         exitBlessPopup();
         lobby.GD.Ignum = 0;
-        if (lobby.resetmara) lobby.Resetmara(5);
-        else lobby.DayAct();
+    
+        lobby.DayAct();
         bless5.SetActive(false);
         b5list.Clear();
         b5cardList.Clear();
@@ -424,8 +423,8 @@ public class Bless : MonoBehaviour
             lobby.GD.bless12[i] = lobby.CD.cardGet[b5list[i]];
         }
         exitBlessPopup();
-        if (lobby.resetmara) lobby.Resetmara(5);
-        else lobby.DayAct();
+
+        lobby.DayAct();
         bless12.SetActive(false);
         b5list.Clear();
         b5cardList.Clear();
@@ -555,7 +554,7 @@ public class Bless : MonoBehaviour
             lobby.GD.blessbool[b] = true;
             But[2].SetActive(true); 
         }
-        if (!lobby.resetmara) 
+    
         lobby.DayAct();
         setBlessIcon();
     }
@@ -567,8 +566,8 @@ public class Bless : MonoBehaviour
         exitBlessPopup();
 
 
-        if (lobby.resetmara) lobby.Resetmara(lobby.ChD.size + 1);
-        else lobby.DayAct();
+
+            lobby.DayAct();
         bless14.SetActive(false);
         setBlessIcon();
 
@@ -595,8 +594,8 @@ public class Bless : MonoBehaviour
         exitBlessPopup();
         lobby.ChD.characterDatas[i / 4].passive[i % 4]++;
         lobby.ChD.characterDatas[i / 4].Atk -= 2;
-        if (lobby.resetmara) lobby.Resetmara(5);
-        else lobby.DayAct();
+
+            lobby.DayAct();
         setBlessIcon();
     }
 }

@@ -983,8 +983,8 @@ public class BattleManager : MonoBehaviour
         otherCanvasOn = true;
         victory_window.SetActive(true);
         isVictoryPopupOn = true;
-        int ignum = Random.Range(15, 26) * 10 + GD.victory * 20;
-        int tribute = Random.Range(5, 11) * 10;
+        int ignum = Random.Range(0, 3) * 50+150 + GD.victory * 20;
+        int tribute = Random.Range(0, 2) * 100+200+50*GD.victory;
         if (GD.blessbool[15]) ignum *= 3;
         rewardIgnum.text = ignum + "이그넘 획득";
         rewardTribute.text = tribute + "공물 획득";

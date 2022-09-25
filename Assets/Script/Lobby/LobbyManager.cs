@@ -56,9 +56,7 @@ public class LobbyManager : MonoBehaviour
     [SerializeField] GameObject noStackInPassive;
     [SerializeField] TextMeshProUGUI curStack;
     [SerializeField] GameObject ResetCanvas;
-    public int ResetMaraCount;
-    [SerializeField] GameObject ResetBless;
-    [SerializeField] GameObject ResetItem;
+
 
 
     [SerializeField] GameObject GetEquipmentCanvas;
@@ -80,6 +78,10 @@ public class LobbyManager : MonoBehaviour
     [SerializeField] GameObject bless19View;
     [SerializeField] GameObject bless19Content;
     public int bless19Count;
+
+
+
+    [SerializeField] TextMeshProUGUI endButton_text;
     private void Start()
     {
         string path = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CardDatas[GameManager.Instance.nowPlayingSlot]);
@@ -104,9 +106,10 @@ public class LobbyManager : MonoBehaviour
         else
         { //path3->이 없다면, 첫 시작이기 때문에 리세마라 시작
             GD.Day = 1; 
-            Resetmara(ResetMaraCount);
+            Resetmara();
 
         }
+        Resetmara();
         IgnumT.text = GD.Ignum + "";
         TributeT.text = GD.tribute + "";
         if (GD.isAct && !GD.isNight)
@@ -137,91 +140,30 @@ public class LobbyManager : MonoBehaviour
         GameObject.Find("Bless").GetComponent<Bless>().setBlessIcon();
     }
 
-    public void Resetmara(int rc)
+    public void Resetmara()
     {
-        if (rc < ChD.size)
+        List<int> cardList = new List<int>();
+       bool[] myCharacter = Enumerable.Repeat<bool>(false, CharacterInfo.Instance.cd.Length).ToArray<bool>();
+        for(int i = 0; i < ChD.size; i++)
         {
-            canvasOn = true;
-            ResetCanvas.SetActive(true);
-            resetmara = true;
-            for (int i = 1; i < CardInfo.Instance.cd.Length; i++)
+            myCharacter[ChD.characterDatas[i].No] = true;
+        }
+        for(int i = 1; i < CardInfo.Instance.cd.Length; i++)
+        {
+            if (CardInfo.Instance.cd[i].type < 2 && myCharacter[CardInfo.Instance.cd[i].Deck])
             {
-                if (CardInfo.Instance.cd[i].Deck == ChD.characterDatas[rc].No)
-                {
-                    if (CardInfo.Instance.cd[i].type != 2)
-                        RandomCardList.Add(i);//
-                }
-            }
-            int r = Random.Range(0, RandomCardList.Count);
-            
-            GameObject newCard = Instantiate(ShopPrefebs, GameObject.Find("ResetShop").transform.GetChild(0).transform);
-            newCard.GetComponent<NoBattleCard>().setCardInfoInLobby(RandomCardList[r], 0);
-            int f = r;
-            while (r == f) r = Random.Range(0, RandomCardList.Count);
-            newCard = Instantiate(ShopPrefebs, GameObject.Find("ResetShop").transform.transform.GetChild(0).transform);
-            newCard.GetComponent<NoBattleCard>().setCardInfoInLobby(RandomCardList[r], 0);
-            int s = r;
-            if (RandomCardList.Count > 2)
-            {
-                while (r == f || s == r) r = Random.Range(0, RandomCardList.Count);
-                newCard = Instantiate(ShopPrefebs, GameObject.Find("ResetShop").transform.transform.GetChild(0).transform);
-                newCard.GetComponent<NoBattleCard>().setCardInfoInLobby(RandomCardList[r], 0);
+                cardList.Add(i);
             }
         }
-        else if (rc == ChD.size)
+        for(int i = 0; i < 5; i++)
         {
-            canvasOn = false;
-            GameObject.Find("Bless").GetComponent<Bless>().BlessPopupOn();
-            GameObject.Find("Bless").GetComponent<Bless>().GetBless();
-        }
-        else if (rc == 5)
-        {
-            canvasOn = true;
-            
-            GetRandomEquipment();
-        }
-        else if (rc == 6)
-        {
-            canvasOn = true;
-            ResetMaraCount = 5;
-            ResetBless.SetActive(false);
-            ResetItem.SetActive(true);
-        }
-        else if (rc == 7)
-        {
-            canvasOn = false;
-            GD.Ignum += 500;
-            GD.tribute += 300;
-            IgnumT.text = "" + GD.Ignum;
-            resetmara = false;          
-            canvasOn = false;
-            ResetCanvas.SetActive(false);
-            save();
+            Debug.Log(cardList[Random.Range(0, cardList.Count)]);
         }
     }
 
     public bool resetmara;
 
-    public void CardSelectInReset(bool t)
-    {
-        if (ShopSelectedCard == null && t) return;
-        if (t)
-        {
-            CD.cardNo.Add(ShopSelectedCardNo);
-            CD.cardCost.Add(CardInfo.Instance.cd[ShopSelectedCardNo].Cost);
-            CD.cardGet.Add(CD.get);
-            CD.get++;
-        }            
-        Transform[] childList = GameObject.Find("ShopList").GetComponentsInChildren<Transform>();
-        for (int i = 1; i < childList.Length; i++)
-        {
-            Destroy(childList[i].gameObject);
-        }
-        RandomCardList.Clear();
-        if(ResetMaraCount>ChD.size-2)GameObject.Find("ResetShop").SetActive(false);    
-        ResetMaraCount++;
-        Resetmara(ResetMaraCount);
-    }
+  
     public void ShowCardList()
     {
         if (!canvasOn)
@@ -467,6 +409,11 @@ public class LobbyManager : MonoBehaviour
     }
     public void DayAct()
     {
+        if (resetmara)
+        {
+            resetmara = false;
+            return;
+        }
         if (!GD.isNight)
         {
             if (!GD.blessbool[11])
@@ -917,7 +864,7 @@ public class LobbyManager : MonoBehaviour
             Bless19PopupOn();
             return;
         }
-        if (resetmara) Resetmara(6);
+        
 
     }
     public void GetSelectPassive() //개발용
