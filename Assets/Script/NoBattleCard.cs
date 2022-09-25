@@ -63,34 +63,34 @@ public class NoBattleCard : MonoBehaviour //대략적으로 배틀이 아닐 때
     {       
         if (select) //선택되면 크게
         {
-            GameObject.Find("Bless").GetComponent<Bless>().blesscount--;
+            GameObject.Find("Bless").GetComponent<BlessInLobby>().blesscount--;
             transform.localScale /= 1.2f;
             select = false;
         }
         else
-        {if (GameObject.Find("Bless").GetComponent<Bless>().curBless == 5)
+        {if (GameObject.Find("Bless").GetComponent<BlessInLobby>().curBless == 5)
             {
-                if (GameObject.Find("Bless").GetComponent<Bless>().blesscount < 6) //최대 6장 가능하기 때문
+                if (GameObject.Find("Bless").GetComponent<BlessInLobby>().blesscount < 6) //최대 6장 가능하기 때문
                 {
-                    GameObject.Find("Bless").GetComponent<Bless>().blesscount++;
+                    GameObject.Find("Bless").GetComponent<BlessInLobby>().blesscount++;
                     transform.localScale *= 1.2f;
                     select = true;
                 }
             }
-            if (GameObject.Find("Bless").GetComponent<Bless>().curBless == 12)
+            if (GameObject.Find("Bless").GetComponent<BlessInLobby>().curBless == 12)
             {
-                if (GameObject.Find("Bless").GetComponent<Bless>().blesscount < 3) //최대 3장이 가능하기 떄문
+                if (GameObject.Find("Bless").GetComponent<BlessInLobby>().blesscount < 3) //최대 3장이 가능하기 떄문
                 {
-                    GameObject.Find("Bless").GetComponent<Bless>().blesscount++;
+                    GameObject.Find("Bless").GetComponent<BlessInLobby>().blesscount++;
                     transform.localScale *= 1.2f;
                     select = true;
                 }
             }
         }
-        if (GameObject.Find("Bless").GetComponent<Bless>().curBless == 5)
-            GameObject.Find("Bless").GetComponent<Bless>().bless5countt.text = "선택된 카드 수 :"+GameObject.Find("Bless").GetComponent<Bless>().blesscount;
-        if (GameObject.Find("Bless").GetComponent<Bless>().curBless == 12)
-            GameObject.Find("Bless").GetComponent<Bless>().bless12countt.text = "선택된 카드 수 :" + GameObject.Find("Bless").GetComponent<Bless>().blesscount;
+        if (GameObject.Find("Bless").GetComponent<BlessInLobby>().curBless == 5)
+            GameObject.Find("Bless").GetComponent<BlessInLobby>().bless5countt.text = "선택된 카드 수 :"+GameObject.Find("Bless").GetComponent<BlessInLobby>().blesscount;
+        if (GameObject.Find("Bless").GetComponent<BlessInLobby>().curBless == 12)
+            GameObject.Find("Bless").GetComponent<BlessInLobby>().bless12countt.text = "선택된 카드 수 :" + GameObject.Find("Bless").GetComponent<BlessInLobby>().blesscount;
    //축복 5일떄, 12일 때
     
     }
@@ -164,9 +164,13 @@ public class NoBattleCard : MonoBehaviour //대략적으로 배틀이 아닐 때
         {
             Name = "PORTE";
         }
-        if (CardInfo.Instance.cd[num].Deck == 4)
+        if (CardInfo.Instance.cd[num].Deck == 5)
         {
             Name = "RHYNG";
+        }
+        if (CardInfo.Instance.cd[num].Deck == 6)
+        {
+            Name = "Hyunggwi";
         }
         CardInfoText[4].text = Name;
     }

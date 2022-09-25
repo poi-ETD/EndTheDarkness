@@ -118,7 +118,7 @@ public class Recover : MonoBehaviour
         {
             recoverView.SetActive(false);
             PopUpCanvas.SetActive(false);
-            lobby.DayAct();
+            lobby.Act();
             lobby.canvasOn = false;
         }
         else
@@ -133,7 +133,7 @@ public class Recover : MonoBehaviour
             }
             else
             {
-                lobby.DayAct();
+                lobby.Act();
                 ActBless10 = true;
             }
         }
@@ -142,7 +142,7 @@ public class Recover : MonoBehaviour
     {
         recoverView.SetActive(false);
         PopUpCanvas.SetActive(false);
-        lobby.DayAct();
+        lobby.Act();
         lobby.canvasOn = false;
     }
 }
