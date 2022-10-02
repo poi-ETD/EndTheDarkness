@@ -47,8 +47,7 @@ public class BlessInLobby : MonoBehaviour
             if (lobby.GD.blessbool[i]) c++;
         }
         if (c == 0) return; //삭제 할 축복이 없을 경우
-        if (lobby.GD.isAct) return;
-        if (lobby.canvasOn) return;
+        lobby.RitualViewOff();
         blessRemovePopup.SetActive(true);
         CancleRemove[0].SetActive(true);
         CancleRemove[1].SetActive(true);
@@ -169,9 +168,8 @@ public class BlessInLobby : MonoBehaviour
     }
     public void BlessPopupOn()
     {
-       
-        if (lobby.GD.isAct) return;
-        if (lobby.canvasOn) return;
+
+        lobby.RitualViewOff();
         igObj.SetActive(true);
         Tribute = 200;
         ig.text = Tribute + "";
