@@ -49,7 +49,7 @@ public class Ranger002 : MonoBehaviour
                 {
                     pattern[0] = 0;
                     pattern[1] = 0;
-                    BM.HitFront(15, 1, myEnemy, 0);
+                    BM.EnemyAttack(8, myEnemy, BM.SelectCharacterInEnemyTurn(2, 0));
                 }
                 else
                 {
@@ -57,14 +57,14 @@ public class Ranger002 : MonoBehaviour
                     pattern[rand]++;
                     if (rand == 0)
                     {
-                        BM.HitFront(3, 0, myEnemy, 0);
-                        BM.HitBack(1, 2, myEnemy, 0);
+                        BM.EnemyAttack(2, myEnemy, BM.SelectCharacterInEnemyTurn(0, 0));
+                        BM.EnemyAttack(1, myEnemy, BM.SelectCharacterInEnemyTurn(2, 1));
 
                     }
                     else
                     {
-                        BM.HitFront(5, 0, myEnemy, 0);
-                        BM.EnemyGetAromor(3, myEnemy, myEnemy);
+                        BM.EnemyAttack(2, myEnemy, BM.SelectCharacterInEnemyTurn(0, 2));
+                        BM.EnemyAttack(2, myEnemy, BM.SelectCharacterInEnemyTurn(0, 2));
                     }
                 }
 

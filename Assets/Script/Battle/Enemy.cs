@@ -108,7 +108,7 @@ public class Enemy : MonoBehaviour
         //위와 동일
         ei.setNull();
     }
-    public void EnemyStartTurn()
+    public virtual void EnemyStartTurn()
     {
         if (Shadow&&!isDie)
         {
@@ -143,7 +143,7 @@ public class Enemy : MonoBehaviour
         }
 
     }
-    public void onHit(int dmg)
+    public virtual void onHit(int dmg)
     {
         if (isDie) return;
         if (status[(int)Enums.Status.weak] > 0)

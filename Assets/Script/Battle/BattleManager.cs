@@ -1108,384 +1108,157 @@ public class BattleManager : MonoBehaviour
         CharacterSelectMode = true; //이 상태로 들어가면 character를 클릭시 선택이 된다.
         CardUseText.text = "취소";
     }
-    //type==0 랜덤 대상 type==1 방어도 높은 적 우선 type==2 체력 높은 적 우선 type==3 방어도 있는 적 우선
-    //type==4 모든 대상
+    //type==0 랜덤 대상 type==1 방어도 높은 적 우선 type==2 체력 높은 적 우선 
     
-    public void HitFront(int dmg, int type, Enemy enemy, int spd) //타켓을 전방으로
-    {
-        bool Alive = false;
+   
 
-        for (int i = 0; i < forward.Count; i++)
+   public Character SelectCharacterInEnemyTurn(int type,int pos) //pos ->0->전방 1->후방 2->전체 중
+    {//특정 위치에 특정 조건을 가지고 있는 캐릭터 한명을 랜덤으로 가져오는 함수
+        List<Character> selectedCharacters = new List<Character>();
+        if (pos == 0)
         {
-            if (!characters[i].isDie) Alive = true;
-        }
-        if (!Alive)
-        {
-            HitAll(dmg, type, enemy, spd);//전방에 아무도 없다면 타겟을 모두로
-        }
-        else
-        {
-            int rand2 = 0;
-            if (type == 0)
+            bool alive = false;
+            for (int i = 0; i < forward.Count; i++)
             {
-                rand2 = Random.Range(0, line);
-                while (characters[rand2].isDie) rand2 = Random.Range(0, line);
-               AM.MakeEnemyAct(0, dmg, characters[rand2], enemy, null);       
-                if (spd>0)
-                { 
-                    AM.SpdIncreaseByEnemy(1, spd, characters[rand2], enemy, null);                   
-                }
+                if (!forward[i].isDie)
+                    alive = true;
             }
-            if (type == 1)
+            if (!alive)
             {
-                List<Character> MaxArmor = new List<Character>();
-                int maxArmor = 0;
-                for (int i = 0; i < forward.Count; i++)
-                {
-                    if (characters[i].armor == maxArmor)
-                    {
-                        MaxArmor.Add(forward[i]);
-                    }
-                    else if (characters[i].armor > maxArmor)
-                    {
-                        maxArmor = characters[i].armor;
-                        MaxArmor.Clear();
-                        MaxArmor.Add(forward[i]);
-                    }
-                }
-                rand2 = Random.Range(0, MaxArmor.Count);
-                while (MaxArmor[rand2].isDie) rand2 = Random.Range(0, MaxArmor.Count);
-
-               AM.MakeEnemyAct(0, dmg, MaxArmor[rand2], enemy, null);
-              
-                if (spd > 0)
-                {
-                
-
-                  AM.SpdIncreaseByEnemy(1, spd, MaxArmor[rand2], enemy, null);
-                   
-                }
-            }
-            if (type == 2)
-            {
-                List<Character> MaxHp = new List<Character>();
-                int maxHp = 0;
-                for (int i = 0; i < forward.Count; i++)
-                {
-                    if (characters[i].Hp == maxHp)
-                    {
-                        MaxHp.Add(forward[i]);
-                    }
-                    else if (characters[i].Hp > maxHp)
-                    {
-                        maxHp = characters[i].Hp;
-                        MaxHp.Clear();
-                        MaxHp.Add(forward[i]);
-                    }
-                }
-                rand2 = Random.Range(0, MaxHp.Count);
-                while (MaxHp[rand2].isDie) rand2 = Random.Range(0, MaxHp.Count);
-
-
-              AM.MakeEnemyAct(0, dmg, MaxHp[rand2], enemy, null);
-             
-                if (spd > 0)
-                {
-                    AM.SpdIncreaseByEnemy(1, spd, MaxHp[rand2], enemy, null);
-                   
-                }
-            }
-            if (type == 3)
-            {
-                List<Character> HaveArmor = new List<Character>();
-                for (int i = 0; i < forward.Count; i++)
-                {
-                    if (forward[i].armor > 0) HaveArmor.Add(forward[i]);
-                }
-                if (HaveArmor.Count == 0) HitFront(dmg, 0, enemy, spd);
-                else
-                {
-                    rand2 = Random.Range(0, HaveArmor.Count);
-
-
-                   AM.MakeEnemyAct(0, dmg, HaveArmor[rand2], enemy, null);
-                    
-                    if (spd > 0)
-                    {
-                        AM.SpdIncreaseByEnemy(1, spd, HaveArmor[rand2], enemy, null);
-                   
-                    }
-                }
-            }
-            if (type == 4)
-            {
-                for (int i = 0; i < line; i++)
-                {
-
-                    AM.MakeEnemyAct(0, dmg, characters[i], enemy, null);
-
-                    if (spd > 0)
-                    {
-                        AM.SpdIncreaseByEnemy(1, spd, characters[i], enemy, null);
-                    }
-                }
-            }
-            if (type == 5)
-            {
-                for (int i = 0; i < line; i++)
-                {
-                    AM.SpdIncreaseByEnemy(1, dmg, characters[i], enemy, null);
-                 
-                }
+                return SelectCharacterInEnemyTurn(type, 2);
             }
         }
-    }
-    public void HitAll(int dmg, int type, Enemy enemy, int spd) //타겟을 모두로
-    {
-      
-        int rand2 = 0;
+        else if (pos == 1)
+        {
+            bool alive = false;
+            for (int i = 0; i < back.Count; i++)
+            {
+                if (!back[i].isDie)
+                    alive = true;
+            }
+            if (!alive)
+            {
+                return SelectCharacterInEnemyTurn(type, 2);
+            }
+        }
+        if (pos == 0)
+        {
+            for (int i = 0; i < forward.Count; i++)
+            {
+                if (!forward[i].isDie)
+                    selectedCharacters.Add(forward[i]);
+            }
+        }
+        else if (pos == 1)
+        {
+            for (int i = 0; i < back.Count; i++)
+            {
+                if (!back[i].isDie)
+                    selectedCharacters.Add(back[i]);
+            }
+        }
+        else if (pos == 2)
+        {
+            for (int i = 0; i < forward.Count; i++)
+            {
+                if (!forward[i].isDie)
+                    selectedCharacters.Add(forward[i]);
+            }
+            for (int i = 0; i < back.Count; i++)
+            {
+                if (!back[i].isDie)
+                    selectedCharacters.Add(back[i]);
+            }
+        }
         if (type == 0)
         {
-            rand2 = Random.Range(0, characters.Count);
-            while (characters[rand2].isDie) rand2 = Random.Range(0, characters.Count);
-
-            AM.MakeEnemyAct(0, dmg, characters[rand2], enemy, null);
-
-            if (spd > 0)
-            {
-                AM.SpdIncreaseByEnemy(1, spd, characters[rand2], enemy, null);
-            }
+            return selectedCharacters[Random.Range(0, selectedCharacters.Count)];
         }
-        if (type == 1)
+        else if (type == 1)
         {
-            List<Character> MaxArmor = new List<Character>();
+            List<Character> MaxAromorList = new List<Character>();
             int maxArmor = 0;
-            for (int i = 0; i < characters.Count; i++)
+            for (int i = 0; i < selectedCharacters.Count; i++)
             {
-                if (characters[i].armor == maxArmor)
+                if (selectedCharacters[i].armor > maxArmor)
                 {
-                    MaxArmor.Add(characters[i]);
+                    maxArmor = selectedCharacters[i].armor;
+                    MaxAromorList.Clear();
+                    MaxAromorList.Add(selectedCharacters[i]);
                 }
-                else if (characters[i].armor > maxArmor)
+                else if (selectedCharacters[i].armor == maxArmor)
                 {
-                    maxArmor = characters[i].armor;
-                    MaxArmor.Clear();
-                    MaxArmor.Add(characters[i]);
+                    MaxAromorList.Add(selectedCharacters[i]);
                 }
             }
-            rand2 = Random.Range(0, MaxArmor.Count);
-            while (MaxArmor[rand2].isDie) rand2 = Random.Range(0, MaxArmor.Count);
-
-
-            AM.MakeEnemyAct(0, dmg, MaxArmor[rand2], enemy, null);
-
-            if (spd > 0)
-            {
-                AM.SpdIncreaseByEnemy(1, spd, MaxArmor[rand2], enemy, null);
-
-            }
+            return MaxAromorList[Random.Range(0, MaxAromorList.Count)];
         }
-        if (type == 2)
+        else if (type == 2)
         {
-            List<Character> MaxHp = new List<Character>();
-            int maxHp = 0;
-            for (int i = 0; i < characters.Count; i++)
+            List<Character> MaxHPList = new List<Character>();
+            int maxHP = 0;
+            for (int i = 0; i < selectedCharacters.Count; i++)
             {
-                if (characters[i].Hp == maxHp)
+                if (selectedCharacters[i].Hp > maxHP)
                 {
-                    MaxHp.Add(characters[i]);
+                    maxHP = selectedCharacters[i].Hp;
+                    MaxHPList.Clear();
+                    MaxHPList.Add(selectedCharacters[i]);
                 }
-                else if (characters[i].Hp > maxHp)
+                else if (selectedCharacters[i].armor == maxHP)
                 {
-                    maxHp = characters[i].Hp;
-                    MaxHp.Clear();
-                    MaxHp.Add(characters[i]);
-                }
-            }
-            rand2 = Random.Range(0, MaxHp.Count);
-            while (MaxHp[rand2].isDie) rand2 = Random.Range(0, MaxHp.Count);
-
-
-
-            AM.MakeEnemyAct(0, dmg, MaxHp[rand2], enemy, null);
-
-            if (spd > 0)
-            {
-                AM.SpdIncreaseByEnemy(1, spd, MaxHp[rand2], enemy, null);
-
-            }
-        }
-        if (type == 3)
-        {
-            List<Character> HaveArmor = new List<Character>();
-            for (int i = 0; i < characters.Count; i++)
-            {
-                if (characters[i].armor > 0) HaveArmor.Add(characters[i]);
-            }
-            if (HaveArmor.Count == 0) HitAll(dmg, 0, enemy, spd);
-            else
-            {
-                rand2 = Random.Range(0, HaveArmor.Count);
-
-
-                AM.MakeEnemyAct(0, dmg, HaveArmor[rand2], enemy, null);
-
-                if (spd > 0)
-                {
-                    AM.SpdIncreaseByEnemy(1, spd, HaveArmor[rand2], enemy, null);
-
+                    MaxHPList.Add(selectedCharacters[i]);
                 }
             }
+            return MaxHPList[Random.Range(0, MaxHPList.Count)];
         }
-        if (type == 4)
-        {
-            for (int i = 0; i < characters.Count; i++)
-            {
+
+        return null;
 
 
-                AM.MakeEnemyAct(0, dmg, characters[i], enemy, null);
 
-                if (spd > 0)
-                {
-                    AM.SpdIncreaseByEnemy(1, spd, characters[i], enemy, null);
-                }
-            }
-        }
-        if (type == 5)
-        {
-            for (int i = 0; i < characters.Count; i++)
-            {
-                AM.SpdIncreaseByEnemy(1, dmg, characters[i], enemy, null);
-            }
-        }
-    }
-    public void HitBack(int dmg, int type, Enemy enemy, int spd) //타겟을 후방으로
+    }   
+
+    public List<Character> SelectCharacterListInEnemyTurn(int pos) //특정 위치에 있는 살아있는 캐릭터 모두를 불러오는 함수
     {
-        bool Alive = false;
-
-        for (int i = 0; i < back.Count; i++)
+        List<Character> selectedCharacters = new List<Character>();
+        if (pos == 0)
         {
-            if (!characters[i].isDie) Alive = true;
-        }
-        if (!Alive)
-        {
-            HitAll(dmg, type, enemy, spd);//후방에 아무도 없다면 타겟을 전체로
-        }
-        else
-        {
-            int rand2 = 0;
-            if (type == 0)
-            {
-                rand2 = Random.Range(line, characters.Count);
-                while (characters[rand2].isDie) rand2 = Random.Range(line, characters.Count);
-
-                AM.MakeEnemyAct(0, dmg, characters[rand2], enemy, null);
-
-                if (spd > 0)
-                {
-                    AM.SpdIncreaseByEnemy(1, spd, characters[rand2], enemy, null);
-                }
-            }
-            if (type == 1)
-            {
-                List<Character> MaxArmor = new List<Character>();
-                int maxArmor = 0;
-                for (int i = line; i < characters.Count; i++)
-                {
-                    if (characters[i].armor == maxArmor)
-                    {
-                        MaxArmor.Add(characters[i]);
-                    }
-                    else if (characters[i].armor > maxArmor)
-                    {
-                        maxArmor = characters[i].armor;
-                        MaxArmor.Clear();
-                        MaxArmor.Add(characters[i]);
-                    }
-                }
-                rand2 = Random.Range(0, MaxArmor.Count);
-                while (MaxArmor[rand2].isDie) rand2 = Random.Range(0, MaxArmor.Count);
-
-
-                AM.MakeEnemyAct(0, dmg, MaxArmor[rand2], enemy, null);
-
-                if (spd > 0)
-                {
-                    AM.SpdIncreaseByEnemy(1, spd, MaxArmor[rand2], enemy, null);
-
-                }
-            }
-            if (type == 2)
-            {
-                List<Character> MaxHp = new List<Character>();
-                int maxHp = 0;
-                for (int i = line; i < characters.Count; i++)
-                {
-                    if (characters[i].Hp == maxHp)
-                    {
-                        MaxHp.Add(characters[i]);
-                    }
-                    else if (characters[i].Hp > maxHp)
-                    {
-                        maxHp = characters[i].Hp;
-                        MaxHp.Clear();
-                        MaxHp.Add(characters[i]);
-                    }
-                }
-                rand2 = Random.Range(0, MaxHp.Count);
-                while (MaxHp[rand2].isDie) rand2 = Random.Range(0, MaxHp.Count);
-
-
-                AM.MakeEnemyAct(0, dmg, MaxHp[rand2], enemy, null);
-                if (spd > 0)
-                {
-                    AM.SpdIncreaseByEnemy(1, spd, MaxHp[rand2], enemy, null);
-
-                }
-            }
-            if (type == 3)
-            {
-                List<Character> HaveArmor = new List<Character>();
-                for (int i = line; i < characters.Count; i++)
-                {
-                    if (characters[i].armor > 0) HaveArmor.Add(characters[i]);
-                }
-                if (HaveArmor.Count == 0) HitBack(dmg, 0, enemy, spd);
-                else
-                {
-                    rand2 = Random.Range(0, HaveArmor.Count);
-
-
-                    AM.MakeEnemyAct(0, dmg, HaveArmor[rand2], enemy, null);
-
-                    if (spd > 0)
-                    {
-                        AM.SpdIncreaseByEnemy(1, spd, HaveArmor[rand2], enemy, null);
-
-                    }
-                }
-            }
-            if (type == 4)
-            {
-                for (int i = line; i < characters.Count; i++)
-                {
-
-                  AM.MakeEnemyAct(0, dmg, characters[i], enemy, null);
-                 
-                    if (spd > 0)
-                    {
-                        AM.SpdIncreaseByEnemy(1, spd, characters[i], enemy, null);
-                    }
-                }
-            }
-            if (type == 5)
-            {
-                for (int i = line; i < characters.Count; i++)
-                {
-                    AM.SpdIncreaseByEnemy(1, dmg, characters[i], enemy, null);
-                }
+            for(int i = 0; i < forward.Count; i++)
+            {if(!forward[i].isDie)
+                selectedCharacters.Add(forward[i]);
             }
         }
+        else if (pos == 1)
+        {
+            for (int i = 0; i < back.Count; i++)
+            {
+                if (!back[i].isDie)
+                    selectedCharacters.Add(back[i]);
+            }
+        }
+        else if (pos == 2)
+        {
+            for (int i = 0; i < forward.Count; i++)
+            {
+                if (!forward[i].isDie)
+                    selectedCharacters.Add(forward[i]);
+            }
+            for (int i = 0; i < back.Count; i++)
+            {
+                if (!back[i].isDie)
+                    selectedCharacters.Add(back[i]);
+            }
+        }
+        return selectedCharacters;
+    }
+    public void EnemyAttack(int dmg,Enemy enemy, Character target)
+    {
+        AM.MakeEnemyAct(0, dmg, target, enemy, null);
+    }
+    public void EnemyIncreaseSpeed(int amount,Enemy enemy,Character target)
+    {
+        AM.SpdIncreaseByEnemy(1, amount, target, enemy, null);
     }
 
     public void EnemyGetAromor(int mount, Enemy myEnemy, Enemy target)
