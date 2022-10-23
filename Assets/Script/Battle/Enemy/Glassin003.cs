@@ -17,7 +17,7 @@ public class Glassin003 : Enemy
 
     [SerializeField] TextMeshProUGUI NameT;
 
-    private void Start()
+    public override void Start()
     {
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
@@ -36,11 +36,14 @@ public class Glassin003 : Enemy
         }
     }
     private void Escape() {
-        Debug.Log("탈출");
+        BM.GD.isTriggerOn = true;
+        BM.Victory();
     }
     public override void EnemyStartTurn()
     {
+        Debug.Log("A");
         base.EnemyStartTurn();
+        Debug.Log("A");
         myTurn = 0;
         curTurn++;
         if (curTurn == 5)

@@ -39,11 +39,11 @@ public class SceneControllerManager : MonoBehaviour
 
     public IEnumerator SwitchScene(string sceneName)
     {
-        Debug.Log("a");
+  
         SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene().buildIndex);
-        Debug.Log("b");
+      
         yield return StartCoroutine(LoadScene(sceneName));
-        Debug.Log("c");
+
     }
 
     private IEnumerator LoadScene(string sceneName)

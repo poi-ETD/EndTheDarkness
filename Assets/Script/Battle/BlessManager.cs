@@ -22,7 +22,6 @@ public class BlessManager : MonoBehaviour
         {
             
             int rand = Random.Range(BM.line, BM.ChD.size);
-            Debug.Log(BM.characters[rand]);
             BM.characters[rand].bless[2] = true;
             BM.characters[rand].atk += 2;
         }

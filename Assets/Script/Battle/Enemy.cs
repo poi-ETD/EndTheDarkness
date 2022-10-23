@@ -29,7 +29,6 @@ public class Enemy : MonoBehaviour
     public Slider hpSlider;
     public Image myImage;
     ActManager AM;
-    public int myNo;
 
 
     public int[] status = new int[10];
@@ -41,8 +40,11 @@ public class Enemy : MonoBehaviour
     public Sprite face;
 
     public bool isAct;
-
-    private void Start()
+    public virtual void EnemySelectPattern()
+    {
+        Debug.Log("C");
+    }
+    public virtual void Start()
     {
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
@@ -110,6 +112,7 @@ public class Enemy : MonoBehaviour
     }
     public virtual void EnemyStartTurn()
     {
+        if (isDie) return;
         if (Shadow&&!isDie)
         {
             Shadow = false;

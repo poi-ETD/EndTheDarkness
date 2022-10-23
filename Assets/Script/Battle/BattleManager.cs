@@ -199,10 +199,7 @@ public class BattleManager : MonoBehaviour
         GameObject EnemySummon = Instantiate(Enemys[GD.BattleNo], new Vector2(-2, -2), transform.rotation, GameObject.Find("CharacterCanvas").transform);
 
         Enemys = GameObject.FindGameObjectsWithTag("Enemy");
-        for (int i = 0; i < Enemys.Length; i++)
-        {
-            Enemys[i].GetComponent<Enemy>().myNo = i;
-        }
+ 
         TurnCardCount = CardCount;
 
         LineObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-820, 360 - 150 * line);
@@ -241,96 +238,9 @@ public class BattleManager : MonoBehaviour
         leftCost += amount;
         costT.text = "" + leftCost;
     }
-    public void FormationCollapse(string ename) //진형붕괴 함수
+    public void FormationCollapse()
     {
-        if (GD.blessbool[20])
-        {
-            ResetBless20();
-        }
-        otherCanvasOn = true;
-        if (forward.Count < back.Count) //더 많은 쪽에서 적은쪽으로 옮긴다.
-        {
-            MoveToForward = true;
-            line++;
-        }
-        else if (forward.Count == back.Count) //전방과 후방의 수가 같으면 랜덤으로 결정
-        {
-            int rand = Random.Range(0, 2);
-            if (rand == 0) { rand = -1; MoveToForward = false; }
-            if (rand == 1) MoveToForward = true;
-            line += rand;
-        }
-        else if (forward.Count > back.Count)
-        { 
-            MoveToForward = false;
-            line--;
-        }
-        //line변수의 값 조정으로 전방과 후방의 수 조정
-        for (int i = 0; i < 3; i++)
-        {
-            FormationCollapseButton[i].SetActive(false);
-        }
-        FormationCollapsePopup.SetActive(true);
-        if (MoveToForward)
-        {
-            FormationCollapseText.text = ename + "이(가) 진형붕괴를 시전했습니다." + "\n누구를 전방으로 보내겠습니까?";
-            for (int i = 0; i < back.Count; i++)
-            {
-                FormationCollapseButton[i].SetActive(true);
-                FormationCollapseButtonText[i].text = back[i].Name;
-            }
-        }
-        else
-        {
-            FormationCollapseText.text = ename + "이(가) 진형붕괴를 시전했습니다." + "\n누구를 후방으로 보내겠습니까?";
-            for (int i = 0; i < forward.Count; i++)
-            {
-                FormationCollapseButton[i].SetActive(true);
-                FormationCollapseButtonText[i].text = forward[i].Name;
-            }
-        }
-    }
-    public void Click_SelectFormationCollapse(int selectedCharacterInCollapse)//진형붕괴 팝업창에 뜬 버튼을 클릭했을 시
-    {
-        ChD.line = line;
-        if (MoveToForward)
-        {
-
-            forward.Add(back[selectedCharacterInCollapse]);
-            back.RemoveAt(selectedCharacterInCollapse);
-        }
-        else
-        {
-
-            back.Add(forward[selectedCharacterInCollapse]);
-            forward.RemoveAt(selectedCharacterInCollapse);
-        }
-        //선택한 캐릭터를 옮긴다.
-        characters.Clear();
-        for (int i = 0; i < line; i++)
-        {
-            forward[i].transform.position = new Vector2(-880 / 45f, (300 - 150 * characters.Count) / 45f);
-            characters.Add(forward[i]);
-        }
-        for (int i = line; i < ChD.size; i++)
-        {
-            back[i - line].transform.position = new Vector2(-880 / 45f, (270 - 150 * characters.Count) / 45f);
-            characters.Add(back[i - line]);
-        }
-        //캐릭터들의 위치 재설정
-        for (int i = 1; i < ChD.size; i++)
-        {
-            characters[i].curNo = i;
-        }
-        //캐릭터들의 현재 위치 정보 재설정
-        otherCanvasOn = false; //진형붕괴 팝업이 꺼졌기 때문
-        otherCorIsRun = false; //턴 시작 코루틴을 진행시킴
-        FormationCollapsePopup.SetActive(false);
-        if (GD.blessbool[20])
-        {
-            SetBless20();
-        }
-        LineObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-820, 360 - 150 * line);
+        Debug.Log("진형 붕괴가 일어나는 지점입니다.");
     }
     public void Click_StackPopUpOn() //현재 스택을 보여주는 함수 (구현 더 해야 함)
     {
@@ -1275,7 +1185,7 @@ public class BattleManager : MonoBehaviour
     public void EnemyStateChange(Enemy myEnemy, int mount) //0->은신 1->무적 2->불사
     {
 
-        AM.MakeEnemyAct(4, mount, null, myEnemy, null);
+        AM.MakeEnemyAct(4, mount, null, myEnemy, myEnemy);
     }
 
     public void EnemyFormationCollapse(Enemy myEnemy) //적이 선 행동으로 진형붕괴를 선택했을 때

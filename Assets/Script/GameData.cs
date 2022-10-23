@@ -21,6 +21,7 @@ public class GameData
     public int blessSelect;
     public List<equipment> EquipmentList = new List<equipment>();
     public int[] curEquip = new int[4];//-1일 때는 장착 x,초기 값으로 넣어주자.
+    public bool isTriggerOn;
 }
 public struct equipment
 {
@@ -33,6 +34,7 @@ public struct equipment
     public int degradeStat; //저하시키는 스탯의 종류, 전용장비는 신경 X
     public int degradeMount; //저하시키는 스탯의 양 ,전용장비는 신경 X
     public int equipNum;
+  
 
     public equipment(int type,int special, string equipName,string equipContent, List<int> improveStat, List<int> improveMount, int degradeStat, int degradeMount, int equipNum)
     {

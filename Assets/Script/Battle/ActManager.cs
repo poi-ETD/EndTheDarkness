@@ -195,6 +195,7 @@ public class ActManager : MonoBehaviour
         {
             if (!enemys[orderList[or].obj].isDie)
             {
+                enemys[orderList[or].obj].EnemySelectPattern();
                 enemys[orderList[or].obj].isAct = true;
             }
             else
@@ -491,6 +492,7 @@ public class ActManager : MonoBehaviour
                     {
                         if (ActList[0].mount == 0) //은신
                         {
+                            Debug.Log(ActList[0].myE);
                             ActList[0].myE.onShadow();
                             for (int i = 0; i < 10; i++)
                             {
