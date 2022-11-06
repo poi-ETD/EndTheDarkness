@@ -124,11 +124,11 @@ public class Bless : MonoBehaviour
             {
                 if (lobby.ChD.characterDatas[i].curFormation == 0)
                 {
-                    lobby.ChD.characterDatas[i].Atk++;
+                    lobby.ChD.characterDatas[i].atk++;
                 }
                 else
                 {
-                    lobby.ChD.characterDatas[i].Atk--;
+                    lobby.ChD.characterDatas[i].atk--;
                 }
             }
         }
@@ -365,7 +365,7 @@ public class Bless : MonoBehaviour
         for (int i = 0; i < lobby.ChD.size; i++)
         {
             bless6.transform.GetChild(i).gameObject.SetActive(true);
-            bless6.transform.GetChild(i).gameObject.GetComponent<TextMeshProUGUI>().text = lobby.ChD.characterDatas[i].Name;
+            bless6.transform.GetChild(i).gameObject.GetComponent<TextMeshProUGUI>().text = lobby.ChD.characterDatas[i].name;
             for (int j = 0; j < 4; j++)
             {
                 if (lobby.ChD.characterDatas[i].passive[j] == 0)
@@ -375,7 +375,7 @@ public class Bless : MonoBehaviour
                 else
                 {
                     bless6.transform.GetChild(i).GetChild(j).gameObject.SetActive(true);
-                    bless6.transform.GetChild(i).GetChild(j).GetChild(0).GetComponent<Text>().text = CharacterInfo.Instance.cd[lobby.ChD.characterDatas[i].No].passive[j];
+                    bless6.transform.GetChild(i).GetChild(j).GetChild(0).GetComponent<Text>().text = CharacterInfo.Instance.cd[lobby.ChD.characterDatas[i].code].passive[j];
                 }
             }
         }
@@ -508,10 +508,10 @@ public class Bless : MonoBehaviour
             bless14.SetActive(true);
             for(int i = 0; i < 4; i++)
             {
-                if (lobby.ChD.characterDatas[i].Name!= null)
+                if (lobby.ChD.characterDatas[i].name!= null)
                 {
                     bless14.transform.GetChild(i).gameObject.SetActive(true);
-                    bless14.transform.GetChild(i).GetChild(0).GetComponent<Text>().text = lobby.ChD.characterDatas[i].Name;
+                    bless14.transform.GetChild(i).GetChild(0).GetComponent<Text>().text = lobby.ChD.characterDatas[i].name;
                 }
                 else
                 {
@@ -526,11 +526,11 @@ public class Bless : MonoBehaviour
             {
                 if (lobby.ChD.characterDatas[i].curFormation == 0)
                 {
-                    lobby.ChD.characterDatas[i].Atk--;
+                    lobby.ChD.characterDatas[i].atk--;
                 }
                 else
                 {
-                    lobby.ChD.characterDatas[i].Atk++;
+                    lobby.ChD.characterDatas[i].atk++;
                 }
             }
             But[2].SetActive(true);
@@ -562,7 +562,7 @@ public class Bless : MonoBehaviour
  
     public void bless14But(int i)
     {
-        lobby.ChD.characterDatas[i].Atk++;
+        lobby.ChD.characterDatas[i].atk++;
         lobby.ChD.characterDatas[i].curHp = 1;
         exitBlessPopup();
 
@@ -594,7 +594,7 @@ public class Bless : MonoBehaviour
         bless6.SetActive(false);
         exitBlessPopup();
         lobby.ChD.characterDatas[i / 4].passive[i % 4]++;
-        lobby.ChD.characterDatas[i / 4].Atk -= 2;
+        lobby.ChD.characterDatas[i / 4].atk -= 2;
         if (lobby.resetmara) lobby.Resetmara(5);
         else lobby.DayAct();
         setBlessIcon();

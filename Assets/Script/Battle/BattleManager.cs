@@ -160,22 +160,22 @@ public class BattleManager : MonoBehaviour
             if (ChD.characterDatas[i].curFormation == 0) //전방
             {
 
-                CharacterC = Instantiate(CharacterPrefebs[ChD.characterDatas[i].No], new Vector2(-880 / 45f, 375 / 45f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
+                CharacterC = Instantiate(CharacterPrefebs[ChD.characterDatas[i].code], new Vector2(-880 / 45f, 375 / 45f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
                 forward.Add(CharacterC.GetComponent<Character>());
             }
             else //후방
             {
-                CharacterC = Instantiate(CharacterPrefebs[ChD.characterDatas[i].No], new Vector2(-880 / 45f, (330 - 150 * characters.Count) / 45f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
+                CharacterC = Instantiate(CharacterPrefebs[ChD.characterDatas[i].code], new Vector2(-880 / 45f, (330 - 150 * characters.Count) / 45f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
                 back.Add(CharacterC.GetComponent<Character>());
             } //전방과 후방 목록에 각각 캐릭터를 넣음
             characterOriginal.Add(CharacterC.GetComponent<Character>());
-            CharacterC.GetComponent<Character>().atk = ChD.characterDatas[i].Atk;
+            CharacterC.GetComponent<Character>().atk = ChD.characterDatas[i].atk;
             CharacterC.GetComponent<Character>().Hp = ChD.characterDatas[i].curHp;
             CharacterC.GetComponent<Character>().maxHp = ChD.characterDatas[i].maxHp;
-            CharacterC.GetComponent<Character>().def = ChD.characterDatas[i].def;
-            CharacterC.GetComponent<Character>().cost = ChD.characterDatas[i].Cost;
+            CharacterC.GetComponent<Character>().def = ChD.characterDatas[i].endurance;
+            CharacterC.GetComponent<Character>().cost = ChD.characterDatas[i].cost;
             CharacterC.GetComponent<Character>().passive = ChD.characterDatas[i].passive;
-            CharacterC.GetComponent<Character>().Name = ChD.characterDatas[i].Name;
+            CharacterC.GetComponent<Character>().Name = ChD.characterDatas[i].name;
             CharacterC.GetComponent<Character>().speed = ChD.characterDatas[i].speed;
             //캐릭터들의 기본 스탯을 데이터와 같게 설정
             CharacterC.GetComponent<Character>().lobbyNum = i; //로비에 있는 순서대로 불러오기 떄문에 미리 저장

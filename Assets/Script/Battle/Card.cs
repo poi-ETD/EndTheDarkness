@@ -217,7 +217,7 @@ public class Card : MonoBehaviour
                         }
                         for (int i = 0; i < BM.Enemys.Length; i++)
                         {
-                            BM.Enemys[i].GetComponent<Enemy>().StatusChange((int)Enums.Status.weak, 3);
+                            BM.Enemys[i].GetComponent<Enemy>().StatusChange((int)Status.weak, 3);
                         }
                     }
                     BM.AllAttack(2, BM.actCharacter, 1);
@@ -356,7 +356,7 @@ public class Card : MonoBehaviour
         }
         if (cardNo == 27)
         {
-            if (BM.selectedEnemy.status[(int)Enums.Status.weak] > 0)
+            if (BM.selectedEnemy.status[(int)Status.weak] > 0)
             {
             BM.OnDmgOneTarget(15, BM.selectedEnemy, BM.actCharacter,1);
             }
@@ -364,7 +364,7 @@ public class Card : MonoBehaviour
             {
                 BM.characters[i].myPassive.EnemyGetWeak();
             }
-            BM.selectedEnemy.GetComponent<Enemy>().StatusChange((int)Enums.Status.weak, 10);
+            BM.selectedEnemy.GetComponent<Enemy>().StatusChange((int)Status.weak, 10);
         }
         if (cardNo == 33)
         {
@@ -474,7 +474,7 @@ public class Card : MonoBehaviour
             }
             for (int i = 0; i < BM.Enemys.Length; i++)
             {
-                BM.Enemys[i].GetComponent<Enemy>().StatusChange((int)Enums.Status.weak, weaknessCount);
+                BM.Enemys[i].GetComponent<Enemy>().StatusChange((int)Status.weak, weaknessCount);
             }
         }
         if (percentDmgToAllTarget > 0)

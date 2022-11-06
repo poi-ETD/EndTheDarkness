@@ -6,6 +6,7 @@ using System.IO;
 using UnityEngine.SceneManagement;
 using TMPro;
 using Newtonsoft.Json;
+
 public class CharacterManager : MonoBehaviour
 {
     CharacterData CD = new CharacterData();
@@ -36,19 +37,19 @@ public class CharacterManager : MonoBehaviour
     public void ToMain() //저장 후 로비로 게임 시작
     {
         cardManager.SaveCard();
+
         for(int i = 0; i < CharacterList.Count; i++)
         {
-            if (CD.characterDatas[i].curFormation == 0) {
-                CD.line++;
-              }
-           
+            if (CD.characterDatas[i].curFormation == 0)
+                CD.line++;   
         }
+
         CD.size = CharacterList.Count; //캐릭터의 수
         string characterData = JsonConvert.SerializeObject(CD);       
         string path = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CharacterDatas[GameManager.Instance.selectedSlot_Main]);                       
         File.WriteAllText(path, characterData);
 
-        GameManager.Instance.nowPlayingSlot = GameManager.Instance.selectedSlot_Main; // 게임을 시작하기 전 현재 슬롯 번호를 초기화함. 이후 게임 내에선 이 현재 슬롯번호를 이용함
+        GameManager.Instance.nowPlayingSlot = GameManager.Instance.selectedSlot_Main; // 현재 플레이중인 슬롯 번호를 선택한 슬롯 번호로 초기화
 
         GameManager.Instance.Save();
 
@@ -147,9 +148,8 @@ public class CharacterManager : MonoBehaviour
             //int maxHp, int curHp, int passive1, int passive2, int passive3, int passive4, int curFormation)
             int[] passiveO = new int[4];
             CD.characterDatas[counter] = new CharacterData.curCharacterData(
-                CharacterInfo.Instance.cd[no].Name, no, CharacterInfo.Instance.cd[no].Cost, CharacterInfo.Instance.cd[no].Atk, CharacterInfo.Instance.cd[no].Def, CharacterInfo.Instance.cd[no].speed, CharacterInfo.Instance.cd[no].maxHp, CharacterInfo.Instance.cd[no].maxHp, passiveO, curFormation, -1);
+                CharacterInfo.Instance.cd[no].name, no, CharacterInfo.Instance.cd[no].cost, CharacterInfo.Instance.cd[no].atk, CharacterInfo.Instance.cd[no].def, CharacterInfo.Instance.cd[no].speed, CharacterInfo.Instance.cd[no].maxHp, CharacterInfo.Instance.cd[no].maxHp, passiveO, curFormation, -1);
             CD.characterDatas[counter].passive[curPassive]++;
-
         }
 
         if (counter+1 >= CharacterList.Count) //모든 캐릭터 서브 세팅을 마치면
@@ -167,7 +167,7 @@ public class CharacterManager : MonoBehaviour
             cardManager.getStarterCard(CharacterList[counter], 1);
 
         SubImage.sprite = CharacterInfo.Instance.cd[CharacterList[counter]].characterSprtie;
-        SetText[0].text = CharacterInfo.Instance.cd[CharacterList[counter]].Name;
+        SetText[0].text = CharacterInfo.Instance.cd[CharacterList[counter]].name;
         SetText[1].text = CharacterInfo.Instance.cd[CharacterList[counter]].passive[0];
         SetText[2].text = CharacterInfo.Instance.cd[CharacterList[counter]].passive[1];
         SetText[3].text = CharacterInfo.Instance.cd[CharacterList[counter]].passive[2];
@@ -234,39 +234,39 @@ public class CharacterManager : MonoBehaviour
     }
 }
 
-public class CharacterData //json으로 저장 될 인게임 캐릭터 정보
-{
-  
-    public struct curCharacterData
-    {
-        public string Name;
-        public int No;
-        public int Cost;
-        public int Atk;
-        public int maxHp;
-        public int curHp;
-        public int def;
-        public float speed;
-        public int[] passive;
-        public int curFormation; //0->전방 1->후방
-        public int curEquip;
-        public curCharacterData(string name, int no, int cost, int atk,int def ,float speed,int maxHp, int curHp, int[] passive, int curFormation,int curEquip)
-        {
-            Name = name;
-            No = no;
-            Cost = cost;
-            Atk = atk;
-            this.def = def;
-            this.speed = speed;
-            this.maxHp = maxHp;
-            this.curHp = curHp;
-            this.passive = passive;
-            this.curFormation = curFormation;
-            this.curEquip = curEquip;
-        }
-    }
-    public curCharacterData[] characterDatas = new curCharacterData[5];
-    public int line; //전, 후방을 나누는 기준
-    public int size; 
-  
-}
+//public class CharacterData //json으로 저장 될 인게임 캐릭터 정보
+//{
+//    public struct curCharacterData
+//    {
+//        public string Name;
+//        public int No;
+//        public int Cost;
+//        public int Atk;
+//        public int maxHp;
+//        public int curHp;
+//        public int def;
+//        public float speed;
+//        public int[] passive;
+//        public int curFormation; //0->전방 1->후방
+//        public int curEquip;
+
+//        public curCharacterData(string name, int no, int cost, int atk, int def ,float speed,int maxHp, int curHp, int[] passive, int curFormation,int curEquip)
+//        {
+//            Name = name;
+//            No = no;
+//            Cost = cost;
+//            Atk = atk;
+//            this.def = def;
+//            this.speed = speed;
+//            this.maxHp = maxHp;
+//            this.curHp = curHp;
+//            this.passive = passive;
+//            this.curFormation = curFormation;
+//            this.curEquip = curEquip;
+//        }
+//    }
+
+//    public curCharacterData[] characterDatas = new curCharacterData[5];
+//    public int line; //전, 후방을 나누는 기준
+//    public int size; 
+//}

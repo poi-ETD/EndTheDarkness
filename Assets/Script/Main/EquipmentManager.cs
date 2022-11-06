@@ -44,34 +44,34 @@ Resources.Load<Sprite>("temporal/axe_010")
 
         switch (rand1)
         {
-            case (int)Enums.EquipmentStat.atk:
+            case (int)EquipmentStat.atk:
                 improveMount = Random.Range(1, 3);
                 break;
-            case (int)Enums.EquipmentStat.def:
+            case (int)EquipmentStat.def:
                 improveMount = Random.Range(1, 4);
                 break;
-            case (int)Enums.EquipmentStat.maxHp:
+            case (int)EquipmentStat.maxHp:
                 improveMount = Random.Range(1, 5) * 5;
                 break;
-            case (int)Enums.EquipmentStat.cost:
+            case (int)EquipmentStat.cost:
                 improveMount = Random.Range(1, 3);
                 break;
-            case (int)Enums.EquipmentStat.act:
+            case (int)EquipmentStat.act:
                 improveMount = 1;
                 break;
         }
         switch (rand2)
         {
-            case (int)Enums.EquipmentStat.atk:
+            case (int)EquipmentStat.atk:
                 degradeMount = Random.Range(1, 3);
                 break;
-            case (int)Enums.EquipmentStat.def:
+            case (int)EquipmentStat.def:
                 degradeMount = Random.Range(1, 4);
                 break;
-            case (int)Enums.EquipmentStat.maxHp:
+            case (int)EquipmentStat.maxHp:
                 degradeMount = Random.Range(2, 5) * 5;
                 break;
-            case (int)Enums.EquipmentStat.cost:
+            case (int)EquipmentStat.cost:
                 degradeMount = 1;
                 break;
             
@@ -136,19 +136,19 @@ Resources.Load<Sprite>("temporal/axe_010")
                 if (i > 0) s += "\n";
                 switch (e.improveStat[i])
                 {
-                    case (int)Enums.EquipmentStat.atk:
+                    case (int)EquipmentStat.atk:
                         s += " 공격력(" + e.improveMount[i] + ")";
                         break;
-                    case (int)Enums.EquipmentStat.def:
+                    case (int)EquipmentStat.def:
                         s += " 지구력(" + e.improveMount[i] + ")";
                         break;
-                    case (int)Enums.EquipmentStat.maxHp:
+                    case (int)EquipmentStat.maxHp:
                         s += " 최대 HP(" + e.improveMount[i] + ")";
                         break;
-                    case (int)Enums.EquipmentStat.cost:
+                    case (int)EquipmentStat.cost:
                         s += " 부여 코스트(" + e.improveMount[i] + ")";
                         break;
-                    case (int)Enums.EquipmentStat.act:
+                    case (int)EquipmentStat.act:
                         s += " 스피드(0." + e.improveMount[i] + ")";
                         break;
                 }
@@ -157,19 +157,19 @@ Resources.Load<Sprite>("temporal/axe_010")
             s = "감소 스탯:";
             switch (e.degradeStat)
             {
-                case (int)Enums.EquipmentStat.atk:
+                case (int)EquipmentStat.atk:
                     s += " 공격력(" + e.degradeMount + ")";
                     break;
-                case (int)Enums.EquipmentStat.def:
+                case (int)EquipmentStat.def:
                     s += " 지구력(" + e.degradeMount + ")";
                     break;
-                case (int)Enums.EquipmentStat.maxHp:
+                case (int)EquipmentStat.maxHp:
                     s += " 최대 HP(" + e.degradeMount + ")";
                     break;
-                case (int)Enums.EquipmentStat.cost:
+                case (int)EquipmentStat.cost:
                     s += " 부여 코스트(" + e.degradeMount + ")";
                     break;
-                case (int)Enums.EquipmentStat.act:
+                case (int)EquipmentStat.act:
                     s += " 스피드(0." + e.degradeMount + ")";
                     break;
             }
@@ -194,37 +194,37 @@ Resources.Load<Sprite>("temporal/axe_010")
         while (rand1 == rand2) rand2 = Random.Range(0, 4);
         switch (rand1)
         {
-            case (int)Enums.EquipmentStat.atk:
+            case (int)EquipmentStat.atk:
                 improveMount = Random.Range(1, 3);
                 break;
-            case (int)Enums.EquipmentStat.def:
+            case (int)EquipmentStat.def:
                 improveMount = Random.Range(1, 4);
                 break;
-            case (int)Enums.EquipmentStat.maxHp:
+            case (int)EquipmentStat.maxHp:
                 improveMount = Random.Range(1, 5) * 5;
                 break;
-            case (int)Enums.EquipmentStat.cost:
+            case (int)EquipmentStat.cost:
                 improveMount = Random.Range(1, 3);
                 break;
-            case (int)Enums.EquipmentStat.act:
+            case (int)EquipmentStat.act:
                 improveMount = Random.Range(1, 4);
                 break;
         }
         switch (rand2)
         {
-            case (int)Enums.EquipmentStat.atk:
+            case (int)EquipmentStat.atk:
                 degradeMount = Random.Range(1, 3);
                 break;
-            case (int)Enums.EquipmentStat.def:
+            case (int)EquipmentStat.def:
                 degradeMount = Random.Range(1, 4);
                 break;
-            case (int)Enums.EquipmentStat.maxHp:
+            case (int)EquipmentStat.maxHp:
                 degradeMount = Random.Range(2, 5) * 5;
                 break;
-            case (int)Enums.EquipmentStat.cost:
+            case (int)EquipmentStat.cost:
                 degradeMount = 1;
                 break;
-            case (int)Enums.EquipmentStat.act:
+            case (int)EquipmentStat.act:
                 degradeMount = Random.Range(1, 4);
                 break;
 

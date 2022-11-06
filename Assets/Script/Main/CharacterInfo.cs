@@ -21,11 +21,11 @@ public class CharacterInfo
     }
     public struct characterData
     {
-        public string Name;
-        public int No;
-        public int Cost;
-        public int Atk;
-        public int Def;
+        public string name;
+        public int code;
+        public int cost;
+        public int atk;
+        public int def;
         public float speed;
         public int maxHp;
       
@@ -39,11 +39,11 @@ public class CharacterInfo
         public Sprite characterFace;
         public characterData(string name, int no, int cost, int atk, int def, float speed, int maxHp, string[] passive, string[] passiveContent, string specialEquipName, string specialEquipContent,Sprite characterSprtie,Sprite characterFace)
         {
-            Name = name;
-            No = no;
-            Cost = cost;
-            Atk = atk;
-            Def = def;
+            this.name = name;
+            this.code = no;
+            this.cost = cost;
+            this.atk = atk;
+            this.def = def;
             this.speed = speed;
             this.maxHp = maxHp;
             this.passive = passive;

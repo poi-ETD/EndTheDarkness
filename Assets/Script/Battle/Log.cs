@@ -65,7 +65,7 @@ public class Log : MonoBehaviour
         int k = i % 4 - 1;
         int m = i / 4 + 1;
         if (k == -1) { k = 3; m--; }
-        s ="\n"+ CharacterInfo.Instance.cd[m].Name+"이 "+ CharacterInfo.Instance.cd[m].passive[k]+" 발동("+c+")";
+        s ="\n"+ CharacterInfo.Instance.cd[m].name+"이 "+ CharacterInfo.Instance.cd[m].passive[k]+" 발동("+c+")";
         return s;
     }
 }

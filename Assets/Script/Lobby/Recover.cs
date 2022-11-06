@@ -42,7 +42,7 @@ public class Recover : MonoBehaviour
         for (int i = 0; i < lobby.ChD.size; i++)
         {
             Recovers[i].SetActive(true);
-            Recovers[i].GetComponent<TextMeshProUGUI>().text = lobby.ChD.characterDatas[i].Name;
+            Recovers[i].GetComponent<TextMeshProUGUI>().text = lobby.ChD.characterDatas[i].name;
             Recovers[i].transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = lobby.ChD.characterDatas[i].curHp + "/" + lobby.ChD.characterDatas[i].maxHp;
             if (lobby.ChD.characterDatas[i].curHp == 0)
             {

@@ -72,10 +72,10 @@ public class CardInfo : MonoBehaviour
         {
             this.Name = Name;
             this.Content = Content;
+            this.No = No;
             this.Cost = Cost;
             this.Deck = Deck;
             this.type = type;
-            this.No = No;
             this.select = select;
         }
     }

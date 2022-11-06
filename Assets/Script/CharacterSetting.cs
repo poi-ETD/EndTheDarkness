@@ -17,8 +17,8 @@ public class CharacterSetting :EventTrigger
         isSet = true;
         myImage.sprite = CharacterInfo.Instance.cd[i].characterSprtie;
         no = i;
-        Info[0].text = CharacterInfo.Instance.cd[i].Name;
-        Info[1].text = "공격력:" + CharacterInfo.Instance.cd[i].Atk + "\n코스트:" + CharacterInfo.Instance.cd[i].Cost + "\nHP:" + CharacterInfo.Instance.cd[i].maxHp;        
+        Info[0].text = CharacterInfo.Instance.cd[i].name;
+        Info[1].text = "공격력:" + CharacterInfo.Instance.cd[i].atk + "\n코스트:" + CharacterInfo.Instance.cd[i].cost + "\nHP:" + CharacterInfo.Instance.cd[i].maxHp;        
         Info[2].text = CharacterInfo.Instance.cd[i].passive[0];
         Info[3].text = CharacterInfo.Instance.cd[i].passive[1];
         Info[4].text = CharacterInfo.Instance.cd[i].passive[2];
@@ -28,11 +28,11 @@ public class CharacterSetting :EventTrigger
     //0->이름 1->내용 2->위치 3~5->패시브
     public void SetCharacterInLobby(int no, Sprite s,int atk,int endur,int cost,int curHp,int maxHp,int formation,int[] passive,string s1,string s2,Sprite equipSprite)
     {
-        Debug.Log(CharacterInfo.Instance.cd[no].Name);
+        Debug.Log(CharacterInfo.Instance.cd[no].name);
         //로비에서 파티 정보 버튼을 눌렀을 때, 현재 캐릭터의 상태를 띄움.
         myImage.sprite = s;
         this.no = no;
-        Info[0].text = CharacterInfo.Instance.cd[no].Name;
+        Info[0].text = CharacterInfo.Instance.cd[no].name;
         Info[1].text = "공격력:" + atk + "\n코스트:" + cost + "\nHP:"+curHp+"/" + maxHp;
         if (formation == 0)
             Info[2].text = "전방";

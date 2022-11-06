@@ -146,9 +146,9 @@ public class Enemy : MonoBehaviour
     public void onHit(int dmg)
     {
         if (isDie) return;
-        if (status[(int)Enums.Status.weak] > 0)
+        if (status[(int)Status.weak] > 0)
         {
-            status[(int)Enums.Status.weak]--;
+            status[(int)Status.weak]--;
             dmg *= 2;
         }
         GameObject Dmg = Instantiate(BM.DmgPrefebs, transform);

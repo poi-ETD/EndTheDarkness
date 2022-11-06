@@ -120,10 +120,10 @@ public void GoLobby()
         for(int i = 0; i < ChD.size; i++)
         {
             CharacterView.transform.GetChild(i).gameObject.SetActive(true);
-            CharacterView.transform.GetChild(i).GetChild(0).GetComponent<TextMeshProUGUI>().text = ChD.characterDatas[i].Name;
+            CharacterView.transform.GetChild(i).GetChild(0).GetComponent<TextMeshProUGUI>().text = ChD.characterDatas[i].name;
             for (int j = 0; j < 4; j++)
             {
-                CharacterView.transform.GetChild(i).GetChild(1 + j).GetComponent<TextMeshProUGUI>().text = CharacterInfo.Instance.cd[ChD.characterDatas[i].No].passive[j];
+                CharacterView.transform.GetChild(i).GetChild(1 + j).GetComponent<TextMeshProUGUI>().text = CharacterInfo.Instance.cd[ChD.characterDatas[i].code].passive[j];
                 CharacterView.transform.GetChild(i).GetChild(1 + j).GetChild(0).GetComponent<TextMeshProUGUI>().text = ChD.characterDatas[i].passive[j]+"";
             }
         }
@@ -160,7 +160,7 @@ public void GoLobby()
     {
         CharacterView.SetActive(false);
         GetEquipmentCanvas.SetActive(true);
-        equipment curEquip=EquipmentManager.Instance.makeSpecialEquipment(ChD.characterDatas[i].No);     
+        equipment curEquip=EquipmentManager.Instance.makeSpecialEquipment(ChD.characterDatas[i].code);     
         GetEquipmentCanvas.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = EquipmentManager.Instance.equipSpr[curEquip.equipNum];
         List<string> sList = EquipmentManager.Instance.equipmentStrings(curEquip);
      

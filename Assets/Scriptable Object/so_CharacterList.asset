@@ -14,6 +14,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterDetails:
   - characterCode: 0
+    name: "\uC774\uB984"
+    aka: "\uBCC4\uBA85"
+    sprite_Face: {fileID: 21300000, guid: 99ca74646277b7f46b798051728ea682, type: 3}
+    isReviver: 0
+    hp: 10
+    attackPower: 1
+    cost: 1
+    endurance: 1
+    inventorySize: 1
+    speed: 1
+    passive0_Name: "\uD328\uC2DC\uBE0C1"
+    passive0_Description: "\uD328\uC2DC\uBE0C \uC124\uBA851"
+    passive1_Name: "\uD328\uC2DC\uBE0C2"
+    passive1_Description: "\uD328\uC2DC\uBE0C \uC124\uBA852"
+    passive2_Name: "\uD328\uC2DC\uBE0C3"
+    passive2_Description: "\uD328\uC2DC\uBE0C \uC124\uBA853"
+    passive3_Name: "\uD328\uC2DC\uBE0C4"
+    passive3_Description: "\uD328\uC2DC\uBE0C \uC124\uBA854"
+  - characterCode: 1
     name: Q
     aka: "\uC545\uC758 \uADFC\uC6D0"
     sprite_Face: {fileID: 21300000, guid: 678b223f10bba99439efa224c956ce14, type: 3}
@@ -41,34 +60,6 @@ MonoBehaviour:
       \uC784\uC758\uB85C \uCE74\uB4DC\uB97C \uD328\uB85C \uAC00\uC838\uC628\uB2E4.
       \uD574\uB2F9 \uC804\uD22C \uB3D9\uC548 \uAC00\uC838\uC628 \uCE74\uB4DC\uC5D0
       [\uBAA8\uB4E0 \uC801\uC5D0\uAC8C \uB370\uBBF8\uC9C0 : 1]\uC744 \uBD80\uC5EC"
-  - characterCode: 1
-    name: "\uBC18\uAC00\uB77C"
-    aka: "\uC9C0\uC625\uC758 \uD30C\uC218\uAFBC"
-    sprite_Face: {fileID: 21300000, guid: ac4347d1edf8c98488fdcfab648d937f, type: 3}
-    isReviver: 0
-    hp: 60
-    attackPower: 0
-    cost: 1
-    endurance: 1
-    inventorySize: 1
-    speed: 9.9
-    passive0_Name: "\uAD73\uAC74\uD55C \uC704\uCE58"
-    passive0_Description: "\uC790\uC2E0\uC744 \uC81C\uC678\uD55C \uC544\uAD70, \uC801\uC758
-      \uCCB4\uB825\uC774 \uAC10\uC18C\uD560 \uB54C\uB9C8\uB2E4 \uC790\uC2E0\uC5D0\uAC8C
-      \uBC29\uC5B4\uB3C4 : 1"
-    passive1_Name: "\uC120\uBD09\uC758 \uD638\uB839"
-    passive1_Description: "\uD134 \uC2DC\uC791 \uC2DC \uBC29\uC5B4\uB3C4\uAC00 \uC788\uC744
-      \uACBD\uC6B0 \uBD80\uC5EC \uCF54\uC2A4\uD2B8 + 1, \uBC29\uC5B4\uB3C4\uAC00
-      \uC5C6\uC744 \uACBD\uC6B0 \uC790\uC2E0\uC5D0\uAC8C \uBC29\uC5B4\uB3C4 : 3"
-    passive2_Name: "\uBB34\uC7A5"
-    passive2_Description: "\uC801\uC758 \uACF5\uACA9\uC774 \uC131\uACF5\uD560 \uB54C\uB9C8\uB2E4
-      \uBC29\uC5B4\uB3C4\uAC00 \uC874\uC7AC\uD558\uBA74 \uAE4E\uC778 \uBC29\uC5B4\uB3C4
-      \uC808\uBC18\uB9CC\uD07C(\uC18C\uC218\uC810 \uBC84\uB9BC) \uD574\uB2F9 \uC801\uC5D0\uAC8C
-      \uB370\uBBF8\uC9C0\uB97C \uC900\uB2E4"
-    passive3_Name: "\uB3C5\uBD88\uC7A5\uAD70"
-    passive3_Description: "\uD134 \uC2DC\uC791 \uC2DC \uD55C \uC9C4\uD615\uC5D0 \uBC18\uAC00\uB77C
-      \uD63C\uC790 \uC788\uC744 \uACBD\uC6B0, \uBC18\uAC00\uB77C\uC5D0\uAC8C \uBC29\uC5B4\uB3C4
-      : 7 \uADF8\uB9AC\uACE0 SP -0.2 (\uCD5C\uB300 5.0)"
   - characterCode: 2
     name: "\uC2A4\uD30C\uD0A4"
     aka: "\uBB34\uC11C\uC6B4 \uB140\uC11D"
@@ -97,6 +88,34 @@ MonoBehaviour:
       \uC801\uC5D0\uAC8C \uB370\uBBF8\uC9C0\uB97C 10\uBC88\uC774\uC0C1 \uC131\uACF5\uD588\uC744
       \uB54C\uB9C8\uB2E4 \uACF5\uACA9\uB825 +1"
   - characterCode: 3
+    name: "\uBC18\uAC00\uB77C"
+    aka: "\uC9C0\uC625\uC758 \uD30C\uC218\uAFBC"
+    sprite_Face: {fileID: 21300000, guid: ac4347d1edf8c98488fdcfab648d937f, type: 3}
+    isReviver: 0
+    hp: 60
+    attackPower: 0
+    cost: 1
+    endurance: 1
+    inventorySize: 1
+    speed: 9.9
+    passive0_Name: "\uAD73\uAC74\uD55C \uC704\uCE58"
+    passive0_Description: "\uC790\uC2E0\uC744 \uC81C\uC678\uD55C \uC544\uAD70, \uC801\uC758
+      \uCCB4\uB825\uC774 \uAC10\uC18C\uD560 \uB54C\uB9C8\uB2E4 \uC790\uC2E0\uC5D0\uAC8C
+      \uBC29\uC5B4\uB3C4 : 1"
+    passive1_Name: "\uC120\uBD09\uC758 \uD638\uB839"
+    passive1_Description: "\uD134 \uC2DC\uC791 \uC2DC \uBC29\uC5B4\uB3C4\uAC00 \uC788\uC744
+      \uACBD\uC6B0 \uBD80\uC5EC \uCF54\uC2A4\uD2B8 + 1, \uBC29\uC5B4\uB3C4\uAC00
+      \uC5C6\uC744 \uACBD\uC6B0 \uC790\uC2E0\uC5D0\uAC8C \uBC29\uC5B4\uB3C4 : 3"
+    passive2_Name: "\uBB34\uC7A5"
+    passive2_Description: "\uC801\uC758 \uACF5\uACA9\uC774 \uC131\uACF5\uD560 \uB54C\uB9C8\uB2E4
+      \uBC29\uC5B4\uB3C4\uAC00 \uC874\uC7AC\uD558\uBA74 \uAE4E\uC778 \uBC29\uC5B4\uB3C4
+      \uC808\uBC18\uB9CC\uD07C(\uC18C\uC218\uC810 \uBC84\uB9BC) \uD574\uB2F9 \uC801\uC5D0\uAC8C
+      \uB370\uBBF8\uC9C0\uB97C \uC900\uB2E4"
+    passive3_Name: "\uB3C5\uBD88\uC7A5\uAD70"
+    passive3_Description: "\uD134 \uC2DC\uC791 \uC2DC \uD55C \uC9C4\uD615\uC5D0 \uBC18\uAC00\uB77C
+      \uD63C\uC790 \uC788\uC744 \uACBD\uC6B0, \uBC18\uAC00\uB77C\uC5D0\uAC8C \uBC29\uC5B4\uB3C4
+      : 7 \uADF8\uB9AC\uACE0 SP -0.2 (\uCD5C\uB300 5.0)"
+  - characterCode: 4
     name: "\uD3EC\uB974\uD14C"
     aka: "\uC218\uB9CE\uC740 \uB2E4\uB9AC\uB97C \uAC00\uC9C4 \uC790"
     sprite_Face: {fileID: 21300000, guid: 65e1fe09d0d9d2a4f95a68a1779571b2, type: 3}
@@ -124,7 +143,7 @@ MonoBehaviour:
     passive3_Description: "\uD134 \uC2DC\uC791\uC2DC \uBB18\uC9C0\uC640 \uB371 \uC911
       \uCE74\uB4DC\uAC00 \uB9CE\uC740 \uCABD\uC5D0\uC11C \uC801\uC740 \uCABD\uC73C\uB85C
       \uCE74\uB4DC 1\uC7A5\uC744 \uC120\uD0DD\uD558\uACE0 \uC774\uB3D9\uC2DC\uD0A8\uB2E4."
-  - characterCode: 4
+  - characterCode: 5
     name: "\uB839"
     aka: "\uBBF8\uC9C0\uC758 \uC874\uC7AC"
     sprite_Face: {fileID: 21300000, guid: 8209d033ee6813a4e90726de95e85f35, type: 3}
@@ -151,7 +170,7 @@ MonoBehaviour:
     passive3_Description: "\uB839\uC774 \uC0AC\uC6A9\uD558\uB294 \uCE74\uB4DC\uC758
       \uC18C\uBE44 \uCF54\uC2A4\uD2B8\uB294 1\uB85C \uACE0\uC815\uB41C\uB2E4. \uC0AC\uC6A9\uD55C
       \uCE74\uB4DC\uB294 \uC18C\uBA78\uB41C"
-  - characterCode: 5
+  - characterCode: 6
     name: "\uD749\uADC0"
     aka: Tiger
     sprite_Face: {fileID: 21300000, guid: bde5eb1f247c6f445befc3c7a5023018, type: 3}
@@ -177,22 +196,3 @@ MonoBehaviour:
     passive3_Description: "\uC804\uD22C \uC2DC\uC791 \uC2DC \uACF5\uBB3C\uC758 10%\uB97C
       \uAC10\uC18C\uD558\uACE0 \uAC10\uC18C\uD55C \uACF5\uBB3C\uC758 10%\uB9CC\uD07C
       \uACF5\uACA9\uB825\uC774 \uC99D\uAC00\uD55C\uB2E4"
-  - characterCode: 6
-    name: "\uD398\uB2C8"
-    aka: 
-    sprite_Face: {fileID: 0}
-    isReviver: 0
-    hp: 25
-    attackPower: 2
-    cost: 2
-    endurance: 0
-    inventorySize: 1
-    speed: 11.5
-    passive0_Name: 
-    passive0_Description: 
-    passive1_Name: 
-    passive1_Description: 
-    passive2_Name: 
-    passive2_Description: 
-    passive3_Name: 
-    passive3_Description: 

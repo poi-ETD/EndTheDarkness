@@ -10,7 +10,7 @@ using UnityEngine.SceneManagement;
 public class LobbyManager : MonoBehaviour
 {
     public CardData CD;
-    public CharacterData ChD;
+    public CharacterData ChD = new CharacterData();
     public GameData GD = new GameData();
     [SerializeField] GameObject PopUpCanvas;
     [SerializeField] GameObject day;
@@ -146,7 +146,7 @@ public class LobbyManager : MonoBehaviour
             resetmara = true;
             for (int i = 1; i < CardInfo.Instance.cd.Length; i++)
             {
-                if (CardInfo.Instance.cd[i].Deck == ChD.characterDatas[rc].No)
+                if (CardInfo.Instance.cd[i].Deck == ChD.characterDatas[rc].code)
                 {
                     if (CardInfo.Instance.cd[i].type != 2)
                         RandomCardList.Add(i);//
@@ -302,8 +302,8 @@ public class LobbyManager : MonoBehaviour
                     spr = EquipmentManager.Instance.equipSpr[e.equipNum];
                 }
                 CharacterView.transform.GetChild(i).gameObject.SetActive(true);
-                CharacterView.transform.GetChild(i).gameObject.GetComponent<CharacterSetting>().SetCharacterInLobby(ChD.characterDatas[i].No, CharacterInfo.Instance.cd[ChD.characterDatas[i].No].characterSprtie,
-                    ChD.characterDatas[i].Atk, ChD.characterDatas[i].def, ChD.characterDatas[i].Cost, ChD.characterDatas[i].curHp, ChD.characterDatas[i].maxHp,
+                CharacterView.transform.GetChild(i).gameObject.GetComponent<CharacterSetting>().SetCharacterInLobby(ChD.characterDatas[i].code, CharacterInfo.Instance.cd[ChD.characterDatas[i].code].characterSprtie,
+                    ChD.characterDatas[i].atk, ChD.characterDatas[i].endurance, ChD.characterDatas[i].cost, ChD.characterDatas[i].curHp, ChD.characterDatas[i].maxHp,
                     ChD.characterDatas[i].curFormation, ChD.characterDatas[i].passive,s1,s2,spr
                     );
             }
@@ -342,7 +342,7 @@ public class LobbyManager : MonoBehaviour
             if (ChD.characterDatas[i].curEquip != -1)
             {
                 EquipmentContent.transform.GetChild(ChD.characterDatas[i].curEquip).GetChild(3).GetChild(0).
-                    GetComponent<TextMeshProUGUI>().text = ChD.characterDatas[i].Name+" 착용 해제";
+                    GetComponent<TextMeshProUGUI>().text = ChD.characterDatas[i].name+" 착용 해제";
             }
         }
     }
@@ -380,7 +380,7 @@ public class LobbyManager : MonoBehaviour
             for (int i = 0; i < ChD.size; i++)
             {
                 EquipCharacterView.transform.GetChild(0).GetChild(i).gameObject.SetActive(true);
-                EquipCharacterView.transform.GetChild(0).GetChild(i).GetChild(0).GetComponent<TextMeshProUGUI>().text = ChD.characterDatas[i].Name;
+                EquipCharacterView.transform.GetChild(0).GetChild(i).GetChild(0).GetComponent<TextMeshProUGUI>().text = ChD.characterDatas[i].name;
             }
         }
     }
@@ -428,11 +428,11 @@ public class LobbyManager : MonoBehaviour
         for (int i = 0; i < ChD.size; i++)
         {
             ByPassive[i].SetActive(true);
-            ByPassiveNames[i].text = ChD.characterDatas[i].Name;
-            ByPassiveButtons[i * 4].text = CharacterInfo.Instance.cd[ChD.characterDatas[i].No].passive[0];
-            ByPassiveButtons[i * 4 + 1].text = CharacterInfo.Instance.cd[ChD.characterDatas[i].No].passive[1];
-            ByPassiveButtons[i * 4 + 2].text = CharacterInfo.Instance.cd[ChD.characterDatas[i].No].passive[2];
-            ByPassiveButtons[i * 4 + 3].text = CharacterInfo.Instance.cd[ChD.characterDatas[i].No].passive[3];
+            ByPassiveNames[i].text = ChD.characterDatas[i].name;
+            ByPassiveButtons[i * 4].text = CharacterInfo.Instance.cd[ChD.characterDatas[i].code].passive[0];
+            ByPassiveButtons[i * 4 + 1].text = CharacterInfo.Instance.cd[ChD.characterDatas[i].code].passive[1];
+            ByPassiveButtons[i * 4 + 2].text = CharacterInfo.Instance.cd[ChD.characterDatas[i].code].passive[2];
+            ByPassiveButtons[i * 4 + 3].text = CharacterInfo.Instance.cd[ChD.characterDatas[i].code].passive[3];
         }
     }
     public void GetItem()
@@ -559,7 +559,7 @@ public class LobbyManager : MonoBehaviour
         {
 
             ShopButtons[i].SetActive(true);
-            ShopButtons[i].transform.GetChild(0).GetComponent<Text>().text = ChD.characterDatas[i].Name;
+            ShopButtons[i].transform.GetChild(0).GetComponent<Text>().text = ChD.characterDatas[i].name;
         }
         for (int i = ChD.size; i < 4; i++)
         {
@@ -640,7 +640,7 @@ public class LobbyManager : MonoBehaviour
             {
                 for (int j = 0; j < ChD.characterDatas.Length; j++)
                 {
-                    if (CardInfo.Instance.cd[i].Deck == ChD.characterDatas[j].No)
+                    if (CardInfo.Instance.cd[i].Deck == ChD.characterDatas[j].code)
                     {
                         if (CardInfo.Instance.cd[i].type != 2)
                             RandomCardList.Add(i);//
@@ -658,7 +658,7 @@ public class LobbyManager : MonoBehaviour
             {
                 for (int j = 0; j < ChD.characterDatas.Length; j++)
                 {
-                    if (CardInfo.Instance.cd[i].Deck == ChD.characterDatas[j].No || CardInfo.Instance.cd[i].Deck == 0)
+                    if (CardInfo.Instance.cd[i].Deck == ChD.characterDatas[j].code || CardInfo.Instance.cd[i].Deck == 0)
                     {
                         if (CardInfo.Instance.cd[i].type != 2)
                             RandomCardList.Add(i);//
@@ -683,7 +683,7 @@ public class LobbyManager : MonoBehaviour
             for (int i = 1; i < CardInfo.Instance.cd.Length; i++)
             {
 
-                if (CardInfo.Instance.cd[i].Deck == ChD.characterDatas[SelectedCharacter].No)
+                if (CardInfo.Instance.cd[i].Deck == ChD.characterDatas[SelectedCharacter].code)
                 {
                     if (CardInfo.Instance.cd[i].type != 2)
                         RandomCardList.Add(i);//
@@ -933,11 +933,11 @@ public class LobbyManager : MonoBehaviour
         for (int i = 0; i < ChD.size; i++)
         {
             ByPassive[i].SetActive(true);
-            ByPassiveNames[i].text = ChD.characterDatas[i].Name;
-            ByPassiveButtons[i * 4].text = CharacterInfo.Instance.cd[ChD.characterDatas[i].No].passive[0];
-            ByPassiveButtons[i * 4 + 1].text = CharacterInfo.Instance.cd[ChD.characterDatas[i].No].passive[1];
-            ByPassiveButtons[i * 4 + 2].text = CharacterInfo.Instance.cd[ChD.characterDatas[i].No].passive[2];
-            ByPassiveButtons[i * 4 + 3].text = CharacterInfo.Instance.cd[ChD.characterDatas[i].No].passive[3];
+            ByPassiveNames[i].text = ChD.characterDatas[i].name;
+            ByPassiveButtons[i * 4].text = CharacterInfo.Instance.cd[ChD.characterDatas[i].code].passive[0];
+            ByPassiveButtons[i * 4 + 1].text = CharacterInfo.Instance.cd[ChD.characterDatas[i].code].passive[1];
+            ByPassiveButtons[i * 4 + 2].text = CharacterInfo.Instance.cd[ChD.characterDatas[i].code].passive[2];
+            ByPassiveButtons[i * 4 + 3].text = CharacterInfo.Instance.cd[ChD.characterDatas[i].code].passive[3];
         }
     }
     
@@ -978,7 +978,7 @@ public class LobbyManager : MonoBehaviour
             if (ChD.characterDatas[i].curEquip != -1)
             {
                 EquipManageContent.transform.GetChild(ChD.characterDatas[i].curEquip).GetChild(3).GetChild(0).
-                    GetComponent<TextMeshProUGUI>().text = ChD.characterDatas[i].Name + " 착용 중";
+                    GetComponent<TextMeshProUGUI>().text = ChD.characterDatas[i].name + " 착용 중";
             }
         }
     }
@@ -1174,14 +1174,15 @@ public class LobbyManager : MonoBehaviour
             if (ChD.characterDatas[i].curEquip != -1)
             {
                 bless19Content.transform.GetChild(ChD.characterDatas[i].curEquip).GetChild(3).GetChild(0).
-                    GetComponent<TextMeshProUGUI>().text = ChD.characterDatas[i].Name + "착용 중";
+                    GetComponent<TextMeshProUGUI>().text = ChD.characterDatas[i].name + "착용 중";
             }
         }
     }
+
     public void Bless19_SelectThis(GameObject me)
     {
-        
         int num = me.name[7]-48;
+
         if (me.name[8] != 41)
         {
             num *= 10;
@@ -1191,8 +1192,5 @@ public class LobbyManager : MonoBehaviour
         GetRandomEquipment();
         PopUpCanvas.SetActive(false);
         bless19View.SetActive(false);
-
-    
     }
-
 }
