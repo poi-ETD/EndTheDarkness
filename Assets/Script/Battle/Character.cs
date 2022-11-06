@@ -53,8 +53,7 @@ public class Character : MonoBehaviour
 
     public string Name;
     public int reflect;
-    public int[] Status=new int[20];
-    public int[] nextStatus = new int[20];
+    public int[] status=new int[20];
     public int curNo;
     public CharacterPassive myPassive;
 
@@ -68,7 +67,10 @@ public class Character : MonoBehaviour
 
     
 
-
+    public void StatusChange(int type,int mount)
+    {
+        status[type] += mount;
+    }
     public void DefUp(int i)
     {
      
@@ -106,11 +108,8 @@ public class Character : MonoBehaviour
         stringArmor = armor;
         armorT.text = "" + armor;
     }
-    public void StatusAbnom(int status,int count)
-    {
-        nextStatus[status] += count;
-    }
-    // Start is called before the first frame update
+ 
+
 
     public void onClickEvent()
     {
@@ -121,6 +120,7 @@ public class Character : MonoBehaviour
         }
 
     }
+
     private void Start()
     {
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
@@ -207,18 +207,6 @@ public class Character : MonoBehaviour
         hpT.text = "<color=#a39fff><b>" + Hp + "</color></b><size=15>/" + maxHp + "</size>";
     }
     
-    public void BoardClear()
-    {
-        board.text = "";     
-        string newstring = "";
-        if (Status[0] != 0)
-            {
-                newstring = "<sprite name=poison>" + Status[0] + "\n";
-            }
-        board.text += newstring;        
-    }
-
-  
     public void OnSpeedText(float amount)
     {
 
@@ -317,6 +305,39 @@ public class Character : MonoBehaviour
         }
        
     }
+    public void onHit(int dmg)
+    {
+        if (dmg == 0) return;
+        for (int i = 0; i < BM.ChD.size; i++)
+        {
+            if (i == curNo) myPassive.MyHit(null, dmg);
+            else { BM.characters[i].myPassive.TeamHit(curNo); }
+        }
+        if (armor > 0)
+        {
+            int startArmor = armor;
+            armor -= dmg;
+            if (armor < 0)
+            {
+                Hp += armor;
+                armor = 0;
+            }
+            if (startArmor > dmg)
+            {
+                myPassive.MyArmorHit((armor) / 2, null);
+            }
+            else
+            {
+                myPassive.MyArmorHit((dmg) / 2, null);
+            }
+        }
+        else
+        {
+            Hp -= dmg;
+
+        }
+
+    }
     public void SpeedTextChange()
     {
         spdT.text = "" + speed;
@@ -390,5 +411,9 @@ public class Character : MonoBehaviour
                 BM.forward.RemoveAt(i);
             }
         }*/
+    }
+    public void act()
+    {
+
     }
 }

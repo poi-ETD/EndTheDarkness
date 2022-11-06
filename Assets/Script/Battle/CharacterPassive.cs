@@ -63,7 +63,7 @@ public class CharacterPassive : MonoBehaviour
     public void MyHit(Enemy e,int dmg)
     {
         if (myCharacter.isDie) return;
-        if (myCharacter.reflect > 0)
+        if (myCharacter.reflect > 0&&e!=null)
         {
             AM.MakeAct(0, -1, myCharacter.reflect, null,e, myCharacter, null, 1); //반사 데미지    
         }
@@ -389,7 +389,7 @@ public class CharacterPassive : MonoBehaviour
     public void MyArmorHit(int armor,Enemy e)
     {
         if (myCharacter.isDie) return;
-        if (myNo == 3 && myPassvie[2] > 0)
+        if (myNo == 3 && myPassvie[2] > 0&&e!=null)
         {
             AM.MakeAct(0,11, armor, null,e, myCharacter, null, myPassvie[2]);
         }  
@@ -450,6 +450,12 @@ public class CharacterPassive : MonoBehaviour
     public void myAct()
     {
         if (myCharacter.isDie) return;
+        if (myCharacter.status[0] > 0)
+        {
+            myCharacter.onHit(myCharacter.status[0]);
+            myCharacter.onDamage(myCharacter.status[0]);
+            myCharacter.status[0]--;//뜨는것도 수정해야함
+        }
         CM.RemoveCardRemove();
         if (myNo == 1 && myPassvie[0] > 0 && !isKing && ghost > 50)
         {

@@ -13,8 +13,10 @@ public class LobbyManager : MonoBehaviour
     public CharacterData ChD = new CharacterData();
     public GameData GD = new GameData();
     [SerializeField] GameObject PopUpCanvas;
-    [SerializeField] GameObject day;
-    [SerializeField] GameObject night;
+    [SerializeField] GameObject dayInside;
+    [SerializeField] GameObject dayOutside;
+    [SerializeField] GameObject nightInside;
+    [SerializeField] GameObject nightOutside;
     [SerializeField] GameObject cardView;
     [SerializeField] GameObject cardPrefebs;
     [SerializeField] GameObject cardContent;
@@ -22,8 +24,9 @@ public class LobbyManager : MonoBehaviour
     [SerializeField] GameObject OneCardCanvas;
     [SerializeField] GameObject CharacterView;
     public bool canvasOn;
-    [SerializeField] TextMeshProUGUI[] mainDayAct;
-    [SerializeField] TextMeshProUGUI[] mainNightAct;
+
+    [SerializeField] TextMeshProUGUI[] act_texts;
+
     [SerializeField] Sprite[] CharacterSprtie;
     [SerializeField] GameObject LobbyCharacterPrefebs;
     [SerializeField] GameObject PassiveView;
@@ -34,7 +37,11 @@ public class LobbyManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI IgnumT;
     [SerializeField] TextMeshProUGUI TributeT;
     [SerializeField] TextMeshProUGUI GetItemIgnum;
-    [SerializeField] GameObject ItemCanvas;
+    [SerializeField] GameObject BoxCanvas;
+    [SerializeField] GameObject IgnumInBox;
+    [SerializeField] GameObject TributeInBox;
+    [SerializeField] GameObject ChoiceInBox;
+ 
     [SerializeField] GameObject CardShopCanvas;
     bool isNoIgnum;
     [SerializeField] GameObject CardShopNoIgnum;
@@ -55,11 +62,16 @@ public class LobbyManager : MonoBehaviour
     [SerializeField] GameObject noIgnumInPassive;
     [SerializeField] GameObject noStackInPassive;
     [SerializeField] TextMeshProUGUI curStack;
-    [SerializeField] GameObject ResetCanvas;
-    public int ResetMaraCount;
-    [SerializeField] GameObject ResetBless;
-    [SerializeField] GameObject ResetItem;
 
+
+    [SerializeField] GameObject ResetCanvas;
+    [SerializeField] NoBattleCard[] resetCards;
+    [SerializeField] TextMeshProUGUI[] resetBless_text;
+    public bool do_Resetmara;
+    private List<int> ResetCardList = new List<int>();
+    private int firstBless;
+    private List<int> ResetCardListSelect = new List<int>();
+    [SerializeField] GameObject[] ResetObjs;
 
     [SerializeField] GameObject GetEquipmentCanvas;
     [SerializeField] TextMeshProUGUI[] equipStrings;
@@ -79,7 +91,21 @@ public class LobbyManager : MonoBehaviour
     [SerializeField] GameObject tributeView; //공물
     [SerializeField] GameObject bless19View;
     [SerializeField] GameObject bless19Content;
+
     public int bless19Count;
+    [SerializeField] BlessInLobby blessInLobby;
+    private bool outside;
+
+    [SerializeField] TextMeshProUGUI endButton_text;
+
+
+    [SerializeField] GameObject ConversationView;
+
+    [SerializeField] GameObject RitualView;
+    [SerializeField] GameObject Ritual_Day;
+    [SerializeField] GameObject Ritual_Night;
+
+    [SerializeField] GameObject MerchantView;
     private void Start()
     {
         string path = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CardDatas[GameManager.Instance.nowPlayingSlot]);
@@ -104,40 +130,58 @@ public class LobbyManager : MonoBehaviour
         else
         { //path3->이 없다면, 첫 시작이기 때문에 리세마라 시작
             GD.Day = 1; 
-            Resetmara(ResetMaraCount);
+            Resetmara();
 
         }
+
         IgnumT.text = GD.Ignum + "";
         TributeT.text = GD.tribute + "";
-        if (GD.isAct && !GD.isNight)
+     
+        PositionChange();
+        if (GD.isAct)
         {
-            for (int i = 0; i < mainDayAct.Length; i++)
+            for(int i = 0; i < act_texts.Length; i++)
             {
-                mainDayAct[i].color = new Color(0.5f, 0.5f, 0.5f);
+                act_texts[i].color = new Color(0.5f, 0.5f, 0.5f);
             }
         }
-        if (!GD.isNight)
+        setDay();
+        GameObject.Find("Bless").GetComponent<BlessInLobby>().setBlessIcon();
+    }
+    public void PositionChange()
+    {
+        nightOutside.SetActive(false);
+        nightInside.SetActive(false);
+        dayInside.SetActive(false);
+        dayOutside.SetActive(false);
+        if (GD.isNight)
         {
-            day.SetActive(true);
-            night.SetActive(false);
+            if (outside)
+            {
+                nightInside.SetActive(true);
+                outside = false;
+            }
+            else
+            {
+                nightOutside.SetActive(true);
+                outside = true;
+            }
         }
         else
         {
-            if (GD.isAct)
+            if (outside)
             {
-                for (int i = 0; i < mainNightAct.Length; i++)
-                {
-                    mainNightAct[i].color = new Color(0.5f, 0.5f, 0.5f);
-                }
+                dayInside.SetActive(true);
+                outside = false;
             }
-            day.SetActive(false);
-            night.SetActive(true);
+            else
+            {
+                dayOutside.SetActive(true);
+                outside = true;
+            }
         }
-        setDay();
-        GameObject.Find("Bless").GetComponent<Bless>().setBlessIcon();
     }
-
-    public void Resetmara(int rc)
+    public void Resetmara() //게임이 가장 처음 시작 될 때
     {
         if (rc < ChD.size)
         {
@@ -146,7 +190,7 @@ public class LobbyManager : MonoBehaviour
             resetmara = true;
             for (int i = 1; i < CardInfo.Instance.cd.Length; i++)
             {
-                if (CardInfo.Instance.cd[i].Deck == ChD.characterDatas[rc].code)
+                if (CardInfo.Instance.cd[i].Deck == ChD.characterDatas[rc].No)
                 {
                     if (CardInfo.Instance.cd[i].type != 2)
                         RandomCardList.Add(i);//
@@ -168,60 +212,47 @@ public class LobbyManager : MonoBehaviour
                 newCard.GetComponent<NoBattleCard>().setCardInfoInLobby(RandomCardList[r], 0);
             }
         }
-        else if (rc == ChD.size)
+        for(int i = 0; i < 5; i++)
         {
-            canvasOn = false;
-            GameObject.Find("Bless").GetComponent<Bless>().BlessPopupOn();
-            GameObject.Find("Bless").GetComponent<Bless>().GetBless();
+            int rand = Random.Range(0, ResetCardList.Count);
+            resetCards[i].setCardInfoInLobby(ResetCardList[rand],0);
+            ResetCardListSelect.Add(ResetCardList[rand]);
         }
-        else if (rc == 5)
+        firstBless = blessInLobby.GetBlessInResetmara();
+        resetBless_text[0].text = blessInLobby.bd.bd[firstBless].Name;
+        resetBless_text[1].text = blessInLobby.bd.bd[firstBless].content;
+        StartCoroutine("ResetCor");
+    }
+   IEnumerator ResetCor()
+    {
+        int idx = 0;
+        yield return new WaitForSeconds(1);
+        while (idx < ResetObjs.Length)
         {
-            canvasOn = true;
-            
-            GetRandomEquipment();
-        }
-        else if (rc == 6)
-        {
-            canvasOn = true;
-            ResetMaraCount = 5;
-            ResetBless.SetActive(false);
-            ResetItem.SetActive(true);
-        }
-        else if (rc == 7)
-        {
-            canvasOn = false;
-            GD.Ignum += 500;
-            GD.tribute += 300;
-            IgnumT.text = "" + GD.Ignum;
-            resetmara = false;          
-            canvasOn = false;
-            ResetCanvas.SetActive(false);
-            save();
+          
+            ResetObjs[idx].SetActive(true);
+            idx++;
+            yield return new WaitForSeconds(0.5f);
         }
     }
-
-    public bool resetmara;
-
-    public void CardSelectInReset(bool t)
+    public void SelectResetmara()
     {
-        if (ShopSelectedCard == null && t) return;
-        if (t)
+        canvasOn = false;
+        ResetCanvas.SetActive(false);
+        for (int i = 0; i < 5; i++)
         {
-            CD.cardNo.Add(ShopSelectedCardNo);
-            CD.cardCost.Add(CardInfo.Instance.cd[ShopSelectedCardNo].Cost);
+            CD.cardNo.Add(ResetCardListSelect[i]);
+            CD.cardCost.Add(CardInfo.Instance.cd[ResetCardListSelect[i]].Cost);
             CD.cardGet.Add(CD.get);
             CD.get++;
-        }            
-        Transform[] childList = GameObject.Find("ShopList").GetComponentsInChildren<Transform>();
-        for (int i = 1; i < childList.Length; i++)
-        {
-            Destroy(childList[i].gameObject);
         }
-        RandomCardList.Clear();
-        if(ResetMaraCount>ChD.size-2)GameObject.Find("ResetShop").SetActive(false);    
-        ResetMaraCount++;
-        Resetmara(ResetMaraCount);
+
+        blessInLobby.BlessApplyInResetmara(firstBless);
+        blessInLobby.exitBlessPopup();
+     
+        save();
     }
+  
     public void ShowCardList()
     {
         if (!canvasOn)
@@ -435,27 +466,48 @@ public class LobbyManager : MonoBehaviour
             ByPassiveButtons[i * 4 + 3].text = CharacterInfo.Instance.cd[ChD.characterDatas[i].code].passive[3];
         }
     }
-    public void GetItem()
+    public void GetBox()
     {
         if (canvasOn) return;
         if (GD.isAct) return;
         canvasOn = true;
-        ItemCanvas.SetActive(true);
-        int Ig = 150 + GD.victory * 20;
-        GetItemIgnum.text = Ig + "";
+        BoxCanvas.SetActive(true);
+        ChoiceInBox.SetActive(true);
+        IgnumInBox.SetActive(false);
+        TributeInBox.SetActive(false);
     }
-    public void SelectGetItem(bool t)
+    public void ChoiceIgnum()
     {
-        if (t)
-        {
-            int Ig = 150 + GD.victory * 20;
-            GD.Ignum += Ig;
-            IgnumT.text = GD.Ignum + "";
-            DayAct();
-        }
-        ItemCanvas.SetActive(false);
-        canvasOn = false;
+        ChoiceInBox.SetActive(false);
+        int ignum = 150 + GD.victory*20;  
+        ignum =Mathf.RoundToInt(ignum* (1 + GD.tributeStack * 0.1f));
+        GD.Ignum += ignum;
+   IgnumInBox.SetActive(true);
+        IgnumInBox.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "" + ignum;
+        Act();
     }
+    public void ChocieTriubute()
+    {
+        ChoiceInBox.SetActive(false);
+        int tribute = 100;
+        if (GD.tributeStack == 1)
+        {
+            tribute += 100 * Random.Range(0, 3);
+        }
+        else if (GD.tributeStack == 2)
+        {
+            tribute += 100 * Random.Range(2, 5);
+        }
+        else if (GD.tributeStack == 3)
+        {
+            tribute += 400;
+        }
+        GD.tribute += tribute;
+        TributeInBox.SetActive(true);
+        TributeInBox.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = ""+tribute;
+        Act();
+    }
+ 
     public void GetPassiveButton(int i)
     {
         GameObject.Find("PassiveView").SetActive(false);
@@ -463,10 +515,15 @@ public class LobbyManager : MonoBehaviour
         ChD.characterDatas[i / 4].passive[i % 4]++;
         GD.passiveStack -= 15;
         canvasOn = false;
-        DayAct();
+        Act();
     }
-    public void DayAct()
+    public void Act()
     {
+        if (do_Resetmara)
+        {
+            do_Resetmara = false;
+            return;
+        }
         if (!GD.isNight)
         {
             if (!GD.blessbool[11])
@@ -484,10 +541,12 @@ public class LobbyManager : MonoBehaviour
             save();
             if (GD.isAct)
             {
-                for (int i = 0; i < mainDayAct.Length; i++)
-                {
-                    mainDayAct[i].color = new Color(0.5f, 0.5f, 0.5f);
-                }
+
+                    for (int i = 0; i < act_texts.Length; i++)
+                    {
+                        act_texts[i].color = new Color(0.5f, 0.5f, 0.5f);
+                    }
+  
             }
         }
         else
@@ -497,10 +556,11 @@ public class LobbyManager : MonoBehaviour
             save();
             if (GD.isAct)
             {
-                for (int i = 0; i < mainNightAct.Length; i++)
+                for (int i = 0; i < act_texts.Length; i++)
                 {
-                    mainNightAct[i].color = new Color(0.5f, 0.5f, 0.5f);
+                    act_texts[i].color = new Color(0.5f, 0.5f, 0.5f);
                 }
+
             }
         }
     }
@@ -534,32 +594,13 @@ public class LobbyManager : MonoBehaviour
         StartCoroutine(SceneControllerManager.Instance.SwitchScene("Scene1_Main"));
         //SceneManager.LoadScene("Scene1_Main");
     }
-    public void Actfalse()
-    {
-        day.SetActive(true);
-        night.SetActive(false);
-        GD.isNight = false;
-        GD.isAct = false;
-        GD.isActInDay = false;
-        setDay();
-        for (int i = 0; i < mainNightAct.Length; i++)
-        {
-            mainNightAct[i].color = new Color(1, 1, 1);
-        }
-        for (int i = 0; i < mainDayAct.Length; i++)
-        {
-            mainDayAct[i].color = new Color(1, 1, 1);
-        }
-    } //테스트용 실제 x
+
     public void CardShopPopupOn()
     {
-        if (canvasOn) return;
-        if (GD.isAct) return;
-        for (int i = 0; i < ChD.size; i++)
-        {
+        MerchantView.SetActive(false);
 
             ShopButtons[i].SetActive(true);
-            ShopButtons[i].transform.GetChild(0).GetComponent<Text>().text = ChD.characterDatas[i].name;
+            ShopButtons[i].transform.GetChild(0).GetComponent<Text>().text = ChD.characterDatas[i].Name;
         }
         for (int i = ChD.size; i < 4; i++)
         {
@@ -624,12 +665,9 @@ public class LobbyManager : MonoBehaviour
         }
         RandomCardList.Clear();
         SelectCardCanvas.SetActive(false);
-        DayAct();
+        Act();
     }
-    public void SelectCardShop3(int c)
-    {
-        SelectedCharacter = c;
-    }
+
     public void CardShopSetting(int type)
     {
         SelectCardCanvas.SetActive(true);
@@ -683,7 +721,7 @@ public class LobbyManager : MonoBehaviour
             for (int i = 1; i < CardInfo.Instance.cd.Length; i++)
             {
 
-                if (CardInfo.Instance.cd[i].Deck == ChD.characterDatas[SelectedCharacter].code)
+                if (CardInfo.Instance.cd[i].Deck == ChD.characterDatas[SelectedCharacter].No)
                 {
                     if (CardInfo.Instance.cd[i].type != 2)
                         RandomCardList.Add(i);//
@@ -705,13 +743,45 @@ public class LobbyManager : MonoBehaviour
         }
     }
     public void NextTurn()
-    {if (canvasOn) return;
+    {
+        if (canvasOn) return;
         if (!GD.isNight)
-        {
-            day.SetActive(false);
-            night.SetActive(true);
+        {  
             GD.isAct = false;
             GD.isNight = true;
+         
+                for (int i = 0; i < act_texts.Length; i++)
+                {
+                    act_texts[i].color = new Color(1,1, 1);
+                }
+            
+            nightOutside.SetActive(false);
+            nightInside.SetActive(false);
+            dayInside.SetActive(false);
+            dayOutside.SetActive(false);
+            if (GD.isNight)
+            {
+                if (outside)
+                {
+                    nightOutside.SetActive(true);
+                }
+                else
+                {
+                    nightInside.SetActive(true);
+                }
+            }
+            else
+            {
+                if (outside)
+                {
+                    dayOutside.SetActive(true);
+                }
+                else
+                {
+                    dayInside.SetActive(true);
+                }
+            }
+
             setDay();
             save();
         }
@@ -813,7 +883,7 @@ public class LobbyManager : MonoBehaviour
             CD.cardGet.RemoveAt(removeList[i]);
         }
         canvasOn = false;
-        DayAct();
+        Act();
         CardRemovePopup.SetActive(false);
         removeCardList.Clear();
         objRemovecardList.Clear();
@@ -867,7 +937,7 @@ public class LobbyManager : MonoBehaviour
             GD.passiveStack += n;
         }
         canvasOn = false;
-        DayAct();
+        Act();
         PassivePopup.SetActive(false);
         PopUpCanvas.SetActive(false);
         noStackInPassive.SetActive(false);
@@ -884,7 +954,7 @@ public class LobbyManager : MonoBehaviour
         int rand = Random.Range(0, ChD.size * 4);
         ChD.characterDatas[rand / 4].passive[rand % 4]++;
         canvasOn = false;
-        DayAct();
+        Act();
         PassivePopup.SetActive(false);
         PopUpCanvas.SetActive(false);
         noStackInPassive.SetActive(false);
@@ -907,17 +977,17 @@ public class LobbyManager : MonoBehaviour
     {
         canvasOn = false;
         GetEquipmentCanvas.SetActive(false);
-        if (GameObject.Find("Bless").GetComponent<Bless>().bless18_on)
+        if (GameObject.Find("Bless").GetComponent<BlessInLobby>().bless18_on)
         {
-            GameObject.Find("Bless").GetComponent<Bless>().Bless_18();
+            GameObject.Find("Bless").GetComponent<BlessInLobby>().Bless_18();
             return;
         }
-        if (GameObject.Find("Bless").GetComponent<Bless>().bless19_on)
+        if (GameObject.Find("Bless").GetComponent<BlessInLobby>().bless19_on)
         {
             Bless19PopupOn();
             return;
         }
-        if (resetmara) Resetmara(6);
+        
 
     }
     public void GetSelectPassive() //개발용
@@ -943,9 +1013,8 @@ public class LobbyManager : MonoBehaviour
     
     public void EquipManageViewOn()
     {
-        if (canvasOn) return;
-        if (GD.isAct) return;
-        canvasOn = true;
+         MerchantView.SetActive(false);
+         canvasOn = true;
         SelectedEquipList.Clear();
         EquipManageView.SetActive(true);
         PopUpCanvas.SetActive(true);
@@ -1050,7 +1119,7 @@ public class LobbyManager : MonoBehaviour
             e = EquipmentManager.Instance.ResetEquipment(e);
             GD.EquipmentList[SelectedEquipList[0]] = e;
             SelectedEquipList.Clear();
-            DayAct();
+            Act();
             EquipManageView.SetActive(false);
             PopUpCanvas.SetActive(false);
             GetEquipmentCanvas.SetActive(true);           
@@ -1075,7 +1144,7 @@ public class LobbyManager : MonoBehaviour
                 if (ChD.characterDatas[i].curEquip > SelectedEquipList[1]) ChD.characterDatas[i].curEquip--;
             }
             SelectedEquipList.Clear();
-            DayAct();
+            Act();
             EquipManageView.SetActive(false);
             PopUpCanvas.SetActive(false);
             GetEquipmentCanvas.SetActive(true);
@@ -1090,9 +1159,9 @@ public class LobbyManager : MonoBehaviour
 
     public void TributeViewOn()
     {
-        if (canvasOn) return;
-        if (GD.isAct) return;
+     
         canvasOn = true;
+        ConversationView.SetActive(false);
         tributeView.SetActive(true);
         int cur = GD.tributeStack;
         int ig = 0;
@@ -1100,8 +1169,8 @@ public class LobbyManager : MonoBehaviour
         else if (cur == 1) ig = 300;
         else if (cur == 2) ig = 600;
         tributeView.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "현재 공급로:" + cur;
-        if (cur == 3) tributeView.transform.GetChild(1).GetChild(1).gameObject.SetActive(false);
-        else tributeView.transform.GetChild(1).GetChild(1).GetComponent<TextMeshProUGUI>().text = "공급로 확보\n(" + ig + "이그넘 필요)";
+        if (cur == 3) tributeView.transform.GetChild(1).gameObject.SetActive(false);
+        else tributeView.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text= "공급로 확보\n(" + ig + "이그넘 필요)";
     }
 
     public void TributeViewOff()
@@ -1109,7 +1178,54 @@ public class LobbyManager : MonoBehaviour
         canvasOn = false;
         tributeView.SetActive(false);
     }
+    public void ConversationViewOn()
+    {
+        if (canvasOn) return;
+        if (GD.isAct) return;
+        canvasOn = true;
+        ConversationView.SetActive(true);
+    }
+    public void ConversationViewOff()
+    {
+        canvasOn = false;
+        ConversationView.SetActive(false);
+    }
 
+    public void RitualViewOn()
+    {
+        if (canvasOn) return;
+        if (GD.isAct) return;
+        canvasOn = true;
+        RitualView.SetActive(true);
+        if (GD.isNight)
+        {
+            Ritual_Day.SetActive(false);
+            Ritual_Night.SetActive(true);
+        }
+        else
+        {
+            Ritual_Day.SetActive(true);
+            Ritual_Night.SetActive(false);
+        }
+    }
+    public void RitualViewOff()
+    {
+        canvasOn = false;
+       RitualView.SetActive(false);
+    }
+
+    public void MerchantViewOn()
+    {
+        if (canvasOn) return;
+        if (GD.isAct) return;
+        canvasOn = true;
+        MerchantView.SetActive(true);
+    }
+    public void MerchantViewOff()
+    {
+        canvasOn = false;
+        MerchantView.SetActive(false);
+    }
     public void GetTributeStack()
     {
         int cur = GD.tributeStack;
@@ -1120,7 +1236,7 @@ public class LobbyManager : MonoBehaviour
         if (GD.Ignum < ig) return;
         GD.Ignum -= ig;
         GD.tributeStack++;
-        DayAct();
+        Act();
         save();
         TributeViewOff();
     }
@@ -1132,7 +1248,7 @@ public class LobbyManager : MonoBehaviour
         else if (cur == 2) tri = Random.Range(3, 6) * 100;
         else if (cur == 3) tri = 500;
         GD.tribute += tri;
-        DayAct();
+        Act();
         save();
         TributeViewOff();
 
@@ -1142,7 +1258,7 @@ public class LobbyManager : MonoBehaviour
     {
         if (bless19Count < 1)
         {
-            GameObject.Find("Bless").GetComponent<Bless>().bless19_on = false;
+            GameObject.Find("Bless").GetComponent<BlessInLobby>().bless19_on = false;
             PopUpCanvas.SetActive(false);
             bless19View.SetActive(false);
             return;

@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-public class Glassin003 : MonoBehaviour
+public class Glassin003 : Enemy
 {
-    public TurnManager TM;
+  
     public int curTurn;
     public Enemy myEnemy;
-    public BattleManager BM;
-    [SerializeField] Enemy[] daggers;
-
+    private int myTurn;
+    private bool[] myAct = new bool[2];
     // YH
     public Image image_character;
     public Sprite sprite_idle;
@@ -18,7 +17,7 @@ public class Glassin003 : MonoBehaviour
 
     [SerializeField] TextMeshProUGUI NameT;
 
-    private void Start()
+    public override void Start()
     {
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
@@ -27,6 +26,7 @@ public class Glassin003 : MonoBehaviour
         NameT.text = myEnemy.Name;
 
     }
+    
     private void Update()
     {
         if (myEnemy.isAct)
@@ -34,28 +34,26 @@ public class Glassin003 : MonoBehaviour
             StartPattern();
             myEnemy.isAct = false;
         }
-        if (myEnemy.Hp <= 0)
+    }
+    private void Escape() {
+        BM.GD.isTriggerOn = true;
+        BM.Victory();
+    }
+    public override void EnemyStartTurn()
+    {
+        base.EnemyStartTurn();
+        myTurn = 0;
+        curTurn++;
+        if (curTurn == 5)
         {
-            Escape(true);
+            Escape();
         }
     }
-    void Escape(bool isDie)
+    public override void onHit(int dmg)
     {
-        if (isDie)
-        {
-            daggers[0].Atk = 0;
-            daggers[1].Atk = 0;
-        }
-        daggers[0].GetComponent<Dagger003>().pattern++;
-        daggers[1].GetComponent<Dagger003>().pattern++;
-        gameObject.tag = "Untagged";
-        BM.Enemys = GameObject.FindGameObjectsWithTag("Enemy");
-        for (int i = 0; i < BM.Enemys.Length; i++)
-        {
-            BM.Enemys[i].GetComponent<Enemy>().myNo = i;
-        }
-        Destroy(gameObject);
 
+        base.onHit(dmg);
+        
     }
     void StartPattern()
     {
@@ -64,17 +62,41 @@ public class Glassin003 : MonoBehaviour
 
             if (!myEnemy.isDie)
             {
-                curTurn++;
-                BM.HitFront(0, 4, myEnemy, 50);
-                BM.EnemyAtkUp(daggers[0], 1, myEnemy);
-                BM.EnemyAtkUp(daggers[1], 1, myEnemy);
-                if (curTurn == 4) Escape(false);
+                if (myTurn == 0)
+                {
+                    BM.EnemyStateChange(myEnemy, 0);
+                }
+                else
+                {
+                    int rand = Random.Range(0, 2);
+                    while (myAct[rand])
+                    {
+                        rand = Random.Range(0, 2);
+                    }
+                    myAct[rand] = true;
+                    if (rand == 0)
+                    {
+                        BM.EnemyGetHp(7, myEnemy, myEnemy);
+                    }
+                    else
+                    {
+                        BM.EnemyGetAromor(5, myEnemy, myEnemy);
+                      
+                    }
+                    List<Character> allCharacters = BM.SelectCharacterListInEnemyTurn(2);
+                    for (int i = 0; i < allCharacters.Count; i++)
+                    {
+                        BM.EnemyIncreaseSpeed(50, myEnemy, allCharacters[i]);
+                    }
+                    if (myAct[0] && myAct[1])
+                    {
+                        myAct[0] = false;
+                        myAct[1] = false;
+                    }
+                }
+                
             }
             myEnemy.BM.AM.EnemyAct();
-
-            // myEnemy.EnemyEndTurn();
-
-
         }
     }
 }

@@ -676,10 +676,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uAE30\uBCF8 \uACF5\uACA9"
+  m_text: "\uAE30\uBCF8\uACF5\uACA9"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: bdd8e55fa09c5274b894488795262bec, type: 2}
-  m_sharedMaterial: {fileID: 9221766285591583883, guid: bdd8e55fa09c5274b894488795262bec,
+  m_fontAsset: {fileID: 11400000, guid: 15ee04d2b7c6daa40b21976ffe860b81, type: 2}
+  m_sharedMaterial: {fileID: -1298058964097706886, guid: 15ee04d2b7c6daa40b21976ffe860b81,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -710,7 +710,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 1
+  m_fontStyle: 0
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535

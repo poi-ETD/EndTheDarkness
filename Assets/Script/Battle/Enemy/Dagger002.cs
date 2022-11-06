@@ -53,8 +53,8 @@ public class Dagger002 : MonoBehaviour
                 int rand = Random.Range(0, 2);
                 if (rand == 0)
                 {
-                    BM.HitFront(3, 1, myEnemy, 50);
-                    BM.HitFront(3, 1, myEnemy, 50);
+                    BM.EnemyAttack(3, myEnemy, BM.SelectCharacterInEnemyTurn(0, 1));
+                    BM.EnemyAttack(3, myEnemy, BM.SelectCharacterInEnemyTurn(0, 0));
                 }
                 else
                 {
@@ -64,9 +64,9 @@ public class Dagger002 : MonoBehaviour
                     }
                     else
                     {
-                        BM.HitFront(3,0, myEnemy, 0);
-                        BM.HitFront(3, 0, myEnemy, 0);
-                        BM.HitFront(3, 0, myEnemy, 0);
+                        BM.EnemyAttack(3, myEnemy, BM.SelectCharacterInEnemyTurn(0, 0));
+                        BM.EnemyAttack(3, myEnemy, BM.SelectCharacterInEnemyTurn(0, 0));
+                        BM.EnemyAttack(3, myEnemy, BM.SelectCharacterInEnemyTurn(0, 0));
                     }
                     pattern2done = true;
                 }
@@ -74,7 +74,6 @@ public class Dagger002 : MonoBehaviour
         }
         myEnemy.BM.AM.EnemyAct();
 
-        // myEnemy.EnemyEndTurn();
 
 
     }

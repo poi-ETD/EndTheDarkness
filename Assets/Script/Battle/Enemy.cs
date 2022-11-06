@@ -29,8 +29,8 @@ public class Enemy : MonoBehaviour
     public Slider hpSlider;
     public Image myImage;
     ActManager AM;
-    public int myNo;
 
+    public bool dieNotEnd;//해당 적이 죽어도 게임이 끝나지 않을 경우
 
     public int[] status = new int[10];
 
@@ -41,8 +41,11 @@ public class Enemy : MonoBehaviour
     public Sprite face;
 
     public bool isAct;
-
-    private void Start()
+    public virtual void EnemySelectPattern()
+    {
+        Debug.Log("C");
+    }
+    public virtual void Start()
     {
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
@@ -108,8 +111,9 @@ public class Enemy : MonoBehaviour
         //위와 동일
         ei.setNull();
     }
-    public void EnemyStartTurn()
+    public virtual void EnemyStartTurn()
     {
+        if (isDie) return;
         if (Shadow&&!isDie)
         {
             Shadow = false;
@@ -143,7 +147,7 @@ public class Enemy : MonoBehaviour
         }
 
     }
-    public void onHit(int dmg)
+    public virtual void onHit(int dmg)
     {
         if (isDie) return;
         if (status[(int)Status.weak] > 0)
@@ -188,7 +192,7 @@ public class Enemy : MonoBehaviour
                     GameObject[] e = GameObject.FindGameObjectsWithTag("Enemy");
                     for (int i = 0; i < e.Length; i++)
                     {
-                        if (!e[i].GetComponent<Enemy>().isDie)
+                        if (!e[i].GetComponent<Enemy>().isDie&&!e[i].GetComponent<Enemy>().dieNotEnd)
                         {
                             V = false;
                         }
@@ -239,7 +243,13 @@ public class Enemy : MonoBehaviour
         Dmg.GetComponent<DMGtext>().GetType(4, amount);
         Atk += amount;
     }
-  
+  public void GetSpeed(int amount)
+    {
+        GameObject Dmg = Instantiate(BM.DmgPrefebs, transform);
+        Dmg.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+        Dmg.GetComponent<DMGtext>().GetType(1, amount/100);
+        speed -= amount / 100;
+    }
     public void onShadow()
     {
         
@@ -267,7 +277,7 @@ public class Enemy : MonoBehaviour
             Hp = maxHp;
         hpSlider.value = Hp / (float)maxHp;
     }
-    public void die()
+    public virtual void die()
     {
         Hp = 0;
         

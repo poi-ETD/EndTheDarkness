@@ -61,23 +61,23 @@ public class Dagger001 : MonoBehaviour
 
                       if (pattern == 0)
                       {
-                          BM.HitFront(3, 0, myEnemy, 0);
-                          BM.HitFront(3, 0, myEnemy, 0);
-                      }
+                        BM.EnemyAttack(3,myEnemy, BM.SelectCharacterInEnemyTurn(0, 0));
+                        BM.EnemyAttack(3, myEnemy, BM.SelectCharacterInEnemyTurn(0, 0));
+                    }
                       if (pattern == 1)
                       {
                           BM.EnemyGetAromor(3, myEnemy, myEnemy);
-                          BM.HitFront(3, 0, myEnemy,0);
-                      }
+                        BM.EnemyAttack(3, myEnemy, BM.SelectCharacterInEnemyTurn(0, 0));
+                    }
                  
                   }
                   else
                   {
-                      BM.HitFront(3, 0, myEnemy, 0);
-                      BM.HitFront(3, 0, myEnemy, 0);
-                      BM.HitFront(3, 0, myEnemy,0);
-                      BM.HitBack(1, 0, myEnemy, 0);
-                  }
+                    BM.EnemyAttack(3, myEnemy, BM.SelectCharacterInEnemyTurn(0, 0));
+                    BM.EnemyAttack(3, myEnemy, BM.SelectCharacterInEnemyTurn(0, 0));
+                    BM.EnemyAttack(3, myEnemy, BM.SelectCharacterInEnemyTurn(0, 0));
+                    BM.EnemyAttack(1, myEnemy, BM.SelectCharacterInEnemyTurn(0, 1));
+                }
               }
            }
         myEnemy.BM.AM.EnemyAct();
