@@ -276,10 +276,15 @@ public class ActManager : MonoBehaviour
             {
                 MakeAct(1, 4, EnemyActList[i].mount, EnemyActList[i].myE, null, null, null, 1);
             }
-            else if (EnemyActList[i].no == 7)
+            else if (EnemyActList[i].no == 7|| EnemyActList[i].no == 8)
             {
-                MakeAct(1, 7, EnemyActList[i].mount, EnemyActList[i].myE, EnemyActList[i].targetE, null, null, 1);
+                MakeAct(1, EnemyActList[i].no, EnemyActList[i].mount, EnemyActList[i].myE, EnemyActList[i].targetE, null, null, 1);
             }
+            else if (EnemyActList[i].no >= 100)
+            {
+                MakeAct(1, EnemyActList[i].no, EnemyActList[i].mount, EnemyActList[i].myE, null, null, EnemyActList[i].targetC, 1);
+            }
+       
             if (i == EnemyActList.Count-1)
             {
                 MakeAct(1, 6, 0, EnemyActList[i].myE, null, null, null, 1);
@@ -516,6 +521,14 @@ public class ActManager : MonoBehaviour
                     {
                         ActList[0].targetE.GetAtk(ActList[0].mount);
                       
+                    }
+                    if (ActList[0].no == 8)
+                    {
+                        ActList[0].targetE.GetSpeed(ActList[0].mount);
+                    }
+                    if (ActList[0].no >= 100)
+                    {
+                        ActList[0].targetC.StatusChange(ActList[0].no - 100, ActList[0].mount);
                     }
                 }
             }

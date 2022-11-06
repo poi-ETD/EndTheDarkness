@@ -457,7 +457,7 @@ public class Card : MonoBehaviour
     }
     public void CardUse()
     {
-      
+        
         if (GetComponent<BlackWhite>() != null)
         {        
             GetComponent<BlackWhite>().onDamage();
@@ -482,9 +482,7 @@ public class Card : MonoBehaviour
             BM.AllAttackOnPercent(percentDmgToAllTarget, BM.actCharacter);            
         }
         if (iscard20Mode)
-        {
-         
-           
+        {           
             BM.useCost(BM.usedInCard20.GetComponent<Card>().cardcost,gameObject);
             BM.usedInCard20.GetComponent<Card>().CardUse();
             BM.usedInCard20 = null;

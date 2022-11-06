@@ -30,6 +30,7 @@ public class Enemy : MonoBehaviour
     public Image myImage;
     ActManager AM;
 
+    public bool dieNotEnd;//해당 적이 죽어도 게임이 끝나지 않을 경우
 
     public int[] status = new int[10];
 
@@ -191,7 +192,7 @@ public class Enemy : MonoBehaviour
                     GameObject[] e = GameObject.FindGameObjectsWithTag("Enemy");
                     for (int i = 0; i < e.Length; i++)
                     {
-                        if (!e[i].GetComponent<Enemy>().isDie)
+                        if (!e[i].GetComponent<Enemy>().isDie&&!e[i].GetComponent<Enemy>().dieNotEnd)
                         {
                             V = false;
                         }
@@ -242,7 +243,13 @@ public class Enemy : MonoBehaviour
         Dmg.GetComponent<DMGtext>().GetType(4, amount);
         Atk += amount;
     }
-  
+  public void GetSpeed(int amount)
+    {
+        GameObject Dmg = Instantiate(BM.DmgPrefebs, transform);
+        Dmg.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+        Dmg.GetComponent<DMGtext>().GetType(1, amount/100);
+        speed -= amount / 100;
+    }
     public void onShadow()
     {
         
@@ -270,7 +277,7 @@ public class Enemy : MonoBehaviour
             Hp = maxHp;
         hpSlider.value = Hp / (float)maxHp;
     }
-    public void die()
+    public virtual void die()
     {
         Hp = 0;
         

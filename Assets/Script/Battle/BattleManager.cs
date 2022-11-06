@@ -159,7 +159,6 @@ public class BattleManager : MonoBehaviour
 
             if (ChD.characterDatas[i].curFormation == 0) //전방
             {
-
                 CharacterC = Instantiate(CharacterPrefebs[ChD.characterDatas[i].No], new Vector2(-880 / 45f, 375 / 45f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
                 forward.Add(CharacterC.GetComponent<Character>());
             }
@@ -240,8 +239,94 @@ public class BattleManager : MonoBehaviour
     }
     public void FormationCollapse()
     {
-        Debug.Log("진형 붕괴가 일어나는 지점입니다.");
+        if (forward.Count < back.Count)
+        {
+            RandomBackGoForward();
+        }
+        else if (forward.Count > back.Count)
+        {
+            RandomForwardGoBack();
+        }
+        else
+        {
+            int rand = Random.Range(0, 2);
+            if (rand == 0) RandomBackGoForward();
+            else RandomForwardGoBack();
+        }
+      
+        line = ChD.line;  
+        for (int i = 0; i < line; i++)
+        {
+            forward[i].transform.position = new Vector2(-880 / 45f, (300 - 150 * i) / 45f);
+        }
+        for (int i = 0; i < ChD.size-line; i++)
+        {   
+            back[i].transform.position = new Vector2(-880 / 45f, (270 - 150 * (i+line)) / 45f);        
+        }
+        for (int i = 1; i < ChD.size; i++)
+        {
+            characters[i].curNo = i;
+        } 
+        LineObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-820, 360 - 150 * line);
     }
+    public void RandomForwardGoBack()
+    {
+        ChD.line--;
+        List<int> forwardInt = new List<int>();
+        for(int i = 0; i < ChD.size; i++)
+        {
+            if (ChD.characterDatas[i].curFormation == 0)
+            {
+                forwardInt.Add(i);
+            }
+        }
+        int rand = Random.Range(0, forwardInt.Count);
+        ChD.characterDatas[forwardInt[rand]].curFormation = 1;
+        int key = -1;
+        for(int i = 0; i < forward.Count; i++)
+        {
+            if (forward[i].characterNo == ChD.characterDatas[forwardInt[rand]].No)
+            {
+                key = i;
+            }
+        }
+        Debug.Log(rand);
+        Debug.Log(forwardInt.Count);
+        Debug.Log(ChD.characterDatas[forwardInt[rand]].No);
+        if (key != -1)
+        {
+            back.Add(forward[key]);
+            forward.RemoveAt(key);
+        }
+    }
+    public void RandomBackGoForward()
+    {
+        ChD.line++;
+        List<int> backInt = new List<int>();
+        for (int i = 0; i < ChD.size; i++)
+        {
+            if (ChD.characterDatas[i].curFormation == 1)
+            {
+                backInt.Add(i);
+            }
+        }
+        int rand = Random.Range(0, backInt.Count);
+        ChD.characterDatas[backInt[rand]].curFormation = 0;
+        int key = -1;
+        for (int i = 0; i < back.Count; i++)
+        {
+            if (back[i].characterNo == ChD.characterDatas[backInt[rand]].No)
+            {
+                key = i;
+            }
+        }
+        if (key != -1)
+        {
+         forward.Add(back[key]);
+            back.RemoveAt(key);
+        }
+    }
+   
     public void Click_StackPopUpOn() //현재 스택을 보여주는 함수 (구현 더 해야 함)
     {
         if (StackPopUp.activeSelf)
@@ -1187,6 +1272,10 @@ public class BattleManager : MonoBehaviour
 
         AM.MakeEnemyAct(4, mount, null, myEnemy, myEnemy);
     }
+    public void EnemyActStatusChange(Enemy myEnemy,int mount,int statusType,Character target)
+    {
+        AM.MakeEnemyAct(statusType, mount, target, myEnemy, null);
+    }
 
     public void EnemyFormationCollapse(Enemy myEnemy) //적이 선 행동으로 진형붕괴를 선택했을 때
     {
@@ -1196,6 +1285,10 @@ public class BattleManager : MonoBehaviour
     public void EnemyAtkUp(Enemy targetEnemy,int mount,Enemy actEnemy)
     {
         AM.MakeEnemyAct(7, mount, null, actEnemy, targetEnemy);
+    }
+    public void EnemySpeedDown(Enemy targetEnemy, int mount, Enemy actEnemy)
+    {
+        AM.MakeEnemyAct(8, mount, null, actEnemy, targetEnemy);
     }
     public void card22()  //결의
     {

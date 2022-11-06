@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-public class Glassin003 : Enemy
+public class Paul005 : Enemy
 {
-  
+
     public int curTurn;
     public Enemy myEnemy;
     private int myTurn;
@@ -22,11 +22,11 @@ public class Glassin003 : Enemy
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         myEnemy = GetComponent<Enemy>();
-        myEnemy.Name = "글래신";
+        myEnemy.Name = "파울";
         NameT.text = myEnemy.Name;
 
     }
-    
+
     private void Update()
     {
         if (myEnemy.isAct)
@@ -35,25 +35,19 @@ public class Glassin003 : Enemy
             myEnemy.isAct = false;
         }
     }
-    private void Escape() {
-        BM.GD.isTriggerOn = true;
+    private void Escape()
+    {
+  
         BM.Victory();
     }
-    public override void EnemyStartTurn()
-    {
-        base.EnemyStartTurn();
-        myTurn = 0;
-        curTurn++;
-        if (curTurn == 5)
-        {
-            Escape();
-        }
-    }
+   
     public override void onHit(int dmg)
     {
 
         base.onHit(dmg);
-        
+        if (Hp <= 20)
+        Escape();
+
     }
     void StartPattern()
     {
@@ -62,39 +56,31 @@ public class Glassin003 : Enemy
 
             if (!myEnemy.isDie)
             {
-                if (myTurn == 0)
+                curTurn++;
+                if (curTurn % 3 == 0)
                 {
-                    BM.EnemyStateChange(myEnemy, 0);
+                    BM.EnemyGetHp((maxHp - Hp) *100/20, this, this);
                 }
                 else
                 {
-                    int rand = Random.Range(0, 2);
-                    while (myAct[rand])
-                    {
-                        rand = Random.Range(0, 2);
-                    }
-                    myAct[rand] = true;
+                    int rand = Random.Range(0, 3);
                     if (rand == 0)
                     {
-                        BM.EnemyGetHp(7, myEnemy, myEnemy);
+                        BM.EnemyAttack(8, this, BM.SelectCharacterInEnemyTurn(0, 0));
+                        BM.EnemyAttack(8, this, BM.SelectCharacterInEnemyTurn(0, 0));
                     }
-                    else
+                    else if (rand == 1)
                     {
-                        BM.EnemyGetAromor(5, myEnemy, myEnemy);
-                      
+                        BM.EnemyAttack(10, this, BM.SelectCharacterInEnemyTurn(0, 0));
+                        BM.EnemyGetAromor(10, this, this);
                     }
-                    List<Character> allCharacters = BM.SelectCharacterListInEnemyTurn(2);
-                    for (int i = 0; i < allCharacters.Count; i++)
+                    else if (rand == 2)
                     {
-                        BM.EnemyIncreaseSpeed(50, myEnemy, allCharacters[i]);
-                    }
-                    if (myAct[0] && myAct[1])
-                    {
-                        myAct[0] = false;
-                        myAct[1] = false;
+                        BM.EnemyAttack(5, this, BM.SelectCharacterInEnemyTurn(0, 0));
+                        BM.EnemyAttack(5, this, BM.SelectCharacterInEnemyTurn(0, 0));
+                        BM.EnemyGetAromor(5, this, this);
                     }
                 }
-                
             }
             myEnemy.BM.AM.EnemyAct();
         }

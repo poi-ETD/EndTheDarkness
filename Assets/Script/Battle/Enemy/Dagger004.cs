@@ -28,7 +28,7 @@ public class Dagger004 : Enemy
             myAction = 3;
         }
 
-        if (plusname == 1 && BM.GD.isTriggerOn)
+        if (plusname == 1 &&!BM.GD.isTriggerOn)
         {
             BM.FormationCollapse();
             BM.GD.isTriggerOn = false;
