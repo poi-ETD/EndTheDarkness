@@ -601,7 +601,7 @@ public class LobbyManager : MonoBehaviour
 
             ShopButtons[i].SetActive(true);
             ShopButtons[i].transform.GetChild(0).GetComponent<Text>().text = ChD.characterDatas[i].Name;
-        }
+
         for (int i = ChD.size; i < 4; i++)
         {
             ShopButtons[i].SetActive(false);
