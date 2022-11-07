@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 using Newtonsoft.Json;
 public class BattleManager : MonoBehaviour
 {
-    [SerializeField] GameObject[] CharacterPrefebs; 
+    [SerializeField] GameObject[] CharacterPrefebs;
     public List<Character> characters = new List<Character>(); //현재 게임에 있는 캐릭터들의 목록,순서또한 동일
     public bool CharacterSelectMode;//캐릭터를 고를 수 있는 상태
     public bool EnemySelectMode;//적을 고를 수 있는 상태
@@ -129,10 +129,10 @@ public class BattleManager : MonoBehaviour
 
 
     public bool otherCorIsRun; //코루틴이 동작 중일 때
- 
+
     public bool turnStartIsRun;//턴 시작 코루틴이 동작 중일 때
 
-  
+
 
     //YH
     [HideInInspector] public bool isPointerinHand = false;
@@ -159,7 +159,6 @@ public class BattleManager : MonoBehaviour
 
             if (ChD.characterDatas[i].curFormation == 0) //전방
             {
-
                 CharacterC = Instantiate(CharacterPrefebs[ChD.characterDatas[i].code], new Vector2(-880 / 45f, 375 / 45f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
                 forward.Add(CharacterC.GetComponent<Character>());
             }
@@ -199,10 +198,7 @@ public class BattleManager : MonoBehaviour
         GameObject EnemySummon = Instantiate(Enemys[GD.BattleNo], new Vector2(-2, -2), transform.rotation, GameObject.Find("CharacterCanvas").transform);
 
         Enemys = GameObject.FindGameObjectsWithTag("Enemy");
-        for (int i = 0; i < Enemys.Length; i++)
-        {
-            Enemys[i].GetComponent<Enemy>().myNo = i;
-        }
+
         TurnCardCount = CardCount;
 
         LineObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-820, 360 - 150 * line);
@@ -211,16 +207,16 @@ public class BattleManager : MonoBehaviour
         {
             SetBless20();
         }
-    
+
     }
 
     public void SetBless20() //bless20이 켜져있다면 적용 될 함수
     {
-        for(int i = 0; i < forward.Count; i++)
+        for (int i = 0; i < forward.Count; i++)
         {
             forward[i].AtkUp(-1);
         }
-        for(int i = 0; i < back.Count; i++)
+        for (int i = 0; i < back.Count; i++)
         {
             back[i].AtkUp(1);
         }
@@ -241,97 +237,96 @@ public class BattleManager : MonoBehaviour
         leftCost += amount;
         costT.text = "" + leftCost;
     }
-    public void FormationCollapse(string ename) //진형붕괴 함수
+    public void FormationCollapse()
     {
-        if (GD.blessbool[20])
+        if (forward.Count < back.Count)
         {
-            ResetBless20();
-        }
-        otherCanvasOn = true;
-        if (forward.Count < back.Count) //더 많은 쪽에서 적은쪽으로 옮긴다.
-        {
-            MoveToForward = true;
-            line++;
-        }
-        else if (forward.Count == back.Count) //전방과 후방의 수가 같으면 랜덤으로 결정
-        {
-            int rand = Random.Range(0, 2);
-            if (rand == 0) { rand = -1; MoveToForward = false; }
-            if (rand == 1) MoveToForward = true;
-            line += rand;
+            RandomBackGoForward();
         }
         else if (forward.Count > back.Count)
-        { 
-            MoveToForward = false;
-            line--;
-        }
-        //line변수의 값 조정으로 전방과 후방의 수 조정
-        for (int i = 0; i < 3; i++)
         {
-            FormationCollapseButton[i].SetActive(false);
-        }
-        FormationCollapsePopup.SetActive(true);
-        if (MoveToForward)
-        {
-            FormationCollapseText.text = ename + "이(가) 진형붕괴를 시전했습니다." + "\n누구를 전방으로 보내겠습니까?";
-            for (int i = 0; i < back.Count; i++)
-            {
-                FormationCollapseButton[i].SetActive(true);
-                FormationCollapseButtonText[i].text = back[i].Name;
-            }
+            RandomForwardGoBack();
         }
         else
         {
-            FormationCollapseText.text = ename + "이(가) 진형붕괴를 시전했습니다." + "\n누구를 후방으로 보내겠습니까?";
-            for (int i = 0; i < forward.Count; i++)
-            {
-                FormationCollapseButton[i].SetActive(true);
-                FormationCollapseButtonText[i].text = forward[i].Name;
-            }
+            int rand = Random.Range(0, 2);
+            if (rand == 0) RandomBackGoForward();
+            else RandomForwardGoBack();
         }
-    }
-    public void Click_SelectFormationCollapse(int selectedCharacterInCollapse)//진형붕괴 팝업창에 뜬 버튼을 클릭했을 시
-    {
-        ChD.line = line;
-        if (MoveToForward)
-        {
 
-            forward.Add(back[selectedCharacterInCollapse]);
-            back.RemoveAt(selectedCharacterInCollapse);
-        }
-        else
-        {
-
-            back.Add(forward[selectedCharacterInCollapse]);
-            forward.RemoveAt(selectedCharacterInCollapse);
-        }
-        //선택한 캐릭터를 옮긴다.
-        characters.Clear();
+        line = ChD.line;
         for (int i = 0; i < line; i++)
         {
-            forward[i].transform.position = new Vector2(-880 / 45f, (300 - 150 * characters.Count) / 45f);
-            characters.Add(forward[i]);
+            forward[i].transform.position = new Vector2(-880 / 45f, (300 - 150 * i) / 45f);
         }
-        for (int i = line; i < ChD.size; i++)
+        for (int i = 0; i < ChD.size - line; i++)
         {
-            back[i - line].transform.position = new Vector2(-880 / 45f, (270 - 150 * characters.Count) / 45f);
-            characters.Add(back[i - line]);
+            back[i].transform.position = new Vector2(-880 / 45f, (270 - 150 * (i + line)) / 45f);
         }
-        //캐릭터들의 위치 재설정
         for (int i = 1; i < ChD.size; i++)
         {
             characters[i].curNo = i;
         }
-        //캐릭터들의 현재 위치 정보 재설정
-        otherCanvasOn = false; //진형붕괴 팝업이 꺼졌기 때문
-        otherCorIsRun = false; //턴 시작 코루틴을 진행시킴
-        FormationCollapsePopup.SetActive(false);
-        if (GD.blessbool[20])
-        {
-            SetBless20();
-        }
         LineObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-820, 360 - 150 * line);
     }
+    public void RandomForwardGoBack()
+    {
+        ChD.line--;
+        List<int> forwardInt = new List<int>();
+        for (int i = 0; i < ChD.size; i++)
+        {
+            if (ChD.characterDatas[i].curFormation == 0)
+            {
+                forwardInt.Add(i);
+            }
+        }
+        int rand = Random.Range(0, forwardInt.Count);
+        ChD.characterDatas[forwardInt[rand]].curFormation = 1;
+        int key = -1;
+        for (int i = 0; i < forward.Count; i++)
+        {
+            if (forward[i].characterNo == ChD.characterDatas[forwardInt[rand]].code)
+            {
+                key = i;
+            }
+        }
+        Debug.Log(rand);
+        Debug.Log(forwardInt.Count);
+        Debug.Log(ChD.characterDatas[forwardInt[rand]].code);
+        if (key != -1)
+        {
+            back.Add(forward[key]);
+            forward.RemoveAt(key);
+        }
+    }
+    public void RandomBackGoForward()
+    {
+        ChD.line++;
+        List<int> backInt = new List<int>();
+        for (int i = 0; i < ChD.size; i++)
+        {
+            if (ChD.characterDatas[i].curFormation == 1)
+            {
+                backInt.Add(i);
+            }
+        }
+        int rand = Random.Range(0, backInt.Count);
+        ChD.characterDatas[backInt[rand]].curFormation = 0;
+        int key = -1;
+        for (int i = 0; i < back.Count; i++)
+        {
+            if (back[i].characterNo == ChD.characterDatas[backInt[rand]].code)
+            {
+                key = i;
+            }
+        }
+        if (key != -1)
+        {
+            forward.Add(back[key]);
+            back.RemoveAt(key);
+        }
+    }
+
     public void Click_StackPopUpOn() //현재 스택을 보여주는 함수 (구현 더 해야 함)
     {
         if (StackPopUp.activeSelf)
@@ -370,7 +365,7 @@ public class BattleManager : MonoBehaviour
             go_Menus.SetActive(true);
     }
 
-    
+
 
     private void Update()
     {
@@ -392,7 +387,7 @@ public class BattleManager : MonoBehaviour
         completeButton.SetActive(false);
         if (porte3mode) //현재 상태가 스타키티시모 라면
         {
-           
+
             if (selectedCard != null)
             {
                 selectedCard.transform.localScale = new Vector3(1, 1, 1);
@@ -400,7 +395,7 @@ public class BattleManager : MonoBehaviour
                 CM.CardToField();//랜덤한 카드를 필드 가장 오른쪽으로 보냄
                 CM.field[CM.field.Count - 1].GetComponent<Card>().cardcost -= 2;//필드의 가장 오른쪽 카드의 코스트를 2감소시킴
                 if (CM.field[CM.field.Count - 1].GetComponent<Card>().cardcost < 0)
-                    CM.field[CM.field.Count - 1].GetComponent<Card>().cardcost = 0; 
+                    CM.field[CM.field.Count - 1].GetComponent<Card>().cardcost = 0;
                 CM.field[CM.field.Count - 1].GetComponent<Card>().costT.text = CM.field[CM.field.Count - 1].GetComponent<Card>().cardcost + "";
                 log.logContent.text += "\n스타카티시모!" + CM.field[CM.field.Count - 1].GetComponent<Card>().Name.text + "의 코스트가 감소하였습니다.";
                 porte3count--;
@@ -437,45 +432,45 @@ public class BattleManager : MonoBehaviour
         }
     }
     public void ShowCharacterHaveTurn(GameObject characterHaveTurn)//캐릭터 클릭이 가능 할 때 누르면 발동
-    {                 
-       //CancleCharacter();//이미 눌러진 캐릭터를 취소
-       
-      
-            actCharacter = characterHaveTurn.GetComponent<Character>();
+    {
+        //CancleCharacter();//이미 눌러진 캐릭터를 취소
+
+
+        actCharacter = characterHaveTurn.GetComponent<Character>();
 
         actCharacter.myPassive.ActStart();
         AM.isStartAct = true;
         AM.Act();
 
         if (actCharacter != null)
-                actCharacter.SelectBox.SetActive(true);
-        
+            actCharacter.SelectBox.SetActive(true);
+
     }
-    public void useCost(int amount,GameObject card) //코스트 사용 함수
+    public void useCost(int amount, GameObject card) //코스트 사용 함수
     {
-        if (actCharacter.characterNo==5&&actCharacter.passive[3]>0) 
-        {   
+        if (actCharacter.characterNo == 5 && actCharacter.passive[3] > 0)
+        {
             leftCost -= 1;
             card.GetComponent<Card>().GetRemove();
         }
-        else 
+        else
             leftCost -= amount;
-        costT.text =""+ leftCost;
+        costT.text = "" + leftCost;
     }
-    public void SpeedChange(Character character,float amount)
+    public void SpeedChange(Character character, float amount)
     {
         character.speed += amount;
         character.curSpeed += amount;
         character.OnSpeedText(amount);
-        
-        AM.SpeedChangeByEffect(0,character.curNo);
+
+        AM.SpeedChangeByEffect(0, character.curNo);
     }
     public void TurnSpeedChange(Character character, float amount)
     {
         character.curSpeed += amount;
         character.OnSpeedText(amount);
-        
-        AM.SpeedChangeByEffect(0,character.curNo);
+
+        AM.SpeedChangeByEffect(0, character.curNo);
     }
     public void EnemySelect(GameObject SelectedEnemyInSelectMode) //공격 카드가 발동되었을 시 적을 선택
     {
@@ -493,8 +488,8 @@ public class BattleManager : MonoBehaviour
                 return;
             }
             selectedEnemy = SelectedEnemyInSelectMode.GetComponent<Enemy>();
-            if(!selectedEnemy.Shadow)//은신일 때는 카드 지정 x
-            selectedCard.GetComponent<Card>().EnemySelectCard();
+            if (!selectedEnemy.Shadow)//은신일 때는 카드 지정 x
+                selectedCard.GetComponent<Card>().EnemySelectCard();
         }
     }
     public void CharacterSelect(GameObject SelectedCharacterInSelectMode) //아군 선택 카드가 발동되었을 시 아군을 선택
@@ -516,7 +511,7 @@ public class BattleManager : MonoBehaviour
     public void SetCard(GameObject c) //카드를 눌렀을 때
     {
         if (cardSelectMode)
-        {           
+        {
             cancleCard();
             //HandManager.Instance.go_UseButton.SetActive(true);
             selectedCard = c;
@@ -528,9 +523,9 @@ public class BattleManager : MonoBehaviour
         if (!otherCanvasOn)
         {
             cancleCard();
-          
+
             //HandManager.Instance.go_UseButton.SetActive(true);
-            
+
             selectedCard = c;
 
             Debug.Log("Set Card b" + selectedCard.GetComponent<Card>().selectType.ToString());
@@ -559,13 +554,13 @@ public class BattleManager : MonoBehaviour
         {
             if (selectedCard != null)
             {
-                selectedCard.GetComponent<Card>().useCard();  
+                selectedCard.GetComponent<Card>().useCard();
                 //HandManager.Instance.CancelToUse(); 카드 사용 시 발동되게 옮깁니다.
             }
         }
         else if (selectedCard.GetComponent<Card>().selectType == 1)
         {
-            
+
             if (actCharacter.passive[0] > 0 && actCharacter.characterNo == 6)
             {
                 GameObject randomEnemy = Enemys[Random.Range(0, Enemys.Length)];
@@ -575,25 +570,25 @@ public class BattleManager : MonoBehaviour
                 }
                 EnemySelect(randomEnemy);
             }
-           else if (ei.SelectedEnemy != null)
-            {              
+            else if (ei.SelectedEnemy != null)
+            {
                 EnemySelect(ei.SelectedEnemy.gameObject);
 
-                
+
             }
             CardUseText.text = "사용";
             EnemySelectMode = false;
         }
         else if (selectedCard.GetComponent<Card>().selectType == 5)
         {
-           /* if (usedInCard20 != null)
-            {
-                Destroy(selectedCard);
-                selectedCard = usedInCard20;
-                otherCanvasOn = false;
-            }*/
+            /* if (usedInCard20 != null)
+             {
+                 Destroy(selectedCard);
+                 selectedCard = usedInCard20;
+                 otherCanvasOn = false;
+             }*/
             CardUseText.text = "사용";
-           // CharacterSelectMode = false;
+            // CharacterSelectMode = false;
         }
     }
 
@@ -639,7 +634,7 @@ public class BattleManager : MonoBehaviour
     {
         warnObj.SetActive(false);
     }
-    public void OnDmgOneTarget(int dmg, Enemy enemy,Character character, int time) //카드를 사용해 데미지를 입힐 경우
+    public void OnDmgOneTarget(int dmg, Enemy enemy, Character character, int time) //카드를 사용해 데미지를 입힐 경우
     {
         CardUseText.text = "사용";
         EnemySelectMode = false;
@@ -648,17 +643,17 @@ public class BattleManager : MonoBehaviour
         {
             Debug.Log(character + "" + enemy);
             enemy.OnHitCal(dmg + character.turnAtk, character.curNo, false);
-        }        
+        }
     }
 
-    public void OnAttack(int dmg,Enemy enemy,Character character,int time) //패시브나 리플렉트로 인하여 데미지 입힐 경우
+    public void OnAttack(int dmg, Enemy enemy, Character character, int time) //패시브나 리플렉트로 인하여 데미지 입힐 경우
     {
         for (int k = 0; k < time; k++)
         {
-           enemy.OnHitCal(dmg, character.curNo, false);
-        }     
+            enemy.OnHitCal(dmg, character.curNo, false);
+        }
     }
-    public void OnRandomAttack(int dmg,Character character,int time)
+    public void OnRandomAttack(int dmg, Character character, int time)
     {
         for (int k = 0; k < time; k++)
         {
@@ -675,24 +670,24 @@ public class BattleManager : MonoBehaviour
             {
                 Enemys[i].GetComponent<Enemy>().OnHitCal(dmg + character.turnAtk, character.curNo, false);
 
-            }        
+            }
         }
-        
+
     }
     public void AllAttackOnPercent(int percent, Character character) //모든적에게 체력 퍼센트 데미지 부여
     {
-       
-            for (int i = 0; i < Enemys.Length; i++)
-            {
-                Enemy e = Enemys[i].GetComponent<Enemy>();
-                e.OnHitCal(Mathf.FloorToInt(percent*e.Hp*0.01f), character.curNo, false);
-            }
-        
+
+        for (int i = 0; i < Enemys.Length; i++)
+        {
+            Enemy e = Enemys[i].GetComponent<Enemy>();
+            e.OnHitCal(Mathf.FloorToInt(percent * e.Hp * 0.01f), character.curNo, false);
+        }
+
 
     }
 
 
-    public void getArmor(int armor,Character character) //방어도 획득
+    public void getArmor(int armor, Character character) //방어도 획득
     {
         log.logContent.text += "\n" + character.Name + "이(가) " + armor + "의 방어도 획득!";
         character.getArmor(armor);
@@ -700,19 +695,19 @@ public class BattleManager : MonoBehaviour
     List<GameObject> specialDrowList = new List<GameObject>();
     public void specialDrow(int drow) //카드를 통한 드로우
     {
-        log.logContent.text += "\n 카드를 통해 드로우 " + drow + "장!";  
+        log.logContent.text += "\n 카드를 통해 드로우 " + drow + "장!";
         int curDrow = 0;
         while (curDrow != drow)
         {
             curDrow++;
             if (CM.Deck.Count > 0)
             {
-             
-               int rand = Random.Range(0,CM.Deck.Count);
+
+                int rand = Random.Range(0, CM.Deck.Count);
                 CM.field.Add(CM.Deck[rand]);
                 specialDrowList.Add(CM.Deck[rand]);
                 CM.Deck.RemoveAt(rand);
-               
+
             }
         }
         for (int i = 0; i < ChD.size; i++)
@@ -721,7 +716,7 @@ public class BattleManager : MonoBehaviour
         }
         StartCoroutine("specialDrowCor");
     }
-    IEnumerator specialDrowCor() 
+    IEnumerator specialDrowCor()
     {
         while (specialDrowList.Count != 0)
         {
@@ -732,7 +727,8 @@ public class BattleManager : MonoBehaviour
             yield return new WaitForSeconds(0.3f);
         }
         if (card12On)
-        { AM.Act();
+        {
+            AM.Act();
             card12On = false;
         }
         //AM.MyAct();
@@ -752,10 +748,10 @@ public class BattleManager : MonoBehaviour
         }
         if (QpassiveScript != null)
         {
-           
+
             QpassiveScript.GhostRevive(ghostCount);
         }
-    } 
+    }
     public void CopyCard(int CopyCount) //덱에 카드 복사
     {
         log.logContent.text += "\n덱에" + selectedCard.GetComponent<Card>().Name.text + "(을)를 복사!";
@@ -770,7 +766,7 @@ public class BattleManager : MonoBehaviour
             CM.Deck.Add(newCard);
         }
     }
-    public void NextTurnArmor(int armor,Character character) //다음 턴 방어도 획득
+    public void NextTurnArmor(int armor, Character character) //다음 턴 방어도 획득
     {
         log.logContent.text += "\n" + actCharacter.Name + "이(가) 다음턴에 " + armor + "의 방어도 획득!";
         character.nextarmor += armor;
@@ -792,12 +788,12 @@ public class BattleManager : MonoBehaviour
             }
         }
     }
-    public void TurnAtkUp(Character character,int atk) //해당 턴 동안 공격력 증가
+    public void TurnAtkUp(Character character, int atk) //해당 턴 동안 공격력 증가
     {
         log.logContent.text += "\n이번 턴 동안 " + character.Name + "의 공격력이 " + atk + "만큼 증가합니다.";
         character.TurnAtkUp(atk);
     }
-    public void AtkUp(Character character,int atk) //해당 전투동안 공격력 증가
+    public void AtkUp(Character character, int atk) //해당 전투동안 공격력 증가
     {
         log.logContent.text += "\n" + character.Name + "의 공격력이 " + atk + "만큼 증가합니다.";
         character.AtkUp(atk);
@@ -831,7 +827,7 @@ public class BattleManager : MonoBehaviour
     {
         if (HandManager.Instance.isEnableOtherButton)
         {
-            
+
             otherCanvasOn = true;
             isGraveWindowOn = true;
 
@@ -871,10 +867,10 @@ public class BattleManager : MonoBehaviour
 
     public void Click_Grave_Revive() //무덤에서 부활버튼 누를 때
     {
-        
-   
+
+
         GraveReviveMode = false;
-       
+
         reviveCount = 0;
         CM.Revive();
         curSelectedCardInRevive.SelectRevive();
@@ -892,7 +888,7 @@ public class BattleManager : MonoBehaviour
 
         go_GraveView_Button_Revive.SetActive(false);
         reviveCount = 0;
-       
+
         CM.GraveOff();
         window_Grave.SetActive(false);
     }
@@ -927,7 +923,7 @@ public class BattleManager : MonoBehaviour
         CM.DeckOff();
         window_Deck.SetActive(false);
     }
-    
+
     public void ReviveToField(int r)
     {
         GraveReviveMode = true;
@@ -953,7 +949,7 @@ public class BattleManager : MonoBehaviour
             if (!characters[i].isDie && characters[i].characterNo == c)
             {
                 log.logContent.text += "\n" + characters[i].Name + "의 행동력이 1증가합니다.";
-               
+
             }
         }
     }
@@ -964,7 +960,7 @@ public class BattleManager : MonoBehaviour
     public void UsePreviousCard()
     {
         usedInCard20 = selectedCard;
-       // Debug.Log(usedInCard20.GetComponent<Card>().cardNo);
+        // Debug.Log(usedInCard20.GetComponent<Card>().cardNo);
         copyCard = Instantiate(previousSelectedCard, CM.HandCanvas.transform);
         copyCard.SetActive(false);
         copyCard.GetComponent<Card>().iscard20Mode = true;
@@ -983,8 +979,8 @@ public class BattleManager : MonoBehaviour
         otherCanvasOn = true;
         victory_window.SetActive(true);
         isVictoryPopupOn = true;
-        int ignum = Random.Range(15, 26) * 10 + GD.victory * 20;
-        int tribute = Random.Range(5, 11) * 10;
+        int ignum = Random.Range(0, 3) * 50 + 150 + GD.victory * 20;
+        int tribute = Random.Range(0, 2) * 100 + 200 + 50 * GD.victory;
         if (GD.blessbool[15]) ignum *= 3;
         rewardIgnum.text = ignum + "이그넘 획득";
         rewardTribute.text = tribute + "공물 획득";
@@ -1018,7 +1014,7 @@ public class BattleManager : MonoBehaviour
             RancomSelectCard.Add(RandomCardList[RandomCardList.Count - i]);
         }
         //랜덤함수를 반복 해서 맨 앞 n장의 카드들을 중복되지 않는 카드들로
-        equipment e=EquipmentManager.Instance.makeEquipment(); //새로운 장비를 생성함.
+        equipment e = EquipmentManager.Instance.makeEquipment(); //새로운 장비를 생성함.
         List<string> sList = EquipmentManager.Instance.equipmentStrings(e);
         RewardEquipmentString[0].text = sList[0];
         RewardEquipmentString[1].text = sList[1] + '\n' + sList[2] + '\n' + sList[3];
@@ -1026,7 +1022,7 @@ public class BattleManager : MonoBehaviour
     }
     public void Click_SelectReward()//원하는 카드를 선택해서 카드 데이터에 저장하는 함수
     {
-        bool isSelect=false;
+        bool isSelect = false;
         for (int i = 0; i < RancomSelectCard.Count; i++)
         {
 
@@ -1042,7 +1038,7 @@ public class BattleManager : MonoBehaviour
         CardD = JsonConvert.DeserializeObject<CardData>(cardData);
         for (int i = 0; i < RancomSelectCard.Count; i++)
         {
-           
+
             if (RewardCanvas.transform.GetChild(i).GetComponent<NoBattleCard>().select)
             {
                 CardD.cardNo.Add(RancomSelectCard[i]);
@@ -1057,7 +1053,8 @@ public class BattleManager : MonoBehaviour
         Click_NoSelectAndMain();
     }
     public void Click_NoSelectAndMain()//전투 정보를 모두 저장한 후 로비로 가는 함수
-    {if (GD.bless3count > 0) GD.bless3count--;
+    {
+        if (GD.bless3count > 0) GD.bless3count--;
         if (GD.bless3count == 0) GD.blessbool[3] = false; //블레스3이 켜져있다면 1개씩 감소시킴.
         for (int i = 0; i < characters.Count; i++)
         {
@@ -1098,7 +1095,7 @@ public class BattleManager : MonoBehaviour
     }
 
     public void goEnemySelectMode() //공격 카드 선택 시 어떤 적을 공격할지 고르는 모드
-    {   
+    {
         EnemySelectMode = true; //이 상태로 들어가면 Enemy를 클릭시 선택이 된다.
         CardUseText.text = "취소";
     }
@@ -1108,411 +1105,193 @@ public class BattleManager : MonoBehaviour
         CharacterSelectMode = true; //이 상태로 들어가면 character를 클릭시 선택이 된다.
         CardUseText.text = "취소";
     }
-    //type==0 랜덤 대상 type==1 방어도 높은 적 우선 type==2 체력 높은 적 우선 type==3 방어도 있는 적 우선
-    //type==4 모든 대상
-    
-    public void HitFront(int dmg, int type, Enemy enemy, int spd) //타켓을 전방으로
-    {
-        bool Alive = false;
+    //type==0 랜덤 대상 type==1 방어도 높은 적 우선 type==2 체력 높은 적 우선 
 
-        for (int i = 0; i < forward.Count; i++)
+
+
+    public Character SelectCharacterInEnemyTurn(int type, int pos) //pos ->0->전방 1->후방 2->전체 중
+    {//특정 위치에 특정 조건을 가지고 있는 캐릭터 한명을 랜덤으로 가져오는 함수
+        List<Character> selectedCharacters = new List<Character>();
+        if (pos == 0)
         {
-            if (!characters[i].isDie) Alive = true;
-        }
-        if (!Alive)
-        {
-            HitAll(dmg, type, enemy, spd);//전방에 아무도 없다면 타겟을 모두로
-        }
-        else
-        {
-            int rand2 = 0;
-            if (type == 0)
+            bool alive = false;
+            for (int i = 0; i < forward.Count; i++)
             {
-                rand2 = Random.Range(0, line);
-                while (characters[rand2].isDie) rand2 = Random.Range(0, line);
-               AM.MakeEnemyAct(0, dmg, characters[rand2], enemy, null);       
-                if (spd>0)
-                { 
-                    AM.SpdIncreaseByEnemy(1, spd, characters[rand2], enemy, null);                   
-                }
+                if (!forward[i].isDie)
+                    alive = true;
             }
-            if (type == 1)
+            if (!alive)
             {
-                List<Character> MaxArmor = new List<Character>();
-                int maxArmor = 0;
-                for (int i = 0; i < forward.Count; i++)
-                {
-                    if (characters[i].armor == maxArmor)
-                    {
-                        MaxArmor.Add(forward[i]);
-                    }
-                    else if (characters[i].armor > maxArmor)
-                    {
-                        maxArmor = characters[i].armor;
-                        MaxArmor.Clear();
-                        MaxArmor.Add(forward[i]);
-                    }
-                }
-                rand2 = Random.Range(0, MaxArmor.Count);
-                while (MaxArmor[rand2].isDie) rand2 = Random.Range(0, MaxArmor.Count);
-
-               AM.MakeEnemyAct(0, dmg, MaxArmor[rand2], enemy, null);
-              
-                if (spd > 0)
-                {
-                
-
-                  AM.SpdIncreaseByEnemy(1, spd, MaxArmor[rand2], enemy, null);
-                   
-                }
-            }
-            if (type == 2)
-            {
-                List<Character> MaxHp = new List<Character>();
-                int maxHp = 0;
-                for (int i = 0; i < forward.Count; i++)
-                {
-                    if (characters[i].Hp == maxHp)
-                    {
-                        MaxHp.Add(forward[i]);
-                    }
-                    else if (characters[i].Hp > maxHp)
-                    {
-                        maxHp = characters[i].Hp;
-                        MaxHp.Clear();
-                        MaxHp.Add(forward[i]);
-                    }
-                }
-                rand2 = Random.Range(0, MaxHp.Count);
-                while (MaxHp[rand2].isDie) rand2 = Random.Range(0, MaxHp.Count);
-
-
-              AM.MakeEnemyAct(0, dmg, MaxHp[rand2], enemy, null);
-             
-                if (spd > 0)
-                {
-                    AM.SpdIncreaseByEnemy(1, spd, MaxHp[rand2], enemy, null);
-                   
-                }
-            }
-            if (type == 3)
-            {
-                List<Character> HaveArmor = new List<Character>();
-                for (int i = 0; i < forward.Count; i++)
-                {
-                    if (forward[i].armor > 0) HaveArmor.Add(forward[i]);
-                }
-                if (HaveArmor.Count == 0) HitFront(dmg, 0, enemy, spd);
-                else
-                {
-                    rand2 = Random.Range(0, HaveArmor.Count);
-
-
-                   AM.MakeEnemyAct(0, dmg, HaveArmor[rand2], enemy, null);
-                    
-                    if (spd > 0)
-                    {
-                        AM.SpdIncreaseByEnemy(1, spd, HaveArmor[rand2], enemy, null);
-                   
-                    }
-                }
-            }
-            if (type == 4)
-            {
-                for (int i = 0; i < line; i++)
-                {
-
-                    AM.MakeEnemyAct(0, dmg, characters[i], enemy, null);
-
-                    if (spd > 0)
-                    {
-                        AM.SpdIncreaseByEnemy(1, spd, characters[i], enemy, null);
-                    }
-                }
-            }
-            if (type == 5)
-            {
-                for (int i = 0; i < line; i++)
-                {
-                    AM.SpdIncreaseByEnemy(1, dmg, characters[i], enemy, null);
-                 
-                }
+                return SelectCharacterInEnemyTurn(type, 2);
             }
         }
-    }
-    public void HitAll(int dmg, int type, Enemy enemy, int spd) //타겟을 모두로
-    {
-      
-        int rand2 = 0;
+        else if (pos == 1)
+        {
+            bool alive = false;
+            for (int i = 0; i < back.Count; i++)
+            {
+                if (!back[i].isDie)
+                    alive = true;
+            }
+            if (!alive)
+            {
+                return SelectCharacterInEnemyTurn(type, 2);
+            }
+        }
+        if (pos == 0)
+        {
+            for (int i = 0; i < forward.Count; i++)
+            {
+                if (!forward[i].isDie)
+                    selectedCharacters.Add(forward[i]);
+            }
+        }
+        else if (pos == 1)
+        {
+            for (int i = 0; i < back.Count; i++)
+            {
+                if (!back[i].isDie)
+                    selectedCharacters.Add(back[i]);
+            }
+        }
+        else if (pos == 2)
+        {
+            for (int i = 0; i < forward.Count; i++)
+            {
+                if (!forward[i].isDie)
+                    selectedCharacters.Add(forward[i]);
+            }
+            for (int i = 0; i < back.Count; i++)
+            {
+                if (!back[i].isDie)
+                    selectedCharacters.Add(back[i]);
+            }
+        }
         if (type == 0)
         {
-            rand2 = Random.Range(0, characters.Count);
-            while (characters[rand2].isDie) rand2 = Random.Range(0, characters.Count);
-
-            AM.MakeEnemyAct(0, dmg, characters[rand2], enemy, null);
-
-            if (spd > 0)
-            {
-                AM.SpdIncreaseByEnemy(1, spd, characters[rand2], enemy, null);
-            }
+            return selectedCharacters[Random.Range(0, selectedCharacters.Count)];
         }
-        if (type == 1)
+        else if (type == 1)
         {
-            List<Character> MaxArmor = new List<Character>();
+            List<Character> MaxAromorList = new List<Character>();
             int maxArmor = 0;
-            for (int i = 0; i < characters.Count; i++)
+            for (int i = 0; i < selectedCharacters.Count; i++)
             {
-                if (characters[i].armor == maxArmor)
+                if (selectedCharacters[i].armor > maxArmor)
                 {
-                    MaxArmor.Add(characters[i]);
+                    maxArmor = selectedCharacters[i].armor;
+                    MaxAromorList.Clear();
+                    MaxAromorList.Add(selectedCharacters[i]);
                 }
-                else if (characters[i].armor > maxArmor)
+                else if (selectedCharacters[i].armor == maxArmor)
                 {
-                    maxArmor = characters[i].armor;
-                    MaxArmor.Clear();
-                    MaxArmor.Add(characters[i]);
+                    MaxAromorList.Add(selectedCharacters[i]);
                 }
             }
-            rand2 = Random.Range(0, MaxArmor.Count);
-            while (MaxArmor[rand2].isDie) rand2 = Random.Range(0, MaxArmor.Count);
-
-
-            AM.MakeEnemyAct(0, dmg, MaxArmor[rand2], enemy, null);
-
-            if (spd > 0)
-            {
-                AM.SpdIncreaseByEnemy(1, spd, MaxArmor[rand2], enemy, null);
-
-            }
+            return MaxAromorList[Random.Range(0, MaxAromorList.Count)];
         }
-        if (type == 2)
+        else if (type == 2)
         {
-            List<Character> MaxHp = new List<Character>();
-            int maxHp = 0;
-            for (int i = 0; i < characters.Count; i++)
+            List<Character> MaxHPList = new List<Character>();
+            int maxHP = 0;
+            for (int i = 0; i < selectedCharacters.Count; i++)
             {
-                if (characters[i].Hp == maxHp)
+                if (selectedCharacters[i].Hp > maxHP)
                 {
-                    MaxHp.Add(characters[i]);
+                    maxHP = selectedCharacters[i].Hp;
+                    MaxHPList.Clear();
+                    MaxHPList.Add(selectedCharacters[i]);
                 }
-                else if (characters[i].Hp > maxHp)
+                else if (selectedCharacters[i].armor == maxHP)
                 {
-                    maxHp = characters[i].Hp;
-                    MaxHp.Clear();
-                    MaxHp.Add(characters[i]);
-                }
-            }
-            rand2 = Random.Range(0, MaxHp.Count);
-            while (MaxHp[rand2].isDie) rand2 = Random.Range(0, MaxHp.Count);
-
-
-
-            AM.MakeEnemyAct(0, dmg, MaxHp[rand2], enemy, null);
-
-            if (spd > 0)
-            {
-                AM.SpdIncreaseByEnemy(1, spd, MaxHp[rand2], enemy, null);
-
-            }
-        }
-        if (type == 3)
-        {
-            List<Character> HaveArmor = new List<Character>();
-            for (int i = 0; i < characters.Count; i++)
-            {
-                if (characters[i].armor > 0) HaveArmor.Add(characters[i]);
-            }
-            if (HaveArmor.Count == 0) HitAll(dmg, 0, enemy, spd);
-            else
-            {
-                rand2 = Random.Range(0, HaveArmor.Count);
-
-
-                AM.MakeEnemyAct(0, dmg, HaveArmor[rand2], enemy, null);
-
-                if (spd > 0)
-                {
-                    AM.SpdIncreaseByEnemy(1, spd, HaveArmor[rand2], enemy, null);
-
+                    MaxHPList.Add(selectedCharacters[i]);
                 }
             }
+            return MaxHPList[Random.Range(0, MaxHPList.Count)];
         }
-        if (type == 4)
-        {
-            for (int i = 0; i < characters.Count; i++)
-            {
+
+        return null;
 
 
-                AM.MakeEnemyAct(0, dmg, characters[i], enemy, null);
 
-                if (spd > 0)
-                {
-                    AM.SpdIncreaseByEnemy(1, spd, characters[i], enemy, null);
-                }
-            }
-        }
-        if (type == 5)
-        {
-            for (int i = 0; i < characters.Count; i++)
-            {
-                AM.SpdIncreaseByEnemy(1, dmg, characters[i], enemy, null);
-            }
-        }
     }
-    public void HitBack(int dmg, int type, Enemy enemy, int spd) //타겟을 후방으로
+
+    public List<Character> SelectCharacterListInEnemyTurn(int pos) //특정 위치에 있는 살아있는 캐릭터 모두를 불러오는 함수
     {
-        bool Alive = false;
-
-        for (int i = 0; i < back.Count; i++)
+        List<Character> selectedCharacters = new List<Character>();
+        if (pos == 0)
         {
-            if (!characters[i].isDie) Alive = true;
-        }
-        if (!Alive)
-        {
-            HitAll(dmg, type, enemy, spd);//후방에 아무도 없다면 타겟을 전체로
-        }
-        else
-        {
-            int rand2 = 0;
-            if (type == 0)
+            for (int i = 0; i < forward.Count; i++)
             {
-                rand2 = Random.Range(line, characters.Count);
-                while (characters[rand2].isDie) rand2 = Random.Range(line, characters.Count);
-
-                AM.MakeEnemyAct(0, dmg, characters[rand2], enemy, null);
-
-                if (spd > 0)
-                {
-                    AM.SpdIncreaseByEnemy(1, spd, characters[rand2], enemy, null);
-                }
-            }
-            if (type == 1)
-            {
-                List<Character> MaxArmor = new List<Character>();
-                int maxArmor = 0;
-                for (int i = line; i < characters.Count; i++)
-                {
-                    if (characters[i].armor == maxArmor)
-                    {
-                        MaxArmor.Add(characters[i]);
-                    }
-                    else if (characters[i].armor > maxArmor)
-                    {
-                        maxArmor = characters[i].armor;
-                        MaxArmor.Clear();
-                        MaxArmor.Add(characters[i]);
-                    }
-                }
-                rand2 = Random.Range(0, MaxArmor.Count);
-                while (MaxArmor[rand2].isDie) rand2 = Random.Range(0, MaxArmor.Count);
-
-
-                AM.MakeEnemyAct(0, dmg, MaxArmor[rand2], enemy, null);
-
-                if (spd > 0)
-                {
-                    AM.SpdIncreaseByEnemy(1, spd, MaxArmor[rand2], enemy, null);
-
-                }
-            }
-            if (type == 2)
-            {
-                List<Character> MaxHp = new List<Character>();
-                int maxHp = 0;
-                for (int i = line; i < characters.Count; i++)
-                {
-                    if (characters[i].Hp == maxHp)
-                    {
-                        MaxHp.Add(characters[i]);
-                    }
-                    else if (characters[i].Hp > maxHp)
-                    {
-                        maxHp = characters[i].Hp;
-                        MaxHp.Clear();
-                        MaxHp.Add(characters[i]);
-                    }
-                }
-                rand2 = Random.Range(0, MaxHp.Count);
-                while (MaxHp[rand2].isDie) rand2 = Random.Range(0, MaxHp.Count);
-
-
-                AM.MakeEnemyAct(0, dmg, MaxHp[rand2], enemy, null);
-                if (spd > 0)
-                {
-                    AM.SpdIncreaseByEnemy(1, spd, MaxHp[rand2], enemy, null);
-
-                }
-            }
-            if (type == 3)
-            {
-                List<Character> HaveArmor = new List<Character>();
-                for (int i = line; i < characters.Count; i++)
-                {
-                    if (characters[i].armor > 0) HaveArmor.Add(characters[i]);
-                }
-                if (HaveArmor.Count == 0) HitBack(dmg, 0, enemy, spd);
-                else
-                {
-                    rand2 = Random.Range(0, HaveArmor.Count);
-
-
-                    AM.MakeEnemyAct(0, dmg, HaveArmor[rand2], enemy, null);
-
-                    if (spd > 0)
-                    {
-                        AM.SpdIncreaseByEnemy(1, spd, HaveArmor[rand2], enemy, null);
-
-                    }
-                }
-            }
-            if (type == 4)
-            {
-                for (int i = line; i < characters.Count; i++)
-                {
-
-                  AM.MakeEnemyAct(0, dmg, characters[i], enemy, null);
-                 
-                    if (spd > 0)
-                    {
-                        AM.SpdIncreaseByEnemy(1, spd, characters[i], enemy, null);
-                    }
-                }
-            }
-            if (type == 5)
-            {
-                for (int i = line; i < characters.Count; i++)
-                {
-                    AM.SpdIncreaseByEnemy(1, dmg, characters[i], enemy, null);
-                }
+                if (!forward[i].isDie)
+                    selectedCharacters.Add(forward[i]);
             }
         }
+        else if (pos == 1)
+        {
+            for (int i = 0; i < back.Count; i++)
+            {
+                if (!back[i].isDie)
+                    selectedCharacters.Add(back[i]);
+            }
+        }
+        else if (pos == 2)
+        {
+            for (int i = 0; i < forward.Count; i++)
+            {
+                if (!forward[i].isDie)
+                    selectedCharacters.Add(forward[i]);
+            }
+            for (int i = 0; i < back.Count; i++)
+            {
+                if (!back[i].isDie)
+                    selectedCharacters.Add(back[i]);
+            }
+        }
+        return selectedCharacters;
+    }
+    public void EnemyAttack(int dmg, Enemy enemy, Character target)
+    {
+        AM.MakeEnemyAct(0, dmg, target, enemy, null);
+    }
+    public void EnemyIncreaseSpeed(int amount, Enemy enemy, Character target)
+    {
+        AM.SpdIncreaseByEnemy(1, amount, target, enemy, null);
     }
 
     public void EnemyGetAromor(int mount, Enemy myEnemy, Enemy target)
     {
-       AM.MakeEnemyAct(2, mount, null, myEnemy, target);    
+        AM.MakeEnemyAct(2, mount, null, myEnemy, target);
     }
 
     public void EnemyGetHp(int mount, Enemy myEnemy, Enemy target)
     {
-        AM.MakeEnemyAct(3, mount, null, myEnemy, target);     
+        AM.MakeEnemyAct(3, mount, null, myEnemy, target);
     }
 
 
     public void EnemyStateChange(Enemy myEnemy, int mount) //0->은신 1->무적 2->불사
     {
 
-        AM.MakeEnemyAct(4, mount, null, myEnemy, null);
+        AM.MakeEnemyAct(4, mount, null, myEnemy, myEnemy);
+    }
+    public void EnemyActStatusChange(Enemy myEnemy, int mount, int statusType, Character target)
+    {
+        AM.MakeEnemyAct(statusType, mount, target, myEnemy, null);
     }
 
     public void EnemyFormationCollapse(Enemy myEnemy) //적이 선 행동으로 진형붕괴를 선택했을 때
     {
-       AM.SpdIncreaseByEnemy(6, 0, null, myEnemy, null);
+        AM.SpdIncreaseByEnemy(6, 0, null, myEnemy, null);
     }
 
-    public void EnemyAtkUp(Enemy targetEnemy,int mount,Enemy actEnemy)
+    public void EnemyAtkUp(Enemy targetEnemy, int mount, Enemy actEnemy)
     {
         AM.MakeEnemyAct(7, mount, null, actEnemy, targetEnemy);
+    }
+    public void EnemySpeedDown(Enemy targetEnemy, int mount, Enemy actEnemy)
+    {
+        AM.MakeEnemyAct(8, mount, null, actEnemy, targetEnemy);
     }
     public void card22()  //결의
     {
@@ -1521,11 +1300,11 @@ public class BattleManager : MonoBehaviour
         for (int i = 0; i < characters.Count; i++)
         {
             if (!characters[i].isDie)
-            {       
-                characters[i].getArmor(4+characters[i].turnDef);
+            {
+                characters[i].getArmor(4 + characters[i].turnDef);
                 if (characters[i].armor < minArmor)
                 {
-                    minArmor = characters[i].armor;                    
+                    minArmor = characters[i].armor;
                     minArmorList.Clear();
                     minArmorList.Add(i);
                 }
@@ -1537,12 +1316,12 @@ public class BattleManager : MonoBehaviour
         }
         getArmor(10, characters[minArmorList[Random.Range(0, minArmorList.Count)]]);
     }
- 
+
     public void card24() //사이코키네시스
     {
         StartCoroutine("card24cor");
     }
-  
+
     IEnumerator card24cor() //덱에있는 모든 패를 무덤으로 보내는 과정
     {
         while (CM.field.Count > 1)
@@ -1564,7 +1343,7 @@ public class BattleManager : MonoBehaviour
         for (int i = CM.field.Count - 1; i >= 0; i--)
         {
 
-            if (CM.field[i]!= MyCard)
+            if (CM.field[i] != MyCard)
             {
                 CM.field[i].GetComponent<Card>().RemoveThisCardInField();
             }
@@ -1575,7 +1354,7 @@ public class BattleManager : MonoBehaviour
         if (!MyCard.GetComponent<Card>().iscard20Mode)
         {
             useCost(MyCard.GetComponent<Card>().cardcost, gameObject);
-          
+
         }
         MyCard.GetComponent<Card>().CardUse();
         AM.Act();
