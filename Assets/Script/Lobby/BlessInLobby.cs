@@ -498,10 +498,10 @@ public class BlessInLobby : MonoBehaviour
             bless14.SetActive(true);
             for(int i = 0; i < 4; i++)
             {
-                if (lobby.ChD.characterDatas[i].Name!= null)
+                if (lobby.ChD.characterDatas[i].name!= null)
                 {
                     bless14.transform.GetChild(i).gameObject.SetActive(true);
-                    bless14.transform.GetChild(i).GetChild(0).GetComponent<Text>().text = lobby.ChD.characterDatas[i].Name;
+                    bless14.transform.GetChild(i).GetChild(0).GetComponent<Text>().text = lobby.ChD.characterDatas[i].name;
                 }
                 else
                 {
@@ -526,11 +526,11 @@ public class BlessInLobby : MonoBehaviour
             {
                 if (lobby.ChD.characterDatas[i].curFormation == 0)
                 {
-                    lobby.ChD.characterDatas[i].Atk--;
+                    lobby.ChD.characterDatas[i].atk--;
                 }
                 else
                 {
-                    lobby.ChD.characterDatas[i].Atk++;
+                    lobby.ChD.characterDatas[i].atk++;
                 }
             }
         }
@@ -620,7 +620,7 @@ public class BlessInLobby : MonoBehaviour
             bless14.SetActive(true);
             for (int i = 0; i < 4; i++)
             {
-                if (lobby.ChD.characterDatas[i].Name!= null)
+                if (lobby.ChD.characterDatas[i].name!= null)
                 {
                     bless14.transform.GetChild(i).gameObject.SetActive(true);
                     bless14.transform.GetChild(i).GetChild(0).GetComponent<Text>().text = lobby.ChD.characterDatas[i].name;
@@ -706,9 +706,9 @@ public class BlessInLobby : MonoBehaviour
         bless6.SetActive(false);
         exitBlessPopup();
         lobby.ChD.characterDatas[i / 4].passive[i % 4]++;
-        lobby.ChD.characterDatas[i / 4].Atk -= 2;
-        if (lobby.resetmara) lobby.Resetmara(5);
-        else lobby.DayAct();
+        lobby.ChD.characterDatas[i / 4].atk -= 2;
+
+        lobby.Act();
         setBlessIcon();
     }
     public int GetBlessInResetmara()
