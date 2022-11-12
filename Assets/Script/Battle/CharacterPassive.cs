@@ -142,7 +142,7 @@ public class CharacterPassive : MonoBehaviour
         if (myCharacter.isDie) return;
         if (myNo == 1 && isKing)
         {
-            BM.SpeedChange(myCharacter, -3.4f);
+           
         }
         if (myNo == 1 && haveMyEquip && ghost >= 200)
         {
@@ -298,6 +298,7 @@ public class CharacterPassive : MonoBehaviour
             isKing = true;
             myCharacter.atk += 2;
             myCharacter.TurnAtkUp(2);
+            BM.SpeedChange(myCharacter, -3.4f);
         }
         
     }
@@ -460,6 +461,7 @@ public class CharacterPassive : MonoBehaviour
         if (myNo == 1 && myPassvie[0] > 0 && !isKing && ghost > 50)
         {
             AM.MakeAct(0, 1, 0, null, null, myCharacter, null, myPassvie[0]);
+            
             //백옥의 왕         
         }
         if (myNo == 2 && myPassvie[2]>0&& CM.field.Count > 0)

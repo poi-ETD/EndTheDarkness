@@ -7,11 +7,9 @@ public class Paul005 : Enemy
 {
 
     public int curTurn;
-    public Enemy myEnemy;
     private int myTurn;
     private bool[] myAct = new bool[2];
     // YH
-    public Image image_character;
     public Sprite sprite_idle;
     public Sprite sprite_highlight;
 
@@ -21,19 +19,14 @@ public class Paul005 : Enemy
     {
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
-        myEnemy = GetComponent<Enemy>();
-        myEnemy.Name = "파울";
-        NameT.text = myEnemy.Name;
+        NameT.text =Name;
 
     }
 
-    private void Update()
+    public override void EnemySelectPattern()
     {
-        if (myEnemy.isAct)
-        {
-            StartPattern();
-            myEnemy.isAct = false;
-        }
+        base.EnemySelectPattern();
+        StartPattern();
     }
     private void Escape()
     {
@@ -54,7 +47,7 @@ public class Paul005 : Enemy
         if (BM.teamDieCount < BM.characters.Count)
         {
 
-            if (!myEnemy.isDie)
+            if (!isDie)
             {
                 curTurn++;
                 if (curTurn % 3 == 0)
@@ -82,7 +75,7 @@ public class Paul005 : Enemy
                     }
                 }
             }
-            myEnemy.BM.AM.EnemyAct();
+           BM.AM.EnemyAct();
         }
     }
 }
