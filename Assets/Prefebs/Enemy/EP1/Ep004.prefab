@@ -405,9 +405,7 @@ MonoBehaviour:
   Atk: 0
   TM: {fileID: 0}
   BM: {fileID: 0}
-  HpT: {fileID: 0}
   Board: {fileID: 6340815177969900181}
-  ArmorT: {fileID: 0}
   hitStack: 0
   dmgStack: 0
   nextTurnArmor: 0
@@ -419,6 +417,7 @@ MonoBehaviour:
   Shadow: 0
   hpSlider: {fileID: 2920130461344740686}
   myImage: {fileID: 3392971980832908369}
+  dieNotEnd: 0
   status: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
   speed: 5.5
   curTurnSpeed: 5.5
@@ -655,7 +654,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 6844987324115116805}
           m_MethodName: onExitEvent
           m_Mode: 1
           m_Arguments:
@@ -670,7 +669,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 6844987324115116805}
           m_MethodName: onEnterEvnent
           m_Mode: 1
           m_Arguments:
@@ -685,7 +684,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 6844987324115116805}
           m_MethodName: onClickEvent
           m_Mode: 1
           m_Arguments:
@@ -1536,7 +1535,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 6661104118916164124}
           m_MethodName: onExitEvent
           m_Mode: 1
           m_Arguments:
@@ -1551,7 +1550,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 6661104118916164124}
           m_MethodName: onEnterEvnent
           m_Mode: 1
           m_Arguments:
@@ -1566,7 +1565,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 6661104118916164124}
           m_MethodName: onClickEvent
           m_Mode: 1
           m_Arguments:
@@ -1876,7 +1875,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 1718470940628814982}
           m_MethodName: onExitEvent
           m_Mode: 1
           m_Arguments:
@@ -1891,7 +1890,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 1718470940628814982}
           m_MethodName: onEnterEvnent
           m_Mode: 1
           m_Arguments:
@@ -1906,7 +1905,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 1718470940628814982}
           m_MethodName: onClickEvent
           m_Mode: 1
           m_Arguments:
@@ -2564,7 +2563,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 4230893224970603792}
           m_MethodName: onExitEvent
           m_Mode: 1
           m_Arguments:
@@ -2579,7 +2578,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 4230893224970603792}
           m_MethodName: onEnterEvnent
           m_Mode: 1
           m_Arguments:
@@ -2594,7 +2593,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 4230893224970603792}
           m_MethodName: onClickEvent
           m_Mode: 1
           m_Arguments:
@@ -2996,9 +2995,7 @@ MonoBehaviour:
   Atk: 0
   TM: {fileID: 0}
   BM: {fileID: 0}
-  HpT: {fileID: 0}
   Board: {fileID: 7214967367212475779}
-  ArmorT: {fileID: 0}
   hitStack: 0
   dmgStack: 0
   nextTurnArmor: 0
@@ -3010,6 +3007,7 @@ MonoBehaviour:
   Shadow: 0
   hpSlider: {fileID: 9019636213427713019}
   myImage: {fileID: 8503208959937283651}
+  dieNotEnd: 0
   status: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
   speed: 8.7
   curTurnSpeed: 8.7
@@ -3323,9 +3321,7 @@ MonoBehaviour:
   Atk: 0
   TM: {fileID: 0}
   BM: {fileID: 0}
-  HpT: {fileID: 0}
   Board: {fileID: 8613884778379382719}
-  ArmorT: {fileID: 0}
   hitStack: 0
   dmgStack: 0
   nextTurnArmor: 0
@@ -3337,6 +3333,7 @@ MonoBehaviour:
   Shadow: 0
   hpSlider: {fileID: 2775132200777441426}
   myImage: {fileID: 4983495450245400115}
+  dieNotEnd: 0
   status: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
   speed: 5.5
   curTurnSpeed: 5.5
@@ -3478,9 +3475,7 @@ MonoBehaviour:
   Atk: 0
   TM: {fileID: 0}
   BM: {fileID: 0}
-  HpT: {fileID: 0}
   Board: {fileID: 8170351113459408425}
-  ArmorT: {fileID: 0}
   hitStack: 0
   dmgStack: 0
   nextTurnArmor: 0
@@ -3492,6 +3487,7 @@ MonoBehaviour:
   Shadow: 0
   hpSlider: {fileID: 5258830429835020134}
   myImage: {fileID: 8822968748103372919}
+  dieNotEnd: 0
   status: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
   speed: 8.7
   curTurnSpeed: 8.7
