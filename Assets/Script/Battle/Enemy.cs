@@ -7,23 +7,21 @@ public class Enemy : MonoBehaviour
 {
     public int Hp;
     public int maxHp;
-    public int Armor;
-    public int Atk;
-    public TurnManager TM;
-    public BattleManager BM;
-    [SerializeField] TextMeshProUGUI HpT;
+    [HideInInspector] public int Armor;
+    [HideInInspector] public int Atk;
+    [HideInInspector]public TurnManager TM;
+    [HideInInspector] public BattleManager BM;
     public TextMeshProUGUI Board;
-    [SerializeField] TextMeshProUGUI ArmorT;
-    public int hitStack;
-    public int dmgStack;
-    public int nextTurnArmor;
-    public bool isDie;
-    public bool noDie;
-    public bool power;
-    public bool immortal;
+    [HideInInspector] public int hitStack;
+    [HideInInspector] public int dmgStack;
+    [HideInInspector] public int nextTurnArmor;
+    [HideInInspector] public bool isDie;
+    [HideInInspector] public bool noDie;
+    [HideInInspector] public bool power;
+    [HideInInspector] public bool immortal;
     public string Name;
     int RecoverHp;
-    public bool Shadow;
+    [HideInInspector] public bool Shadow;
     int EndTurnDmg;
     EnemyInfo ei;
     public Slider hpSlider;
@@ -32,15 +30,15 @@ public class Enemy : MonoBehaviour
 
     public bool dieNotEnd;//해당 적이 죽어도 게임이 끝나지 않을 경우
 
-    public int[] status = new int[10];
+    [HideInInspector] public int[] status = new int[10];
 
     public float speed;
 
-    public float curTurnSpeed;
+    [HideInInspector] public float curTurnSpeed;
 
     public Sprite face;
 
-    public bool isAct;
+    [HideInInspector] public bool isAct;
     public virtual void EnemySelectPattern()
     {
         Debug.Log("C");

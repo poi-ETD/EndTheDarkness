@@ -20,9 +20,9 @@ public class CardInfo : MonoBehaviour
 
     public Sprite[] CardSpr = {
          Resources.Load<Sprite>("CardSprite/Card-13"), //0
-         Resources.Load<Sprite>("CardSprite/Card-13"), //1
-         Resources.Load<Sprite>("CardSprite/Card-13"), //2
-         Resources.Load<Sprite>("CardSprite/Card-13"), //3
+         Resources.Load<Sprite>("CardSprite/Card-01"), //1
+         Resources.Load<Sprite>("CardSprite/Card-02"), //2
+         Resources.Load<Sprite>("CardSprite/Card-03"), //3
          Resources.Load<Sprite>("CardSprite/Card-13"), //4
          Resources.Load<Sprite>("CardSprite/Card-5"), //5
          Resources.Load<Sprite>("CardSprite/Card-6"), //6

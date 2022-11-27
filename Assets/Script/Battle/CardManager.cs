@@ -395,7 +395,7 @@ public class CardManager : MonoBehaviour
                 }
                 else
                 {
-                    ReviveCountOver();
+                    //ReviveCountOver();
                 }
             }
         }

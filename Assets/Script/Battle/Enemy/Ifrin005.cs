@@ -8,7 +8,7 @@ public class Ifrin005 : Enemy
 
     public int curTurn;
     public Enemy myEnemy;
-    private int phase;
+    private int phase=1;
     private bool phase2start;
     public Image image_character;
     public Sprite sprite_idle;
@@ -27,13 +27,10 @@ public class Ifrin005 : Enemy
 
     }
 
-    private void Update()
+    public override void EnemySelectPattern()
     {
-        if (myEnemy.isAct)
-        {
-            StartPattern();
-            myEnemy.isAct = false;
-        }
+        base.EnemySelectPattern();
+        StartPattern();
     }
     private void Escape()
     {
@@ -56,6 +53,7 @@ public class Ifrin005 : Enemy
     {
         base.die();
         Instantiate(obj_Paul);
+        Destroy(gameObject);
     }
     void StartPattern()
     {
