@@ -232,10 +232,10 @@ public class LobbyManager : MonoBehaviour
         ResetCanvas.SetActive(false);
         for (int i = 0; i < 5; i++)
         {
-            CD.cardNo.Add(ResetCardListSelect[i]);
+            CD.cardCode.Add(ResetCardListSelect[i]);
             CD.cardCost.Add(CardInfo.Instance.cd[ResetCardListSelect[i]].Cost);
-            CD.cardGet.Add(CD.get);
-            CD.get++;
+            CD.cardGetOrder.Add(CD.count);
+            CD.count++;
         }
 
         blessInLobby.BlessApplyInResetmara(firstBless);
@@ -252,12 +252,12 @@ public class LobbyManager : MonoBehaviour
             canvasOn = true;
             PopUpCanvas.SetActive(true);
             cardView.SetActive(true);
-            for (int i = 0; i < CD.cardNo.Count; i++)
+            for (int i = 0; i < CD.cardCode.Count; i++)
             {
                 GameObject newCard = Instantiate(cardPrefebs, cardContent.transform);
-                newCard.GetComponent<NoBattleCard>().setCardInfoInLobby(CD.cardNo[i], i);
+                newCard.GetComponent<NoBattleCard>().setCardInfoInLobby(CD.cardCode[i], i);
                 newCard.GetComponent<NoBattleCard>().setCost(CD.cardCost[i]);
-                int[] k = { CD.cardNo[i], CD.cardCost[i] };
+                int[] k = { CD.cardCode[i], CD.cardCost[i] };
                 CardList.Add(i, k);
             }
         }
@@ -430,7 +430,7 @@ public class LobbyManager : MonoBehaviour
     public void ThisCardSee(int i)
     {
         OneCardCanvas.SetActive(true);
-        OneCard.GetComponent<NoBattleCard>().setCardInfoInLobby(CD.cardNo[i], 0);
+        OneCard.GetComponent<NoBattleCard>().setCardInfoInLobby(CD.cardCode[i], 0);
         OneCard.GetComponent<NoBattleCard>().setCost(CD.cardCost[i]);
     }
     public void GetPassiveInGM() //개발용
@@ -636,10 +636,10 @@ public class LobbyManager : MonoBehaviour
         if (ShopSelectedCard == null && t) return;
         if (t)
         {
-            CD.cardNo.Add(ShopSelectedCardNo);
+            CD.cardCode.Add(ShopSelectedCardNo);
             CD.cardCost.Add(CardInfo.Instance.cd[ShopSelectedCardNo].Cost);
-            CD.cardGet.Add(CD.get);
-            CD.get++;
+            CD.cardGetOrder.Add(CD.count);
+            CD.count++;
 
         }
         cancleInShop.SetActive(true);
@@ -807,12 +807,12 @@ public class LobbyManager : MonoBehaviour
         CardRemovePopup.SetActive(true);
         cardRemoveText[0].text = "삭제할 카드를 " + n + "장 선택해 주세요.";
         maxRemoveCount = n;
-        for (int i = 0; i < CD.cardNo.Count; i++)
+        for (int i = 0; i < CD.cardCode.Count; i++)
         {
             GameObject newCard = Instantiate(RemoveCardPrefebs, RemoveContent.transform);
-            newCard.GetComponent<NoBattleCard>().setCardInfoInLobby(CD.cardNo[i], i);
+            newCard.GetComponent<NoBattleCard>().setCardInfoInLobby(CD.cardCode[i], i);
             newCard.GetComponent<NoBattleCard>().setCost(CD.cardCost[i]);
-            int[] k = { CD.cardNo[i], CD.cardCost[i] };
+            int[] k = { CD.cardCode[i], CD.cardCost[i] };
             removeCardList.Add(i, k);
             objRemovecardList.Add(newCard);
         }
@@ -854,7 +854,7 @@ public class LobbyManager : MonoBehaviour
     {
         List<int> removeList = new List<int>();
         if (removeCount < maxRemoveCount) return;
-        for (int i = 0; i < CD.cardNo.Count; i++)
+        for (int i = 0; i < CD.cardCode.Count; i++)
         {
 
             if (RemoveContent.transform.GetChild(i).gameObject.GetComponent<NoBattleCard>().select)
@@ -864,9 +864,9 @@ public class LobbyManager : MonoBehaviour
 
         for (int i = maxRemoveCount - 1; i >= 0; i--)
         {
-            CD.cardNo.RemoveAt(removeList[i]);
+            CD.cardCode.RemoveAt(removeList[i]);
             CD.cardCost.RemoveAt(removeList[i]);
-            CD.cardGet.RemoveAt(removeList[i]);
+            CD.cardGetOrder.RemoveAt(removeList[i]);
         }
         canvasOn = false;
         Act();

@@ -41,9 +41,9 @@ public class GMmode : MonoBehaviour
             string gameData = File.ReadAllText(path3);
             GD = JsonConvert.DeserializeObject<GameData>(gameData);
         }
-        for (int i = 0; i < CD.cardNo.Count; i++)
+        for (int i = 0; i < CD.cardCode.Count; i++)
         {
-            CardCount[CD.cardNo[i]]++;
+            CardCount[CD.cardCode[i]]++;
         }
     }
 
@@ -82,18 +82,18 @@ public void GoLobby()
     void SaveCard()
     {
         CD.cardCost.Clear();
-        CD.cardGet.Clear();
-        CD.cardNo.Clear();
+        CD.cardGetOrder.Clear();
+        CD.cardCode.Clear();
         int get = 0;
         for(int i = 1; i < CardCount.Length; i++)
         {
             int count = 0;
             while (count < CardCount[i])
             {
-                CD.cardNo.Add(i);
+                CD.cardCode.Add(i);
                 CD.cardCost.Add(CardInfo.Instance.cd[i].Cost);
-                CD.cardGet.Add(get);
-                CD.get = get;
+                CD.cardGetOrder.Add(get);
+                CD.count = get;
                 get++;
                 count++;
             }
@@ -105,9 +105,9 @@ public void GoLobby()
         {
             CardCount[i] = 0;
         }
-        for (int i = 0; i < CD.cardNo.Count; i++)
+        for (int i = 0; i < CD.cardCode.Count; i++)
         {
-            CardCount[CD.cardNo[i]]++;
+            CardCount[CD.cardCode[i]]++;
         }
         for(int i = 0; i < CardInfo.Instance.cd.Length-1; i++)
         {

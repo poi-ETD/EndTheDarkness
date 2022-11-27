@@ -1041,10 +1041,10 @@ public class BattleManager : MonoBehaviour
 
             if (RewardCanvas.transform.GetChild(i).GetComponent<NoBattleCard>().select)
             {
-                CardD.cardNo.Add(RancomSelectCard[i]);
+                CardD.cardCode.Add(RancomSelectCard[i]);
                 CardD.cardCost.Add(CardInfo.Instance.cd[RancomSelectCard[i]].Cost);
-                CardD.cardGet.Add(CardD.get);
-                CardD.get++;
+                CardD.cardGetOrder.Add(CardD.count);
+                CardD.count++;
             }
         }
         cardData = JsonConvert.SerializeObject(CardD);

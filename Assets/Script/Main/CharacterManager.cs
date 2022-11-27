@@ -36,7 +36,7 @@ public class CharacterManager : MonoBehaviour
 
     public void ToMain() //저장 후 로비로 게임 시작
     {
-        cardManager.SaveCard();
+        //cardManager.SaveCard();
 
         for(int i = 0; i < CharacterList.Count; i++)
         {
@@ -154,7 +154,7 @@ public class CharacterManager : MonoBehaviour
 
         if (counter+1 >= CharacterList.Count) //모든 캐릭터 서브 세팅을 마치면
         {
-            go_Window_SlotName.SetActive(true); 
+            go_Window_SlotName.SetActive(true);
             return;
         }
 

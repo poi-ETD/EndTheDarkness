@@ -91,10 +91,10 @@ public class BlessInLobby : MonoBehaviour
         {
             for(int i = 0; i < lobby.CD.cardCost.Count; i++)
             {
-                if(lobby.CD.cardGet[i]==lobby.GD.bless12[0]|| lobby.CD.cardGet[i] == lobby.GD.bless12[1]|| lobby.CD.cardGet[i] == lobby.GD.bless12[2])
+                if(lobby.CD.cardGetOrder[i]==lobby.GD.bless12[0]|| lobby.CD.cardGetOrder[i] == lobby.GD.bless12[1]|| lobby.CD.cardGetOrder[i] == lobby.GD.bless12[2])
                 {
                     CardInfo carddata = new CardInfo();
-                    lobby.CD.cardCost[i] = carddata.cd[lobby.CD.cardNo[i]].Cost;
+                    lobby.CD.cardCost[i] = carddata.cd[lobby.CD.cardCode[i]].Cost;
                 }
             }
         }
@@ -110,10 +110,10 @@ public class BlessInLobby : MonoBehaviour
         {
             for (int i = 0; i < lobby.CD.cardCost.Count; i++)
             {
-                if (lobby.CD.cardGet[i] == lobby.GD.bless12[0] || lobby.CD.cardGet[i] == lobby.GD.bless12[1] || lobby.CD.cardGet[i] == lobby.GD.bless12[2])
+                if (lobby.CD.cardGetOrder[i] == lobby.GD.bless12[0] || lobby.CD.cardGetOrder[i] == lobby.GD.bless12[1] || lobby.CD.cardGetOrder[i] == lobby.GD.bless12[2])
                 {
                     CardInfo carddata = new CardInfo();
-                    lobby.CD.cardCost[i] = carddata.cd[lobby.CD.cardNo[i]].Cost;
+                    lobby.CD.cardCost[i] = carddata.cd[lobby.CD.cardCode[i]].Cost;
                 }
             }
         }
@@ -214,12 +214,12 @@ public class BlessInLobby : MonoBehaviour
         BlessObj.SetActive(false);
         bless12.SetActive(true);
         bless12Content.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
-        for (int i = 0; i < lobby.CD.cardNo.Count; i++)
+        for (int i = 0; i < lobby.CD.cardCode.Count; i++)
         {
             GameObject newCard = Instantiate(bless5RemoveCard, bless12Content.transform);
-            newCard.GetComponent<NoBattleCard>().setCardInfoInLobby(lobby.CD.cardNo[i], i);
+            newCard.GetComponent<NoBattleCard>().setCardInfoInLobby(lobby.CD.cardCode[i], i);
             newCard.GetComponent<NoBattleCard>().setCost(lobby.CD.cardCost[i]);
-            int[] k = { lobby.CD.cardNo[i], lobby.CD.cardCost[i] };
+            int[] k = { lobby.CD.cardCode[i], lobby.CD.cardCost[i] };
             CardList.Add(i, k);
             b5cardList.Add(newCard);
         }
@@ -234,12 +234,12 @@ public class BlessInLobby : MonoBehaviour
         BlessObj.SetActive(false);
         bless5.SetActive(true);
         bless5Content.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);         
-        for (int i = 0; i < lobby.CD.cardNo.Count; i++)
+        for (int i = 0; i < lobby.CD.cardCode.Count; i++)
         {
             GameObject newCard = Instantiate(bless5RemoveCard, bless5Content.transform);
-            newCard.GetComponent<NoBattleCard>().setCardInfoInLobby(lobby.CD.cardNo[i], i);
+            newCard.GetComponent<NoBattleCard>().setCardInfoInLobby(lobby.CD.cardCode[i], i);
             newCard.GetComponent<NoBattleCard>().setCost(lobby.CD.cardCost[i]);
-            int[] k = { lobby.CD.cardNo[i], lobby.CD.cardCost[i] };
+            int[] k = { lobby.CD.cardCode[i], lobby.CD.cardCost[i] };
             CardList.Add(i, k);
             b5cardList.Add(newCard);
         }
@@ -385,7 +385,7 @@ public class BlessInLobby : MonoBehaviour
     List<int> b5list = new List<int>();
     public void RemoveB5()
     {if (blesscount < 6) return;      
-        for(int i = 0; i <lobby.CD.cardNo.Count; i++)
+        for(int i = 0; i <lobby.CD.cardCode.Count; i++)
         {
         
             if(bless5Content.transform.GetChild(i).gameObject.GetComponent<NoBattleCard>().select)
@@ -394,9 +394,9 @@ public class BlessInLobby : MonoBehaviour
         b5list.Sort();
         for(int i = 5; i >=0; i--)
         { 
-            lobby.CD.cardNo.RemoveAt(b5list[i]);
+            lobby.CD.cardCode.RemoveAt(b5list[i]);
             lobby.CD.cardCost.RemoveAt(b5list[i]);
-            lobby.CD.cardGet.RemoveAt(b5list[i]);
+            lobby.CD.cardGetOrder.RemoveAt(b5list[i]);
         }
         exitBlessPopup();
         lobby.GD.Ignum = 0;
@@ -409,7 +409,7 @@ public class BlessInLobby : MonoBehaviour
     public void B12Apply()
     {
         if (blesscount < 3) return;
-        for (int i = 0; i < lobby.CD.cardNo.Count; i++)
+        for (int i = 0; i < lobby.CD.cardCode.Count; i++)
         {
 
             if (bless12Content.transform.GetChild(i).gameObject.GetComponent<NoBattleCard>().select)
@@ -418,7 +418,7 @@ public class BlessInLobby : MonoBehaviour
        for(int i = 0; i < 3; i++)
         {
             lobby.CD.cardCost[b5list[i]] = 0;
-            lobby.GD.bless12[i] = lobby.CD.cardGet[b5list[i]];
+            lobby.GD.bless12[i] = lobby.CD.cardGetOrder[b5list[i]];
         }
         exitBlessPopup();
 
@@ -449,8 +449,8 @@ public class BlessInLobby : MonoBehaviour
         }
         else if (newbless == 8)
         {
-            int length = lobby.CD.cardNo.Count;
-            int[] randArray = new int[lobby.CD.cardNo.Count / 2];
+            int length = lobby.CD.cardCode.Count;
+            int[] randArray = new int[lobby.CD.cardCode.Count / 2];
             bool isSame;
             for (int i = 0; i < length / 2; ++i)
             {
@@ -484,8 +484,8 @@ public class BlessInLobby : MonoBehaviour
             for (int i = length / 2 - 1; i >= 0; i--)
             {
                 lobby.CD.cardCost.RemoveAt(randArray[i]);
-                lobby.CD.cardNo.RemoveAt(randArray[i]);
-                lobby.CD.cardGet.RemoveAt(randArray[i]);
+                lobby.CD.cardCode.RemoveAt(randArray[i]);
+                lobby.CD.cardGetOrder.RemoveAt(randArray[i]);
             }
         }
         else if (newbless == 12)
@@ -568,8 +568,8 @@ public class BlessInLobby : MonoBehaviour
 
         else if (newbless == 8)
         {
-            int length = lobby.CD.cardNo.Count;
-            int[] randArray = new int[lobby.CD.cardNo.Count / 2];
+            int length = lobby.CD.cardCode.Count;
+            int[] randArray = new int[lobby.CD.cardCode.Count / 2];
             bool isSame;
             for (int i = 0; i < length / 2; ++i)
             {
@@ -604,8 +604,8 @@ public class BlessInLobby : MonoBehaviour
             for (int i = length / 2 - 1; i >= 0; i--)
             {
                 lobby.CD.cardCost.RemoveAt(randArray[i]);
-                lobby.CD.cardNo.RemoveAt(randArray[i]);
-                lobby.CD.cardGet.RemoveAt(randArray[i]);
+                lobby.CD.cardCode.RemoveAt(randArray[i]);
+                lobby.CD.cardGetOrder.RemoveAt(randArray[i]);
             }
             But[2].SetActive(true);
         }

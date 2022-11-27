@@ -25,11 +25,14 @@ public class CardSetManager : MonoBehaviour
     {
         //string filepath = Application.persistentDataPath + "/CardData.json";
 
-        AllCard = CD.cardNo.Count;
-        for (int i = 0; i < AllCard; i++)
-        {
-            CardCount[CD.cardNo[i]]++;
-        }
+        //# 단락 주석처리 : YH
+        //AllCard = CD.cardNo.Count;
+        //for (int i = 0; i < AllCard; i++)
+        //{
+        //    CardCount[CD.cardNo[i]]++;
+        //}
+        //##
+
         /*  for (int i = 1; i < cd.cd.Length; i++)
           {
 
@@ -89,43 +92,45 @@ public class CardSetManager : MonoBehaviour
         }
     }
 
-    public void SaveCard()
-    {
-        for (int i = 1; i <= 4; i++)
-        {
-            for (int j = 0; j < 5; j++)
-            {
-                CD.cardNo.Add(i);
-                CD.cardCost.Add(CardInfo.Instance.cd[i].Cost);
-                CD.cardGet.Add(CD.get);
-                CD.get++;
-            }
-        }
-        for (int i = 0; i < CardInfo.Instance.cd.Length; i++)
-        {
-            while (CardCount[i] != 0)
-            {
-                CardCount[i]--;
-                CD.cardNo.Add(i);
-                CD.cardCost.Add(CardInfo.Instance.cd[i].Cost);
-                CD.cardGet.Add(CD.get);
-                CD.get++;
+    //# 단락 주석처리 : YH
+    //public void SaveCard()
+    //{
+    //    for (int i = 1; i <= 4; i++)
+    //    {
+    //        for (int j = 0; j < 5; j++)
+    //        {
+    //            CD.cardNo.Add(i);
+    //            CD.cardCost.Add(CardInfo.Instance.cd[i].Cost);
+    //            CD.cardGet.Add(CD.get);
+    //            CD.get++;
+    //        }
+    //    }
+    //    for (int i = 0; i < CardInfo.Instance.cd.Length; i++)
+    //    {
+    //        while (CardCount[i] != 0)
+    //        {
+    //            CardCount[i]--;
+    //            CD.cardNo.Add(i);
+    //            CD.cardCost.Add(CardInfo.Instance.cd[i].Cost);
+    //            CD.cardGet.Add(CD.get);
+    //            CD.get++;
 
-            }
-        }
+    //        }
+    //    }
 
-        string cardData = JsonConvert.SerializeObject(CD);
-        string path = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CardDatas[GameManager.Instance.selectedSlot_Main]);
-        File.WriteAllText(path, cardData);
+    //    string cardData = JsonConvert.SerializeObject(CD);
+    //    string path = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CardDatas[GameManager.Instance.selectedSlot_Main]);
+    //    File.WriteAllText(path, cardData);
 
-        //cardImage.sprite =  so_CardList.cardDetails[0].sprite_Card;
-    }
+    //    //cardImage.sprite =  so_CardList.cardDetails[0].sprite_Card;
+    //}
+    //##
 }
 
-public class CardData
-{
-    public List<int> cardNo = new List<int>(); // 소유한 카드들의 넘버 (ex:인덱스 0부터 4까지 [1, 1, 1, 1, 1] 이라면 넘버 1 카드 5장을 소유하고 있는 것)
-    public List<int> cardCost = new List<int>(); // 소유한 카드들의 코스트
-    public List<int> cardGet = new List<int>(); // 소유한 카드들의 획득 순서
-    public int get;
-}
+//public class CardData
+//{
+//    public List<int> cardNo = new List<int>(); // 소유한 카드들의 넘버 (ex:인덱스 0부터 4까지 [1, 1, 1, 1, 1] 이라면 넘버 1 카드 5장을 소유하고 있는 것)
+//    public List<int> cardCost = new List<int>(); // 소유한 카드들의 코스트
+//    public List<int> cardGet = new List<int>(); // 소유한 카드들의 획득 순서
+//    public int get;
+//}

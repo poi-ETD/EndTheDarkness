@@ -77,7 +77,7 @@ MonoBehaviour:
   - code: 8
     sprite_Card: {fileID: 21300000, guid: f398ee955fc043e42b96be2514790ab7, type: 3}
     name: "\uBC29\uC5B4\uC804\uC220"
-    cost: 999
+    cost: 0
     ownerCharacter: 3
     thema: 1
     description_KR: "- \uD604\uC7AC \uB0A8\uC740 \uCF54\uC2A4\uD2B8 1\uB2F9 \uC790\uC2E0\uC5D0\uAC8C

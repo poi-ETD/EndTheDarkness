@@ -8,9 +8,9 @@ using System.IO;
 
 public class UIManager_CharacterScene : MonoBehaviour
 {
-    private static HandManager instance;
+    private static UIManager_CharacterScene instance;
 
-    public static HandManager Instance
+    public static UIManager_CharacterScene Instance
     {
         get
         {
@@ -67,6 +67,7 @@ public class UIManager_CharacterScene : MonoBehaviour
     [SerializeField] private GameObject[] gos_SelectedMark_Passive;
 
     private CharacterData characterData;
+    private CardData cardData;
 
     [SerializeField] private RectTransform rect_Image_Line;
     private float[] positions_LineImage;
@@ -104,9 +105,14 @@ public class UIManager_CharacterScene : MonoBehaviour
     [SerializeField] private TextMeshProUGUI text_Name_SubWindow_Passive_Card;
     [SerializeField] private TextMeshProUGUI text_Description_SubWindow_Passive_Card;
 
+    [SerializeField] private GameObject go_Window_SlotName;
+    [SerializeField] private Text text_SlotName;
+
     private void Awake()
     {
         characterData = new CharacterData();
+
+        cardData = new CardData();
 
         characters_Party = new Character_Party[4];
 
@@ -148,7 +154,7 @@ public class UIManager_CharacterScene : MonoBehaviour
 
         isCardsBasic = true;
     }
-
+        
     private void Init_Card() // 카드 선택창의 초기 셋팅을 하는 함수
     {
         for (int i = 0; i < 4; i++)
@@ -352,6 +358,20 @@ public class UIManager_CharacterScene : MonoBehaviour
             }
         }
 
+        bool isAllBackward = true;
+
+        for (int i = 0; i < 4; i++)
+        {
+            if (characters_Party[i].characterCode != -1) // 파티원이 존재하는데
+            {
+                if (characters_Party[i].isForward) // 포지션이 전방인 파티원이 한명이라도 있다면 문제 없지만
+                    isAllBackward = false;
+            }
+        }
+
+        if (isAllBackward) // 모두 후방이라면 리턴
+            return;
+
         characterData.size = 0;
 
         for (int i = 0; i < 4; i++)
@@ -392,7 +412,7 @@ public class UIManager_CharacterScene : MonoBehaviour
         Init_Card();
     }
 
-    public void Click_Tab_Cards()
+    public void Click_Tab_Cards() // 카드 설정 창의 통상 / 스탠다드 탭 클릭시 실행되는 함수
     {
         if (!isCardsBasic)
         {
@@ -427,7 +447,7 @@ public class UIManager_CharacterScene : MonoBehaviour
         }
     }
 
-    public void Click_Card_Basic(int positionCode)
+    public void Click_Card_Basic(int positionCode) // 통상 카드 클릭시 실행되는 함수
     {
         // 이미 통상 카드가 10장 이상 덱에 존재한다면 리턴
         if (count_Basic_Deck >= 10)
@@ -462,7 +482,7 @@ public class UIManager_CharacterScene : MonoBehaviour
         }
     }
 
-    public void Click_Card_Standard(int positionCode)
+    public void Click_Card_Standard(int positionCode) // 스탠다드 카드 클릭시 실행되는 함수
     {
         // 이미 스탠다드 카드가 해당 캐릭터의 최대 스탠다드 카드 소지 수 이상 덱에 존재한다면 리턴
         if (cards_Standard[positionCode].ownerCode == 1) // Q(Revivor)
@@ -534,7 +554,7 @@ public class UIManager_CharacterScene : MonoBehaviour
         }
     }
 
-    public void Click_Remove_Deck(int positionCode)
+    public void Click_Remove_Deck(int positionCode) // 덱에 있는 카드 클릭시 실행되는 함수
     {
         if (list_CardCode_Deck[positionCode] <= 4) // Basic Card
         {
@@ -596,8 +616,56 @@ public class UIManager_CharacterScene : MonoBehaviour
         }
 
         list_CardCode_Deck.RemoveAt(positionCode);
-
+        
         Reset_Deck();
+    }
+
+    public void Click_Complete_CardSetting() // 카드 설정 창의 설정 완료 버튼 클릭 시 실행되는 함수
+    {
+        //if (list_CardCode_Deck.Count < 20) // 선택된 카드 수가 20장 미만일시 리턴
+        //    return;
+
+        for (int i = 0; i < list_CardCode_Deck.Count; i++) // 덱에 넣은 카드들을 순회하며
+        {
+            if (list_CardCode_Deck[i] <= 4) // 통상 카드일시 카드 데이터에 추가
+            {
+                cardData.cardCode.Add(list_CardCode_Deck[i]);
+                cardData.cardCost.Add(so_CardList.cardDetails[list_CardCode_Deck[i]].cost);
+                cardData.cardGetOrder.Add(cardData.count);
+                cardData.count++;
+            }
+        }
+
+        for (int i = 0; i < list_CardCode_Deck.Count; i++) // 다시 덱에 넣은 카드들을 순회하며
+        {
+            if (list_CardCode_Deck[i] > 4) // 스탠다드 카드일시 카드 데이터에 추가
+            {
+                cardData.cardCode.Add(list_CardCode_Deck[i]);
+                cardData.cardCost.Add(so_CardList.cardDetails[list_CardCode_Deck[i]].cost);
+                cardData.cardGetOrder.Add(cardData.count);
+                cardData.count++;
+            }
+        }
+
+        // 위 작업에 따라 카드 데이터의 앞쪽에는 통상카드, 뒤쪽에는 스탠다드 카드가 위치하게 됨
+
+        string cardDataForJson = JsonConvert.SerializeObject(cardData);
+        string path = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CardDatas[GameManager.Instance.selectedSlot_Main]);
+        File.WriteAllText(path, cardDataForJson);
+
+        go_Window_SlotName.SetActive(true);
+    }
+
+    public void Click_Button_OK_SlotName()
+    {
+        if (text_SlotName.Equals(""))
+            return;
+
+        GameManager.Instance.slot_Names[GameManager.Instance.selectedSlot_Main] = text_SlotName.text;
+        GameManager.Instance.Save();
+        Debug.Log("슬롯의 이름이 " + text_SlotName.text + "(으)로 설정되었습니다.");
+
+        StartCoroutine(SceneControllerManager.Instance.SwitchScene("Scene3_Lobby"));
     }
 
     private void Select_Character(int characterCode) // 선택한 캐릭터의 세부정보를 나타내는 함수
@@ -871,10 +939,10 @@ public class CharacterData // json으로 저장 될 캐릭터 정보
     public int size; // 파티의 캐릭터 수
 }
 
-//public class CardData
-//{
-//    public List<int> cardNo = new List<int>(); // 소유한 카드들의 넘버 (ex:인덱스 0부터 4까지 [1, 1, 1, 1, 1] 이라면 넘버 1 카드 5장을 소유하고 있는 것)
-//    public List<int> cardCost = new List<int>(); // 소유한 카드들의 코스트
-//    public List<int> cardGet = new List<int>(); // 소유한 카드들의 획득 순서
-//    public int get;
-//}
+public class CardData
+{
+    public List<int> cardCode = new List<int>(); // 소유한 카드들의 코드 리스트
+    public List<int> cardCost = new List<int>(); // 소유한 카드들의 코스트 리스트
+    public List<int> cardGetOrder = new List<int>(); // 소유한 카드들의 획득 순서 리스트
+    public int count; // 소유한 카드의 총 갯수
+}

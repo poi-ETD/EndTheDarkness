@@ -62,19 +62,19 @@ public class CardManager : MonoBehaviour
             CD = JsonConvert.DeserializeObject<CardData>(cardData);
 
         }
-        for (int i = 0; i < CD.cardNo.Count; i++)
+        for (int i = 0; i < CD.cardCode.Count; i++)
         {
             GameObject newCard = Instantiate(CardPrefebs, CardCanvas.transform);
-            newCard.GetComponent<Card>().cardImage.sprite = CardInfo.Instance.CardSpr[CD.cardNo[i]];
-            newCard.GetComponent<Card>().NoT.text = "NO." + CardInfo.Instance.cd[CD.cardNo[i]].No.ToString("D3");//넘버
-            newCard.GetComponent<Card>().cardNo = CardInfo.Instance.cd[CD.cardNo[i]].No;
-            newCard.GetComponent<Card>().DeckNo = CardInfo.Instance.cd[CD.cardNo[i]].Deck;
-            newCard.GetComponent<Card>().DeckT.text = deckText[CardInfo.Instance.cd[CD.cardNo[i]].Deck];
-            newCard.GetComponent<Card>().Content.text = CardInfo.Instance.cd[CD.cardNo[i]].Content;
-            newCard.GetComponent<Card>().Name.text = CardInfo.Instance.cd[CD.cardNo[i]].Name;
+            newCard.GetComponent<Card>().cardImage.sprite = CardInfo.Instance.CardSpr[CD.cardCode[i]];
+            newCard.GetComponent<Card>().NoT.text = "NO." + CardInfo.Instance.cd[CD.cardCode[i]].No.ToString("D3");//넘버
+            newCard.GetComponent<Card>().cardNo = CardInfo.Instance.cd[CD.cardCode[i]].No;
+            newCard.GetComponent<Card>().DeckNo = CardInfo.Instance.cd[CD.cardCode[i]].Deck;
+            newCard.GetComponent<Card>().DeckT.text = deckText[CardInfo.Instance.cd[CD.cardCode[i]].Deck];
+            newCard.GetComponent<Card>().Content.text = CardInfo.Instance.cd[CD.cardCode[i]].Content;
+            newCard.GetComponent<Card>().Name.text = CardInfo.Instance.cd[CD.cardCode[i]].Name;
             newCard.GetComponent<Card>().cardcost = CD.cardCost[i];
             newCard.GetComponent<Card>().realCost = CD.cardCost[i];
-            newCard.GetComponent<Card>().selectType = CardInfo.Instance.cd[CD.cardNo[i]].select;
+            newCard.GetComponent<Card>().selectType = CardInfo.Instance.cd[CD.cardCode[i]].select;
             //addComponent(newCard, CD.cardNo[i]);                    
             Deck.Add(newCard);
         }
@@ -150,7 +150,7 @@ public class CardManager : MonoBehaviour
         newCard.GetComponent<Card>().Name.text = CardInfo.Instance.cd[i].Name;
         newCard.GetComponent<Card>().cardcost = CardInfo.Instance.cd[i].Cost;
         newCard.GetComponent<Card>().realCost = CardInfo.Instance.cd[i].Cost;
-        newCard.GetComponent<Card>().selectType = CardInfo.Instance.cd[CD.cardNo[i]].select;
+        newCard.GetComponent<Card>().selectType = CardInfo.Instance.cd[CD.cardCode[i]].select;
 
         Deck.Add(newCard);
         newCard.SetActive(false);
