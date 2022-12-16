@@ -336,8 +336,8 @@ public class CharacterPassive : MonoBehaviour
     {
         if (myCharacter.isDie) return;
         if (myNo == 2 && myPassvie[1] > 0)
-        { 
-           
+        {
+            if (myCharacter.turnAtk == 0) return;
            AM.MakeAct(0,6, myCharacter.turnAtk,null, e, myCharacter, null, myPassvie[1]);
                     
         }

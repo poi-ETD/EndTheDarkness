@@ -19,6 +19,15 @@ public class CharacterInfo
             return instance;
         }
     }
+    public Sprite[] CharacterFaceSprite = {
+         Resources.Load<Sprite>("CharacterSprite/Q_face"), //0
+         Resources.Load<Sprite>("CharacterSprite/Q_face"), //1
+         Resources.Load<Sprite>("CharacterSprite/Sparky_face"), //2
+         Resources.Load<Sprite>("CharacterSprite/Vangara_face"), //3
+         Resources.Load<Sprite>("CharacterSprite/Porte_face"), //4
+         Resources.Load<Sprite>("CharacterSprite/Ryung_face"), //5
+         Resources.Load<Sprite>("CharacterSprite/Hyunggwi_face"), //6      
+         };
     public struct characterData
     {
         public string name;

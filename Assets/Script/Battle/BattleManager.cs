@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 using Newtonsoft.Json;
 public class BattleManager : MonoBehaviour
 {
-    [SerializeField] GameObject[] CharacterPrefebs;
+    [SerializeField] GameObject CharacterPrefebs;
     public List<Character> characters = new List<Character>(); //현재 게임에 있는 캐릭터들의 목록,순서또한 동일
     public bool CharacterSelectMode;//캐릭터를 고를 수 있는 상태
     public bool EnemySelectMode;//적을 고를 수 있는 상태
@@ -153,48 +153,8 @@ public class BattleManager : MonoBehaviour
         string characterData = File.ReadAllText(path);
         ChD = JsonConvert.DeserializeObject<CharacterData>(characterData);
         line = ChD.line;
-        for (int i = 0; i < ChD.size; i++)
-        {
-            GameObject CharacterC = null;
 
-            if (ChD.characterDatas[i].curFormation == 0) //전방
-            {
-                CharacterC = Instantiate(CharacterPrefebs[ChD.characterDatas[i].code], new Vector2(-880 / 45f, 375 / 45f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
-                forward.Add(CharacterC.GetComponent<Character>());
-            }
-            else //후방
-            {
-                CharacterC = Instantiate(CharacterPrefebs[ChD.characterDatas[i].code], new Vector2(-880 / 45f, (330 - 150 * characters.Count) / 45f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
-                back.Add(CharacterC.GetComponent<Character>());
-            } //전방과 후방 목록에 각각 캐릭터를 넣음
-            characterOriginal.Add(CharacterC.GetComponent<Character>());
-            CharacterC.GetComponent<Character>().atk = ChD.characterDatas[i].atk;
-            CharacterC.GetComponent<Character>().Hp = ChD.characterDatas[i].curHp;
-            CharacterC.GetComponent<Character>().maxHp = ChD.characterDatas[i].maxHp;
-            CharacterC.GetComponent<Character>().def = ChD.characterDatas[i].endurance;
-            CharacterC.GetComponent<Character>().cost = ChD.characterDatas[i].cost;
-            CharacterC.GetComponent<Character>().passive = ChD.characterDatas[i].passive;
-            CharacterC.GetComponent<Character>().Name = ChD.characterDatas[i].name;
-            CharacterC.GetComponent<Character>().speed = ChD.characterDatas[i].speed;
-            //캐릭터들의 기본 스탯을 데이터와 같게 설정
-            CharacterC.GetComponent<Character>().lobbyNum = i; //로비에 있는 순서대로 불러오기 떄문에 미리 저장
-        }
-
-        for (int i = 0; i < line; i++)
-        {
-            forward[i].transform.position = new Vector2(-880 / 45f, (300 - 150 * characters.Count) / 45f);
-            characters.Add(forward[i]);
-        }//위치가 전방인 캐릭터들을 목록에 넣음
-        for (int i = line; i < ChD.size; i++)
-        {
-            back[i - line].transform.position = new Vector2(-880 / 45f, (270 - 150 * characters.Count) / 45f);
-            characters.Add(back[i - line]);
-        }//위치가 후방인 캐릭터들을 목록에 넣음
-        for (int i = 1; i < ChD.size; i++)
-        {
-            characters[i].curNo = i;
-        }
-
+        SetCharacterOnBattle();
         GameObject EnemySummon = Instantiate(Enemys[GD.BattleNo], new Vector2(-2, -2), transform.rotation, GameObject.Find("CharacterCanvas").transform);
 
         Enemys = GameObject.FindGameObjectsWithTag("Enemy");
@@ -210,6 +170,54 @@ public class BattleManager : MonoBehaviour
 
     }
 
+    public void SetCharacterOnBattle()
+    {
+        for (int i = 0; i < ChD.size; i++)
+        {
+         
+            GameObject CharacterC = Instantiate(CharacterPrefebs, new Vector2(-880 / 45f, (330 - 150 * characters.Count) / 45f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
+            Character CharacterComponenet = CharacterC.GetComponent<Character>();
+            characterOriginal.Add(CharacterComponenet);
+            CharacterComponenet.atk = ChD.characterDatas[i].atk;
+            CharacterComponenet.Hp = ChD.characterDatas[i].curHp;
+            CharacterComponenet.maxHp = ChD.characterDatas[i].maxHp;
+            CharacterComponenet.def = ChD.characterDatas[i].endurance;
+            CharacterComponenet.cost = ChD.characterDatas[i].cost;
+            CharacterComponenet.passive = ChD.characterDatas[i].passive;
+            CharacterComponenet.Name = ChD.characterDatas[i].name;
+            CharacterComponenet.speed = ChD.characterDatas[i].speed;
+            CharacterComponenet.characterNo = ChD.characterDatas[i].code;
+            //캐릭터들의 기본 스탯을 데이터와 같게 설정
+            CharacterComponenet.lobbyNum = i; //로비에 있는 순서대로 불러오기 떄문에 미리 저장
+            CharacterComponenet.SetCharacterInPrefebs();
+
+            if (ChD.characterDatas[i].curFormation == 0) //전방
+            {
+
+                forward.Add(CharacterComponenet);
+            }
+            else //후방
+            {
+
+                back.Add(CharacterComponenet);
+            } //전방과 후방 목록에 각각 캐릭터를 넣음
+        }
+
+        for (int i = 0; i < line; i++)
+        {
+            forward[i].transform.position = new Vector2(-800 / 45f, (300 - 150 * characters.Count) / 45f);
+            characters.Add(forward[i]);
+        }//위치가 전방인 캐릭터들을 목록에 넣음
+        for (int i = line; i < ChD.size; i++)
+        {
+            back[i - line].transform.position = new Vector2(-800 / 45f, (270 - 150 * characters.Count) / 45f);
+            characters.Add(back[i - line]);
+        }//위치가 후방인 캐릭터들을 목록에 넣음
+        for (int i = 1; i < ChD.size; i++)
+        {
+            characters[i].curNo = i;
+        }
+    }
     public void SetBless20() //bless20이 켜져있다면 적용 될 함수
     {
         for (int i = 0; i < forward.Count; i++)
@@ -257,11 +265,11 @@ public class BattleManager : MonoBehaviour
         line = ChD.line;
         for (int i = 0; i < line; i++)
         {
-            forward[i].transform.position = new Vector2(-880 / 45f, (300 - 150 * i) / 45f);
+            forward[i].transform.position = new Vector2(-600 / 45f, (300 - 150 * i) / 45f);
         }
         for (int i = 0; i < ChD.size - line; i++)
         {
-            back[i].transform.position = new Vector2(-880 / 45f, (270 - 150 * (i + line)) / 45f);
+            back[i].transform.position = new Vector2(-600 / 45f, (270 - 150 * (i + line)) / 45f);
         }
         for (int i = 1; i < ChD.size; i++)
         {
@@ -1252,7 +1260,7 @@ public class BattleManager : MonoBehaviour
     }
     public void EnemyAttack(int dmg, Enemy enemy, Character target)
     {
-        AM.MakeEnemyAct(0, dmg, target, enemy, null);
+        AM.MakeEnemyAct(0, dmg+enemy.atk, target, enemy, null);
     }
     public void EnemyIncreaseSpeed(int amount, Enemy enemy, Character target)
     {

@@ -8,7 +8,7 @@ public class Enemy : MonoBehaviour
     public int Hp;
     public int maxHp;
     [HideInInspector] public int Armor;
-    [HideInInspector] public int Atk;
+    [HideInInspector] public int atk;
     [HideInInspector]public TurnManager TM;
     [HideInInspector] public BattleManager BM;
     public TextMeshProUGUI Board;
@@ -27,21 +27,30 @@ public class Enemy : MonoBehaviour
     public Slider hpSlider;
     public Image myImage;
     ActManager AM;
-
+    public float curTurnActTime;
     public bool dieNotEnd;//해당 적이 죽어도 게임이 끝나지 않을 경우
-
     [HideInInspector] public int[] status = new int[10];
 
     public float speed;
 
-    [HideInInspector] public float curTurnSpeed;
+    [HideInInspector] public float curSpeed;
 
     public Sprite face;
 
     [HideInInspector] public bool isAct;
+
+    public int battleNo;
     public virtual void EnemySelectPattern()
     {
         Debug.Log("C");
+    }
+    public void EnemyActEnd()
+    {
+        if (status[(int)Status.blood] > 0)
+        {
+            onHit(status[(int)Status.blood]);
+            status[(int)Status.blood]--;
+        }
     }
     public virtual void Start()
     {
@@ -96,6 +105,7 @@ public class Enemy : MonoBehaviour
     {
         //if (isDie || !BM.EnemySelectMode) return; // 적이 죽거나 적 선택이 필요한 카드로 인한 적 선택 모드가 아닐시 반응하지 않게 하는 코드
         if (isDie) return;//YC->적 선택 모드가 아닐 시에도 마우스를 가져다 대면 정보를 표시해야 함
+        Debug.Log(ei);
         ei.setThis(this);
     }
     public void onExitEvent()
@@ -112,13 +122,14 @@ public class Enemy : MonoBehaviour
     public virtual void EnemyStartTurn()
     {
         if (isDie) return;
+        curTurnActTime = 0;
+        curSpeed = speed;
         if (Shadow&&!isDie)
         {
             Shadow = false;
             myImage.color = new Color(1, 1, 1, 1);
         }
-        power = false;
-        immortal = false;
+        
     }
     public void EnemyEndTurn()
     {             
@@ -148,6 +159,7 @@ public class Enemy : MonoBehaviour
     public virtual void onHit(int dmg)
     {
         if (isDie) return;
+      
         if (status[(int)Status.weak] > 0)
         {
             status[(int)Status.weak]--;
@@ -155,9 +167,9 @@ public class Enemy : MonoBehaviour
         }
         GameObject Dmg = Instantiate(BM.DmgPrefebs, transform);
         Dmg.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
-        Dmg.GetComponent<DMGtext>().GetType(0, dmg);      
-        if (!power)
-        {                   
+        Dmg.GetComponent<DMGtext>().GetType(0, dmg);
+        if (power) return;
+                        
             if (Armor > 0)
             {
                 Armor -= dmg;
@@ -169,13 +181,12 @@ public class Enemy : MonoBehaviour
             }
             else
             {
-                if (!power)
-                {
+               
                  
                     Hp -= dmg;
                     if (Hp > maxHp)
                         Hp = maxHp;
-                }
+                
             }
             if (Hp <= 0)
             {
@@ -190,19 +201,20 @@ public class Enemy : MonoBehaviour
                     GameObject[] e = GameObject.FindGameObjectsWithTag("Enemy");
                     for (int i = 0; i < e.Length; i++)
                     {
-                        if (!e[i].GetComponent<Enemy>().isDie&&!e[i].GetComponent<Enemy>().dieNotEnd)
+                        if (!e[i].GetComponent<Enemy>().isDie)
                         {
                             V = false;
                         }
                     }
-                    die();
-                    if (V&&!BM.isVictoryPopupOn) BM.Victory();
+                
+                    if (V&&!BM.isVictoryPopupOn&&!dieNotEnd) BM.Victory();
                     Hp = 0;
                     Color color = new Color(0.3f, 0.3f, 0.3f);
                     myImage.color = color;
                     hpSlider.transform.Find("Fill Area").gameObject.SetActive(false);
+                    die();
                 }
-            }
+            
         }
         hpSlider.value= Hp / (float)maxHp;
        
@@ -215,20 +227,22 @@ public class Enemy : MonoBehaviour
         Armor += arm;
     }
 
-
-    public void GetArmor(int arm,string enemyname)
+    public void Revive(int revieHp)
     {
-        
-        nextTurnArmor += arm;
-        string newstring = "<sprite name="+enemyname+"><sprite name=armor>" + arm + "\n";
-        Board.text += newstring;
+
+        GetHp(revieHp);
+        Color color = new Color(1,1,1);
+        myImage.color = color;
+        hpSlider.transform.Find("Fill Area").gameObject.SetActive(true);
+        isDie = false;
     }
-    List<int> HpI = new List<int>();
-    List<string> HpS = new List<string>();
 
 
     public void GetHp(int amount)
     {
+        GameObject Dmg = Instantiate(BM.DmgPrefebs, transform);
+        Dmg.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+        Dmg.GetComponent<DMGtext>().GetType(3, amount);
         Hp += amount;
         if (Hp > maxHp) Hp = maxHp;
         hpSlider.value = Hp / (float)maxHp;
@@ -239,14 +253,20 @@ public class Enemy : MonoBehaviour
         GameObject Dmg = Instantiate(BM.DmgPrefebs, transform);
         Dmg.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
         Dmg.GetComponent<DMGtext>().GetType(4, amount);
-        Atk += amount;
+        atk += amount;
     }
   public void GetSpeed(int amount)
     {
+       
         GameObject Dmg = Instantiate(BM.DmgPrefebs, transform);
         Dmg.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
-        Dmg.GetComponent<DMGtext>().GetType(1, amount/100);
-        speed -= amount / 100;
+        float amount2 = amount;
+        amount2 /= 100;
+        Dmg.GetComponent<DMGtext>().GetType(1, amount2);
+        speed -= amount2;
+        curSpeed -= amount2;
+
+        AM.SpeedChangeByEffect(1, battleNo);
     }
     public void onShadow()
     {
@@ -263,18 +283,7 @@ public class Enemy : MonoBehaviour
     }
 
 
-    public void HpUp()
-    {
-        HpI.Clear();
-        HpS.Clear();
-        Hp -= EndTurnDmg;
-        EndTurnDmg = 0;
-        Hp += RecoverHp;
-        RecoverHp = 0;
-        if (Hp >= maxHp)
-            Hp = maxHp;
-        hpSlider.value = Hp / (float)maxHp;
-    }
+   
     public virtual void die()
     {
         Hp = 0;

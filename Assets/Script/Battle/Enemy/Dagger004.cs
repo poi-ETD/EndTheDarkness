@@ -30,7 +30,7 @@ public class Dagger004 : Enemy
 
         if (plusname == 1 &&!BM.GD.isTriggerOn)
         {
-            BM.FormationCollapse();
+            //BM.FormationCollapse();
             BM.GD.isTriggerOn = false;
         }
     }

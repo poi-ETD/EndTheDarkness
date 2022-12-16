@@ -7,7 +7,6 @@ public class Ifrin005 : Enemy
 {
 
     public int curTurn;
-    public Enemy myEnemy;
     private int phase=1;
     private bool phase2start;
     public Image image_character;
@@ -19,11 +18,9 @@ public class Ifrin005 : Enemy
 
     public override void Start()
     {
-        TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
-        BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
-        myEnemy = GetComponent<Enemy>();
-        myEnemy.Name = "이프린";
-        NameT.text = myEnemy.Name;
+        base.Start();
+        Name = "이프린";
+        NameT.text = Name;
 
     }
 
@@ -46,21 +43,25 @@ public class Ifrin005 : Enemy
             myAct[1] = false;
             myAct[2] = false;
             phase = 2;
+            phase2start = true;
         }
       
     }
     public override void die()
     {
         base.die();
-        Instantiate(obj_Paul);
-        Destroy(gameObject);
+       GameObject p= Instantiate(obj_Paul,gameObject.transform.parent);
+        gameObject.SetActive(false);
+        TM.PlayerTurnEnd();
+        BM.Enemys[0] = p.transform.GetChild(0).gameObject;
+        
     }
     void StartPattern()
     {
         if (BM.teamDieCount < BM.characters.Count)
         {
 
-            if (!myEnemy.isDie)
+            if (!isDie)
             {
                 if (phase == 1)
                 {
@@ -70,6 +71,7 @@ public class Ifrin005 : Enemy
                     {
                         rand = Random.Range(0, 3);
                     }
+                    myAct[rand] = true;
                     if (rand == 0)
                     {
                         BM.EnemyAttack(3, this, BM.SelectCharacterInEnemyTurn(0, 0));
@@ -151,7 +153,7 @@ public class Ifrin005 : Enemy
                 }
 
             }
-            myEnemy.BM.AM.EnemyAct();
+          BM.AM.EnemyAct();
         }
     }
 }

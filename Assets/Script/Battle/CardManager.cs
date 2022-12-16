@@ -121,7 +121,7 @@ public class CardManager : MonoBehaviour
     IEnumerator turnStartDrow()//턴 시작시 드로우
     {
         BM.otherCorIsRun = true;
-
+  
         for (int i = 0; i < BM.TurnCardCount; i++)
         {
             CardToField();

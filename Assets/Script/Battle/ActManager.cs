@@ -41,6 +41,7 @@ public class ActManager : MonoBehaviour
         for(int i = 0; i < BM.Enemys.Length; i++)
         {
             enemys.Add(BM.Enemys[i].GetComponent<Enemy>());
+            enemys[i].battleNo = i;
         }
     }
     public void ActComplete() //행동 종료 패시브를 불러 일으키기 위한 함수.
@@ -72,20 +73,20 @@ public class ActManager : MonoBehaviour
                 characters[no].curTurnActTime = curSpeed - characters[no].curSpeed;
             }
 
-            float characterActing = characters[no].curTurnActTime + characters[no].curSpeed;
+            float charaterActing = characters[no].curTurnActTime + characters[no].curSpeed;
           
-            ord newOrd = new ord(characterActing, 0, no);         
-            if (characterActing <= 10 || previousActTime == 0)
+            ord newOrd = new ord(charaterActing, 0, no);         
+            if (charaterActing <= 10 || previousActTime == 0)
             {
-                Debug.Log(characterActing);
+               
                 orderList.Add(newOrd);
             }
-            characterActing += characters[no].curSpeed;
-            while (characterActing <= 10)
+            charaterActing += characters[no].curSpeed;
+            while (charaterActing <= 10)
             {
-                Debug.Log(characterActing);
-                ord newOrd2 = new ord(characterActing, 0, no);
-                characterActing += characters[no].curSpeed;
+               
+                ord newOrd2 = new ord(charaterActing, 0, no);
+                charaterActing += characters[no].curSpeed;
                 orderList.Add(newOrd2);
             }
             orderList = orderList.OrderBy(obj =>
@@ -96,7 +97,41 @@ public class ActManager : MonoBehaviour
         }
         else //적이 속도가 변했을 경우
         {
+            for (int i = 0; i < orderList.Count; i++)
+            {
+                if (orderList[i].type == 1 && orderList[i].obj == no)
+                {
+                    orderList.RemoveAt(i);
+                }
+            } //현재 선택된 적의 예정 행동을 다 없앰
+            float previousActTime = enemys[no].curTurnActTime;
+            if (enemys[no].curTurnActTime + enemys[no].curSpeed < curSpeed)
+            {
+                enemys[no].curTurnActTime = curSpeed - enemys[no].curSpeed;
+            }
 
+            float enemyActing = enemys[no].curTurnActTime + enemys[no].curSpeed;
+            Debug.Log(enemyActing);
+            ord newOrd = new ord(enemyActing, 1, no);
+            if (enemyActing <= 10 || previousActTime == 0)
+            {
+                
+                orderList.Add(newOrd);
+            }
+            enemyActing +=enemys[no].curSpeed;
+            Debug.Log(enemyActing);
+            while (enemyActing <= 10)
+            {
+                Debug.Log(enemyActing);
+                ord newOrd2 = new ord(enemyActing, 1, no);
+                enemyActing += enemys[no].curSpeed;
+                orderList.Add(newOrd2);
+            }
+            orderList = orderList.OrderBy(obj =>
+            {
+                return obj.value;
+            }).ToList();
+            SpeedImageChange();
         }
     }
     public void SetOrder()
@@ -124,7 +159,7 @@ public class ActManager : MonoBehaviour
             }
         }
         for(int i = 0; i < enemys.Count; i++)
-        {if (enemys[i].isDie) continue;
+        {   if (enemys[i].isDie) continue;
             float s = enemys[i].speed;
             if (s <= 1) enemys[i].speed = 1;
             ord newOrd = new ord(s, 1, i);
@@ -293,8 +328,15 @@ public class ActManager : MonoBehaviour
         Act();
         EnemyActList.Clear();
     }
+    public void EnemyJustAct(Enemy e)
+    {
+        MakeAct(1, 5, 0, e, null, null, null, 1);
+        MakeAct(1, 6, 0, e, null, null, null, 1);
+        Act();
+    }
     public void MakeEnemyAct(int no,int mount,Character target,Enemy myE,Enemy targetE)
-    {if (no == 0 && mount == 0) return;
+    {
+        if (no == 0 && mount == 0) return;
         ActStruct newActStruct = new ActStruct(1, no, mount, myE, targetE, null,target, 1);
         EnemyActList.Add(newActStruct);
     }
@@ -468,6 +510,7 @@ public class ActManager : MonoBehaviour
             }
             else if (ActList[0].type == 1) //적의 행동
             {
+                ActList[0].myE.curTurnActTime = curSpeed;
                 if (ActList[0].myE.isDie) yield return null;
                 else
                 {
@@ -515,6 +558,7 @@ public class ActManager : MonoBehaviour
                     if (ActList[0].no == 6)
                     {                     
                         ActList[0].myE.transform.DOMove(ActList[0].myE.transform.position + new Vector3(0, 0.5f, 0), 0.1f);
+                        ActList[0].myE.EnemyActEnd();
                         yield return new WaitForSeconds(0.1f);
                     }
                     if (ActList[0].no == 7)//공격력 올리기
@@ -522,7 +566,7 @@ public class ActManager : MonoBehaviour
                         ActList[0].targetE.GetAtk(ActList[0].mount);
                       
                     }
-                    if (ActList[0].no == 8)
+                    if (ActList[0].no == 8)//적 스피드 획득
                     {
                         ActList[0].targetE.GetSpeed(ActList[0].mount);
                     }
@@ -556,10 +600,7 @@ public class ActManager : MonoBehaviour
         {
             if (isStartAct)
             {
-                while (TM.CM.field.Count < 5)
-                {
-                    TM.CM.Drow();
-                }
+              
                 isStartAct = false;
             }
             else
@@ -570,6 +611,7 @@ public class ActManager : MonoBehaviour
                     {
                         characters[orderList[0].obj].curTurnActTime = curSpeed;
                     }
+                  
                     orderList.RemoveAt(0);
                     ActByOrder();
                 }

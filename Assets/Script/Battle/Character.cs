@@ -66,7 +66,11 @@ public class Character : MonoBehaviour
     public int lobbyNum;
 
     
-
+    public void SetCharacterInPrefebs()
+    {
+        Debug.Log(characterNo);
+        myImage.sprite = CharacterInfo.Instance.CharacterFaceSprite[characterNo];
+    }
     public void StatusChange(int type,int mount)
     {
         status[type] += mount;
@@ -99,14 +103,14 @@ public class Character : MonoBehaviour
             armor = 0;
         }
         stringArmor = armor;
-        armorT.text = "" + armor;
+        //armorT.text = "" + armor;
         myPassive.GetArmor(a);
     }
     public void ArmorValueGoZero()
     {
         armor = 0;
         stringArmor = armor;
-        armorT.text = "" + armor;
+       // armorT.text = "" + armor;
     }
  
 
@@ -198,7 +202,7 @@ public class Character : MonoBehaviour
 
       
       
-        myImage = transform.GetChild(8).GetComponent<Image>();
+       // myImage = transform.GetChild(8).GetComponent<Image>();
       
         if (Hp <= 0) die();
         if (Hp > maxHp) Hp = maxHp;
@@ -362,7 +366,7 @@ public class Character : MonoBehaviour
         {
             stringHp -= dmg;
         }
-        armorT.text = stringArmor + "";
+       // armorT.text = stringArmor + "";
         if (stringHp <= 0)
         {
             stringHp = 0;

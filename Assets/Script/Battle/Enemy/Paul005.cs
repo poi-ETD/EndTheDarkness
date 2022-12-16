@@ -17,6 +17,7 @@ public class Paul005 : Enemy
 
     public override void Start()
     {
+        base.Start();
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         NameT.text =Name;
@@ -52,7 +53,7 @@ public class Paul005 : Enemy
                 curTurn++;
                 if (curTurn % 3 == 0)
                 {
-                    BM.EnemyGetHp((maxHp - Hp) *100/20, this, this);
+                    BM.EnemyGetHp((maxHp - Hp) *20/100, this, this);
                 }
                 else
                 {
