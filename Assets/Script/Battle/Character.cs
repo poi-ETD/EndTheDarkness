@@ -22,6 +22,7 @@ public class Character : MonoBehaviour
 
     public TurnManager TM;
     public BattleManager BM;
+    [SerializeField] private TextMeshProUGUI text_Name; // YH
     public TextMeshProUGUI hpT;
     public TextMeshProUGUI atkT;
     public TextMeshProUGUI armorT;
@@ -69,6 +70,7 @@ public class Character : MonoBehaviour
     public void SetCharacterInPrefebs()
     {
         Debug.Log(characterNo);
+        text_Name.text = Name;
         myImage.sprite = CharacterInfo.Instance.CharacterFaceSprite[characterNo];
     }
     public void StatusChange(int type,int mount)

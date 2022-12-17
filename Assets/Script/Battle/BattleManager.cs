@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 public class BattleManager : MonoBehaviour
 {
     [SerializeField] GameObject CharacterPrefebs;
+    [SerializeField] private GameObject EnemyPrefeb; // YH
     public List<Character> characters = new List<Character>(); //현재 게임에 있는 캐릭터들의 목록,순서또한 동일
     public bool CharacterSelectMode;//캐릭터를 고를 수 있는 상태
     public bool EnemySelectMode;//적을 고를 수 있는 상태
@@ -155,6 +156,7 @@ public class BattleManager : MonoBehaviour
         line = ChD.line;
 
         SetCharacterOnBattle();
+        SetEnemyOnBattle();
         GameObject EnemySummon = Instantiate(Enemys[GD.BattleNo], new Vector2(-2, -2), transform.rotation, GameObject.Find("CharacterCanvas").transform);
 
         Enemys = GameObject.FindGameObjectsWithTag("Enemy");
@@ -218,6 +220,39 @@ public class BattleManager : MonoBehaviour
             characters[i].curNo = i;
         }
     }
+
+    public void SetEnemyOnBattle() // YH
+    {
+        int enemyCount = 0;
+
+        switch (GD.BattleNo)
+        {
+            case 0: enemyCount = 2; break;
+            case 1: enemyCount = 2; break;
+            case 2: enemyCount = 2; break;
+            case 3: enemyCount = 1; break;
+            case 4: enemyCount = 4; break;
+            case 5: enemyCount = 1; break;
+            case 6: enemyCount = 2; break;
+            case 7: enemyCount = 2; break;
+            case 8: enemyCount = 1; break;
+            default: break;
+        }
+
+        for (int i = 0; i < enemyCount; i++)
+        {
+            GameObject EnemyC =
+                Instantiate(EnemyPrefeb, new Vector2(840 / 45f, (330 - 150 * i) / 45f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
+            UI_Enemy_Battle enemyComponenet = EnemyC.GetComponent<UI_Enemy_Battle>();
+
+            //enemyComponenet.image_Face = ;
+            //enemyComponenet.text_Name = ;
+            //enemyComponenet.text_Hp = ;
+            //enemyComponenet.text_Attack = ;
+            //enemyComponenet.text_Speed = ;
+        }
+    }
+
     public void SetBless20() //bless20이 켜져있다면 적용 될 함수
     {
         for (int i = 0; i < forward.Count; i++)
