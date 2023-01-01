@@ -917,7 +917,7 @@ public class CharacterData // json으로 저장 될 캐릭터 정보
         public int[] passive;
         public int curFormation; // 0:전방, 1:후방
         public int curEquip;
-
+        public int trainStack;
         public curCharacterData(string name, int code, int cost, int atk, int endurance, float speed, int maxHp, int curHp, int[] passive, int curFormation, int curEquip)
         {
             this.name = name;
@@ -931,6 +931,7 @@ public class CharacterData // json으로 저장 될 캐릭터 정보
             this.passive = passive;
             this.curFormation = curFormation;
             this.curEquip = curEquip;
+            trainStack = 0;
         }
     }
 
