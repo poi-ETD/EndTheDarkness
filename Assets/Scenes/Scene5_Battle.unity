@@ -3125,6 +3125,8 @@ MonoBehaviour:
   - {fileID: 2561739878112913441, guid: 0b126f0f5b215d84a8d9dd92871cd9a7, type: 3}
   - {fileID: 5657846933374684555, guid: e2f319b1690cb374cbe6b173e265a583, type: 3}
   - {fileID: 4630093556093138294, guid: 96b5bef84490315489d9f66c880fa3fa, type: 3}
+  - {fileID: 8415656364056641383, guid: cfd88cfe04c05fb4db429a22b3808b43, type: 3}
+  - {fileID: 8482823276563945048, guid: ae252b37eee22f64fb3c44d6625bc515, type: 3}
   warnObj: {fileID: 759816071}
   warnT: {fileID: 129511392}
   forward: []
