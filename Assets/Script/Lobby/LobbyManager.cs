@@ -406,8 +406,16 @@ public class LobbyManager : MonoBehaviour
             EquipCharacterView.SetActive(true);
             for (int i = 0; i < ChD.size; i++)
             {
-                EquipCharacterView.transform.GetChild(0).GetChild(i).gameObject.SetActive(true);
-                EquipCharacterView.transform.GetChild(0).GetChild(i).GetChild(0).GetComponent<TextMeshProUGUI>().text = ChD.characterDatas[i].name;
+                if (GD.EquipmentList[num].type == ChD.characterDatas[i].curFormation||GD.EquipmentList[num].type==2)
+                {
+                
+                    EquipCharacterView.transform.GetChild(0).GetChild(i).gameObject.SetActive(true);
+                    EquipCharacterView.transform.GetChild(0).GetChild(i).GetChild(0).GetComponent<TextMeshProUGUI>().text = ChD.characterDatas[i].name;
+                }
+                else
+                {
+                    EquipCharacterView.transform.GetChild(0).GetChild(i).gameObject.SetActive(false);
+                }
             }
         }
     }
@@ -533,6 +541,7 @@ public class LobbyManager : MonoBehaviour
                 }
                 else GD.isActInDay = true;
             }
+            if (GD.Ignum < 0) GD.Ignum = 0;
             IgnumT.text = GD.Ignum + "";
             save();
             if (GD.isAct)
@@ -1101,6 +1110,7 @@ public class LobbyManager : MonoBehaviour
     }
     public void SelectEquipManageButton()
     {
+        Debug.Log(SelectedEquipList.Count);
         if (SelectedEquipList.Count == 1)
         {
             if (GD.Ignum < 700) return;
@@ -1125,8 +1135,9 @@ public class LobbyManager : MonoBehaviour
             equipment e1 = GD.EquipmentList[SelectedEquipList[0]];
             equipment e2 = GD.EquipmentList[SelectedEquipList[1]];
             equipment newE = EquipmentManager.Instance.AddEquipments(e1, e2);
-            GD.EquipmentList.RemoveAt(SelectedEquipList[0]);
-            GD.EquipmentList.RemoveAt(SelectedEquipList[1]);
+            
+            GD.EquipmentList.RemoveAt(Mathf.Max(SelectedEquipList[0],SelectedEquipList[1]));
+            GD.EquipmentList.RemoveAt(Mathf.Min(SelectedEquipList[0], SelectedEquipList[1]));
             GD.EquipmentList.Add(newE);
             for (int i = 0; i < ChD.size; i++)
             {
