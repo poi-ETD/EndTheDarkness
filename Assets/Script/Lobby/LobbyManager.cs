@@ -101,11 +101,15 @@ public class LobbyManager : MonoBehaviour
 
     [SerializeField] GameObject ConversationView;
 
-    [SerializeField] GameObject RitualView;
-    [SerializeField] GameObject Ritual_Day;
-    [SerializeField] GameObject Ritual_Night;
+    [SerializeField] private GameObject RitualView;
+    [SerializeField] private GameObject Ritual_Day;
+    [SerializeField] private GameObject Ritual_Night;
 
-    [SerializeField] GameObject MerchantView;
+    [SerializeField] private GameObject MerchantView;
+
+    [SerializeField] private GameObject ScriptView;
+
+    [SerializeField] private GameObject TrainView;
     private void Start()
     {
         string path = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CardDatas[GameManager.Instance.nowPlayingSlot]);
@@ -402,8 +406,16 @@ public class LobbyManager : MonoBehaviour
             EquipCharacterView.SetActive(true);
             for (int i = 0; i < ChD.size; i++)
             {
-                EquipCharacterView.transform.GetChild(0).GetChild(i).gameObject.SetActive(true);
-                EquipCharacterView.transform.GetChild(0).GetChild(i).GetChild(0).GetComponent<TextMeshProUGUI>().text = ChD.characterDatas[i].name;
+                if (GD.EquipmentList[num].type == ChD.characterDatas[i].curFormation||GD.EquipmentList[num].type==2)
+                {
+                
+                    EquipCharacterView.transform.GetChild(0).GetChild(i).gameObject.SetActive(true);
+                    EquipCharacterView.transform.GetChild(0).GetChild(i).GetChild(0).GetComponent<TextMeshProUGUI>().text = ChD.characterDatas[i].name;
+                }
+                else
+                {
+                    EquipCharacterView.transform.GetChild(0).GetChild(i).gameObject.SetActive(false);
+                }
             }
         }
     }
@@ -529,6 +541,7 @@ public class LobbyManager : MonoBehaviour
                 }
                 else GD.isActInDay = true;
             }
+            if (GD.Ignum < 0) GD.Ignum = 0;
             IgnumT.text = GD.Ignum + "";
             save();
             if (GD.isAct)
@@ -1097,6 +1110,7 @@ public class LobbyManager : MonoBehaviour
     }
     public void SelectEquipManageButton()
     {
+        Debug.Log(SelectedEquipList.Count);
         if (SelectedEquipList.Count == 1)
         {
             if (GD.Ignum < 700) return;
@@ -1121,8 +1135,9 @@ public class LobbyManager : MonoBehaviour
             equipment e1 = GD.EquipmentList[SelectedEquipList[0]];
             equipment e2 = GD.EquipmentList[SelectedEquipList[1]];
             equipment newE = EquipmentManager.Instance.AddEquipments(e1, e2);
-            GD.EquipmentList.RemoveAt(SelectedEquipList[0]);
-            GD.EquipmentList.RemoveAt(SelectedEquipList[1]);
+            
+            GD.EquipmentList.RemoveAt(Mathf.Max(SelectedEquipList[0],SelectedEquipList[1]));
+            GD.EquipmentList.RemoveAt(Mathf.Min(SelectedEquipList[0], SelectedEquipList[1]));
             GD.EquipmentList.Add(newE);
             for (int i = 0; i < ChD.size; i++)
             {
@@ -1147,7 +1162,7 @@ public class LobbyManager : MonoBehaviour
     {
 
         canvasOn = true;
-        ConversationView.SetActive(false);
+        ScriptView.SetActive(false);
         tributeView.SetActive(true);
         int cur = GD.tributeStack;
         int ig = 0;
@@ -1170,13 +1185,29 @@ public class LobbyManager : MonoBehaviour
         if (GD.isAct) return;
         canvasOn = true;
         ConversationView.SetActive(true);
+        for(int i = 1; i <= 4; i++)
+        {
+            ConversationView.transform.GetChild(0).GetChild(i).gameObject.SetActive(false);
+        }
+        for (int i = 0; i < 4; i++)
+        {
+            if (ChD.characterDatas[i].curHp > 0)
+            {
+                ConversationView.transform.GetChild(0).GetChild(i + 1).gameObject.SetActive(true);
+                ConversationView.transform.GetChild(0).GetChild(i + 1).GetComponent<TextMeshProUGUI>().text = ChD.characterDatas[i].name + "과 대화하기";
+            }
+        }
     }
     public void ConversationViewOff()
     {
         canvasOn = false;
         ConversationView.SetActive(false);
     }
-
+    public void ScriptVeiwOff()
+    {
+        canvasOn = false;
+        ScriptView.SetActive(false);
+    }
     public void RitualViewOn()
     {
         if (canvasOn) return;
@@ -1296,5 +1327,62 @@ public class LobbyManager : MonoBehaviour
 
 
     }
-
+    public void CoversationWithMyTeam(int myCharacter)//-1일 시 브루와 베릴과 대화
+    {
+        ScriptView.SetActive(true);
+        ConversationView.SetActive(false);
+        ScriptView.transform.GetChild(1).GetChild(2).gameObject.SetActive(false);
+        if (myCharacter == -1)
+        {
+            BBConversationOn();
+            return;        
+        }
+        ScriptView.transform.GetChild(0).GetComponent<Image>().sprite = CharacterInfo.Instance.CharacterFullSprite[ChD.characterDatas[myCharacter].code];
+        ScriptView.transform.GetChild(1).GetChild(0).GetComponent<TextMeshProUGUI>().text = ChD.characterDatas[myCharacter].name;
+    }
+    private void BBConversationOn() //브루 베릴과 대화
+    {
+        ScriptView.transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load<Sprite>("CharacterSprite/BB");
+        ScriptView.transform.GetChild(1).GetChild(0).GetComponent<TextMeshProUGUI>().text = "브루와 베릴";
+        ScriptView.transform.GetChild(1).GetChild(2).gameObject.SetActive(true);
+    }
+    public void TrainviewOn()
+    {
+        canvasOn = true;
+        ScriptView.SetActive(false);
+        TrainView.SetActive(true);      
+        for (int i = 0; i < 4; i++)
+        {
+            TrainView.transform.GetChild(0).GetChild(i).gameObject.SetActive(false);
+        }
+        for (int i = 0; i < 4; i++)
+        {
+            if (ChD.characterDatas[i].curHp > 0)
+            {
+                TrainView.transform.GetChild(0).GetChild(i).gameObject.SetActive(true);
+                TrainView.transform.GetChild(0).GetChild(i).GetComponent<TextMeshProUGUI>().text = ChD.characterDatas[i].name + "를 훈련시킨다.";
+            }
+        }
+    }
+    public void TrainViewOff()
+    {
+        canvasOn = false;
+        TrainView.SetActive(false);
+    }
+    public void TrainStackUp(int myCharacter)
+    {
+        if (ChD.characterDatas[myCharacter].trainStack == 0)
+        {
+            ChD.characterDatas[myCharacter].trainStack++;
+        }
+        else
+        {
+            ChD.characterDatas[myCharacter].trainStack = 0;
+            int rand = Random.Range(0, 4);
+            ChD.characterDatas[myCharacter].passive[rand]++;
+        }
+        TrainView.SetActive(false);
+        canvasOn = false;
+        Act();
+    }
 }

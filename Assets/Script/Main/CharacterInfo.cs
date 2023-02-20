@@ -24,9 +24,18 @@ public class CharacterInfo
          Resources.Load<Sprite>("CharacterSprite/Q_face"), //1
          Resources.Load<Sprite>("CharacterSprite/Sparky_face"), //2
          Resources.Load<Sprite>("CharacterSprite/Vangara_face"), //3
-         Resources.Load<Sprite>("CharacterSprite/Porte_face"), //4
+         Resources.Load<Sprite>("CharacterSprite/forte_face"), //4
          Resources.Load<Sprite>("CharacterSprite/Ryung_face"), //5
          Resources.Load<Sprite>("CharacterSprite/Hyunggwi_face"), //6      
+         };
+    public Sprite[] CharacterFullSprite = {
+         Resources.Load<Sprite>("CharacterSprite/Q"), //0
+         Resources.Load<Sprite>("CharacterSprite/Q"), //1
+         Resources.Load<Sprite>("CharacterSprite/Sparky"), //2
+         Resources.Load<Sprite>("CharacterSprite/Vangara"), //3
+         Resources.Load<Sprite>("CharacterSprite/forte"), //4
+         Resources.Load<Sprite>("CharacterSprite/Ryung"), //5
+         Resources.Load<Sprite>("CharacterSprite/Hyunggwi"), //6      
          };
     public struct characterData
     {
@@ -37,7 +46,7 @@ public class CharacterInfo
         public int def;
         public float speed;
         public int maxHp;
-      
+   
      
         public string[] passive;
         public string[] passiveContent;
@@ -61,6 +70,7 @@ public class CharacterInfo
             this.specialEquipContent = specialEquipContent;
             this.characterSprtie = characterSprtie;
             this.characterFace = characterFace;
+        
         }
     }
     public characterData[] cd = new characterData[7]

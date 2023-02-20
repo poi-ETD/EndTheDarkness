@@ -132,22 +132,11 @@ public class Character : MonoBehaviour
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         myPassive = GetComponent<CharacterPassive>();
         if (BM.ChD.characterDatas[lobbyNum].curEquip != -1)
+        
         {
             equipment myEquip = BM.GD.EquipmentList[BM.ChD.characterDatas[lobbyNum].curEquip];
             if (myEquip.special == 0)
             {
-                bool cantEquip = false;
-                if (myEquip.type == 1 && BM.ChD.characterDatas[lobbyNum].curFormation == 0)
-                {
-                    cantEquip = true;
-                }
-                if (myEquip.type == 0 && BM.ChD.characterDatas[lobbyNum].curFormation == 1)
-                {
-                    cantEquip = true;
-                }
-
-                if (!cantEquip)
-                {
                     for (int i = 0; i < myEquip.improveMount.Count; i++)
                     {
 
@@ -188,7 +177,7 @@ public class Character : MonoBehaviour
                             speed -= myEquip.degradeMount * 0.1f;
                             break;
                     }
-                }
+              
             }
             else //전용 장비
             {
