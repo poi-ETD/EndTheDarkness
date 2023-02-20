@@ -662,7 +662,9 @@ public class UIManager_CharacterScene : MonoBehaviour
             return;
 
         GameManager.Instance.slot_Names[GameManager.Instance.selectedSlot_Main] = text_SlotName.text;
+        GameManager.Instance.nowPlayingSlot = GameManager.Instance.selectedSlot_Main; // 현재 플레이중인 슬롯 번호를 선택한 슬롯 번호로 초기화
         GameManager.Instance.Save();
+
         Debug.Log("슬롯의 이름이 " + text_SlotName.text + "(으)로 설정되었습니다.");
 
         StartCoroutine(SceneControllerManager.Instance.SwitchScene("Scene3_Lobby"));

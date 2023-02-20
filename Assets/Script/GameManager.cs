@@ -52,7 +52,6 @@ public class GameManager : MonoBehaviour
   
     void Start()
     {
-       
         slot_CharacterDatas[0] = "CharacterData1.json";
         slot_CharacterDatas[1] = "CharacterData2.json";
         slot_CharacterDatas[2] = "CharacterData3.json";

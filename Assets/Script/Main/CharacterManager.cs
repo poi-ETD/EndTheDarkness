@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 using TMPro;
 using Newtonsoft.Json;
 
-public class CharacterManager : MonoBehaviour
+public class CharacterManager : MonoBehaviour // YH : 슬롯 생성 로직 (영학) 새로 짜면서 안쓰게된 기존(예찬님) 스크립트
 {
     CharacterData CD = new CharacterData();
     float timer;
