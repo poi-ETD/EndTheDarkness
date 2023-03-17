@@ -936,9 +936,9 @@ public class BattleManager : MonoBehaviour
         window_Grave.SetActive(false);
     }
 
-    public void Click_DeckOn()
+    public void Click_DeckOn(bool isCardSkill)
     {
-        if (HandManager.Instance.isEnableOtherButton)
+        if (HandManager.Instance.isEnableOtherButton||isCardSkill)
         {
             otherCanvasOn = true;
             isDeckWindowOn = true;
@@ -1407,8 +1407,7 @@ public class BattleManager : MonoBehaviour
     {
         SelectDeckCount = count;
         DeckSelectMode = true;
-
-        Click_DeckOn();
+        Click_DeckOn(true);
     }
 
     public void Click_Cancle_DeckWindow() //덱에서 선택을 취소하는 함수
