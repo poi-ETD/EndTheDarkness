@@ -142,7 +142,7 @@ public class BattleManager : MonoBehaviour
 
     public GameObject DmgPrefebs;//데미지 프리펩
 
-    private Card curSelectedCardInRevive;
+    public Card curSelectedCardInRevive;
 
     private void Start()
     {
@@ -157,7 +157,7 @@ public class BattleManager : MonoBehaviour
 
         SetCharacterOnBattle();
         SetEnemyOnBattle();
-        GameObject EnemySummon = Instantiate(Enemys[GD.BattleNo], new Vector2(-2, -2), transform.rotation, GameObject.Find("CharacterCanvas").transform);
+        GameObject EnemySummon = Instantiate(Enemys[GD.victory], new Vector2(-2, -2), transform.rotation, GameObject.Find("CharacterCanvas").transform);
 
         Enemys = GameObject.FindGameObjectsWithTag("Enemy");
 
@@ -203,6 +203,7 @@ public class BattleManager : MonoBehaviour
 
                 back.Add(CharacterComponenet);
             } //전방과 후방 목록에 각각 캐릭터를 넣음
+            CharacterComponenet.AfterInstiate();
         }
 
         for (int i = 0; i < line; i++)
@@ -1022,12 +1023,14 @@ public class BattleManager : MonoBehaviour
         otherCanvasOn = true;
         victory_window.SetActive(true);
         isVictoryPopupOn = true;
+        otherCanvasOn = true;
         int ignum = Random.Range(0, 3) * 50 + 150 + GD.victory * 20;
         int tribute = Random.Range(0, 2) * 100 + 200 + 50 * GD.victory;
         if (GD.blessbool[15]) ignum *= 3;
         rewardIgnum.text = ignum + "이그넘 획득";
         rewardTribute.text = tribute + "공물 획득";
         GD.Ignum += ignum;
+        GD.BattleNo++;
         //정해진 공식에 따라 이그넘을 획득 후
         if (GD.blessbool[16]) rewardListlength = 4; //축복 16번이 true라면 4개를 보여줘야함
         if (!GD.blessbool[9]) noSelectCard.SetActive(false); //축복 9번이 없다면 아무것도 선택 안하는 버튼을 없앰
@@ -1119,10 +1122,11 @@ public class BattleManager : MonoBehaviour
         string CharacterData = JsonConvert.SerializeObject(ChD);
         File.WriteAllText(path4, CharacterData);
         GD.isAct = false;
-        GD.Day++;
         GD.isNight = false;
-        GD.victory++;
         GD.isActInDay = false;
+        GD.Day+=2;
+        GD.victory++;
+
         //로비에 가게되면 새로운 날짜기 때문에 행동력이 주어지고 낮으로 바뀌게된다.
         string path3 = Path.Combine(Application.persistentDataPath, "GameData.json");
         string GameData = JsonConvert.SerializeObject(GD);

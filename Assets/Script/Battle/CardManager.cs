@@ -312,7 +312,12 @@ public class CardManager : MonoBehaviour
 
                 Grave[i].GetComponent<Card>().isGrave = false;
                 Grave[i].GetComponent<Transform>().localScale = new Vector2(1, 1);
+                if (BM.curSelectedCardInRevive.cardNo == 13)
+                {
+                    Grave[i].GetComponent<Card>().decreaseCost(-2);
+                }
                 Grave.RemoveAt(i);
+
                 break;
             }
         }
@@ -459,7 +464,7 @@ public class CardManager : MonoBehaviour
         for (int i = 0; i < Grave.Count; i++)
         {
             if (c == Grave[i])
-            {
+            {               
                 Deck.Add(c);
                 c.GetComponent<Card>().isDeck = true;
                 c.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0.5f);

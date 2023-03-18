@@ -23,39 +23,39 @@ public class CardInfo : MonoBehaviour
          Resources.Load<Sprite>("CardSprite/Card-01"), //1
          Resources.Load<Sprite>("CardSprite/Card-02"), //2
          Resources.Load<Sprite>("CardSprite/Card-03"), //3
-         Resources.Load<Sprite>("CardSprite/Card-13"), //4
-         Resources.Load<Sprite>("CardSprite/Card-5"), //5
-         Resources.Load<Sprite>("CardSprite/Card-6"), //6
-         Resources.Load<Sprite>("CardSprite/Card-7"), //7
-         Resources.Load<Sprite>("CardSprite/Card-13"), //8
-         Resources.Load<Sprite>("CardSprite/Card-13"), //9
-         Resources.Load<Sprite>("CardSprite/Card-13"), //10
-         Resources.Load<Sprite>("CardSprite/Card-13"), //11
-         Resources.Load<Sprite>("CardSprite/Card-12"), //12
+         Resources.Load<Sprite>("CardSprite/Card-04"), //4
+         Resources.Load<Sprite>("CardSprite/Card-05"), //5
+         Resources.Load<Sprite>("CardSprite/Card-06"), //6
+         Resources.Load<Sprite>("CardSprite/Card-07"), //7
+         Resources.Load<Sprite>("CardSprite/Card-01"), //8
+         Resources.Load<Sprite>("CardSprite/Card-01"), //9
+         Resources.Load<Sprite>("CardSprite/Card-01"), //10
+         Resources.Load<Sprite>("CardSprite/Card-01"), //11
+         Resources.Load<Sprite>("CardSprite/Card-01"), //12
          Resources.Load<Sprite>("CardSprite/Card-13"), //13
-         Resources.Load<Sprite>("CardSprite/Card-13"), //14
-         Resources.Load<Sprite>("CardSprite/Card-13"), //15
-         Resources.Load<Sprite>("CardSprite/Card-13"), //16
-         Resources.Load<Sprite>("CardSprite/Card-13"), //17
-         Resources.Load<Sprite>("CardSprite/Card-13"), //18
-         Resources.Load<Sprite>("CardSprite/Card-13"), //19
+         Resources.Load<Sprite>("CardSprite/Card-01"), //14
+         Resources.Load<Sprite>("CardSprite/Card-01"), //15
+         Resources.Load<Sprite>("CardSprite/Card-01"), //16
+         Resources.Load<Sprite>("CardSprite/Card-01"), //17
+         Resources.Load<Sprite>("CardSprite/Card-01"), //18
+         Resources.Load<Sprite>("CardSprite/Card-01"), //19
          Resources.Load<Sprite>("CardSprite/Card-20"), //20
-         Resources.Load<Sprite>("CardSprite/Card-13"), //21
-         Resources.Load<Sprite>("CardSprite/Card-13"), //22
-         Resources.Load<Sprite>("CardSprite/Card-13"), //23
+         Resources.Load<Sprite>("CardSprite/Card-01"), //21
+         Resources.Load<Sprite>("CardSprite/Card-01"), //22
+         Resources.Load<Sprite>("CardSprite/Card-01"), //23
          Resources.Load<Sprite>("CardSprite/Card-24"), //24
          Resources.Load<Sprite>("CardSprite/Card-25"), //25
          Resources.Load<Sprite>("CardSprite/Card-26"), //26
-         Resources.Load<Sprite>("CardSprite/Card-13"), //27
-         Resources.Load<Sprite>("CardSprite/Card-13"), //28
-         Resources.Load<Sprite>("CardSprite/Card-13"), //29
-         Resources.Load<Sprite>("CardSprite/Card-13"), //30
-         Resources.Load<Sprite>("CardSprite/Card-13"), //31
-         Resources.Load<Sprite>("CardSprite/Card-13"), //32
-         Resources.Load<Sprite>("CardSprite/Card-13"), //33
-         Resources.Load<Sprite>("CardSprite/Card-13"), //34
-         Resources.Load<Sprite>("CardSprite/Card-13"), //35
-         Resources.Load<Sprite>("CardSprite/Card-13"), //36
+         Resources.Load<Sprite>("CardSprite/Card-27"), //27
+         Resources.Load<Sprite>("CardSprite/Card-28"), //28
+         Resources.Load<Sprite>("CardSprite/Card-29"), //29
+         Resources.Load<Sprite>("CardSprite/Card-30"), //30
+         Resources.Load<Sprite>("CardSprite/Card-31"), //31
+         Resources.Load<Sprite>("CardSprite/Card-01"), //32
+         Resources.Load<Sprite>("CardSprite/Card-01"), //33
+         Resources.Load<Sprite>("CardSprite/Card-01"), //34
+         Resources.Load<Sprite>("CardSprite/Card-01"), //35
+         Resources.Load<Sprite>("CardSprite/Card-01"), //36
          };
 
     public struct cardData
@@ -83,13 +83,13 @@ public class CardInfo : MonoBehaviour
     public cardData[] cd = new cardData[37]
     {  new cardData("이름자리입니다","내용입니다",0,0,0,0,0),
 
-       new cardData("기본공격","-적 한명에게 데미지: <color=red><b>7</color></b>",1,1,0,0,1),
+       new cardData("타격","-적 한명에게 데미지: <color=red><b>7</color></b>",1,1,0,0,1),
 
-       new cardData("통상방어","-아군 한명에게 방어도:10",2,1,0,0,5),
+       new cardData("방패 전달","-아군 한명에게 방어도:10",2,1,0,0,5),
 
-       new cardData("연계공격","-적 한명에게 데미지:7\n-드로우:1",3,2,0,0,1),
+       new cardData("격분","-적 한명에게 데미지:7\n-드로우:1",3,2,0,0,1),
 
-       new cardData("준비태세","-드로우:2\n-자신에게 SP-0.1",4,2,0,0,0),
+       new cardData("약탈","-드로우:2\n-자신에게 SP-0.1",4,2,0,0,0),
 
        new cardData("심연속 요동","-망자부활:8\n-덱에 이 카드 한장을 복사해 넣는다.",5,1,1,0,0),
 
@@ -103,7 +103,7 @@ public class CardInfo : MonoBehaviour
 
        new cardData("우렁찬 표효","-턴 종료시까지 모든 아군의 공격력:+1\n-자신의 SP-0.1",10,0,2,0,0),
 
-       new cardData("스트레이트 펀치","-카드를 4장 이상 사용했을 때 패에 있는 이 카드의 소비 코스트를 3감소한다\n-적 한명에게 데미지:15",11,3,2,0,1),
+       new cardData("마지막 질주","-카드를 4장 이상 사용했을 때 패에 있는 이 카드의 소비 코스트를 3감소한다\n-적 한명에게 데미지:15",11,3,2,0,1),
        new cardData("칠흑/핏빛","-패에 있는 카드를 덱에 넣는다\n-드로우:덱에 넣은 카드 장 수",12,1,4,0,0),
 
        new cardData("검은 아리아","-묘지에 패로 카드 1장을 선택해 가지고 온다.\n-소비 코스트+2",13,0,4,0,2),
@@ -116,9 +116,9 @@ public class CardInfo : MonoBehaviour
 
        new cardData("집중과 휴식","-아군 한명에게 방어도:20\n-다음 턴 시작 시 반가라의 방어도:-30",17,1,3,1,5),
 
-       new cardData("피스트범프","-턴 종료시까지 스파키의 SP-1.0\n-턴 종료시까지 스파키의 공격력:+1",18,1,2,1,0),
+       new cardData("썩은 살점","-턴 종료시까지 스파키의 SP-1.0\n-턴 종료시까지 스파키의 공격력:+1",18,1,2,1,0),
 
-       new cardData("콤비네이션!","-적 한명에게 데미지:4(7번)",19,3,2,1,1),
+       new cardData("떼거리 추격","-적 한명에게 데미지:4(7번)",19,3,2,1,1),
 
        new cardData("자비로운 앙코르","-이전 카드의 발동을 반복한다.(중첩 불가능)",20,2,4,1,4),
 
@@ -126,7 +126,7 @@ public class CardInfo : MonoBehaviour
 
        new cardData("결의","-아군 전체에게 방어도:4\n-방어도가 제일 낮은 아군 한명에게 방어도:10",22,2,3,1,0),
 
-       new cardData("매치 포인트","-스파키를 제외한 파티 전체의 행동력이 0이 된다.\n-턴 종료시까지 스파키의 공격력:+3",23,2,2,1,0),
+       new cardData("무리 이탈","-스파키를 제외한 파티 전체의 행동력이 0이 된다.\n-턴 종료시까지 스파키의 공격력:+3",23,2,2,1,0),
 
        new cardData("끔찍한 화음, 비명","-패에있는 카드를 묘지에 버린다.\n-덱에 있는 카드를 1장 선택해 가지고 온다.",24,2,4,1,3),
 

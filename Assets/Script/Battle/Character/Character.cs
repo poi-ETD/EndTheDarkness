@@ -129,55 +129,59 @@ public class Character : MonoBehaviour
 
     private void Start()
     {
+        
+    }
+    
+    public void AfterInstiate()
+    {
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         myPassive = GetComponent<CharacterPassive>();
         if (BM.ChD.characterDatas[lobbyNum].curEquip != -1)
-        
         {
             equipment myEquip = BM.GD.EquipmentList[BM.ChD.characterDatas[lobbyNum].curEquip];
             if (myEquip.special == 0)
             {
-                    for (int i = 0; i < myEquip.improveMount.Count; i++)
-                    {
+                for (int i = 0; i < myEquip.improveMount.Count; i++)
+                {
 
-                        switch (myEquip.improveStat[i])
-                        {
-                            case 0:
-                                AtkUp(myEquip.improveMount[i]);
-                                break;
-                            case 1:
-                                DefUp(myEquip.improveMount[i]);
-                                break;
-                            case 2:
-                                maxHp += myEquip.improveMount[i];
-                                break;
-                            case 3:
-                                cost += myEquip.improveMount[i];
-                                break;
-                            case 4:
-                                speed += myEquip.improveMount[i]*0.1f;
-                                break;
-                        }
-                    }
-                    switch (myEquip.degradeStat)
+                    switch (myEquip.improveStat[i])
                     {
                         case 0:
-                            AtkUp(-myEquip.degradeMount);
+                            AtkUp(myEquip.improveMount[i]);
                             break;
                         case 1:
-                            DefUp(-myEquip.degradeMount);
+                            DefUp(myEquip.improveMount[i]);
                             break;
                         case 2:
-                            maxHp -= myEquip.degradeMount;
+                            maxHp += myEquip.improveMount[i];
                             break;
                         case 3:
-                            cost -= myEquip.degradeMount;
+                            cost += myEquip.improveMount[i];
                             break;
                         case 4:
-                            speed -= myEquip.degradeMount * 0.1f;
+                            speed += myEquip.improveMount[i] * 0.1f;
                             break;
                     }
-              
+                }
+                switch (myEquip.degradeStat)
+                {
+                    case 0:
+                        AtkUp(-myEquip.degradeMount);
+                        break;
+                    case 1:
+                        DefUp(-myEquip.degradeMount);
+                        break;
+                    case 2:
+                        maxHp -= myEquip.degradeMount;
+                        break;
+                    case 3:
+                        cost -= myEquip.degradeMount;
+                        break;
+                    case 4:
+                        speed -= myEquip.degradeMount * 0.1f;
+                        break;
+                }
+
             }
             else //전용 장비
             {
@@ -189,19 +193,12 @@ public class Character : MonoBehaviour
         }
         spdT.text = "" + speed;
         defT.text = "" + def;
-        //endurT.text = "" + endur;
-
-      
-      
-       // myImage = transform.GetChild(8).GetComponent<Image>();
-      
         if (Hp <= 0) die();
         if (Hp > maxHp) Hp = maxHp;
 
         stringHp = Hp;
         hpT.text = "<color=#a39fff><b>" + Hp + "</color></b><size=15>/" + maxHp + "</size>";
     }
-    
     public void OnSpeedText(float amount)
     {
 

@@ -134,8 +134,8 @@ public class LobbyManager : MonoBehaviour
         else
         { //path3->이 없다면, 첫 시작이기 때문에 리세마라 시작
             GD.Day = 1;
+            GD.victory = 1;
             Resetmara();
-
         }
 
         IgnumT.text = GD.Ignum + "";
@@ -788,8 +788,22 @@ public class LobbyManager : MonoBehaviour
         {
             GD.isAct = true;
             save();
-            StartCoroutine(SceneControllerManager.Instance.SwitchScene("Scene5_Battle"));
-            //SceneManager.LoadScene("Scene3_Battle");
+            bool[] battleDay = { false,true,false,false,true,false,false,true,false,true, //10
+                false,false,true,false,false,true,false, true,false,true,false, //20
+                false, false, false, true, false, false, false,false,true,true};//30 후에 더 좋은 방법 있다면...
+            if (battleDay[GD.Day])
+            {
+                StartCoroutine(SceneControllerManager.Instance.SwitchScene("Scene5_Battle"));
+            }
+            else
+            {
+                GD.Day++;
+                GD.isAct = false;
+                GD.isNight = false;
+                GD.isActInDay = false;
+                save();
+                StartCoroutine(SceneControllerManager.Instance.SwitchScene("Scene3_Lobby"));
+            }
         }
     }
     public void click_button_GMmode()

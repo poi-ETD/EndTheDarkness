@@ -172,7 +172,7 @@ public void GoLobby()
     }
     public void SetBattleByNum(int battle)
     {
-        GD.BattleNo = battle;
+        GD.victory = battle;
     }
 }
 

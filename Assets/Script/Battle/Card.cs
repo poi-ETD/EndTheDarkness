@@ -91,7 +91,6 @@ public class Card : MonoBehaviour
             {
                 if (cardNo == 24)
                 {
-                    Debug.Log("Asd");
                     BM.SelectDeckCard(1);
                 }
             }

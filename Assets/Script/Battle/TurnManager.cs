@@ -103,6 +103,7 @@ public class TurnManager : MonoBehaviour
         CM.FieldOff();//코루틴이 끝나면 필드에 있는 카드들을 모두 덱으로 넣음
 
         BM.characters[BM.ChD.size - 1].transform.localScale = new Vector3(1, 1, 1);
+        if(!BM.isVictoryPopupOn)
         BM.otherCanvasOn = false;
         turn++; //턴을 1 올림
         turnText.text = "" + turn;
