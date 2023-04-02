@@ -110,6 +110,8 @@ public class LobbyManager : MonoBehaviour
     [SerializeField] private GameObject ScriptView;
 
     [SerializeField] private GameObject TrainView;
+
+
     private void Start()
     {
         string path = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CardDatas[GameManager.Instance.nowPlayingSlot]);
@@ -183,6 +185,13 @@ public class LobbyManager : MonoBehaviour
                 dayOutside.SetActive(true);
                 outside = true;
             }
+        }
+    }
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape)&&!GameObject.Find("ESC(Clone)"))//이 창은 하나만 띄우자
+        {
+            Instantiate(GameManager.Instance.EscViewPrefeb, GameObject.Find("Canvas").transform);
         }
     }
     public void Resetmara() //게임이 가장 처음 시작 될 때

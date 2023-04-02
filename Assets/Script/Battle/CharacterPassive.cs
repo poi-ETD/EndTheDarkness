@@ -112,12 +112,12 @@ public class CharacterPassive : MonoBehaviour
         }
        
     }
-    public void Q3()
+    public void Q3(int drow)
     {
         if (myCharacter.isDie) return;
-
-        CM.GraveToField(CM.Grave[Random.Range(0,CM.Grave.Count)]);
-            GameObject newCard = CM.field[CM.field.Count -  1];
+        for (int i = 1; i <= drow; i++)
+        {
+            GameObject newCard = CM.field[CM.field.Count - i];
             if (newCard.GetComponent<BlackWhite>() == null)
             {
                 newCard.AddComponent<BlackWhite>();
@@ -127,7 +127,8 @@ public class CharacterPassive : MonoBehaviour
             {
                 newCard.GetComponent<BlackWhite>().PlusStack();
             }
-     }
+        }
+    }
     
     public void Porte2()
     {
@@ -447,6 +448,10 @@ public class CharacterPassive : MonoBehaviour
         passiveCount[0]++;
     }
     
+    public void myActStart(int no)
+    {
+
+    }
 
     public void myAct()
     {
