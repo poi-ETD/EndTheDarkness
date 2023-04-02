@@ -401,7 +401,7 @@ public class ActManager : MonoBehaviour
                     }
                     if (ActList[0].no == 3)
                     {
-                        ActList[0].myC.myPassive.Q3();
+                        ActList[0].myC.myPassive.Q3(ActList[0].mount);
                     }
                     if (ActList[0].no == 4)
                     {

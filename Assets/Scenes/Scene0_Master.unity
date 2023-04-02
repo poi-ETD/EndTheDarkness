@@ -150,6 +150,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69ed01a93ed6c734880214deca2f5d19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  EscViewPrefeb: {fileID: 8844012414597601460, guid: 3a6a7f0c911cce3438a500dafa4dfcb6,
+    type: 3}
   isInit: 0
   slot_Names: []
   slot_CharacterDatas: []
@@ -243,7 +245,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   passiveName: []
-  passvieDescription: []
+  passiveDescription: []
 --- !u!4 &2133532479
 Transform:
   m_ObjectHideFlags: 0

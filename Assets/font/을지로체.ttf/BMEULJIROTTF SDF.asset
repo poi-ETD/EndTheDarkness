@@ -1849,6 +1849,10 @@ MonoBehaviour:
     m_GlyphIndex: 106
     m_Scale: 1
   - m_ElementType: 1
+    m_Unicode: 33310
+    m_GlyphIndex: 4827
+    m_Scale: 1
+  - m_ElementType: 1
     m_Unicode: 44200
     m_GlyphIndex: 1145
     m_Scale: 1
@@ -2215,10 +2219,6 @@ MonoBehaviour:
   - m_ElementType: 1
     m_Unicode: 54952
     m_GlyphIndex: 3372
-    m_Scale: 1
-  - m_ElementType: 1
-    m_Unicode: 33310
-    m_GlyphIndex: 4827
     m_Scale: 1
   m_AtlasTextures:
   - {fileID: 490129126397732499}

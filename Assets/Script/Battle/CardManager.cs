@@ -312,7 +312,7 @@ public class CardManager : MonoBehaviour
 
                 Grave[i].GetComponent<Card>().isGrave = false;
                 Grave[i].GetComponent<Transform>().localScale = new Vector2(1, 1);
-                if (BM.curSelectedCardInRevive.cardNo == 13)
+                if (BM.curSelectedCardInRevive!=null&&BM.curSelectedCardInRevive.cardNo == 13)
                 {
                     Grave[i].GetComponent<Card>().decreaseCost(-2);
                 }

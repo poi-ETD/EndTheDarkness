@@ -413,8 +413,10 @@ public class BattleManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKey("escape")) //esc누르면 게임 나가게
-            Application.Quit();
+        if (Input.GetKeyDown(KeyCode.Escape) && !GameObject.Find("ESC(Clone)"))//이 창은 하나만 띄우자
+        {
+            Instantiate(GameManager.Instance.EscViewPrefeb, GameObject.Find("NonGameCanvas").transform);
+        }
     }
 
     public void Porte3On() //스타키티시모 on
@@ -465,7 +467,6 @@ public class BattleManager : MonoBehaviour
     }
     public void CancleCharacter() //발동->캐릭터를 두번 눌럿을때 or 눌러진 상태에서 다른 캐릭터를 눌렀을때
     {
-
         if (!otherCanvasOn)
         {
 
@@ -475,11 +476,8 @@ public class BattleManager : MonoBehaviour
             actCharacter = null;
         }
     }
-    public void ShowCharacterHaveTurn(GameObject characterHaveTurn)//캐릭터 클릭이 가능 할 때 누르면 발동
+    public void ShowCharacterHaveTurn(GameObject characterHaveTurn)
     {
-        //CancleCharacter();//이미 눌러진 캐릭터를 취소
-
-
         actCharacter = characterHaveTurn.GetComponent<Character>();
 
         actCharacter.myPassive.ActStart();

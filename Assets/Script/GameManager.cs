@@ -14,7 +14,7 @@ public class UserSaveData
 public class GameManager : MonoBehaviour
 {
     private static GameManager instance;
-
+    [SerializeField] public GameObject EscViewPrefeb;
     public static GameManager Instance
     {
         get
@@ -82,10 +82,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape)) Application.Quit();
-    }
 
     private void Init()
     {

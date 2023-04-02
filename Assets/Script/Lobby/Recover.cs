@@ -42,30 +42,14 @@ public class Recover : MonoBehaviour
         }
         for (int i = 0; i < lobby.ChD.size; i++)
         {
+            if (lobby.ChD.characterDatas[i].curHp <= 0) continue;
             Recovers[i].SetActive(true);
             Recovers[i].GetComponent<TextMeshProUGUI>().text = lobby.ChD.characterDatas[i].name;
             Recovers[i].transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = lobby.ChD.characterDatas[i].curHp + "/" + lobby.ChD.characterDatas[i].maxHp;
-           /* if (lobby.ChD.characterDatas[i].curHp == 0)
-            {
-                if (!lobby.GD.isNight)
-                {
-                    Recovers[i].transform.GetChild(1).gameObject.SetActive(false);
-                    Recovers[i].transform.GetChild(2).gameObject.SetActive(false);
-                    Recovers[i].transform.GetChild(3).gameObject.SetActive(true);
-                }
-                else
-                {
-                    Recovers[i].transform.GetChild(1).gameObject.SetActive(false);
-                    Recovers[i].transform.GetChild(2).gameObject.SetActive(false);
-                    Recovers[i].transform.GetChild(3).gameObject.SetActive(false);
-                }
-            }
-            else
-            { 이 부분은 회복+부활이 함께일 때*/ 
-                Recovers[i].transform.GetChild(1).gameObject.SetActive(true);
-                Recovers[i].transform.GetChild(2).gameObject.SetActive(true);
-                Recovers[i].transform.GetChild(3).gameObject.SetActive(false);
-            
+            Recovers[i].transform.GetChild(1).gameObject.SetActive(true);
+            Recovers[i].transform.GetChild(2).gameObject.SetActive(true);
+            Recovers[i].transform.GetChild(3).gameObject.SetActive(false);
+
         }
         for (int i = lobby.ChD.size; i < 4; i++)
         {
