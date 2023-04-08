@@ -35,7 +35,7 @@ MonoBehaviour:
   - characterCode: 1
     name: Q
     aka: "\uC545\uC758 \uADFC\uC6D0"
-    sprite_Face: {fileID: 21300000, guid: 678b223f10bba99439efa224c956ce14, type: 3}
+    sprite_Face: {fileID: 21300000, guid: 3b4a2971ec10b3748b9b6fcc84190d48, type: 3}
     isReviver: 1
     hp: 35
     attackPower: 1

@@ -23,11 +23,11 @@ public class Character : MonoBehaviour
     public TurnManager TM;
     public BattleManager BM;
     [SerializeField] private TextMeshProUGUI text_Name; // YH
-    public TextMeshProUGUI hpT;
-    public TextMeshProUGUI atkT;
+    public TextMeshProUGUI hpT; // YH : 배틀 씬 내의 좌측 캐릭터 정보 인스턴스 내의 HP 텍스트 변수
+    public TextMeshProUGUI atkT; // YH : 배틀 씬 내의 좌측 캐릭터 정보 인스턴스 내의 ATK 텍스트 변수
+    public TextMeshProUGUI defT; // YH : 배틀 씬 내의 좌측 캐릭터 정보 인스턴스 내의 DEF 텍스트 변수
+    public TextMeshProUGUI spdT; // YH : 배틀 씬 내의 좌측 캐릭터 정보 인스턴스 내의 SPD 텍스트 변수
     public TextMeshProUGUI armorT;
-    public TextMeshProUGUI spdT;
-    public TextMeshProUGUI defT;
 
     public TextMeshProUGUI board;
 

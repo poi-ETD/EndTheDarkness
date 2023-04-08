@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 using Newtonsoft.Json;
 public class BattleManager : MonoBehaviour
 {
-    [SerializeField] GameObject CharacterPrefebs;
+    [SerializeField] private GameObject CharacterPrefebs;
     [SerializeField] private GameObject EnemyPrefeb; // YH
     public List<Character> characters = new List<Character>(); //현재 게임에 있는 캐릭터들의 목록,순서또한 동일
     public bool CharacterSelectMode;//캐릭터를 고를 수 있는 상태

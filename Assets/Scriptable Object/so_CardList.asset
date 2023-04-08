@@ -126,91 +126,91 @@ MonoBehaviour:
     description_KR: "- \uBB18\uC9C0\uC5D0\uC11C \uD328\uB85C \uCE74\uB4DC 1\uC7A5\uC744
       \uC120\uD0DD\uD574 \uAC00\uC9C0\uACE0 \uC628\uB2E4.\n- \uAC00\uC9C0\uACE0 \uC628
       \uCE74\uB4DC\uC758 \uC18C\uBE44 \uCF54\uC2A4\uD2B8\uB97C 2\uB9CC\uD07C \uAC10\uC18C\uC2DC\uD0A8\uB2E4."
-  - code: 0
+  - code: 14
     sprite_Card: {fileID: 0}
     name: 
     cost: 0
     ownerCharacter: 0
     thema: 0
     description_KR: 
-  - code: 0
+  - code: 15
     sprite_Card: {fileID: 0}
     name: 
     cost: 0
     ownerCharacter: 0
     thema: 0
     description_KR: 
-  - code: 0
+  - code: 16
     sprite_Card: {fileID: 0}
     name: 
     cost: 0
     ownerCharacter: 0
     thema: 0
     description_KR: 
-  - code: 0
+  - code: 17
     sprite_Card: {fileID: 0}
     name: 
     cost: 0
     ownerCharacter: 0
     thema: 0
     description_KR: 
-  - code: 0
+  - code: 18
     sprite_Card: {fileID: 0}
     name: 
     cost: 0
     ownerCharacter: 0
     thema: 0
     description_KR: 
-  - code: 0
+  - code: 19
     sprite_Card: {fileID: 0}
     name: 
     cost: 0
     ownerCharacter: 0
     thema: 0
     description_KR: 
-  - code: 0
+  - code: 20
     sprite_Card: {fileID: 0}
     name: 
     cost: 0
     ownerCharacter: 0
     thema: 0
     description_KR: 
-  - code: 0
+  - code: 21
     sprite_Card: {fileID: 0}
     name: 
     cost: 0
     ownerCharacter: 0
     thema: 0
     description_KR: 
-  - code: 0
+  - code: 22
     sprite_Card: {fileID: 0}
     name: 
     cost: 0
     ownerCharacter: 0
     thema: 0
     description_KR: 
-  - code: 0
+  - code: 23
     sprite_Card: {fileID: 0}
     name: 
     cost: 0
     ownerCharacter: 0
     thema: 0
     description_KR: 
-  - code: 0
+  - code: 24
     sprite_Card: {fileID: 0}
     name: 
     cost: 0
     ownerCharacter: 0
     thema: 0
     description_KR: 
-  - code: 0
+  - code: 25
     sprite_Card: {fileID: 0}
     name: 
     cost: 0
     ownerCharacter: 0
     thema: 0
     description_KR: 
-  - code: 0
+  - code: 26
     sprite_Card: {fileID: 0}
     name: 
     cost: 0
