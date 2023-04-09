@@ -10,6 +10,7 @@ public class UI_Enemy_Battle : MonoBehaviour
     public TextMeshProUGUI text_Name;
     public TextMeshProUGUI text_Hp;
     public TextMeshProUGUI text_Attack;
+    public TextMeshProUGUI text_Defense;
     public TextMeshProUGUI text_Speed;
 
     void Start()

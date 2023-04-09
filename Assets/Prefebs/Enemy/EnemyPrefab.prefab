@@ -1187,8 +1187,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4947039244860995699}
-  - component: {fileID: 4947039244860995711}
-  - component: {fileID: 217681889887276545}
   - component: {fileID: -2567368635966651978}
   - component: {fileID: 4947039244860995704}
   - component: {fileID: 4947039244860995709}
@@ -1222,79 +1220,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 250, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &4947039244860995711
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4947039244860995705}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf98a63e117df5c448723e74491aefa1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  characterNo: 1
-  maxHp: 30
-  Hp: 0
-  atk: 0
-  armor: 0
-  turnAtk: 0
-  def: 0
-  turnDef: 0
-  speed: 0
-  curSpeed: 0
-  curTurnActTime: 0
-  TM: {fileID: 0}
-  BM: {fileID: 0}
-  text_Name: {fileID: 4074748377135758465}
-  hpT: {fileID: 4947039246154316983}
-  atkT: {fileID: 8170937070070488999}
-  defT: {fileID: 8740612977451774920}
-  spdT: {fileID: 5672601257994105348}
-  armorT: {fileID: 0}
-  board: {fileID: 4947039244917896246}
-  passive: 00000000000000000000000000000000
-  enemyName: 
-  AttackCount: 0
-  bless: 0000000000000000000000000000000000000000
-  SelectBox: {fileID: 2327101167346211065}
-  myImage: {fileID: 7967456359866279009}
-  cost: 2
-  hitStack: 0
-  dmgStack: 0
-  NextTurnMinusAct: 0
-  isDie: 0
-  nextarmor: 0
-  card8: 0
-  card8point: 0
-  Name: 
-  reflect: 0
-  status: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-  curNo: 0
-  myPassive: {fileID: 0}
-  stringHp: 0
-  stringArmor: 0
-  beforeArmor: 0
-  lobbyNum: 0
---- !u!114 &217681889887276545
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4947039244860995705}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f337c7279b59e6438b23bb8eebe75bb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ghost: 0
-  ghostText: {fileID: 4947039244830821326}
-  upQ: {fileID: 21300000, guid: 03d954929911ad7458295e8a27497d60, type: 3}
-  DMGtext: {fileID: 3516283684887914833, guid: dd90e8f3edae7fc489918575a58fd894, type: 3}
-  sparkyAttackDone: 0
-  haveMyEquip: 0
 --- !u!114 &-2567368635966651978
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1311,6 +1236,7 @@ MonoBehaviour:
   text_Name: {fileID: 4074748377135758465}
   text_Hp: {fileID: 4947039246154316983}
   text_Attack: {fileID: 8170937070070488999}
+  text_Defense: {fileID: 8740612977451774920}
   text_Speed: {fileID: 5672601257994105348}
 --- !u!61 &4947039244860995704
 BoxCollider2D:
@@ -1363,7 +1289,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 4947039244860995711}
+        - m_Target: {fileID: 0}
           m_MethodName: onClickEvent
           m_Mode: 1
           m_Arguments:

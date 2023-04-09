@@ -7,8 +7,8 @@ public class Enemy : MonoBehaviour
 {
     public int Hp;
     public int maxHp;
-    [HideInInspector] public int Armor;
     [HideInInspector] public int atk;
+    [HideInInspector] public int Armor;
     [HideInInspector]public TurnManager TM;
     [HideInInspector] public BattleManager BM;
     public TextMeshProUGUI Board;
