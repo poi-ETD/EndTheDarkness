@@ -203,7 +203,7 @@ public class BattleManager : MonoBehaviour
 
                 back.Add(CharacterComponenet);
             } //전방과 후방 목록에 각각 캐릭터를 넣음
-            CharacterComponenet.AfterInstiate();
+            CharacterComponenet.AfterInstantiate();
         }
 
         for (int i = 0; i < line; i++)

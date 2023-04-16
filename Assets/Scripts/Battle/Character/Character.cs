@@ -23,13 +23,15 @@ public class Character : MonoBehaviour
     public TurnManager TM;
     public BattleManager BM;
     [SerializeField] private TextMeshProUGUI text_Name; // YH
-    public TextMeshProUGUI hpT; // YH : 배틀 씬 내의 좌측 캐릭터 정보 인스턴스 내의 HP 텍스트 변수
-    public TextMeshProUGUI atkT; // YH : 배틀 씬 내의 좌측 캐릭터 정보 인스턴스 내의 ATK 텍스트 변수
-    public TextMeshProUGUI defT; // YH : 배틀 씬 내의 좌측 캐릭터 정보 인스턴스 내의 DEF 텍스트 변수
-    public TextMeshProUGUI spdT; // YH : 배틀 씬 내의 좌측 캐릭터 정보 인스턴스 내의 SPD 텍스트 변수
-    public TextMeshProUGUI armorT;
+    public TextMeshProUGUI hpT; // YH : 배틀 씬 내의 좌측 캐릭터 정보 인스턴스 내의 HP 텍스트
+    public TextMeshProUGUI atkT; // YH : 배틀 씬 내의 좌측 캐릭터 정보 인스턴스 내의 ATK 텍스트
+    public TextMeshProUGUI defT; // YH : 배틀 씬 내의 좌측 캐릭터 정보 인스턴스 내의 DEF 텍스트
+    public TextMeshProUGUI spdT; // YH : 배틀 씬 내의 좌측 캐릭터 정보 인스턴스 내의 SPD 텍스트
 
-    public TextMeshProUGUI board;
+    public TextMeshProUGUI text_Armor; // YH : 배틀 씬 내의 좌측 캐릭터 정보 인스턴스 내의 방어도 텍스트
+    public TextMeshProUGUI text_Ghost; // YH : 배틀 씬 내의 좌측 캐릭터 정보 인스턴스 내의 망자부활 텍스트
+    public TextMeshProUGUI text_Blood; // YH : 배틀 씬 내의 좌측 캐릭터 정보 인스턴스 내의 출혈 텍스트
+    public TextMeshProUGUI text_Weak; // YH : 배틀 씬 내의 좌측 캐릭터 정보 인스턴스 내의 약화 텍스트
 
     public int[] passive;
 
@@ -132,7 +134,7 @@ public class Character : MonoBehaviour
         
     }
     
-    public void AfterInstiate()
+    public void AfterInstantiate()
     {
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         myPassive = GetComponent<CharacterPassive>();
@@ -388,7 +390,6 @@ public class Character : MonoBehaviour
         Color color = new Color(0.3f, 0.3f, 0.3f);
         myImage.color = color;
        
-        board.text = "";
         armor = 0;
         BM.teamDieCount++;
         if (BM.teamDieCount == BM.characters.Count)
