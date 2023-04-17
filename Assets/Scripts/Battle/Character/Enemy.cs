@@ -95,7 +95,7 @@ public class Enemy : MonoBehaviour
         if (BM.cardSelectMode) return;
         if (Shadow) return;
 
-        if (BM.EnemySelectMode)
+        if (BM.enemySelectMode)
         {
             Debug.Log("OnSelect");
             BM.EnemySelect(gameObject);

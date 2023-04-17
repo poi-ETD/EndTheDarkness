@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using TMPro;
 using UnityEngine;
-using TMPro;
 using UnityEngine.UI;
 
 public class Card : MonoBehaviour
@@ -23,7 +21,7 @@ public class Card : MonoBehaviour
     public int DeckNo;// start->0 Q->1 스파키->2 반가라->3 포르테->4 령->5
     public int type;//스타터->0 스타터x->1 특수->2
     public int cardNo;
-    public int selectType;
+    public int selectType; // YH : selectType의 번호가 무슨 의미인지?
     public bool iscard20Mode;
 
     //부여 가능한 속성들
@@ -31,12 +29,12 @@ public class Card : MonoBehaviour
     int weaknessCount;
     int percentDmgToAllTarget;
 
-
-
     public bool isRemove;
+
     //YH
     [HideInInspector] public bool isSelected = false;
-    public void useCardInCard20()
+
+    public void useCardInCard20() // YH : '20카드사용' 같은 주석말고, 언제 실행되는 함수인지? 무슨 역할을 하는 함수인지? 정확하게 기재 부탁드립니다
     {
         if (selectType == 1)
         {
@@ -50,14 +48,15 @@ public class Card : MonoBehaviour
         }
         else useCard();
     }
-    public void useCard()
+
+    public void useCard() // YH : '카드사용' 같은 주석말고, 언제 실행되는 함수인지? 무슨 역할을 하는 함수인지? 정확하게 기재 부탁드립니다
     {
         if (CM.TM.turn == 1 )
         {if( BM.GD.blessbool[4]||BM.GD.blessbool[12])
             return;
         }
         BM.otherCanvasOn = false;
-        if (!BM.EnemySelectMode)
+        if (!BM.enemySelectMode)
         {   
             if (BM.actCharacter == null)
             {
@@ -71,13 +70,13 @@ public class Card : MonoBehaviour
                 BM.costOver();
                 return;
             }        
-            else if (selectType==1)
+            else if (selectType == 1) // YH : selectType의 번호가 무슨 의미인지?
             {
                 //BM.goEnemySelectMode();
             }
-            else if (selectType == 2) //무덤류
+            else if (selectType == 2) // 무덤류 -> YH : '무덤류' 라는 모호한 표현말고, 정확하게 주석 달아주세요. 무덤에서 카드를 선택해야 하는 타입이라던가,
+                                      // 무덤으로 보내야하는 타입이라던가..
             {
-              
                 if (cardNo == 7)
                 {
                     BM.ReviveToField(2);
@@ -87,14 +86,14 @@ public class Card : MonoBehaviour
                     BM.ReviveToField(1);
                 }
             }
-            else if (selectType == 3)
+            else if (selectType == 3) // YH : selectType의 번호가 무슨 의미인지?
             {
                 if (cardNo == 24)
                 {
                     BM.SelectDeckCard(1);
                 }
             }
-            else if (selectType == 4)
+            else if (selectType == 4) // YH : selectType의 번호가 무슨 의미인지?
             {
                 if (BM.previousSelectedCard == null)
                 {
@@ -110,7 +109,7 @@ public class Card : MonoBehaviour
                 }
                 BM.UsePreviousCard();
             }
-            else if (selectType == 5)
+            else if (selectType == 5) // YH : selectType의 번호가 무슨 의미인지?
             {
                 BM.goCharacterSelectMode();
             }
@@ -304,13 +303,10 @@ public class Card : MonoBehaviour
             
         }
         else
-        {
-            BM.CardUseText.text = "사용";
-            BM.EnemySelectMode = false;
-        }
+            BM.enemySelectMode = false;
     }
   
-    public void EnemySelectCard()
+    public void EnemySelectCard() // YH : '적선택' 같은 주석말고, 언제 실행되는 함수인지? 무슨 역할을 하는 함수인지? 정확하게 기재 부탁드립니다
     {
       
         BM.log.logContent.text += "\n" + BM.actCharacter.Name + "이(가) " + Name.text + " 발동!";
@@ -384,11 +380,13 @@ public class Card : MonoBehaviour
     
         BM.AM.Act();
     }
-    public void CancleRevive()
+
+    public void CancleRevive() // YH : '부활취소' 같은 주석말고, 언제 실행되는 함수인지? 무슨 역할을 하는 함수인지? 정확하게 기재 부탁드립니다
     {
         
     }
-    public void SelectRevive()
+
+    public void SelectRevive() // YH : '부활선택' 같은 주석말고, 언제 실행되는 함수인지? 무슨 역할을 하는 함수인지? 정확하게 기재 부탁드립니다
     {
         if (cardNo == 7)
         {            
@@ -402,7 +400,8 @@ public class Card : MonoBehaviour
         BM.AM.Act();
         BM.Click_GraveOff();
     }
-    public void SelectDeck()
+
+    public void SelectDeck() // YH : '덱선택' 같은 주석말고, 언제 실행되는 함수인지? 무슨 역할을 하는 함수인지? 정확하게 기재 부탁드립니다
     {
         BM.log.logContent.text += "\n" + BM.actCharacter.Name + "이(가) " + Name.text + " 발동!";
         if (cardNo == 24)
@@ -417,7 +416,8 @@ public class Card : MonoBehaviour
         CardUse();
         BM.AM.Act();
     }
-    public void CharacterSelectCard()
+
+    public void CharacterSelectCard() // YH : '캐릭터선택카드' 같은 주석말고, 언제 실행되는 함수인지? 무슨 역할을 하는 함수인지? 정확하게 기재 부탁드립니다
     {
         BM.log.logContent.text += "\n" + BM.actCharacter.Name + "이(가) " + Name.text + " 발동!";
         if (cardNo == 2)
@@ -441,23 +441,26 @@ public class Card : MonoBehaviour
        
         BM.AM.Act();
     }
-    public void decreaseCost(int amount)
+
+    public void decreaseCost(int amount) // YH : '코스트감소' 같은 주석말고, 언제 실행되는 함수인지? 무슨 역할을 하는 함수인지? 정확하게 기재 부탁드립니다
     {
         cardcost -= amount;
         if (cardcost < 0) cardcost = 0;
         if(cardNo!=8)
         costT.text = cardcost + "";
     }
-    private void Start()
+
+    private void Start() // YH : Start() 함수가 굳이 이런곳에 있어야할 이유가 있을까요?
     {
-      
         CM = GameObject.Find("CardManager").GetComponent<CardManager>();
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         AM = BM.AM;
     }
-    public void CardUse()
+
+    public void CardUse() // YH : '카드사용' 같은 주석말고, 언제 실행되는 함수인지? 무슨 역할을 하는 함수인지? 정확하게 기재 부탁드립니다
+                          // 위에 useCard() 함수가 있는데 어떤 차이가 있나요? useCard()와 CardUse() 같은 구분이 모호한 명명은 지양해주시고
+                          // 함수 이름에서 함수의 역할이 어느정도 유추되는게 아닌 카드는 주석을 정확하게 적어주세요
     {
-        
         if (GetComponent<BlackWhite>() != null)
         {        
             GetComponent<BlackWhite>().onDamage();
@@ -492,13 +495,14 @@ public class Card : MonoBehaviour
         CM.UseCard(gameObject);
     }
 
-    public void textSet()
+    public void textSet() // YH : '텍스트설정' 같은 주석말고, 언제 실행되는 함수인지? 무슨 역할을 하는 함수인지? 정확하게 기재 부탁드립니다
     {
        
         if (cardNo != 8)
             costT.text = cardcost + "";
         else costT.text = "N";
     }
+
     [HideInInspector] public Vector3 origin_Position;
     private bool isOnMouse;
 
@@ -520,7 +524,7 @@ public class Card : MonoBehaviour
             HandManager.Instance.InputToOriginText(this); //YH  
             HandManager.Instance.CardMouseEnter(this); //YH
 
-            if (!BM.EnemySelectMode && !BM.otherCanvasOn)
+            if (!BM.enemySelectMode && !BM.otherCanvasOn)
             {
                 if (BM.selectedCard != gameObject)
                     BM.SetCard(gameObject);
@@ -532,12 +536,12 @@ public class Card : MonoBehaviour
 
             if (selectType == 1)
             {
-                BM.EnemySelectMode = true;
+                BM.enemySelectMode = true;
                 Debug.Log("Enemy select mode on");
             }
             else
             {
-                BM.EnemySelectMode = false;
+                BM.enemySelectMode = false;
                 Debug.Log("Enemy select mode off");
             }
 
@@ -558,7 +562,7 @@ public class Card : MonoBehaviour
     {
         if (!HandManager.Instance.isSelectedCard && !BM.otherCanvasOn)
         {
-            if (!BM.EnemySelectMode && !BM.otherCanvasOn && !isDeck)
+            if (!BM.enemySelectMode && !BM.otherCanvasOn && !isDeck)
                 HandManager.Instance.CardMouseEnter(this);
             if (BM.otherCanvasOn && (BM.isGraveWindowOn || BM.isDeckWindowOn))
             {
@@ -612,6 +616,7 @@ public class Card : MonoBehaviour
             Content.text = newstring;
         }
     }
+
     public void GetWeaknessEffect()
     {
         if (weaknessCount == 0)
@@ -627,11 +632,13 @@ public class Card : MonoBehaviour
             Content.text = newstring;
         }
     }
+
     public void GetRemove()
     {
         isRemove = true;
         Content.text += "\n-[소멸]";
     }
+
     public void RemoveThisCardInDeck()
     {
         for(int i = 0; i < BM.characters.Count; i++)
@@ -644,6 +651,7 @@ public class Card : MonoBehaviour
         transform.parent = CM.RemoveContent.transform;
         gameObject.SetActive(false);
     }
+
     public void RemoveThisCardInField()
     {
      
@@ -655,6 +663,7 @@ public class Card : MonoBehaviour
         CM.RemoveCard.Add(gameObject);
         transform.parent = CM.RemoveContent.transform;
     }
+
     public void GetPercentDmgToAllTarget(int dmg)
     {
         if (percentDmgToAllTarget== 0)
@@ -671,7 +680,4 @@ public class Card : MonoBehaviour
             Content.text = newstring;
         }
     }
-
-
-
 }

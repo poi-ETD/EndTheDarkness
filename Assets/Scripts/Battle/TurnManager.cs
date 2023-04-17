@@ -55,7 +55,7 @@ public class TurnManager : MonoBehaviour
         }
         PlayerTurnStart();
     }
-    public void PlayerTurnEnd()
+    public void PlayerTurnEnd() // YH : 이거 무슨 함수지?
     {
         for (int i = 0; i < BM.Enemys.Length; i++)
         {
@@ -68,8 +68,11 @@ public class TurnManager : MonoBehaviour
         PlayerTurn = false;
 
         EndButton.SetActive(false);
-        BM.CharacterSelectMode = false;
-        BM.EnemySelectMode = false;
+        BM.characterSelectMode = false; // YH : 현재 함수 이름으로 봤을 때 하나의 플레이어블 캐릭터가 턴을 종료했을 때 실행되는 함수 같은데,
+                                        // 이 코드는 현재 카드의 캐릭터 선택 모드를 false로 바꾸는 코드기 때문에 만약 한 턴에 두개 이상의 카드를 사용한다면
+                                        // 이 코드가 실행되기 전까지는 두번째 사용하는 카드가 적을 선택하지 않는 카드임에 불구하고 여전히 이 변수가 true인 상태라면
+                                        // 오류가 발생하지 않을까 해서 적어둠
+        BM.enemySelectMode = false;
 
         for (int i = 0; i < BM.Enemys.Length; i++)
             BM.Enemys[i].GetComponent<Enemy>().Board.text = "";

@@ -8,15 +8,16 @@ using UnityEngine.SceneManagement;
 using Newtonsoft.Json;
 public class BattleManager : MonoBehaviour
 {
-    [SerializeField] private GameObject CharacterPrefebs;
-    [SerializeField] private GameObject EnemyPrefeb; // YH
-    public List<Character> characters = new List<Character>(); //현재 게임에 있는 캐릭터들의 목록,순서또한 동일
-    public bool CharacterSelectMode;//캐릭터를 고를 수 있는 상태
-    public bool EnemySelectMode;//적을 고를 수 있는 상태
-    public Character actCharacter;//현재 행동하는 캐릭터
-    public Enemy selectedEnemy;//현재 지정된 적
-    public Character selectedCharacter;//현재 선택된 캐릭터
-    public GameObject selectedCard;//현재 지정된 카드
+    [SerializeField] private GameObject characterPrefab;
+    [SerializeField] private GameObject enemyPrefab; // YH
+
+    public List<Character> characters = new List<Character>(); // 현재 게임에 있는 캐릭터들의 목록,순서또한 동일
+    public bool characterSelectMode; // 캐릭터를 고를 수 있는 상태
+    public bool enemySelectMode; // 적을 고를 수 있는 상태
+    public Character actCharacter; // 현재 행동하는 캐릭터
+    public Enemy selectedEnemy; // 현재 지정된 적
+    public Character selectedCharacter; // 현재 선택된 캐릭터
+    public GameObject selectedCard; // 현재 지정된 카드
 
     public GameObject previousSelectedCard;//바로 이전에 사용한 카드
     public Enemy previousEnemy;
@@ -32,7 +33,6 @@ public class BattleManager : MonoBehaviour
 
     [SerializeField] CardManager CM;
     public ActManager AM;
-
 
     public GameObject[] Enemys;//적들
 
@@ -55,6 +55,7 @@ public class BattleManager : MonoBehaviour
 
     public GameData GD;
     public CharacterData ChD;
+
     [SerializeField] GameObject victory_window; //승리 시 나오는 팝업 창
     [SerializeField] GameObject defeated_window; //패배 시 나오는 팝업 창
 
@@ -69,8 +70,6 @@ public class BattleManager : MonoBehaviour
 
     [SerializeField] Text StackT;
     [SerializeField] GameObject StackPopUp;
-    public TextMeshProUGUI CardUseText;
-    [SerializeField] GameObject CancleButton;
 
     [HideInInspector] public bool isGraveWindowOn; // YH
     public bool card20Activing;
@@ -85,8 +84,6 @@ public class BattleManager : MonoBehaviour
     public GameObject DeckView;
     public GameObject SelectedCard;
     [SerializeField] GameObject LineObject;
-
-    [SerializeField] GameObject UseButton;
 
     [SerializeField] GameObject FormationCollapsePopup;
     [SerializeField] Text FormationCollapseText;
@@ -127,13 +124,9 @@ public class BattleManager : MonoBehaviour
 
     public GameObject usedInCard20;//스케치 반복용
 
-
-
     public bool otherCorIsRun; //코루틴이 동작 중일 때
 
     public bool turnStartIsRun;//턴 시작 코루틴이 동작 중일 때
-
-
 
     //YH
     [HideInInspector] public bool isPointerinHand = false;
@@ -177,7 +170,7 @@ public class BattleManager : MonoBehaviour
         for (int i = 0; i < ChD.size; i++)
         {
          
-            GameObject CharacterC = Instantiate(CharacterPrefebs, new Vector2(-880 / 45f, (330 - 150 * characters.Count) / 45f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
+            GameObject CharacterC = Instantiate(characterPrefab, new Vector2(-880 / 45f, (330 - 150 * characters.Count) / 45f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
             Character CharacterComponenet = CharacterC.GetComponent<Character>();
             characterOriginal.Add(CharacterComponenet);
             CharacterComponenet.atk = ChD.characterDatas[i].atk;
@@ -243,7 +236,7 @@ public class BattleManager : MonoBehaviour
         for (int i = 0; i < enemyCount; i++)
         {
             GameObject EnemyC =
-                Instantiate(EnemyPrefeb, new Vector2(840 / 45f, (330 - 150 * i) / 45f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
+                Instantiate(enemyPrefab, new Vector2(840 / 45f, (330 - 150 * i) / 45f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
             UI_Enemy_Battle enemyComponenet = EnemyC.GetComponent<UI_Enemy_Battle>();
 
             //enemyComponenet.image_Face = ;
@@ -577,7 +570,7 @@ public class BattleManager : MonoBehaviour
     {
         if (!otherCanvasOn)
         {
-            EnemySelectMode = false;
+            enemySelectMode = false;
 
             selectedCard = null;
 
@@ -590,7 +583,6 @@ public class BattleManager : MonoBehaviour
 
     public void Click_useCard() // 카드 드래그 상태에서 아무곳이나(또는 적,아군) 클릭시 사용되는 함수
     {
-        CancleButton.SetActive(false);
         //HandManager.Instance.go_SelectedCardTooltip.SetActive(false);
         if (selectedCard.GetComponent<Card>().selectType != 1)
         {
@@ -618,8 +610,7 @@ public class BattleManager : MonoBehaviour
 
 
             }
-            CardUseText.text = "사용";
-            EnemySelectMode = false;
+            enemySelectMode = false;
         }
         else if (selectedCard.GetComponent<Card>().selectType == 5)
         {
@@ -629,7 +620,6 @@ public class BattleManager : MonoBehaviour
                  selectedCard = usedInCard20;
                  otherCanvasOn = false;
              }*/
-            CardUseText.text = "사용";
             // CharacterSelectMode = false;
         }
     }
@@ -678,8 +668,7 @@ public class BattleManager : MonoBehaviour
     }
     public void OnDmgOneTarget(int dmg, Enemy enemy, Character character, int time) //카드를 사용해 데미지를 입힐 경우
     {
-        CardUseText.text = "사용";
-        EnemySelectMode = false;
+        enemySelectMode = false;
         //log.logContent.text += "\n" + enemy.Name + "에게 " + (dmg + character.turnAtk) + "의 데미지!("+time+")";
         for (int k = 0; k < time; k++)
         {
@@ -1141,14 +1130,12 @@ public class BattleManager : MonoBehaviour
 
     public void goEnemySelectMode() //공격 카드 선택 시 어떤 적을 공격할지 고르는 모드
     {
-        EnemySelectMode = true; //이 상태로 들어가면 Enemy를 클릭시 선택이 된다.
-        CardUseText.text = "취소";
+        enemySelectMode = true; //이 상태로 들어가면 Enemy를 클릭시 선택이 된다.
     }
 
     public void goCharacterSelectMode() //아군 선택 카드 선택 시 어떤 아군을 선택할지 고르는 모드
     {
-        CharacterSelectMode = true; //이 상태로 들어가면 character를 클릭시 선택이 된다.
-        CardUseText.text = "취소";
+        characterSelectMode = true; //이 상태로 들어가면 character를 클릭시 선택이 된다.
     }
     //type==0 랜덤 대상 type==1 방어도 높은 적 우선 type==2 체력 높은 적 우선 
 

@@ -122,10 +122,9 @@ public class Character : MonoBehaviour
     public void onClickEvent()
     {
         if (isDie) return;
-        if (BM.CharacterSelectMode)
-        {
+
+        if (BM.characterSelectMode)
             BM.CharacterSelect(gameObject);
-        }
 
     }
 
@@ -138,6 +137,7 @@ public class Character : MonoBehaviour
     {
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         myPassive = GetComponent<CharacterPassive>();
+
         if (BM.ChD.characterDatas[lobbyNum].curEquip != -1)
         {
             equipment myEquip = BM.GD.EquipmentList[BM.ChD.characterDatas[lobbyNum].curEquip];
@@ -145,7 +145,6 @@ public class Character : MonoBehaviour
             {
                 for (int i = 0; i < myEquip.improveMount.Count; i++)
                 {
-
                     switch (myEquip.improveStat[i])
                     {
                         case 0:
@@ -188,13 +187,13 @@ public class Character : MonoBehaviour
             else //전용 장비
             {
                 if (myEquip.special == characterNo)
-                {
                     myPassive.haveMyEquip = true;
-                }
             }
         }
+
         spdT.text = "" + speed;
         defT.text = "" + def;
+
         if (Hp <= 0) die();
         if (Hp > maxHp) Hp = maxHp;
 
