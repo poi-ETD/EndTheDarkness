@@ -6,7 +6,8 @@ using TMPro;
 using System.IO;
 using UnityEngine.SceneManagement;
 using Newtonsoft.Json;
-public class BattleManager : MonoBehaviour
+
+public class BattleManager : SingletonMonobehaviour<BattleManager>
 {
     [SerializeField] private GameObject characterPrefab;
     [SerializeField] private GameObject enemyPrefab; // YH
@@ -151,9 +152,9 @@ public class BattleManager : MonoBehaviour
         SetCharacterOnBattle();
         SetEnemyOnBattle();
         GameObject EnemySummon = Instantiate(Enemys[GD.victory], new Vector2(-2, -2), transform.rotation, GameObject.Find("CharacterCanvas").transform);
-
+        
         Enemys = GameObject.FindGameObjectsWithTag("Enemy");
-
+        Debug.Log("a");
         TurnCardCount = CardCount;
 
         LineObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-820, 360 - 150 * line);
@@ -162,7 +163,6 @@ public class BattleManager : MonoBehaviour
         {
             SetBless20();
         }
-
     }
 
     public void SetCharacterOnBattle()

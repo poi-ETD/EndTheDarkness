@@ -32,18 +32,21 @@ public class ActManager : MonoBehaviour
         }
       
     }
-    
+
     void Start()
     {
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         characters = BM.characters;
-        for(int i = 0; i < BM.Enemys.Length; i++)
+        Debug.Log("b");
+        Debug.Log(BM.Enemys.Length);
+        for (int i = 0; i < BM.Enemys.Length; i++)
         {
             enemys.Add(BM.Enemys[i].GetComponent<Enemy>());
             enemys[i].battleNo = i;
         }
     }
+
     public void ActComplete() //행동 종료 패시브를 불러 일으키기 위한 함수.
     {
         BM.actCharacter.myPassive.myAct();
