@@ -7,11 +7,12 @@ using System.IO;
 using UnityEngine.SceneManagement;
 using Newtonsoft.Json;
 
-public class BattleManager : SingletonMonobehaviour<BattleManager>
+public class BattleManager : MonoBehaviour
 {
     [SerializeField] private GameObject characterPrefab;
     [SerializeField] private GameObject enemyPrefab; // YH
 
+    [SerializeField] private GameObject[] EnemyList;
     public List<Character> characters = new List<Character>(); // 현재 게임에 있는 캐릭터들의 목록,순서또한 동일
     public bool characterSelectMode; // 캐릭터를 고를 수 있는 상태
     public bool enemySelectMode; // 적을 고를 수 있는 상태
@@ -151,10 +152,9 @@ public class BattleManager : SingletonMonobehaviour<BattleManager>
 
         SetCharacterOnBattle();
         SetEnemyOnBattle();
-        GameObject EnemySummon = Instantiate(Enemys[GD.victory], new Vector2(-2, -2), transform.rotation, GameObject.Find("CharacterCanvas").transform);
+        GameObject EnemySummon = Instantiate(EnemyList[GD.victory], new Vector2(-2, -2), transform.rotation, GameObject.Find("CharacterCanvas").transform);
         
         Enemys = GameObject.FindGameObjectsWithTag("Enemy");
-        Debug.Log("a");
         TurnCardCount = CardCount;
 
         LineObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-820, 360 - 150 * line);
@@ -168,8 +168,7 @@ public class BattleManager : SingletonMonobehaviour<BattleManager>
     public void SetCharacterOnBattle()
     {
         for (int i = 0; i < ChD.size; i++)
-        {
-         
+        {        
             GameObject CharacterC = Instantiate(characterPrefab, new Vector2(-880 / 45f, (330 - 150 * characters.Count) / 45f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
             Character CharacterComponenet = CharacterC.GetComponent<Character>();
             characterOriginal.Add(CharacterComponenet);
@@ -910,7 +909,6 @@ public class BattleManager : SingletonMonobehaviour<BattleManager>
     public void Grave_ReviveCancel()
     {
         GraveReviveMode = false;
-        curSelectedCardInRevive.CancleRevive();
         for (int i = 0; i < CM.ReviveCard.Count; i++)
         {
             CM.ReviveCard[i].GetComponent<Transform>().localScale = new Vector2(1f, 1f);
@@ -1388,7 +1386,7 @@ public class BattleManager : SingletonMonobehaviour<BattleManager>
             useCost(MyCard.GetComponent<Card>().cardcost, gameObject);
 
         }
-        MyCard.GetComponent<Card>().CardUse();
+        MyCard.GetComponent<Card>().UseCardResult();
         AM.Act();
 
     }

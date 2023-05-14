@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 using System.Reflection;
 using TMPro;
 
-public class CardManager : MonoBehaviour
+public class CardManager : SingletonMonobehaviour<MonoBehaviour>
 {
     public List<GameObject> Deck = new List<GameObject>(); //덱에 있는 카드들의 리스트
     public List<GameObject> Grave = new List<GameObject>(); //무덤에 있는 카드들의 리스트
@@ -105,7 +105,7 @@ public class CardManager : MonoBehaviour
         {
             Deck[i].SetActive(true);
             Deck[i].GetComponent<Card>().cardcost = Deck[i].GetComponent<Card>().realCost;
-            Deck[i].GetComponent<Card>().textSet();
+            Deck[i].GetComponent<Card>().costTextSet();
             Deck[i].SetActive(false);
 
         }
@@ -113,7 +113,7 @@ public class CardManager : MonoBehaviour
         {
             Grave[i].SetActive(true);
             Grave[i].GetComponent<Card>().cardcost = Grave[i].GetComponent<Card>().realCost;
-            Grave[i].GetComponent<Card>().textSet();
+            Grave[i].GetComponent<Card>().costTextSet();
             Grave[i].SetActive(false);
         }
         StartCoroutine("turnStartDrow");

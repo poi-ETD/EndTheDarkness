@@ -3,7 +3,51 @@ guid: 61443f68bb2124d46a77c8cabbacb68e
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - characterPrefab: {fileID: 4947039244860995705, guid: 11489a6962bec5345b444ac02b987596,
+      type: 3}
+  - enemyPrefab: {instanceID: 0}
+  - actCharacter: {instanceID: 0}
+  - selectedEnemy: {instanceID: 0}
+  - selectedCharacter: {instanceID: 0}
+  - selectedCard: {instanceID: 0}
+  - previousSelectedCard: {instanceID: 0}
+  - previousEnemy: {instanceID: 0}
+  - previousCharacter: {instanceID: 0}
+  - costT: {instanceID: 0}
+  - CM: {instanceID: 0}
+  - AM: {instanceID: 0}
+  - warnObj: {instanceID: 0}
+  - warnT: {instanceID: 0}
+  - completeButton: {instanceID: 0}
+  - log: {instanceID: 0}
+  - window_Grave: {instanceID: 0}
+  - victory_window: {instanceID: 0}
+  - defeated_window: {instanceID: 0}
+  - condition: {instanceID: 0}
+  - conditionText: {instanceID: 0}
+  - StackT: {instanceID: 0}
+  - StackPopUp: {instanceID: 0}
+  - go_GraveView_Button_Revive: {instanceID: 0}
+  - window_Deck: {instanceID: 0}
+  - go_DeckView_Button_OK: {instanceID: 0}
+  - go_DeckView_Button_Cancel: {instanceID: 0}
+  - DeckView: {instanceID: 0}
+  - SelectedCard: {instanceID: 0}
+  - LineObject: {instanceID: 0}
+  - FormationCollapsePopup: {instanceID: 0}
+  - FormationCollapseText: {instanceID: 0}
+  - rect_HandCanvas: {instanceID: 0}
+  - go_Menus: {instanceID: 0}
+  - rewardIgnum: {instanceID: 0}
+  - rewardTribute: {instanceID: 0}
+  - RewardCanvas: {instanceID: 0}
+  - rewardCardPrefebs: {instanceID: 0}
+  - noSelectCard: {instanceID: 0}
+  - go_Warning_LessSelectedCard_DeckSelectMode: {instanceID: 0}
+  - usedInCard20: {instanceID: 0}
+  - DmgPrefebs: {instanceID: 0}
+  - curSelectedCardInRevive: {instanceID: 0}
   executionOrder: -50
   icon: {instanceID: 0}
   userData: 

@@ -52,7 +52,7 @@ public class Ifrin005 : Enemy
         base.die();
        GameObject p= Instantiate(obj_Paul,gameObject.transform.parent);
         gameObject.SetActive(false);
-        TM.PlayerTurnEnd();
+        TM.TurnEnd();
         BM.Enemys[0] = p.transform.GetChild(0).gameObject;
         
     }

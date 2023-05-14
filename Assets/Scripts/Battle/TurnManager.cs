@@ -55,7 +55,7 @@ public class TurnManager : MonoBehaviour
         }
         PlayerTurnStart();
     }
-    public void PlayerTurnEnd() // YH : 이거 무슨 함수지?
+    public void TurnEnd() // 한번의 턴이 종료될 때 호출되는 함수
     {
         for (int i = 0; i < BM.Enemys.Length; i++)
         {
@@ -72,6 +72,7 @@ public class TurnManager : MonoBehaviour
                                         // 이 코드는 현재 카드의 캐릭터 선택 모드를 false로 바꾸는 코드기 때문에 만약 한 턴에 두개 이상의 카드를 사용한다면
                                         // 이 코드가 실행되기 전까지는 두번째 사용하는 카드가 적을 선택하지 않는 카드임에 불구하고 여전히 이 변수가 true인 상태라면
                                         // 오류가 발생하지 않을까 해서 적어둠
+                                        // YC : 캐릭터 선택이 필요한 카드가 호출된다면 캐릭터 선택 모드가 다시 켜집니다.
         BM.enemySelectMode = false;
 
         for (int i = 0; i < BM.Enemys.Length; i++)
@@ -79,10 +80,10 @@ public class TurnManager : MonoBehaviour
 
         BM.TurnCardCount = BM.CardCount; //뽑아야 할 카드의 수를 디폴트로 변경
         BM.allClear();
-        StartCoroutine("TurnEnd");
+        StartCoroutine("TurnEndCor");
     }
 
-    IEnumerator TurnEnd()
+    IEnumerator TurnEndCor()
     {
         
         for (int i = 0; i < BM.ChD.size; i++)
@@ -124,7 +125,7 @@ public class TurnManager : MonoBehaviour
         HandManager.Instance.go_SelectedCardTooltip.SetActive(false); //YH
         HandManager.Instance.SelectCardToOriginPosition(); //YH
         //GameObject.Find("ActManager").GetComponent<ActManager>().LateAct();
-        PlayerTurnEnd();
+        TurnEnd();
     }
 
    

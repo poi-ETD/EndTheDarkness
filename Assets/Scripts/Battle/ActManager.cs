@@ -24,11 +24,9 @@ public class ActManager : MonoBehaviour
 
         public ord(float value, int type,int obj) 
         {
-    
             this.value = value;
             this.type = type;
-            this.obj = obj;
-           
+            this.obj = obj; 
         }
       
     }
@@ -38,13 +36,6 @@ public class ActManager : MonoBehaviour
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         TM = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         characters = BM.characters;
-        Debug.Log("b");
-        Debug.Log(BM.Enemys.Length);
-        for (int i = 0; i < BM.Enemys.Length; i++)
-        {
-            enemys.Add(BM.Enemys[i].GetComponent<Enemy>());
-            enemys[i].battleNo = i;
-        }
     }
 
     public void ActComplete() //행동 종료 패시브를 불러 일으키기 위한 함수.
@@ -382,8 +373,7 @@ public class ActManager : MonoBehaviour
         
         yield return new WaitForSeconds(0.2f);    
         while (ActList.Count != 0)
-        {
-          
+        {     
             int c = 0;
             if (ActList[0].type == 0) //아군 패시브 발동
             {

@@ -68,12 +68,13 @@ public class Character : MonoBehaviour
 
     public int lobbyNum;
 
+    [SerializeField] SO_CharacterList so_CharacterList;
     
     public void SetCharacterInPrefebs()
     {
         Debug.Log(characterNo);
         text_Name.text = Name;
-        myImage.sprite = CharacterInfo.Instance.CharacterFaceSprite[characterNo];
+        myImage.sprite = so_CharacterList.characterDetails[characterNo].sprite_Face;
     }
     public void StatusChange(int type,int mount)
     {

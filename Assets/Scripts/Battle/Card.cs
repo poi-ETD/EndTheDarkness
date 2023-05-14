@@ -21,7 +21,7 @@ public class Card : MonoBehaviour
     public int DeckNo;// start->0 Q->1 스파키->2 반가라->3 포르테->4 령->5
     public int type;//스타터->0 스타터x->1 특수->2
     public int cardNo;
-    public int selectType; // YH : selectType의 번호가 무슨 의미인지?
+    public int selectType; // 해당 카드가 발동되는 조건, 0->선택 없이 발동, 1->적 선택 시 발동 2->무덤에 있는 카드 선택 시 발동 ...
     public bool iscard20Mode;
 
     //부여 가능한 속성들
@@ -30,11 +30,22 @@ public class Card : MonoBehaviour
     int percentDmgToAllTarget;
 
     public bool isRemove;
-
+    [SerializeField] private SO_CardList so_CardList;
     //YH
     [HideInInspector] public bool isSelected = false;
 
-    public void useCardInCard20() // YH : '20카드사용' 같은 주석말고, 언제 실행되는 함수인지? 무슨 역할을 하는 함수인지? 정확하게 기재 부탁드립니다
+    private void Start() // YH : Start() 함수가 굳이 이런곳에 있어야할 이유가 있을까요?
+    {
+        CM = GameObject.Find("CardManager").GetComponent<CardManager>();
+        BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
+        AM = BM.AM;
+        Sprite sprite = so_CardList.cardDetails[cardNo].sprite_Card;
+        if (sprite != null)
+            cardImage.sprite = sprite;
+        else cardImage.sprite = so_CardList.cardDetails[1].sprite_Card;
+    }
+
+    public void useCardInCard20() // 특수 케이스 : 스케치 반복 사용 로직 중 호출
     {
         if (selectType == 1)
         {
@@ -49,7 +60,7 @@ public class Card : MonoBehaviour
         else useCard();
     }
 
-    public void useCard() // YH : '카드사용' 같은 주석말고, 언제 실행되는 함수인지? 무슨 역할을 하는 함수인지? 정확하게 기재 부탁드립니다
+    public void useCard() // 카드를 내면 호출되는 함수, 카드의 SelectType에 따라서 다음 행동이 결정된다.
     {
         if (CM.TM.turn == 1 )
         {if( BM.GD.blessbool[4]||BM.GD.blessbool[12])
@@ -70,12 +81,11 @@ public class Card : MonoBehaviour
                 BM.costOver();
                 return;
             }        
-            else if (selectType == 1) // YH : selectType의 번호가 무슨 의미인지?
+            else if (selectType == 1) // 적을 선택해야 하는 카드,현재는 다른 로직으로 실행됨
             {
                 //BM.goEnemySelectMode();
             }
-            else if (selectType == 2) // 무덤류 -> YH : '무덤류' 라는 모호한 표현말고, 정확하게 주석 달아주세요. 무덤에서 카드를 선택해야 하는 타입이라던가,
-                                      // 무덤으로 보내야하는 타입이라던가..
+            else if (selectType == 2) // 무덤에 있는 카드를 선택해야 하는 카드
             {
                 if (cardNo == 7)
                 {
@@ -86,14 +96,14 @@ public class Card : MonoBehaviour
                     BM.ReviveToField(1);
                 }
             }
-            else if (selectType == 3) // YH : selectType의 번호가 무슨 의미인지?
+            else if (selectType == 3) //덱에 있는 카드를 선택해야 하는 카드
             {
                 if (cardNo == 24)
                 {
                     BM.SelectDeckCard(1);
                 }
             }
-            else if (selectType == 4) // YH : selectType의 번호가 무슨 의미인지?
+            else if (selectType == 4) // 특수 케이스 : 스케치 반복에서만 사용
             {
                 if (BM.previousSelectedCard == null)
                 {
@@ -109,7 +119,7 @@ public class Card : MonoBehaviour
                 }
                 BM.UsePreviousCard();
             }
-            else if (selectType == 5) // YH : selectType의 번호가 무슨 의미인지?
+            else if (selectType == 5) // 아군 캐릭터를 선택해야 하는 카드
             {
                 BM.goCharacterSelectMode();
             }
@@ -297,7 +307,7 @@ public class Card : MonoBehaviour
                     BM.useCost(cardcost, gameObject);
                    
                 }               
-                CardUse();
+                UseCardResult();
                 BM.AM.Act();
             }
             
@@ -306,7 +316,7 @@ public class Card : MonoBehaviour
             BM.enemySelectMode = false;
     }
   
-    public void EnemySelectCard() // YH : '적선택' 같은 주석말고, 언제 실행되는 함수인지? 무슨 역할을 하는 함수인지? 정확하게 기재 부탁드립니다
+    public void EnemySelectCard() // 해당 카드가 적을 선택해서 사용하는 카드일 때, 캐릭터가 선택 될 시 카드가 발동되면서 호출되는 함수
     {
       
         BM.log.logContent.text += "\n" + BM.actCharacter.Name + "이(가) " + Name.text + " 발동!";
@@ -376,17 +386,12 @@ public class Card : MonoBehaviour
           
         }
         
-        CardUse();
+        UseCardResult();
     
         BM.AM.Act();
     }
 
-    public void CancleRevive() // YH : '부활취소' 같은 주석말고, 언제 실행되는 함수인지? 무슨 역할을 하는 함수인지? 정확하게 기재 부탁드립니다
-    {
-        
-    }
-
-    public void SelectRevive() // YH : '부활선택' 같은 주석말고, 언제 실행되는 함수인지? 무슨 역할을 하는 함수인지? 정확하게 기재 부탁드립니다
+    public void SelectRevive() //  해당 카드가 무덤에 있는 카드를 선택해서 사용하는 카드일 때, 캐릭터가 선택 될 시 카드가 발동되면서 호출되는 함수
     {
         if (cardNo == 7)
         {            
@@ -396,12 +401,12 @@ public class Card : MonoBehaviour
         {
             BM.useCost(cardcost, gameObject);          
         }
-        CardUse();
+        UseCardResult();
         BM.AM.Act();
         BM.Click_GraveOff();
     }
 
-    public void SelectDeck() // YH : '덱선택' 같은 주석말고, 언제 실행되는 함수인지? 무슨 역할을 하는 함수인지? 정확하게 기재 부탁드립니다
+    public void SelectDeck() //  해당 카드가 덱에 있는 카드를 선택해서 사용하는 카드일 때, 캐릭터가 선택 될 시 카드가 발동되면서 호출되는 함수
     {
         BM.log.logContent.text += "\n" + BM.actCharacter.Name + "이(가) " + Name.text + " 발동!";
         if (cardNo == 24)
@@ -413,11 +418,11 @@ public class Card : MonoBehaviour
             BM.useCost(cardcost, gameObject);
          
         }
-        CardUse();
+        UseCardResult();
         BM.AM.Act();
     }
 
-    public void CharacterSelectCard() // YH : '캐릭터선택카드' 같은 주석말고, 언제 실행되는 함수인지? 무슨 역할을 하는 함수인지? 정확하게 기재 부탁드립니다
+    public void CharacterSelectCard() // 해당 카드가 캐릭터를 선택해서 사용하는 카드일 때, 캐릭터가 선택 될 시 카드가 발동되면서 호출되는 함수
     {
         BM.log.logContent.text += "\n" + BM.actCharacter.Name + "이(가) " + Name.text + " 발동!";
         if (cardNo == 2)
@@ -437,12 +442,12 @@ public class Card : MonoBehaviour
             
         }
       
-        CardUse();
+        UseCardResult();
        
         BM.AM.Act();
     }
 
-    public void decreaseCost(int amount) // YH : '코스트감소' 같은 주석말고, 언제 실행되는 함수인지? 무슨 역할을 하는 함수인지? 정확하게 기재 부탁드립니다
+    public void decreaseCost(int amount) // "코스트 감소" 키워드가 발동될 때, 해당 카드의 코스트를 감소하는 함수
     {
         cardcost -= amount;
         if (cardcost < 0) cardcost = 0;
@@ -450,16 +455,7 @@ public class Card : MonoBehaviour
         costT.text = cardcost + "";
     }
 
-    private void Start() // YH : Start() 함수가 굳이 이런곳에 있어야할 이유가 있을까요?
-    {
-        CM = GameObject.Find("CardManager").GetComponent<CardManager>();
-        BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
-        AM = BM.AM;
-    }
-
-    public void CardUse() // YH : '카드사용' 같은 주석말고, 언제 실행되는 함수인지? 무슨 역할을 하는 함수인지? 정확하게 기재 부탁드립니다
-                          // 위에 useCard() 함수가 있는데 어떤 차이가 있나요? useCard()와 CardUse() 같은 구분이 모호한 명명은 지양해주시고
-                          // 함수 이름에서 함수의 역할이 어느정도 유추되는게 아닌 카드는 주석을 정확하게 적어주세요
+    public void UseCardResult() // 카드 사용 시퀀스의 마지막, 카드가 사용되면서 효과가 설정된다.
     {
         if (GetComponent<BlackWhite>() != null)
         {        
@@ -487,7 +483,7 @@ public class Card : MonoBehaviour
         if (iscard20Mode)
         {           
             BM.useCost(BM.usedInCard20.GetComponent<Card>().cardcost,gameObject);
-            BM.usedInCard20.GetComponent<Card>().CardUse();
+            BM.usedInCard20.GetComponent<Card>().UseCardResult();
             BM.usedInCard20 = null;
             Destroy(gameObject);
             return;
@@ -495,7 +491,7 @@ public class Card : MonoBehaviour
         CM.UseCard(gameObject);
     }
 
-    public void textSet() // YH : '텍스트설정' 같은 주석말고, 언제 실행되는 함수인지? 무슨 역할을 하는 함수인지? 정확하게 기재 부탁드립니다
+    public void costTextSet() // 카드의 효과로 인해 코스트가 변경될 경우, 해당 카드의 코스트 표기를 변경하는 함수
     {
        
         if (cardNo != 8)

@@ -56,7 +56,7 @@ public class Ifrin009 : Enemy
         base.die();
         GameObject p = Instantiate(obj_Alki, gameObject.transform.parent);
         gameObject.SetActive(false);
-        TM.PlayerTurnEnd();
+        TM.TurnEnd();
         BM.Enemys[0] = p.transform.GetChild(0).gameObject;
 
     }

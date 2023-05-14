@@ -2,41 +2,47 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.IO;
+using UnityEngine.SceneManagement;
+using TMPro;
+using Newtonsoft.Json;
 
-public class CharacterInfo
+public class CharacterInfo : MonoBehaviour
 {
-    private static CharacterInfo instance;
-
     public static CharacterInfo Instance
     {
         get
         {
             if (null == instance)
             {
-
                 instance = new CharacterInfo();
             }
             return instance;
         }
     }
-    public Sprite[] CharacterFaceSprite = {
-         Resources.Load<Sprite>("CharacterSprite/Q_face"), //0
-         Resources.Load<Sprite>("CharacterSprite/Q_face"), //1
-         Resources.Load<Sprite>("CharacterSprite/Sparky_face"), //2
-         Resources.Load<Sprite>("CharacterSprite/Vangara_face"), //3
-         Resources.Load<Sprite>("CharacterSprite/forte_face"), //4
-         Resources.Load<Sprite>("CharacterSprite/Ryung_face"), //5
-         Resources.Load<Sprite>("CharacterSprite/Hyunggwi_face"), //6      
-         };
-    public Sprite[] CharacterFullSprite = {
-         Resources.Load<Sprite>("CharacterSprite/Q"), //0
-         Resources.Load<Sprite>("CharacterSprite/Q"), //1
-         Resources.Load<Sprite>("CharacterSprite/Sparky"), //2
-         Resources.Load<Sprite>("CharacterSprite/Vangara"), //3
-         Resources.Load<Sprite>("CharacterSprite/forte"), //4
-         Resources.Load<Sprite>("CharacterSprite/Ryung"), //5
-         Resources.Load<Sprite>("CharacterSprite/Hyunggwi"), //6      
-         };
+    public int a;
+    [SerializeField] SO_CharacterList so_CharacterList;
+    private static CharacterInfo instance;
+    public Sprite[] CharacterFaceSprite =
+    {
+     
+    };
+    public Sprite[] CharacterFullSprite =
+    {
+
+    };
+
+
+    
+    private void Awake()
+    {
+        for (int i = 1; i<so_CharacterList.characterDetails.Count; i++)
+        {
+            //CharacterFaceSprite[i] = so_CharacterList.characterDetails[i].sprite_Face;
+          //  CharacterFullSprite[i] = so_CharacterList.characterDetails[i].sprite_All;
+        }
+    }
+
     public struct characterData
     {
         public string name;

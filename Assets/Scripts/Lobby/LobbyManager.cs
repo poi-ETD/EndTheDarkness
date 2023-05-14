@@ -9,6 +9,7 @@ using System.Linq;
 using UnityEngine.SceneManagement;
 public class LobbyManager : MonoBehaviour
 {
+    [SerializeField] SO_CharacterList so_Character;
     public CardData CD;
     public CharacterData ChD;
     public GameData GD = new GameData();
@@ -337,7 +338,7 @@ public class LobbyManager : MonoBehaviour
                     spr = EquipmentManager.Instance.equipSpr[e.equipNum];
                 }
                 CharacterView.transform.GetChild(i).gameObject.SetActive(true);
-                CharacterView.transform.GetChild(i).gameObject.GetComponent<CharacterSetting>().SetCharacterInLobby(ChD.characterDatas[i].code, CharacterInfo.Instance.cd[ChD.characterDatas[i].code].characterSprtie,
+                CharacterView.transform.GetChild(i).gameObject.GetComponent<CharacterSetting>().SetCharacterInLobby(ChD.characterDatas[i].code, so_Character.characterDetails[ChD.characterDatas[i].code].sprite_All,
                     ChD.characterDatas[i].atk, ChD.characterDatas[i].endurance, ChD.characterDatas[i].cost, ChD.characterDatas[i].curHp, ChD.characterDatas[i].maxHp,
                     ChD.characterDatas[i].curFormation, ChD.characterDatas[i].passive, s1, s2, spr
                     );
@@ -678,7 +679,7 @@ public class LobbyManager : MonoBehaviour
     public void CardShopSetting(int type)
     {
         SelectCardCanvas.SetActive(true);
-        if (type == 10)
+        if (type == 0)
         {
             cancleInShop.SetActive(false);
             for (int i = 1; i < CardInfo.Instance.cd.Length; i++)
@@ -1360,7 +1361,7 @@ public class LobbyManager : MonoBehaviour
             BBConversationOn();
             return;        
         }
-        ScriptView.transform.GetChild(0).GetComponent<Image>().sprite = CharacterInfo.Instance.CharacterFullSprite[ChD.characterDatas[myCharacter].code];
+        ScriptView.transform.GetChild(0).GetComponent<Image>().sprite = so_Character.characterDetails[myCharacter].sprite_All;
         ScriptView.transform.GetChild(1).GetChild(0).GetComponent<TextMeshProUGUI>().text = ChD.characterDatas[myCharacter].name;
     }
     private void BBConversationOn() //브루 베릴과 대화

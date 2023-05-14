@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using Newtonsoft.Json;
-public class BlessManager : MonoBehaviour
+public class BlessManager : SingletonMonobehaviour<MonoBehaviour>
 {
     [SerializeField] BattleManager BM;
     GameData GD;

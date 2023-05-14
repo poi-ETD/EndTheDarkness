@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 [System.Serializable]
 public class CharacterDetails
@@ -8,6 +9,7 @@ public class CharacterDetails
     public string aka;
 
     public Sprite sprite_Face;
+    public Sprite sprite_All;
 
     public bool isReviver;
 

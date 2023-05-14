@@ -13,6 +13,7 @@ public class NoBattleCard : MonoBehaviour //대략적으로 배틀이 아닐 때
     public int deckNo;
     public bool select;
     [SerializeField] Image myImage;
+    [SerializeField] private SO_CardList so_CardList;
     public void setCost(int cost)
     {
         CardInfoText[3].text = "" + cost;//코스트
@@ -26,8 +27,12 @@ public class NoBattleCard : MonoBehaviour //대략적으로 배틀이 아닐 때
         CardInfoText[1].text = CardInfo.Instance.cd[i].Content;//내용
         CardInfoText[2].text="NO."+ CardInfo.Instance.cd[i].No.ToString("D3");//넘버
         CardInfoText[3].text = "" + CardInfo.Instance.cd[i].Cost;//코스트
-        myImage.sprite = CardInfo.Instance.CardSpr[i];
-        string Name="";
+        Sprite sprite = so_CardList.cardDetails[i].sprite_Card;
+        if (sprite != null)
+            myImage.sprite = sprite;
+        else
+            myImage.sprite=so_CardList.cardDetails[1].sprite_Card; //디폴트로 적용하자
+        string Name = "";
         if (CardInfo.Instance.cd[i].Deck==0)
         {
             Name = "BASE";
@@ -142,7 +147,12 @@ public class NoBattleCard : MonoBehaviour //대략적으로 배틀이 아닐 때
         CardInfoText[1].text = CardInfo.Instance.cd[num].Content;//내용
         CardInfoText[2].text = "NO." + CardInfo.Instance.cd[num].No.ToString("D3");//넘버
         CardInfoText[3].text = CardInfo.Instance.cd[num].Cost+"";
-        myImage.sprite = CardInfo.Instance.CardSpr[num];
+
+        Sprite sprite = so_CardList.cardDetails[num].sprite_Card;
+        if (sprite != null)
+            myImage.sprite = sprite;
+        else
+            myImage.sprite=so_CardList.cardDetails[1].sprite_Card; //디폴트로 적용하자
         string Name = "";
         if (CardInfo.Instance.cd[num].Deck == 0)
         {

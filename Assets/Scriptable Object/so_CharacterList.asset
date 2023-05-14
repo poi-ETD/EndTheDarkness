@@ -17,6 +17,7 @@ MonoBehaviour:
     name: "\uC774\uB984"
     aka: "\uBCC4\uBA85"
     sprite_Face: {fileID: 21300000, guid: 99ca74646277b7f46b798051728ea682, type: 3}
+    sprite_All: {fileID: 0}
     isReviver: 0
     hp: 10
     attackPower: 1
@@ -36,6 +37,7 @@ MonoBehaviour:
     name: Q
     aka: "\uC545\uC758 \uADFC\uC6D0"
     sprite_Face: {fileID: 21300000, guid: 3b4a2971ec10b3748b9b6fcc84190d48, type: 3}
+    sprite_All: {fileID: 21300000, guid: 697dc1439ce780946b5a8d6e9d3b2a97, type: 3}
     isReviver: 1
     hp: 35
     attackPower: 1
@@ -64,6 +66,7 @@ MonoBehaviour:
     name: "\uC2A4\uD30C\uD0A4"
     aka: "\uBB34\uC11C\uC6B4 \uB140\uC11D"
     sprite_Face: {fileID: 21300000, guid: 43bd7e8405561ba438d56f97032f9d2c, type: 3}
+    sprite_All: {fileID: 21300000, guid: 6e8563b919bc5da4bbe06a0e9c7cf8af, type: 3}
     isReviver: 0
     hp: 45
     attackPower: 1
@@ -91,6 +94,7 @@ MonoBehaviour:
     name: "\uBC18\uAC00\uB77C"
     aka: "\uC9C0\uC625\uC758 \uD30C\uC218\uAFBC"
     sprite_Face: {fileID: 21300000, guid: 6def579745f757a4fbce80d58f0762cc, type: 3}
+    sprite_All: {fileID: 21300000, guid: 64a21a8419e3a2541ba2b2a383627c0e, type: 3}
     isReviver: 0
     hp: 60
     attackPower: 0
@@ -119,6 +123,7 @@ MonoBehaviour:
     name: "\uD3EC\uB974\uD14C"
     aka: "\uC218\uB9CE\uC740 \uB2E4\uB9AC\uB97C \uAC00\uC9C4 \uC790"
     sprite_Face: {fileID: 21300000, guid: a6874425eca7f0c4caaa5d464cc154e1, type: 3}
+    sprite_All: {fileID: 21300000, guid: 2a4e8e965b005884ab86087983f4aab6, type: 3}
     isReviver: 0
     hp: 20
     attackPower: 0
@@ -147,6 +152,7 @@ MonoBehaviour:
     name: "\uB839"
     aka: "\uBBF8\uC9C0\uC758 \uC874\uC7AC"
     sprite_Face: {fileID: 21300000, guid: 155c5804e3c65ad41ad0f82fd1c803ef, type: 3}
+    sprite_All: {fileID: 21300000, guid: 772a0bc511a7d224ea4c7b7a97cd2286, type: 3}
     isReviver: 0
     hp: 35
     attackPower: 0
@@ -174,6 +180,7 @@ MonoBehaviour:
     name: "\uD749\uADC0"
     aka: Tiger
     sprite_Face: {fileID: 21300000, guid: e369bba15b5ffd54ca11b5724f68ffa0, type: 3}
+    sprite_All: {fileID: 21300000, guid: 0ff08ad4e96656146a41112fc0bce290, type: 3}
     isReviver: 0
     hp: 25
     attackPower: 2

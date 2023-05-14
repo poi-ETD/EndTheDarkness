@@ -3093,8 +3093,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61443f68bb2124d46a77c8cabbacb68e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterPrefab: {fileID: 0}
-  enemyPrefab: {fileID: 0}
+  characterPrefab: {fileID: 4947039244860995705, guid: 11489a6962bec5345b444ac02b987596,
+    type: 3}
+  enemyPrefab: {fileID: 4947039244860995705, guid: 9284ef2342db00040bdee95605be9c38,
+    type: 3}
+  EnemyList:
+  - {fileID: 8526652786934175351, guid: 97414c795e2149a43a018fd8de173a23, type: 3}
+  - {fileID: 8526652786934175351, guid: 97414c795e2149a43a018fd8de173a23, type: 3}
+  - {fileID: 8421385341672782052, guid: 0534a230c189d3a44b52d029d432166d, type: 3}
+  - {fileID: 8529118291676376678, guid: bf2aac8b33f629a4ea36d12c730e55c3, type: 3}
+  - {fileID: 2820063722592757557, guid: 663bddc20838edb40ab8d09878d30205, type: 3}
+  - {fileID: 6440748471198661014, guid: c86773dd2b7ca5a4aa80ed077685c40b, type: 3}
+  - {fileID: 4646262263205552783, guid: 41e89a247b18b9d4aa570bdab9a3d37b, type: 3}
+  - {fileID: 2561739878112913441, guid: 0b126f0f5b215d84a8d9dd92871cd9a7, type: 3}
+  - {fileID: 5657846933374684555, guid: e2f319b1690cb374cbe6b173e265a583, type: 3}
+  - {fileID: 4630093556093138294, guid: 96b5bef84490315489d9f66c880fa3fa, type: 3}
+  - {fileID: 8415656364056641383, guid: cfd88cfe04c05fb4db429a22b3808b43, type: 3}
+  - {fileID: 8482823276563945048, guid: ae252b37eee22f64fb3c44d6625bc515, type: 3}
   characters: []
   characterSelectMode: 0
   enemySelectMode: 0
