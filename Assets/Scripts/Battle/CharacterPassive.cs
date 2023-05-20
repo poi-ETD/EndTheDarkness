@@ -177,7 +177,7 @@ public class CharacterPassive : MonoBehaviour
         if (myNo == 4 && myPassvie[2] > 0)
         {
             BM.porte3count = myCharacter.passive[2];
-            BM.porte3mode = true;
+            BM.Porte3On();
         }
         if (myNo == 4 && myPassvie[3] > 0)
         {

@@ -622,7 +622,7 @@ public class UIManager_CharacterScene : MonoBehaviour
 
     public void Click_Complete_CardSetting() // 카드 설정 창의 설정 완료 버튼 클릭 시 실행되는 함수
     {
-        if (list_CardCode_Deck.Count < 18) // 선택된 카드 수가 20장 미만일시 리턴
+        if (list_CardCode_Deck.Count < 10) // 선택된 카드 수가 20장 미만일시 리턴
             return;
 
         for (int i = 0; i < list_CardCode_Deck.Count; i++) // 덱에 넣은 카드들을 순회하며

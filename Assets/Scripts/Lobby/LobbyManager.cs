@@ -255,6 +255,8 @@ public class LobbyManager : MonoBehaviour
         blessInLobby.BlessApplyInResetmara(firstBless);
         blessInLobby.exitBlessPopup();
 
+        GD.Ignum+=500;
+        GD.tribute+=500;
         save();
     }
 

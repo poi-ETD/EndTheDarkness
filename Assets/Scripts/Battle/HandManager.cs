@@ -113,7 +113,7 @@ public class HandManager : MonoBehaviour
             CancelToUse();
         }
 
-        if (isSelectedCard)
+        if (isSelectedCard&&go_selectedCardImage!=null&&BM.selectedCard!=null)
         {
             CardDrag();
             go_selectedCardImage.GetComponent<Image>().sprite = BM.selectedCard.GetComponent<Card>().cardImage.sprite;
@@ -368,5 +368,21 @@ public class HandManager : MonoBehaviour
         Vector3 mouseCursor = Input.mousePosition - new Vector3(960, 540);
 
         go_selectedCardImage.GetComponent<RectTransform>().localPosition = mouseCursor;
+    }
+
+    public void Porte3DO()
+    {
+        if (selectedCard == null)
+            return;
+
+        isSelectedCard = false;
+        go_selectedCardImage.SetActive(false);
+
+        selectedCard.isSelected = false;
+        BM.isSelectedCardinHand = false;
+        BM.cancleCard();
+
+        selectedCard = null;
+        isEnableOtherButton = true;
     }
 }

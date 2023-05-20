@@ -67,6 +67,7 @@ public class Card : MonoBehaviour
             return;
         }
         BM.otherCanvasOn = false;
+
         if (!BM.enemySelectMode)
         {   
             if (BM.actCharacter == null)
@@ -530,7 +531,7 @@ public class Card : MonoBehaviour
             //else if (isGrave || isDeck)
             //    CM.ClickInGraveOrDeck(gameObject);
 
-            if (selectType == 1)
+            if (selectType == 1&&!BM.porte3mode)
             {
                 BM.enemySelectMode = true;
                 Debug.Log("Enemy select mode on");

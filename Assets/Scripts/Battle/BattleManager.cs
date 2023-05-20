@@ -413,9 +413,9 @@ public class BattleManager : MonoBehaviour
 
     public void Porte3On() //스타키티시모 on
     {
+        porte3mode=true;
         condition.SetActive(true);
         conditionText.text = "스타키티시모";
-        completeButton.SetActive(true);
         cardSelectMode = true;
     }
     public void Click_Complete()//카드를 고르는 기능용
@@ -428,24 +428,7 @@ public class BattleManager : MonoBehaviour
 
             if (selectedCard != null)
             {
-                selectedCard.transform.localScale = new Vector3(1, 1, 1);
-                CM.FieldToDeck(selectedCard);//선택한 카드를 덱에 보내고
-                CM.CardToField();//랜덤한 카드를 필드 가장 오른쪽으로 보냄
-                CM.field[CM.field.Count - 1].GetComponent<Card>().cardcost -= 2;//필드의 가장 오른쪽 카드의 코스트를 2감소시킴
-                if (CM.field[CM.field.Count - 1].GetComponent<Card>().cardcost < 0)
-                    CM.field[CM.field.Count - 1].GetComponent<Card>().cardcost = 0;
-                CM.field[CM.field.Count - 1].GetComponent<Card>().costT.text = CM.field[CM.field.Count - 1].GetComponent<Card>().cardcost + "";
-                log.logContent.text += "\n스타카티시모!" + CM.field[CM.field.Count - 1].GetComponent<Card>().Name.text + "의 코스트가 감소하였습니다.";
-                porte3count--;
-                selectedCard = null;
-                if (porte3count == 0) //포르테3의 중첩이 다 끝나면
-                {
-                    porte3mode = false;
-                }
-                else
-                {
-                    Porte3On();
-                }
+               
             }
             else //아무 카드도 선택이 되어있지 않을 때
             {
@@ -495,6 +478,14 @@ public class BattleManager : MonoBehaviour
     {
         character.speed += amount;
         character.curSpeed += amount;
+        if(character.speed < 2)
+        {
+            character.speed=2;
+        }
+        if(character.curSpeed < 2)
+        {
+            character.curSpeed= 2;
+        }
         character.OnSpeedText(amount);
 
         AM.SpeedChangeByEffect(0, character.curNo);
@@ -582,44 +573,70 @@ public class BattleManager : MonoBehaviour
 
     public void Click_useCard() // 카드 드래그 상태에서 아무곳이나(또는 적,아군) 클릭시 사용되는 함수
     {
-        //HandManager.Instance.go_SelectedCardTooltip.SetActive(false);
-        if (selectedCard.GetComponent<Card>().selectType != 1)
+        if (porte3mode) //일반 카드 사용보다 먼저 처리
         {
-            if (selectedCard != null)
+            selectedCard.transform.localScale = new Vector3(1, 1, 1);
+            CM.FieldToDeck(selectedCard);//선택한 카드를 덱에 보내고
+            CM.CardToField();//랜덤한 카드를 필드 가장 오른쪽으로 보냄
+            CM.field[CM.field.Count - 1].GetComponent<Card>().cardcost -= 2;//필드의 가장 오른쪽 카드의 코스트를 2감소시킴
+            if (CM.field[CM.field.Count - 1].GetComponent<Card>().cardcost < 0)
+                CM.field[CM.field.Count - 1].GetComponent<Card>().cardcost = 0;
+            CM.field[CM.field.Count - 1].GetComponent<Card>().costT.text = CM.field[CM.field.Count - 1].GetComponent<Card>().cardcost + "";
+            log.logContent.text += "\n스타카티시모!" + CM.field[CM.field.Count - 1].GetComponent<Card>().Name.text + "의 코스트가 감소하였습니다.";
+           
+            porte3count--;
+            HandManager.Instance.Porte3DO();
+            if (porte3count == 0) //포르테3의 중첩이 다 끝나면
             {
-                selectedCard.GetComponent<Card>().useCard();
-                //HandManager.Instance.CancelToUse(); 카드 사용 시 발동되게 옮깁니다.
+                condition.SetActive(false);
+                porte3mode = false;
+            }
+            else
+            {
+                Porte3On();
             }
         }
-        else if (selectedCard.GetComponent<Card>().selectType == 1)
+        else
         {
-
-            if (actCharacter.passive[0] > 0 && actCharacter.characterNo == 6)
+            //HandManager.Instance.go_SelectedCardTooltip.SetActive(false);
+            if (selectedCard.GetComponent<Card>().selectType != 1)
             {
-                GameObject randomEnemy = Enemys[Random.Range(0, Enemys.Length)];
-                while (randomEnemy.GetComponent<Enemy>().isDie)
+                if (selectedCard != null)
                 {
-                    randomEnemy = Enemys[Random.Range(0, Enemys.Length)];
+                    selectedCard.GetComponent<Card>().useCard();
+                    //HandManager.Instance.CancelToUse(); 카드 사용 시 발동되게 옮깁니다.
                 }
-                EnemySelect(randomEnemy);
             }
-            else if (ei.SelectedEnemy != null)
+            else if (selectedCard.GetComponent<Card>().selectType == 1)
             {
-                EnemySelect(ei.SelectedEnemy.gameObject);
+
+                if (actCharacter.passive[0] > 0 && actCharacter.characterNo == 6)
+                {
+                    GameObject randomEnemy = Enemys[Random.Range(0, Enemys.Length)];
+                    while (randomEnemy.GetComponent<Enemy>().isDie)
+                    {
+                        randomEnemy = Enemys[Random.Range(0, Enemys.Length)];
+                    }
+                    EnemySelect(randomEnemy);
+                }
+                else if (ei.SelectedEnemy != null)
+                {
+                    EnemySelect(ei.SelectedEnemy.gameObject);
 
 
+                }
+                enemySelectMode = false;
             }
-            enemySelectMode = false;
-        }
-        else if (selectedCard.GetComponent<Card>().selectType == 5)
-        {
-            /* if (usedInCard20 != null)
-             {
-                 Destroy(selectedCard);
-                 selectedCard = usedInCard20;
-                 otherCanvasOn = false;
-             }*/
-            // CharacterSelectMode = false;
+            else if (selectedCard.GetComponent<Card>().selectType == 5)
+            {
+                /* if (usedInCard20 != null)
+                 {
+                     Destroy(selectedCard);
+                     selectedCard = usedInCard20;
+                     otherCanvasOn = false;
+                 }*/
+                // CharacterSelectMode = false;
+            }
         }
     }
 
@@ -1128,6 +1145,7 @@ public class BattleManager : MonoBehaviour
 
     public void goEnemySelectMode() //공격 카드 선택 시 어떤 적을 공격할지 고르는 모드
     {
+        if(!porte3mode)
         enemySelectMode = true; //이 상태로 들어가면 Enemy를 클릭시 선택이 된다.
     }
 
