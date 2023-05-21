@@ -29,7 +29,6 @@ public class Character : MonoBehaviour
     public TextMeshProUGUI spdT; // YH : 배틀 씬 내의 좌측 캐릭터 정보 인스턴스 내의 SPD 텍스트
 
     public TextMeshProUGUI text_Armor; // YH : 배틀 씬 내의 좌측 캐릭터 정보 인스턴스 내의 방어도 텍스트
-    public TextMeshProUGUI text_Ghost; // YH : 배틀 씬 내의 좌측 캐릭터 정보 인스턴스 내의 망자부활 텍스트
     public TextMeshProUGUI text_Blood; // YH : 배틀 씬 내의 좌측 캐릭터 정보 인스턴스 내의 출혈 텍스트
     public TextMeshProUGUI text_Weak; // YH : 배틀 씬 내의 좌측 캐릭터 정보 인스턴스 내의 약화 텍스트
 

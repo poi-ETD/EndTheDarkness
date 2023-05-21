@@ -69,7 +69,8 @@ public class UIManager_CharacterScene : MonoBehaviour
     private CharacterData characterData;
     private CardData cardData;
 
-    [SerializeField] private RectTransform rect_Image_Line;
+    [SerializeField] private RectTransform rect_Image_Line_Charcter; // 캐릭터 설정 단계에서의 라인(전후방 긋는)의 RectTransform
+    [SerializeField] private RectTransform rect_Image_Line_Card; // 카드 설정 단계에서의 라인(전후방 긋는)의 RectTransform
     private float[] positions_LineImage;
 
     private int selectedPartyIndex_ForDrag;
@@ -176,6 +177,8 @@ public class UIManager_CharacterScene : MonoBehaviour
                     ui_Party_Card[i].text_Count_Card.text = ui_Party_Card[i].count_SelectedCard + " / 1";
             }
         }
+
+        rect_Image_Line_Card.anchoredPosition = new Vector2(rect_Image_Line_Charcter.anchoredPosition.x, rect_Image_Line_Charcter.anchoredPosition.y);
 
         Init_Cards();
     }
@@ -745,7 +748,7 @@ public class UIManager_CharacterScene : MonoBehaviour
                 line++;
         }
 
-        rect_Image_Line.anchoredPosition = new Vector2(rect_Image_Line.anchoredPosition.x, positions_LineImage[line]); // 결정된 라인의 위치에 라인을 긋는 코드
+        rect_Image_Line_Charcter.anchoredPosition = new Vector2(rect_Image_Line_Charcter.anchoredPosition.x, positions_LineImage[line]); // 결정된 라인의 위치에 라인을 긋는 코드
     }
 
     private void Reset_Deck()

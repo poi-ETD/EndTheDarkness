@@ -18625,7 +18625,8 @@ MonoBehaviour:
   - {fileID: 1377466555}
   - {fileID: 696823017}
   - {fileID: 1040406499}
-  rect_Image_Line: {fileID: 1364262401}
+  rect_Image_Line_Charcter: {fileID: 1364262401}
+  rect_Image_Line_Card: {fileID: 1828372498}
   line_Forward: {fileID: 1366590334}
   line_Backward: {fileID: 646465186}
   image_Face_Party_ForDrag: {fileID: 456602831}
