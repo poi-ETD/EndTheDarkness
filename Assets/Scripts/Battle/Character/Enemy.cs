@@ -140,6 +140,7 @@ public class Enemy : MonoBehaviour
    
     public void OnHitCal(int dmg, int no, bool reply)
     {
+		if (dmg<=0) return;
         if (isDie) return;
         AM.MakeAct(2, 0, dmg, null, this, null, null, 1);
         BM.characters[no].myPassive.MyAttack();
@@ -158,7 +159,8 @@ public class Enemy : MonoBehaviour
     }
     public virtual void onHit(int dmg)
     {
-        if (isDie) return;
+		if (dmg<=0) return;
+		if (isDie) return;
       
         if (status[(int)Status.weak] > 0)
         {

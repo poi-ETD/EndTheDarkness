@@ -111,7 +111,7 @@ public class LobbyManager : MonoBehaviour
     [SerializeField] private GameObject ScriptView;
 
     [SerializeField] private GameObject TrainView;
-
+	[SerializeField] private Sprite bruberylSpr;
 
     private void Start()
     {
@@ -1363,12 +1363,15 @@ public class LobbyManager : MonoBehaviour
             BBConversationOn();
             return;        
         }
-        ScriptView.transform.GetChild(0).GetComponent<Image>().sprite = so_Character.characterDetails[myCharacter].sprite_All;
-        ScriptView.transform.GetChild(1).GetChild(0).GetComponent<TextMeshProUGUI>().text = ChD.characterDatas[myCharacter].name;
-    }
+
+		int myCode= ChD.characterDatas[myCharacter].code;
+
+        ScriptView.transform.GetChild(0).GetComponent<Image>().sprite = so_Character.characterDetails[myCode].sprite_All;
+		ScriptView.transform.GetChild(1).GetChild(0).GetComponent<TextMeshProUGUI>().text = so_Character.characterDetails[myCode].name;
+	}
     private void BBConversationOn() //브루 베릴과 대화
     {
-        ScriptView.transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load<Sprite>("CharacterSprite/BB");
+		ScriptView.transform.GetChild(0).GetComponent<Image>().sprite = bruberylSpr;
         ScriptView.transform.GetChild(1).GetChild(0).GetComponent<TextMeshProUGUI>().text = "브루와 베릴";
         ScriptView.transform.GetChild(1).GetChild(2).gameObject.SetActive(true);
     }

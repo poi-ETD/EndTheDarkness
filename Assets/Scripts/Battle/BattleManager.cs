@@ -139,6 +139,7 @@ public class BattleManager : MonoBehaviour
 
     public Card curSelectedCardInRevive;
 
+	[SerializeField] private Transform CharacterLayoutTrans;
     private void Start()
     {
         ei = GameObject.Find("SelectEnemyInformation").GetComponent<EnemyInfo>();
@@ -152,7 +153,7 @@ public class BattleManager : MonoBehaviour
 
         SetCharacterOnBattle();
         SetEnemyOnBattle();
-        GameObject EnemySummon = Instantiate(EnemyList[GD.victory], new Vector2(-2, -2), transform.rotation, GameObject.Find("CharacterCanvas").transform);
+        GameObject EnemySummon = Instantiate(EnemyList[GD.victory], new Vector2(-2, -2), transform.rotation, CharacterLayoutTrans);
         
         Enemys = GameObject.FindGameObjectsWithTag("Enemy");
         TurnCardCount = CardCount;
@@ -169,7 +170,7 @@ public class BattleManager : MonoBehaviour
     {
         for (int i = 0; i < ChD.size; i++)
         {        
-            GameObject CharacterC = Instantiate(characterPrefab, new Vector2(-880 / 45f, (330 - 150 * characters.Count) / 45f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
+            GameObject CharacterC = Instantiate(characterPrefab, new Vector2(-880 / 45f, (330 - 150 * characters.Count) / 45f), transform.rotation, CharacterLayoutTrans);
             Character CharacterComponenet = CharacterC.GetComponent<Character>();
             characterOriginal.Add(CharacterComponenet);
             CharacterComponenet.atk = ChD.characterDatas[i].atk;
@@ -235,7 +236,7 @@ public class BattleManager : MonoBehaviour
         for (int i = 0; i < enemyCount; i++)
         {
             GameObject EnemyC =
-                Instantiate(enemyPrefab, new Vector2(840 / 45f, (330 - 150 * i) / 45f), transform.rotation, GameObject.Find("CharacterCanvas").transform);
+                Instantiate(enemyPrefab, new Vector2(840 / 45f, (330 - 150 * i) / 45f), transform.rotation, CharacterLayoutTrans);
             UI_Enemy_Battle enemyComponenet = EnemyC.GetComponent<UI_Enemy_Battle>();
 
             //enemyComponenet.image_Face = ;
@@ -435,9 +436,8 @@ public class BattleManager : MonoBehaviour
                 condition.SetActive(true);
                 cardSelectMode = true;
                 completeButton.SetActive(true);
-                warnT.text = "스타카티시모:카드 선택을 해주세요.";
-                WarnOn();
-            }
+                WarnOn("스타카티시모:카드 선택을 해주세요.");
+			}
         }
     }
     public void CancleCharacter() //발동->캐릭터를 두번 눌럿을때 or 눌러진 상태에서 다른 캐릭터를 눌렀을때
@@ -501,8 +501,11 @@ public class BattleManager : MonoBehaviour
     {
         if (CM.TM.turn == 1)
         {
-            if (GD.blessbool[4] || GD.blessbool[12])
-                return;
+			if (GD.blessbool[4] || GD.blessbool[12])
+			{
+				WarnOn("축복의 효과로 첫 턴에는 행동이 불가능합니다.");
+				return;
+			}
         }
         if (!otherCanvasOn)
         {
@@ -640,16 +643,16 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    public void WarnOn()//여러가지 경고 처리
-    {
-        warnObj.SetActive(true);
+    public void WarnOn(string warnText)//여러가지 경고 처리
+	{
+		warnT.text = warnText;
+		warnObj.SetActive(true);
 
-        Invoke("TargetOff", 1f);
+        Invoke("WarnOff", 1f);
     }
     public void overAct()
     {
-        warnT.text = "캐릭터의 행동력이 없습니다.";
-        WarnOn();
+        WarnOn("캐릭터의 행동력이 없습니다.");
     }
     public void TargetOn()
     {
@@ -657,7 +660,7 @@ public class BattleManager : MonoBehaviour
         CancleEnemy();
         warnObj.SetActive(true);
         warnT.text = "타겟 설정을 다시 해주세요";
-        Invoke("TargetOff", 1f);
+        Invoke("WarnOff", 1f);
     }
     public void allClear()//지정된 카드,적,캐릭터 모두 null로 만듬(턴 종료시 발동)
     {
@@ -665,10 +668,7 @@ public class BattleManager : MonoBehaviour
         CancleCharacter();
         CancleEnemy();
     }
-    public void TargetOff()
-    {
-        warnObj.SetActive(false);
-    }
+
     public void costOver()
     {
         HandManager.Instance.SelectCardToOriginPosition();
@@ -676,9 +676,9 @@ public class BattleManager : MonoBehaviour
         cancleCard();
         warnObj.SetActive(true);
         warnT.text = "코스트가 부족합니다";
-        Invoke("costOverOff", 1f);
+        Invoke("WarnOff", 1f);
     }
-    void costOverOff()
+    void WarnOff()
     {
         warnObj.SetActive(false);
     }
@@ -1138,8 +1138,9 @@ public class BattleManager : MonoBehaviour
         //SceneManager.LoadScene("Scene2_Lobby");
     }
 
-    public void Defetead() //패배했을 시 패배 창 띄우기
+    public void Defetead() //패배,포기했을 시 패배 창 띄우기
     {
+		otherCanvasOn=true;
         defeated_window.SetActive(true);
     }
 
@@ -1344,7 +1345,7 @@ public class BattleManager : MonoBehaviour
     public void card22()  //결의
     {
         List<int> minArmorList = new List<int>();
-        int minArmor = 0;
+        int minArmor = int.MaxValue;
         for (int i = 0; i < characters.Count; i++)
         {
             if (!characters[i].isDie)
@@ -1362,8 +1363,8 @@ public class BattleManager : MonoBehaviour
                 }
             }
         }
-        getArmor(10, characters[minArmorList[Random.Range(0, minArmorList.Count)]]);
-    }
+        getArmor(6, characters[minArmorList[Random.Range(0, minArmorList.Count)]]);
+    }      
 
     public void card24() //사이코키네시스
     {

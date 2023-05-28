@@ -40,7 +40,11 @@ public class BlessManager : SingletonMonobehaviour<MonoBehaviour>
         {
             BM.GD.blessbool[7] = true;
         }
-        if (bless[17])
+		if (bless[12])
+		{
+			BM.GD.blessbool[12] = true;
+		}
+		if (bless[17])
         {
             for(int i = 0; i < BM.characters.Count; i++)
             {

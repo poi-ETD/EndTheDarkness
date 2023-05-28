@@ -38,7 +38,7 @@ public class CardManager : SingletonMonobehaviour<MonoBehaviour>
     string[] deckText = new string[7];
 
     [SerializeField] private GameObject go_Content_Deck;
-
+	[SerializeField] private Transform deckContentTrans;
 
     private void Update()
     {
@@ -469,8 +469,8 @@ public class CardManager : SingletonMonobehaviour<MonoBehaviour>
                 c.GetComponent<Card>().isDeck = true;
                 c.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0.5f);
                 c.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0.5f);
-                c.transform.parent = GameObject.Find("DeckContent").transform;
-                c.GetComponent<Card>().isGrave = false;
+				c.transform.parent =deckContentTrans;
+				c.GetComponent<Card>().isGrave = false;
                 c.SetActive(false);
                 c.GetComponent<Card>().isSelected = false;
                 Grave.RemoveAt(i);

@@ -63,8 +63,12 @@ public class Card : MonoBehaviour
     public void useCard() // 카드를 내면 호출되는 함수, 카드의 SelectType에 따라서 다음 행동이 결정된다.
     {
         if (CM.TM.turn == 1 )
-        {if( BM.GD.blessbool[4]||BM.GD.blessbool[12])
-            return;
+        {
+			if (BM.GD.blessbool[4]||BM.GD.blessbool[12])
+			{
+				BM.WarnOn("축복의 효과로 첫 턴에는 행동이 불가능합니다.");
+				return;
+			}
         }
         BM.otherCanvasOn = false;
 
@@ -108,14 +112,12 @@ public class Card : MonoBehaviour
             {
                 if (BM.previousSelectedCard == null)
                 {
-                    BM.WarnOn();
-                    BM.warnT.text = "이전에 사용한 카드가 없습니다.";
+					BM.WarnOn("이전에 사용한 카드가 없습니다.");
                     return;
                 }
                 if (BM.previousSelectedCard.GetComponent<Card>().cardNo == 20)
                 {
-                    BM.WarnOn();
-                    BM.warnT.text = "스케치 반복은 연속해서 사용 할 수 없습니다.";
+					BM.WarnOn("스케치 반복은 연속해서 사용 할 수 없습니다.");
                     return;
                 }
                 BM.UsePreviousCard();

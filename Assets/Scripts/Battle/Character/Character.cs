@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
+
 public class Character : MonoBehaviour
 {
     public int characterNo; 
@@ -29,6 +31,7 @@ public class Character : MonoBehaviour
     public TextMeshProUGUI spdT; // YH : 배틀 씬 내의 좌측 캐릭터 정보 인스턴스 내의 SPD 텍스트
 
     public TextMeshProUGUI text_Armor; // YH : 배틀 씬 내의 좌측 캐릭터 정보 인스턴스 내의 방어도 텍스트
+    public TextMeshProUGUI text_Ghost; // YH : 배틀 씬 내의 좌측 캐릭터 정보 인스턴스 내의 망자부활 텍스트
     public TextMeshProUGUI text_Blood; // YH : 배틀 씬 내의 좌측 캐릭터 정보 인스턴스 내의 출혈 텍스트
     public TextMeshProUGUI text_Weak; // YH : 배틀 씬 내의 좌측 캐릭터 정보 인스턴스 내의 약화 텍스트
 
@@ -78,6 +81,14 @@ public class Character : MonoBehaviour
     public void StatusChange(int type,int mount)
     {
         status[type] += mount;
+		if(type == (int)Status.blood)
+		{
+			text_Blood.text=status[type].ToString();
+		}
+		else if(type==(int)Status.weak)
+		{
+			text_Weak.text=status[type].ToString();
+		}
     }
     public void DefUp(int i)
     {
@@ -107,7 +118,7 @@ public class Character : MonoBehaviour
             armor = 0;
         }
         stringArmor = armor;
-        //armorT.text = "" + armor;
+		text_Armor.text = armor.ToString();
         myPassive.GetArmor(a);
     }
     public void ArmorValueGoZero()
@@ -116,8 +127,6 @@ public class Character : MonoBehaviour
         stringArmor = armor;
        // armorT.text = "" + armor;
     }
- 
-
 
     public void onClickEvent()
     {
@@ -265,9 +274,9 @@ public class Character : MonoBehaviour
 
     public void onHit(int dmg,Enemy E)
     {
-        if (dmg == 0) return;
-        
-        BM.log.logContent.text+="\n"+Name+"이(가) "+E.Name+"에게 "+dmg+"의 피해를 입었다.";
+		if (dmg <= 0) return;
+
+		BM.log.logContent.text+="\n"+Name+"이(가) "+E.Name+"에게 "+dmg+"의 피해를 입었다.";
         for (int i = 0; i < BM.ChD.size; i++)
         {
             if (i == curNo) myPassive.MyHit(E,dmg);
@@ -300,7 +309,8 @@ public class Character : MonoBehaviour
     }
     public void onHit(int dmg)
     {
-        if (dmg == 0) return;
+		//최종 데미지가 0이하라면 x
+        if (dmg <= 0) return;
         for (int i = 0; i < BM.ChD.size; i++)
         {
             if (i == curNo) myPassive.MyHit(null, dmg);
