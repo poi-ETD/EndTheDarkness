@@ -140,6 +140,8 @@ public class BattleManager : MonoBehaviour
     public Card curSelectedCardInRevive;
 
 	[SerializeField] private Transform CharacterLayoutTrans;
+
+	public Enemy prvokingEnemy;		//도발 중인 적
     private void Start()
     {
         ei = GameObject.Find("SelectEnemyInformation").GetComponent<EnemyInfo>();
@@ -624,7 +626,13 @@ public class BattleManager : MonoBehaviour
                 }
                 else if (ei.SelectedEnemy != null)
                 {
-                    EnemySelect(ei.SelectedEnemy.gameObject);
+					if (prvokingEnemy != null && prvokingEnemy != ei.SelectedEnemy)
+					{
+						//도발중인 다른 몬스터가 있다!!
+						WarnOn("다른 적이 가로막고 있습니다.");
+						return;
+					}
+					EnemySelect(ei.SelectedEnemy.gameObject);
 
 
                 }
@@ -1301,6 +1309,12 @@ public class BattleManager : MonoBehaviour
     }
     public void EnemyAttack(int dmg, Enemy enemy, Character target)
     {
+		if (enemy.status[(int)Status.charming] > 0)	//매혹 상태라면
+		{
+			dmg -= enemy.status[(int)Status.charming];
+			--enemy.status[(int)Status.charming];
+		}
+		if (dmg < 0) dmg = 0;
         AM.MakeEnemyAct(0, dmg+enemy.atk, target, enemy, null);
     }
     public void EnemyIncreaseSpeed(int amount, Enemy enemy, Character target)

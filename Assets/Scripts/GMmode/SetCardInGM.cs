@@ -13,11 +13,13 @@ public class SetCardInGM : MonoBehaviour
     GMmode gm;
     int no;
     int size;
-    public void set(int no, GMmode gm,int size)
+	[SerializeField] private SO_CardList so_CardList;
+	public void set(int no, GMmode gm,int size)
     {
-        myImage = transform.GetChild(5).GetComponent<Image>();
-        myImage.sprite = CardInfo.Instance.CardSpr[no];
-        this.gm = gm;
+        myImage = transform.GetChild(0).GetComponent<Image>();
+		myImage.sprite = so_CardList.cardDetails[no].sprite_Card;
+
+		this.gm = gm;
         noT.text = no+"";
         title.text = CardInfo.Instance.cd[no].Name;
         content.text = CardInfo.Instance.cd[no].Content;

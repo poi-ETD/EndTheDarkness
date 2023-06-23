@@ -91,15 +91,14 @@ public class Enemy : MonoBehaviour
         
     public void onClickEvent()
     {
-        if (isDie) return;
-        if (BM.cardSelectMode) return;
-        if (Shadow) return;
+        //if (isDie) return;
+        //if (BM.cardSelectMode) return;
+        //if (Shadow) return;
 
-        if (BM.enemySelectMode)
-        {
-            Debug.Log("OnSelect");
-            BM.EnemySelect(gameObject);
-        }
+        //if (BM.enemySelectMode)
+        //{
+        //    BM.EnemySelect(gameObject);
+        //}
     }
     public void onEnterEvnent()
     {
@@ -288,6 +287,10 @@ public class Enemy : MonoBehaviour
    
     public virtual void die()
     {
+		if(BM.prvokingEnemy==this)
+			BM.prvokingEnemy = null;
+		//죽는다면 도발 x
+
         Hp = 0;
         
     }

@@ -22,12 +22,10 @@ public class Ranger004 : Enemy
         base.Start();
         this.Name = "레인저" + plusname;
         NameT.text = this.Name;
-       
-      
-    }
+
+	}
     public override void EnemySelectPattern()
     {
-        Debug.Log("A");
         base.EnemySelectPattern();
         StartPattern();
     }
@@ -35,12 +33,12 @@ public class Ranger004 : Enemy
     {
         base.EnemyStartTurn();
         GameObject[] enemys = GameObject.FindGameObjectsWithTag("Enemy");
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 3; i++)
         {
             enemyArray[i] = enemys[i].GetComponent<Enemy>();
         }
         int alive = 0;
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 3; i++)
         {
             if (!enemyArray[i].isDie) alive++;
         }
@@ -54,62 +52,58 @@ public class Ranger004 : Enemy
     {
         if (BM.teamDieCount < BM.characters.Count)
         {
-            if (phase == 1)
-            {
-                if (myAction == 3)
-                {
-                    myAction = 0;
-                    BM.EnemyAttack(2, this, BM.SelectCharacterInEnemyTurn(2, 2));
-                    BM.EnemyAttack(3, this, BM.SelectCharacterInEnemyTurn(0, 0));
-                    BM.EnemyGetAromor(7, this, this);
-                }
-                else
-                {
-                    myAction++;
-                    int rand = Random.Range(0, 2);
-                    if (rand == 0)
-                    {
-                        BM.EnemyAttack(2, this, BM.SelectCharacterInEnemyTurn(0, 1));
-                    }
-                    if (rand == 1)
-                    {
-                        BM.EnemyAttack(2, this, BM.SelectCharacterInEnemyTurn(0, 0));
-                        BM.EnemyGetAromor(5, this, this);
-                    }
-                }
-            }
-            else
-            {
-                if (myAction == 3)
-                {
-                    myAction = 0;
-                    BM.EnemyAttack(3, this, BM.SelectCharacterInEnemyTurn(0, 0));
-                    BM.EnemyAttack(5, this, BM.SelectCharacterInEnemyTurn(0, 0));
-                    BM.EnemyGetAromor(10, this, this);
-                }
-                else
-                {
-                    myAction++;
-                    int rand = Random.Range(0, 2);
-                    if (rand == 0)
-                    {
-                        BM.EnemyAttack(4, this, BM.SelectCharacterInEnemyTurn(0, 0));
-                        BM.EnemyAttack(3, this, BM.SelectCharacterInEnemyTurn(0, 1));
-                    }
-                    if (rand == 1)
-                    {
-                        BM.EnemyAttack(2, this, BM.SelectCharacterInEnemyTurn(0, 1));
-                        BM.EnemyGetAromor(10, this, this);
-                    }
-                }
-            }
-
+			if (phase == 1)
+			{
+				//    if (myAction == 3)
+				//    {
+				//        myAction = 0;
+				//        BM.EnemyAttack(2, this, BM.SelectCharacterInEnemyTurn(2, 2));
+				//        BM.EnemyAttack(3, this, BM.SelectCharacterInEnemyTurn(0, 0));
+				//        BM.EnemyGetAromor(7, this, this);
+				//    }
+				//    else
+				//    {
+				//        myAction++;
+				//        int rand = Random.Range(0, 2);
+				//        if (rand == 0)
+				//        {
+				//            BM.EnemyAttack(2, this, BM.SelectCharacterInEnemyTurn(0, 1));
+				//        }
+				//        if (rand == 1)
+				//        {
+				//            BM.EnemyAttack(2, this, BM.SelectCharacterInEnemyTurn(0, 0));
+				//            BM.EnemyGetAromor(5, this, this);
+				//        }
+				//    }
+				//}
+				//else
+				//{
+				//    if (myAction == 3)
+				//    {
+				//        myAction = 0;
+				//        BM.EnemyAttack(3, this, BM.SelectCharacterInEnemyTurn(0, 0));
+				//        BM.EnemyAttack(5, this, BM.SelectCharacterInEnemyTurn(0, 0));
+				//        BM.EnemyGetAromor(10, this, this);
+				//    }
+				//    else
+				//    {
+				//        myAction++;
+				//        int rand = Random.Range(0, 2);
+				//        if (rand == 0)
+				//        {
+				//            BM.EnemyAttack(4, this, BM.SelectCharacterInEnemyTurn(0, 0));
+				//            BM.EnemyAttack(3, this, BM.SelectCharacterInEnemyTurn(0, 1));
+				//        }
+				//        if (rand == 1)
+				//        {
+				//            BM.EnemyAttack(2, this, BM.SelectCharacterInEnemyTurn(0, 1));
+				//            BM.EnemyGetAromor(10, this, this);
+				//        }
+				//    }
+				//}
+			}
 
             this.BM.AM.EnemyAct();
-
-
-
-
         }
 
     }

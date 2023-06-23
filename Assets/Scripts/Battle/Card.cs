@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 public class Card : MonoBehaviour
 {
+	
     public CardManager CM;
     public Image cardImage;
     public TextMeshProUGUI Content;
@@ -97,8 +98,13 @@ public class Card : MonoBehaviour
                     BM.ReviveToField(2);
                 }
                 if (cardNo == 13)
-                {
-                    BM.ReviveToField(1);
+				{
+					for (int i = 0; i < BM.Enemys.Length; i++)
+					{
+						BM.Enemys[i].GetComponent<Enemy>().StatusChange((int)Status.charming, 1);
+					}
+
+					BM.ReviveToField(1);
                 }
             }
             else if (selectType == 3) //덱에 있는 카드를 선택해야 하는 카드

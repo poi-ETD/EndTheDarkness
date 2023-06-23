@@ -61,13 +61,13 @@ public class Dagger001 : MonoBehaviour
 
                       if (pattern == 0)
                       {
-                        BM.EnemyAttack(3,myEnemy, BM.SelectCharacterInEnemyTurn(0, 0));
-                        BM.EnemyAttack(3, myEnemy, BM.SelectCharacterInEnemyTurn(0, 0));
+                        BM.EnemyAttack(10, myEnemy, BM.SelectCharacterInEnemyTurn(0, 0));
+                        BM.EnemyAttack(10, myEnemy, BM.SelectCharacterInEnemyTurn(0, 0));
                     }
                       if (pattern == 1)
                       {
-                          BM.EnemyGetAromor(3, myEnemy, myEnemy);
-                        BM.EnemyAttack(3, myEnemy, BM.SelectCharacterInEnemyTurn(0, 0));
+                        BM.EnemyGetAromor(3, myEnemy, myEnemy);
+                        BM.EnemyAttack(10, myEnemy, BM.SelectCharacterInEnemyTurn(0, 0));
                     }
                  
                   }
