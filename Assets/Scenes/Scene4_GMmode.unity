@@ -9849,6 +9849,7 @@ MonoBehaviour:
   - {fileID: 499656195}
   - {fileID: 1121317015}
   blessSelect: {fileID: 829848047}
+  cardList: {fileID: 11400000, guid: 43a3f366bacc26f46a82dca83e183786, type: 2}
 --- !u!1 &313418029
 GameObject:
   m_ObjectHideFlags: 0

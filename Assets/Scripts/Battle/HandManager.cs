@@ -44,13 +44,14 @@ public class HandManager : MonoBehaviour
     BattleManager BM;
     private int selectedCardStack = 0; // prevent to too much fast select error between cards
 
-    private Card onPointerCard = null; // this field have script<Card> on mouse pointer
-    public Card selectedCard = null; // this field have script<Card> selected
+    private RenewalCard onPointerCard = null; // this field have script<Card> on mouse pointer
+    public RenewalCard selectedCard = null; // this field have script<Card> selected
 
     [HideInInspector] public bool isSelectedCard = false;
     public GameObject go_selectedCardImage;
 
     [HideInInspector] public bool isEnableOtherButton; // 패에서 카드 클릭시 카드를 사용하거나 취소하기 전까지는 다른 버튼을 사용하지 못하게 하는 변수
+	[HideInInspector] public bool isAnimationDoing;
 
     private void Awake()
     {
@@ -68,7 +69,7 @@ public class HandManager : MonoBehaviour
         list_Rotation = new List<float>();
         BM = GameObject.Find("BattleManager").GetComponent<BattleManager>();
 
-        selectedCard = new Card();
+        selectedCard = new RenewalCard();
     }
 
     void Start()
@@ -81,7 +82,7 @@ public class HandManager : MonoBehaviour
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Keypad1))
-            BM.specialDrow(1);
+            BM.SpecialDrow(1);
 
         if (Input.GetKeyDown(KeyCode.Keypad2))
         {
@@ -110,13 +111,13 @@ public class HandManager : MonoBehaviour
         {
            
             //isSelectedCard = false;
-            CancelToUse();
+            CancelToUse(true);
         }
 
         if (isSelectedCard&&go_selectedCardImage!=null&&BM.selectedCard!=null)
         {
             CardDrag();
-            go_selectedCardImage.GetComponent<Image>().sprite = BM.selectedCard.GetComponent<Card>().cardImage.sprite;
+            go_selectedCardImage.GetComponent<Image>().sprite = BM.selectedCard.GetComponent<RenewalCard>().cardImage.sprite;
             go_selectedCardImage.SetActive(true);
         }
     }
@@ -197,7 +198,7 @@ public class HandManager : MonoBehaviour
 
         foreach (GameObject card in CM.field)
         {
-            card.GetComponent<Card>().SavePosition(list_XPosition[index], FindY_CircleEquation(list_XPosition[index]) - 8f, -(index / 10f));         
+            card.GetComponent<RenewalCard>().SavePosition(list_XPosition[index], FindY_CircleEquation(list_XPosition[index]) - 8f, -(index / 10f));         
             card.transform.DOMove(new Vector3(list_XPosition[index], FindY_CircleEquation(list_XPosition[index]) - 8f, -(index / 10f)), 0.3f)
                 .SetEase(Ease.OutExpo);
             card.transform.DORotate(new Vector3(0f, 0f, list_Rotation[index]), 0.3f).SetEase(Ease.OutExpo);
@@ -220,7 +221,7 @@ public class HandManager : MonoBehaviour
     //    RemoveCard(int.Parse(inputField_RemoveCard.text));
     //}
 
-    public void CardMouseEnter(Card card)
+    public void CardMouseEnter(RenewalCard card)
     {
         if ((!card.isGrave && !BM.isGraveWindowOn) || (!card.isDeck && !BM.isDeckWindowOn))
         {
@@ -253,7 +254,7 @@ public class HandManager : MonoBehaviour
         }
     }
 
-    public void CardMouseExit(Card card)
+    public void CardMouseExit(RenewalCard card)
     {
         if (!card.isGrave)
         {
@@ -299,7 +300,7 @@ public class HandManager : MonoBehaviour
         selectedCardStack = 0;
     }
 
-    public void InputToOriginText(Card card)
+    public void InputToOriginText(RenewalCard card)
     {
         originCardName = card.Name.text;
         originCardNo = card.NoT.text;
@@ -313,7 +314,7 @@ public class HandManager : MonoBehaviour
         text_TooltipCardContext.text = originCardContext;
     }
 
-    public void CancelToUse()
+    public void CancelToUse(bool realUse)
     {
         if (selectedCard == null)
             return;
@@ -330,13 +331,16 @@ public class HandManager : MonoBehaviour
 
         selectedCard.isSelected = false;
         BM.isSelectedCardinHand = false;
-        BM.cancleCard();
+        BM.cancleCard(!realUse);
 
-        selectedCard = null;
         isEnableOtherButton = true;
+		if(!realUse)
+		{
+			selectedCard = null;
+		}
     }
 
-    public void SelectCard(Card card) // 이전에 선택된 카드의 선택상태를 취소하고 새로운 인자로 들어온 카드를 설정하는 함수
+    public void SelectCard(RenewalCard card) // 이전에 선택된 카드의 선택상태를 취소하고 새로운 인자로 들어온 카드를 설정하는 함수
     {
         if (selectedCard != null)
         {
@@ -347,7 +351,7 @@ public class HandManager : MonoBehaviour
         selectedCard = card;
     }
 
-    public void CardTooltipOn(Card card)
+    public void CardTooltipOn(RenewalCard card)
     {
         text_TooltipCardName.text = card.Name.text;
         text_TooltipCardNo.text = card.NoT.text;

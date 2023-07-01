@@ -10,7 +10,8 @@ public class CardDetails
     public int cost;
     public Owner ownerCharacter;
     public Thema thema;
-
+	public float[] values;
+	public int selectType;
     [Space(10f)]
     [TextArea(3, 5)]
     public string description_KR;

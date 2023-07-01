@@ -114,7 +114,7 @@ public class UIManager_CharacterScene : MonoBehaviour
         characterData = new CharacterData();
 
         cardData = new CardData();
-
+		cardData.SetSO(so_CardList);
         characters_Party = new Character_Party[4];
 
         positions_LineImage = new float[5];
@@ -632,10 +632,7 @@ public class UIManager_CharacterScene : MonoBehaviour
         {
             if (list_CardCode_Deck[i] <= 4) // 통상 카드일시 카드 데이터에 추가
             {
-                cardData.cardCode.Add(list_CardCode_Deck[i]);
-                cardData.cardCost.Add(so_CardList.cardDetails[list_CardCode_Deck[i]].cost);
-                cardData.cardGetOrder.Add(cardData.count);
-                cardData.count++;
+				cardData.AddDefaultCard(list_CardCode_Deck[i]);
             }
         }
 
@@ -643,11 +640,8 @@ public class UIManager_CharacterScene : MonoBehaviour
         {
             if (list_CardCode_Deck[i] > 4) // 스탠다드 카드일시 카드 데이터에 추가
             {
-                cardData.cardCode.Add(list_CardCode_Deck[i]);
-                cardData.cardCost.Add(so_CardList.cardDetails[list_CardCode_Deck[i]].cost);
-                cardData.cardGetOrder.Add(cardData.count);
-                cardData.count++;
-            }
+				cardData.AddDefaultCard(list_CardCode_Deck[i]);
+			}
         }
 
         // 위 작업에 따라 카드 데이터의 앞쪽에는 통상카드, 뒤쪽에는 스탠다드 카드가 위치하게 됨
@@ -945,10 +939,37 @@ public class CharacterData // json으로 저장 될 캐릭터 정보
     public int size; // 파티의 캐릭터 수
 }
 
+
 public class CardData
 {
-    public List<int> cardCode = new List<int>(); // 소유한 카드들의 코드 리스트
-    public List<int> cardCost = new List<int>(); // 소유한 카드들의 코스트 리스트
-    public List<int> cardGetOrder = new List<int>(); // 소유한 카드들의 획득 순서 리스트
-    public int count; // 소유한 카드의 총 갯수
+	public struct CardDetailDatas
+	{
+		public int no;
+		public int cost;
+		public float[] values;
+		public int id; //카드가 추가된 순서
+
+		public CardDetailDatas(int no, int cost, float[] values, int id)
+		{
+			this.no = no;
+			this.cost = cost;
+			this.values = values;
+			this.id = id;
+		}
+	}
+
+	public List<CardDetailDatas> cardDetails = new List<CardDetailDatas>();
+	public int lastId; // ++해당 아이디 해줘야함.
+	[SerializeField] private SO_CardList so_CardList;
+	public void SetSO(SO_CardList _value)
+	{
+		so_CardList = _value;
+	}
+	public void AddDefaultCard(int no)
+	{
+		CardDetails cardDetail = so_CardList.cardDetails[no];
+		CardDetailDatas defaultcard = new CardDetailDatas(no, cardDetail.cost, cardDetail.values, lastId);
+		++lastId;
+		cardDetails.Add(defaultcard);
+	}
 }

@@ -14,12 +14,14 @@ public class GMmode : MonoBehaviour
     public GameData GD = new GameData();
     [SerializeField] GameObject CardView;
     [SerializeField] GameObject CharacterView;
-    int[] CardCount = new int[200];
+	int[] CardCount;
     [SerializeField]TextMeshProUGUI[] passiveCounts;
 
     [SerializeField] GameObject GetEquipmentCanvas;
     [SerializeField] TextMeshProUGUI[] equipStrings;
     [SerializeField] TMP_InputField blessSelect;
+	[SerializeField] SO_CardList cardList;
+	// TO DO : 캐릭터 카드 셋팅
     // Start is called before the first frame update
     void Start()
     {
@@ -41,9 +43,10 @@ public class GMmode : MonoBehaviour
             string gameData = File.ReadAllText(path3);
             GD = JsonConvert.DeserializeObject<GameData>(gameData);
         }
-        for (int i = 0; i < CD.cardCode.Count; i++)
+		CardCount = new int[cardList.cardDetails.Count];
+        for (int i = 0; i < CD.cardDetails.Count; i++)
         {
-            CardCount[CD.cardCode[i]]++;
+            CardCount[CD.cardDetails[i].no]++;
         }
     }
 
@@ -77,26 +80,20 @@ public void GoLobby()
         GD.isNight = false;
         GD.isAct = false;
         GD.isActInDay = false;
-        
     }
     void SaveCard()
     {
-        CD.cardCost.Clear();
-        CD.cardGetOrder.Clear();
-        CD.cardCode.Clear();
-        int get = 0;
-        for(int i = 1; i < CardCount.Length; i++)
+		CD.lastId = 0;
+		CD.SetSO(cardList);
+		CD.cardDetails.Clear();
+        for(int i = 1; i < cardList.cardDetails.Count; i++)
         {
             int count = 0;
             while (count < CardCount[i])
             {
-                CD.cardCode.Add(i);
-                CD.cardCost.Add(CardInfo.Instance.cd[i].Cost);
-                CD.cardGetOrder.Add(get);
-                CD.count = get;
-                get++;
-                count++;
-            }
+				++count;
+				CD.AddDefaultCard(i);
+			}
         }
     }
     public void OpenCardView()
@@ -105,11 +102,11 @@ public void GoLobby()
         {
             CardCount[i] = 0;
         }
-        for (int i = 0; i < CD.cardCode.Count; i++)
-        {
-            CardCount[CD.cardCode[i]]++;
-        }
-        for(int i = 0; i < CardInfo.Instance.cd.Length-1; i++)
+		for (int i = 0; i < CD.cardDetails.Count; i++)
+		{
+			CardCount[CD.cardDetails[i].no]++;
+		}
+		for (int i = 0; i < CardInfo.Instance.cd.Length-1; i++)
         {
             CardView.transform.GetChild(i).gameObject.SetActive(true);
             CardView.transform.GetChild(i).GetComponent<SetCardInGM>().set(i+1,this,CardCount[i+1]);

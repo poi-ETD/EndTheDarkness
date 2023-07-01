@@ -925,6 +925,7 @@ MonoBehaviour:
   isSelectedCard: 0
   go_selectedCardImage: {fileID: 1055180424}
   isEnableOtherButton: 0
+  isAnimationDoing: 0
 --- !u!4 &131153709
 Transform:
   m_ObjectHideFlags: 0
@@ -1073,81 +1074,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 142797210}
   m_CullTransparentMesh: 0
---- !u!1 &144093981
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 144093984}
-  - component: {fileID: 144093983}
-  - component: {fileID: 144093982}
-  m_Layer: 5
-  m_Name: pleaseSelect
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &144093982
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 144093981}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.11461386, b: 0, a: 0.6392157}
-  m_RaycastTarget: 1
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &144093983
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 144093981}
-  m_CullTransparentMesh: 0
---- !u!224 &144093984
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 144093981}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.9998999, y: 0.9998999, z: 0.9998999}
-  m_Children:
-  - {fileID: 783256333}
-  m_Father: {fileID: 1950354994}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 500, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &150984900
 GameObject:
   m_ObjectHideFlags: 0
@@ -3207,9 +3133,10 @@ MonoBehaviour:
   turnStartIsRun: 0
   isPointerinHand: 0
   isSelectedCardinHand: 0
+  ei: {fileID: 0}
   DmgPrefebs: {fileID: 3516283684887914833, guid: dd90e8f3edae7fc489918575a58fd894,
     type: 3}
-  curSelectedCardInRevive: {fileID: 0}
+  curSelectedCardInSelectOthers: {fileID: 0}
   CharacterLayoutTrans: {fileID: 574224357}
   prvokingEnemy: {fileID: 0}
   card20done: 0
@@ -6632,84 +6559,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!1 &783256332
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 783256333}
-  - component: {fileID: 783256335}
-  - component: {fileID: 783256334}
-  m_Layer: 5
-  m_Name: Text
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &783256333
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 783256332}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 144093984}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 500, y: 50}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &783256334
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 783256332}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
-  m_RaycastTarget: 1
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_FontData:
-    m_Font: {fileID: 12800000, guid: 2e021f0a3a93efc4daa4ac4ac26fcc73, type: 3}
-    m_FontSize: 30
-    m_FontStyle: 0
-    m_BestFit: 0
-    m_MinSize: 3
-    m_MaxSize: 40
-    m_Alignment: 4
-    m_AlignByGeometry: 0
-    m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
-    m_LineSpacing: 1
-  m_Text: "\uC120\uD0DD\uB41C \uCE74\uB4DC\uAC00 \uB9CE\uC2B5\uB2C8\uB2E4."
---- !u!222 &783256335
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 783256332}
-  m_CullTransparentMesh: 0
 --- !u!1 &808814069
 GameObject:
   m_ObjectHideFlags: 0
@@ -13301,7 +13150,7 @@ RectTransform:
   m_Children:
   - {fileID: 142797211}
   m_Father: {fileID: 1950354994}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
@@ -13340,7 +13189,6 @@ RectTransform:
   - {fileID: 2022936750}
   - {fileID: 605515340}
   - {fileID: 1974602184}
-  - {fileID: 144093984}
   - {fileID: 1937175874}
   m_Father: {fileID: 646101571}
   m_RootOrder: 4
@@ -14138,7 +13986,7 @@ MonoBehaviour:
   RemoveCard: []
   graveT: {fileID: 2074036863}
   deckT: {fileID: 1285459212}
-  graveWarn: {fileID: 144093981}
+  graveWarn: {fileID: 0}
   selectedWarn: {fileID: 548750988}
   CardPrefebs: {fileID: 9053282550429952276, guid: a830569d89a842046baa0b763ba790d8,
     type: 3}
@@ -14150,9 +13998,10 @@ MonoBehaviour:
   cardKind: 24
   CardCanvas: {fileID: 1214982110}
   HandCanvas: {fileID: 1483911196}
-  DeckCanvas: {fileID: 314253081}
+  DeckCanvas: {fileID: 1675216410}
   go_Content_Deck: {fileID: 909976794}
-  deckContentTrans: {fileID: 0}
+  deckContentTrans: {fileID: 909976795}
+  cardList: {fileID: 11400000, guid: 43a3f366bacc26f46a82dca83e183786, type: 2}
 --- !u!4 &2043666057
 Transform:
   m_ObjectHideFlags: 0

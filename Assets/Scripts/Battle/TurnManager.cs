@@ -21,24 +21,14 @@ public class TurnManager : MonoBehaviour
     public int turnAtk;
     public void turnCardPlus() //카드를 사용 시 발동
     {
-        turnCard++;
+		turnCard++;
+		for (int i = 0; i < CM.field.Count; i++)
+		{
+			CM.field[i].GetComponent<RenewalCard>().TurnCardUse(turnCard);
+		}
+	}
 
-        if (turnCard == 4) //현재 턴에 카드를 4번 사용했다면, 모든 스트레이트 펀치의 코스트를 감소시켜야함.
-        {
-            
-            for (int i = 0; i < CM.field.Count; i++)
-            {
-                if (CM.field[i].GetComponent<Card>().cardNo == 11)
-                {
-                    CM.field[i].GetComponent<Card>().decreaseCost(3);
-                }
-            }
-            
-            BM.log.logContent.text += "\n패에 있는 스트레이트 펀치의 코스트가 3 감소합니다.";
-        }
-    }
-
-    private void Start()
+	private void Start()
     {
         enemys = GameObject.FindGameObjectsWithTag("Enemy");
         enemy = new Enemy[enemys.Length];

@@ -1,0 +1,20 @@
+fileFormatVersion: 2
+guid: e1aa51591254b1245b04673f34dfd765
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - CM: {instanceID: 0}
+  - cardImage: {instanceID: 0}
+  - Content: {instanceID: 0}
+  - BM: {instanceID: 0}
+  - costT: {instanceID: 0}
+  - DeckT: {instanceID: 0}
+  - NoT: {instanceID: 0}
+  - Name: {instanceID: 0}
+  - so_CardList: {fileID: 11400000, guid: 43a3f366bacc26f46a82dca83e183786, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -418,4 +418,15 @@ public class Character : MonoBehaviour
     {
 
     }
+
+	public void onEnterEvnent()
+	{
+		//if (isDie || !BM.EnemySelectMode) return; // 적이 죽거나 적 선택이 필요한 카드로 인한 적 선택 모드가 아닐시 반응하지 않게 하는 코드
+		if (isDie) return;//YC->적 선택 모드가 아닐 시에도 마우스를 가져다 대면 정보를 표시해야 함
+		BM.selectedCharacter = this;
+	}
+	public void onExitEvent()
+	{
+		BM.selectedCharacter = null;
+	}
 }

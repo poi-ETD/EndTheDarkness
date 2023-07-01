@@ -111,7 +111,7 @@ public class BattleManager : MonoBehaviour
     int rewardListlength = 3;
     List<int> RandomCardList = new List<int>();
 
-    List<int> RancomSelectCard = new List<int>();
+    List<int> RandomSelectCard = new List<int>();
     [SerializeField] TextMeshProUGUI[] RewardEquipmentString;
     //승리 시 보상 선택하는 창에 들어갈 변수들
 
@@ -133,11 +133,11 @@ public class BattleManager : MonoBehaviour
     //YH
     [HideInInspector] public bool isPointerinHand = false;
     [HideInInspector] public bool isSelectedCardinHand = false;
-    private EnemyInfo ei;
+    public EnemyInfo ei;
 
     public GameObject DmgPrefebs;//데미지 프리펩
 
-    public Card curSelectedCardInRevive;
+    public RenewalCard curSelectedCardInSelectOthers;
 
 	[SerializeField] private Transform CharacterLayoutTrans;
 
@@ -465,15 +465,16 @@ public class BattleManager : MonoBehaviour
             actCharacter.SelectBox.SetActive(true);
 
     }
-    public void useCost(int amount, GameObject card) //코스트 사용 함수
+    public void useCost(int amount) //코스트 사용 함수
     {
-        if (actCharacter.characterNo == 5 && actCharacter.passive[3] > 0)
-        {
-            leftCost -= 1;
-            card.GetComponent<Card>().GetRemove();
-        }
-        else
-            leftCost -= amount;
+	//	if (actCharacter.characterNo == 5 && actCharacter.passive[3] > 0)
+	//	{
+	//		leftCost -= 1;
+	//		card.GetComponent<RenewalCard>().GetRemove();
+	//	}
+	//	else
+
+			leftCost -= amount;
         costT.text = "" + leftCost;
     }
     public void SpeedChange(Character character, float amount)
@@ -511,15 +512,13 @@ public class BattleManager : MonoBehaviour
         }
         if (!otherCanvasOn)
         {
-            if (leftCost < selectedCard.GetComponent<Card>().cardcost)
+            if (leftCost < selectedCard.GetComponent<RenewalCard>().cardcost)
             {
-                HandManager.Instance.CancelToUse();
+                HandManager.Instance.CancelToUse(false);
                 costOver();
                 return;
             }
-            selectedEnemy = SelectedEnemyInSelectMode.GetComponent<Enemy>();
-            if (!selectedEnemy.Shadow)//은신일 때는 카드 지정 x
-                selectedCard.GetComponent<Card>().EnemySelectCard();
+          
         }
     }
     public void CharacterSelect(GameObject SelectedCharacterInSelectMode) //아군 선택 카드가 발동되었을 시 아군을 선택
@@ -527,7 +526,7 @@ public class BattleManager : MonoBehaviour
         if (!otherCanvasOn)
         {
             selectedCharacter = SelectedCharacterInSelectMode.GetComponent<Character>();
-            selectedCard.GetComponent<Card>().CharacterSelectCard();
+            //selectedCard.GetComponent<RenwalCard>().CharacterSelectCard();
         }
     }
 
@@ -546,7 +545,7 @@ public class BattleManager : MonoBehaviour
             //HandManager.Instance.go_UseButton.SetActive(true);
             selectedCard = c;
 
-            Debug.Log("Set Card a" + selectedCard.GetComponent<Card>().selectType.ToString());
+            Debug.Log("Set Card a" + selectedCard.GetComponent<RenewalCard>().selectType.ToString());
             return;
         }
 
@@ -558,15 +557,16 @@ public class BattleManager : MonoBehaviour
 
             selectedCard = c;
 
-            Debug.Log("Set Card b" + selectedCard.GetComponent<Card>().selectType.ToString());
+            Debug.Log("Set Card b" + selectedCard.GetComponent<RenewalCard>().selectType.ToString());
         }
     }
-    public void cancleCard() //카드를 두번 누르거나, 다른 카드를 눌렀을때 이미 눌러진 카드에게 적용되는 함수
+	public void cancleCard(bool makeNull = true) //카드를 두번 누르거나, 다른 카드를 눌렀을때 이미 눌러진 카드에게 적용되는 함수
     {
         if (!otherCanvasOn)
         {
             enemySelectMode = false;
 
+			if(makeNull)
             selectedCard = null;
 
             //HandManager.Instance.go_UseButton.SetActive(false);
@@ -583,11 +583,11 @@ public class BattleManager : MonoBehaviour
             selectedCard.transform.localScale = new Vector3(1, 1, 1);
             CM.FieldToDeck(selectedCard);//선택한 카드를 덱에 보내고
             CM.CardToField();//랜덤한 카드를 필드 가장 오른쪽으로 보냄
-            CM.field[CM.field.Count - 1].GetComponent<Card>().cardcost -= 2;//필드의 가장 오른쪽 카드의 코스트를 2감소시킴
-            if (CM.field[CM.field.Count - 1].GetComponent<Card>().cardcost < 0)
-                CM.field[CM.field.Count - 1].GetComponent<Card>().cardcost = 0;
-            CM.field[CM.field.Count - 1].GetComponent<Card>().costT.text = CM.field[CM.field.Count - 1].GetComponent<Card>().cardcost + "";
-            log.logContent.text += "\n스타카티시모!" + CM.field[CM.field.Count - 1].GetComponent<Card>().Name.text + "의 코스트가 감소하였습니다.";
+            CM.field[CM.field.Count - 1].GetComponent<RenewalCard>().cardcost -= 2;//필드의 가장 오른쪽 카드의 코스트를 2감소시킴
+            if (CM.field[CM.field.Count - 1].GetComponent<RenewalCard>().cardcost < 0)
+                CM.field[CM.field.Count - 1].GetComponent<RenewalCard>().cardcost = 0;
+            CM.field[CM.field.Count - 1].GetComponent<RenewalCard>().costT.text = CM.field[CM.field.Count - 1].GetComponent<RenewalCard>().cardcost + "";
+            log.logContent.text += "\n스타카티시모!" + CM.field[CM.field.Count - 1].GetComponent<RenewalCard>().Name.text + "의 코스트가 감소하였습니다.";
            
             porte3count--;
             HandManager.Instance.Porte3DO();
@@ -603,51 +603,15 @@ public class BattleManager : MonoBehaviour
         }
         else
         {
-            //HandManager.Instance.go_SelectedCardTooltip.SetActive(false);
-            if (selectedCard.GetComponent<Card>().selectType != 1)
-            {
-                if (selectedCard != null)
-                {
-                    selectedCard.GetComponent<Card>().useCard();
-                    //HandManager.Instance.CancelToUse(); 카드 사용 시 발동되게 옮깁니다.
-                }
-            }
-            else if (selectedCard.GetComponent<Card>().selectType == 1)
-            {
-
-                if (actCharacter.passive[0] > 0 && actCharacter.characterNo == 6)
-                {
-                    GameObject randomEnemy = Enemys[Random.Range(0, Enemys.Length)];
-                    while (randomEnemy.GetComponent<Enemy>().isDie)
-                    {
-                        randomEnemy = Enemys[Random.Range(0, Enemys.Length)];
-                    }
-                    EnemySelect(randomEnemy);
-                }
-                else if (ei.SelectedEnemy != null)
-                {
-					if (prvokingEnemy != null && prvokingEnemy != ei.SelectedEnemy)
-					{
-						//도발중인 다른 몬스터가 있다!!
-						WarnOn("다른 적이 가로막고 있습니다.");
-						return;
-					}
-					EnemySelect(ei.SelectedEnemy.gameObject);
-
-
-                }
-                enemySelectMode = false;
-            }
-            else if (selectedCard.GetComponent<Card>().selectType == 5)
-            {
-                /* if (usedInCard20 != null)
-                 {
-                     Destroy(selectedCard);
-                     selectedCard = usedInCard20;
-                     otherCanvasOn = false;
-                 }*/
-                // CharacterSelectMode = false;
-            }
+			if (selectedCard != null)
+			{
+				if (selectedCard.GetComponent<RenewalCard>().UseCard())
+				{
+					//카드 성공!
+					selectedCard.GetComponent<RenewalCard>().UseCardResult();
+				};
+				HandManager.Instance.CancelToUse(true); // 카드 사용 시 발동되게 옮깁니다.
+			}
         }
     }
 
@@ -748,7 +712,7 @@ public class BattleManager : MonoBehaviour
         character.getArmor(armor);
     }
     List<GameObject> specialDrowList = new List<GameObject>();
-    public void specialDrow(int drow) //카드를 통한 드로우
+    public void SpecialDrow(int drow) //카드를 통한 드로우
     {
         log.logContent.text += "\n 카드를 통해 드로우 " + drow + "장!";
         int curDrow = 0;
@@ -773,7 +737,8 @@ public class BattleManager : MonoBehaviour
     }
     IEnumerator specialDrowCor()
     {
-        while (specialDrowList.Count != 0)
+		HandManager.Instance.isAnimationDoing = true;
+		while (specialDrowList.Count != 0)
         {
 
             CM.SpecialCardToField(specialDrowList[0]);
@@ -781,15 +746,9 @@ public class BattleManager : MonoBehaviour
 
             yield return new WaitForSeconds(0.3f);
         }
-        if (card12On)
-        {
-            AM.Act();
-            card12On = false;
-        }
-        //AM.MyAct();
-        // CM.Rebatch();           
-    }
-    public void ghostRevive(int ghostCount) //망자부활 + ghostCount
+		HandManager.Instance.isAnimationDoing = false;         
+	}
+    public void GhostRevive(int ghostCount) //망자부활 + ghostCount
     {
         log.logContent.text += "\n망자부활 : " + ghostCount + "!";
         CharacterPassive QpassiveScript = null;
@@ -809,15 +768,16 @@ public class BattleManager : MonoBehaviour
     }
     public void CopyCard(int CopyCount) //덱에 카드 복사
     {
-        log.logContent.text += "\n덱에" + selectedCard.GetComponent<Card>().Name.text + "(을)를 복사!";
+        log.logContent.text += "\n덱에" + selectedCard.GetComponent<RenewalCard>().Name.text + "(을)를 복사!";
         for (int i = 0; i < CopyCount; i++)
         {
-            GameObject newCard = Instantiate(selectedCard, new Vector3(0, 0, 0), transform.rotation, GameObject.Find("CardCanvas").transform);
-            newCard.GetComponent<Card>().isGrave = false;
-            newCard.GetComponent<Card>().isDeck = false;
-            newCard.GetComponent<Card>().isSelected = false;
+			GameObject newCard = Instantiate(selectedCard,CM.DeckCanvas.transform);
+            newCard.GetComponent<RenewalCard>().isGrave = false;
+            newCard.GetComponent<RenewalCard>().isDeck = false;
+            newCard.GetComponent<RenewalCard>().isSelected = false;
             newCard.GetComponent<Transform>().localScale = new Vector2(1, 1);
             newCard.SetActive(false);
+			
             CM.Deck.Add(newCard);
         }
     }
@@ -826,7 +786,21 @@ public class BattleManager : MonoBehaviour
         log.logContent.text += "\n" + actCharacter.Name + "이(가) 다음턴에 " + armor + "의 방어도 획득!";
         character.nextarmor += armor;
     }
-    public void card8(int point) //car8개별 효과 함수
+	public void SetNextTurnCost(int cost)
+	{
+		nextTurnStartCost += cost;
+	}
+
+	public Character FindCharacterByOwner(Owner owner)
+	{
+		for(int i=0;i<characters.Count;i++) 
+		{
+			if (characters[i].characterNo==(int)owner)
+				return characters[i];
+		}
+		return null;
+	}
+	public void card8(int point) //car8개별 효과 함수
     {
         log.logContent.text += "\n" + actCharacter.Name + "이(가) 이번 턴 종료시 남은 cost*10의 방어도를 얻습니다.";
         actCharacter.card8 = true;
@@ -863,43 +837,38 @@ public class BattleManager : MonoBehaviour
 
     IEnumerator card12C()
     {
-        CM.UseCard(selectedCard);
-        int g = CM.field.Count;
-        for (int i = CM.field.Count - 1; i >= 0; i--)
+		HandManager.Instance.isAnimationDoing = true;
+        int drow = CM.field.Count - 1;	//들고있는 카드는 제외해줘야 함
+        foreach (GameObject card in CM.field)
         {
-            if (CM.field[i] != null)
-            {
-                if (selectedCard != CM.field[i])
-                    CM.FieldToDeck(CM.field[i]);
-            }
+			if(card!= selectedCard)
+			CM.FieldToDeck(card);
             yield return new WaitForSeconds(0.25f);
         }
-        specialDrow(g);
 
+		CM.field.Clear();
+		selectedCard.GetComponent<RenewalCard>().UseCardResult();
+		SpecialDrow(drow);
     }
 
     public void Click_GraveOn() //무덤 열기. 특정 경우에는 클릭 안 해도 자동으로 열림
     {
-        if (HandManager.Instance.isEnableOtherButton)
-        {
+		otherCanvasOn = true;
+		isGraveWindowOn = true;
 
-            otherCanvasOn = true;
-            isGraveWindowOn = true;
+		go_GraveView_Button_Revive.SetActive(false);
 
-            go_GraveView_Button_Revive.SetActive(false);
-
-            CM.GraveOn();
-            window_Grave.SetActive(true);
-        }
-    }
-    public void GraveOn_ByCardEffect()
+		CM.GraveOn();
+		window_Grave.SetActive(true);
+	}
+	public void GraveOn_ByCardEffect()
     {
         otherCanvasOn = true;
         isGraveWindowOn = true;
 
         go_GraveView_Button_Revive.SetActive(true);
-        curSelectedCardInRevive = selectedCard.GetComponent<Card>();
-        HandManager.Instance.CancelToUse();
+        curSelectedCardInSelectOthers = selectedCard.GetComponent<RenewalCard>();
+        HandManager.Instance.CancelToUse(false);
         CM.GraveOn();
         window_Grave.SetActive(true);
     }
@@ -922,13 +891,13 @@ public class BattleManager : MonoBehaviour
 
     public void Click_Grave_Revive() //무덤에서 부활버튼 누를 때
     {
-
-
-        GraveReviveMode = false;
-
-        reviveCount = 0;
-        CM.Revive();
-        curSelectedCardInRevive.SelectRevive();
+		if (CM.Revive())
+		{
+			curSelectedCardInSelectOthers.UseCardResult();
+			GraveReviveMode = false;
+			reviveCount = 0;
+		}
+		Click_GraveOff(); //누르지 않았지만 누른거랑 같지 이정도면
     }
 
     public void Grave_ReviveCancel()
@@ -978,13 +947,15 @@ public class BattleManager : MonoBehaviour
         window_Deck.SetActive(false);
     }
 
-    public void ReviveToField(int r)
-    {
-        GraveReviveMode = true;
-        GraveOn_ByCardEffect();
-        reviveCount += r;
-    }
-    public void RandomReviveToField(int n) //랜덤으로 무덤에서 필드로 카드 가져오기
+	public void ReviveToField(int r, RenewalCard card)
+	{
+		curSelectedCardInSelectOthers = card;
+		GraveReviveMode = true;
+		GraveOn_ByCardEffect();
+		reviveCount += r;
+	}
+
+	public void RandomReviveToField(int n) //랜덤으로 무덤에서 필드로 카드 가져오기
     {
         if (n > CM.Grave.Count)
             n = CM.Grave.Count;
@@ -1017,10 +988,10 @@ public class BattleManager : MonoBehaviour
         // Debug.Log(usedInCard20.GetComponent<Card>().cardNo);
         copyCard = Instantiate(previousSelectedCard, CM.HandCanvas.transform);
         copyCard.SetActive(false);
-        copyCard.GetComponent<Card>().iscard20Mode = true;
-        copyCard.GetComponent<Card>().BM = this;
-        copyCard.GetComponent<Card>().CM = CM;
-        copyCard.GetComponent<Card>().useCardInCard20();
+        copyCard.GetComponent<RenewalCard>().iscard20Mode = true;
+        copyCard.GetComponent<RenewalCard>().BM = this;
+        copyCard.GetComponent<RenewalCard>().CM = CM;
+        //copyCard.GetComponent<RenwalCard>().useCardInCard20();
     }
 
     public void reflectUp(int amount) //반사데미지를 올려줌
@@ -1067,7 +1038,7 @@ public class BattleManager : MonoBehaviour
             Debug.Log(RandomCardList[RandomCardList.Count - i]);
             GameObject newCard = Instantiate(rewardCardPrefebs, RewardCanvas.transform);
             newCard.GetComponent<NoBattleCard>().setCardInfoInLobby(RandomCardList[RandomCardList.Count - i], 0);
-            RancomSelectCard.Add(RandomCardList[RandomCardList.Count - i]);
+            RandomSelectCard.Add(RandomCardList[RandomCardList.Count - i]);
         }
         //랜덤함수를 반복 해서 맨 앞 n장의 카드들을 중복되지 않는 카드들로
         equipment e = EquipmentManager.Instance.makeEquipment(); //새로운 장비를 생성함.
@@ -1079,7 +1050,7 @@ public class BattleManager : MonoBehaviour
     public void Click_SelectReward()//원하는 카드를 선택해서 카드 데이터에 저장하는 함수
     {
         bool isSelect = false;
-        for (int i = 0; i < RancomSelectCard.Count; i++)
+        for (int i = 0; i < RandomSelectCard.Count; i++)
         {
 
             if (RewardCanvas.transform.GetChild(i).GetComponent<NoBattleCard>().select)
@@ -1088,19 +1059,15 @@ public class BattleManager : MonoBehaviour
             }
         }
         if (!isSelect) return;
-        CardData CardD;
+        CardData CardD=CM.CD;
         string path = Path.Combine(Application.persistentDataPath, GameManager.Instance.slot_CardDatas[GameManager.Instance.nowPlayingSlot]);
         string cardData = File.ReadAllText(path);
-        CardD = JsonConvert.DeserializeObject<CardData>(cardData);
-        for (int i = 0; i < RancomSelectCard.Count; i++)
+        for (int i = 0; i < RandomSelectCard.Count; i++)
         {
 
             if (RewardCanvas.transform.GetChild(i).GetComponent<NoBattleCard>().select)
             {
-                CardD.cardCode.Add(RancomSelectCard[i]);
-                CardD.cardCost.Add(CardInfo.Instance.cd[RancomSelectCard[i]].Cost);
-                CardD.cardGetOrder.Add(CardD.count);
-                CardD.count++;
+				CardD.AddDefaultCard(RandomSelectCard[i]);
             }
         }
         cardData = JsonConvert.SerializeObject(CardD);
@@ -1408,18 +1375,18 @@ public class BattleManager : MonoBehaviour
 
             if (CM.field[i] != MyCard)
             {
-                CM.field[i].GetComponent<Card>().RemoveThisCardInField();
+                CM.field[i].GetComponent<RenewalCard>().RemoveThisCardInField();
             }
             yield return new WaitForSeconds(0.1f);
         }
         otherCorIsRun = false;
         OnRandomAttack(10, actCharacter, myFieldCount);
-        if (!MyCard.GetComponent<Card>().iscard20Mode)
+        if (!MyCard.GetComponent<RenewalCard>().iscard20Mode)
         {
-            useCost(MyCard.GetComponent<Card>().cardcost, gameObject);
+           // useCost(MyCard.GetComponent<RenewalCard>().cardcost, gameObject);
 
         }
-        MyCard.GetComponent<Card>().UseCardResult();
+        MyCard.GetComponent<RenewalCard>().UseCardResult();
         AM.Act();
 
     }
@@ -1442,7 +1409,7 @@ public class BattleManager : MonoBehaviour
     {
         if (SelectDeckCount == CM.SelectedCard.Count)
         {
-            selectedCard.GetComponent<Card>().SelectDeck();
+            //selectedCard.GetComponent<RenwalCard>().SelectDeck();
             SelectedCard = CM.SelectedCard[0];
             CM.DeckToField();
             DeckSelectMode = false;

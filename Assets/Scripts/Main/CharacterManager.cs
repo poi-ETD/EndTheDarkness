@@ -33,7 +33,7 @@ public class CharacterManager : MonoBehaviour // YH : 슬롯 생성 로직 (영�
 
     [SerializeField] private GameObject go_Window_SlotName;
     [SerializeField] private Text text_SlotName;
-
+	[SerializeField] SO_CardList so_cardlist;
     public void ToMain() //저장 후 로비로 게임 시작
     {
         //cardManager.SaveCard();

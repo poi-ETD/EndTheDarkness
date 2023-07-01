@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//스크립터블 오브젝트를 주 사용체로 변경하자.
 public class CardInfo : MonoBehaviour
 {
     private static CardInfo instance;

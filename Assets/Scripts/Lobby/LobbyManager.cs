@@ -10,6 +10,7 @@ using UnityEngine.SceneManagement;
 public class LobbyManager : MonoBehaviour
 {
     [SerializeField] SO_CharacterList so_Character;
+	[SerializeField] SO_CardList so_CardList;
     public CardData CD;
     public CharacterData ChD;
     public GameData GD = new GameData();
@@ -123,6 +124,7 @@ public class LobbyManager : MonoBehaviour
             Debug.Log(path);
             string cardData = File.ReadAllText(path);
             CD = JsonConvert.DeserializeObject<CardData>(cardData);
+			CD.SetSO(so_CardList);
         }
         if (File.Exists(path2))
         {
@@ -246,10 +248,7 @@ public class LobbyManager : MonoBehaviour
         ResetCanvas.SetActive(false);
         for (int i = 0; i < 5; i++)
         {
-            CD.cardCode.Add(ResetCardListSelect[i]);
-            CD.cardCost.Add(CardInfo.Instance.cd[ResetCardListSelect[i]].Cost);
-            CD.cardGetOrder.Add(CD.count);
-            CD.count++;
+			CD.AddDefaultCard(ResetCardListSelect[i]);
         }
 
         blessInLobby.BlessApplyInResetmara(firstBless);
@@ -268,12 +267,13 @@ public class LobbyManager : MonoBehaviour
             canvasOn = true;
             PopUpCanvas.SetActive(true);
             cardView.SetActive(true);
-            for (int i = 0; i < CD.cardCode.Count; i++)
+            for (int i = 0; i < CD.cardDetails.Count; i++)
             {
+				CardData.CardDetailDatas cardDetail = CD.cardDetails[i];
                 GameObject newCard = Instantiate(cardPrefebs, cardContent.transform);
-                newCard.GetComponent<NoBattleCard>().setCardInfoInLobby(CD.cardCode[i], i);
-                newCard.GetComponent<NoBattleCard>().setCost(CD.cardCost[i]);
-                int[] k = { CD.cardCode[i], CD.cardCost[i] };
+                newCard.GetComponent<NoBattleCard>().setCardInfoInLobby(cardDetail.no, i);
+                newCard.GetComponent<NoBattleCard>().setCost(cardDetail.cost);
+                int[] k = { cardDetail.no, cardDetail.cost };
                 CardList.Add(i, k);
             }
         }
@@ -454,8 +454,8 @@ public class LobbyManager : MonoBehaviour
     public void ThisCardSee(int i)
     {
         OneCardCanvas.SetActive(true);
-        OneCard.GetComponent<NoBattleCard>().setCardInfoInLobby(CD.cardCode[i], 0);
-        OneCard.GetComponent<NoBattleCard>().setCost(CD.cardCost[i]);
+        OneCard.GetComponent<NoBattleCard>().setCardInfoInLobby(CD.cardDetails[i].no, 0);
+        OneCard.GetComponent<NoBattleCard>().setCost(CD.cardDetails[i].cost);
     }
     public void GetPassiveInGM() //개발용
     {
@@ -661,10 +661,7 @@ public class LobbyManager : MonoBehaviour
         if (ShopSelectedCard == null && t) return;
         if (t)
         {
-            CD.cardCode.Add(ShopSelectedCardNo);
-            CD.cardCost.Add(CardInfo.Instance.cd[ShopSelectedCardNo].Cost);
-            CD.cardGetOrder.Add(CD.count);
-            CD.count++;
+			CD.AddDefaultCard(ShopSelectedCardNo);
 
         }
         cancleInShop.SetActive(true);
@@ -846,12 +843,12 @@ public class LobbyManager : MonoBehaviour
         CardRemovePopup.SetActive(true);
         cardRemoveText[0].text = "삭제할 카드를 " + n + "장 선택해 주세요.";
         maxRemoveCount = n;
-        for (int i = 0; i < CD.cardCode.Count; i++)
+        for (int i = 0; i < CD.cardDetails.Count; i++)
         {
             GameObject newCard = Instantiate(RemoveCardPrefebs, RemoveContent.transform);
-            newCard.GetComponent<NoBattleCard>().setCardInfoInLobby(CD.cardCode[i], i);
-            newCard.GetComponent<NoBattleCard>().setCost(CD.cardCost[i]);
-            int[] k = { CD.cardCode[i], CD.cardCost[i] };
+			newCard.GetComponent<NoBattleCard>().setCardInfoInLobby(CD.cardDetails[i].no, i);
+			newCard.GetComponent<NoBattleCard>().setCost(CD.cardDetails[i].cost);
+            int[] k = { CD.cardDetails[i].no, CD.cardDetails[i].cost };
             removeCardList.Add(i, k);
             objRemovecardList.Add(newCard);
         }
@@ -893,9 +890,8 @@ public class LobbyManager : MonoBehaviour
     {
         List<int> removeList = new List<int>();
         if (removeCount < maxRemoveCount) return;
-        for (int i = 0; i < CD.cardCode.Count; i++)
+        for (int i = 0; i < CD.cardDetails.Count; i++)
         {
-
             if (RemoveContent.transform.GetChild(i).gameObject.GetComponent<NoBattleCard>().select)
                 removeList.Add(RemoveContent.transform.GetChild(i).gameObject.GetComponent<NoBattleCard>().deckNo);
         }
@@ -903,9 +899,7 @@ public class LobbyManager : MonoBehaviour
 
         for (int i = maxRemoveCount - 1; i >= 0; i--)
         {
-            CD.cardCode.RemoveAt(removeList[i]);
-            CD.cardCost.RemoveAt(removeList[i]);
-            CD.cardGetOrder.RemoveAt(removeList[i]);
+            CD.cardDetails.RemoveAt(removeList[i]);
         }
         canvasOn = false;
         Act();

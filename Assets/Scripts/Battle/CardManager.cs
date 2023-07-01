@@ -30,7 +30,7 @@ public class CardManager : SingletonMonobehaviour<MonoBehaviour>
     public GameObject CardCanvas;
     public GameObject HandCanvas;
     public GameObject DeckCanvas;
-    CardData CD;
+    public CardData CD;
     BattleManager BM;
     HandManager HM;
     ActManager AM;
@@ -39,15 +39,17 @@ public class CardManager : SingletonMonobehaviour<MonoBehaviour>
 
     [SerializeField] private GameObject go_Content_Deck;
 	[SerializeField] private Transform deckContentTrans;
-
-    private void Update()
+	public SO_CardList cardList;
+	//매 프레임마다 하는게 괜찮다면야..
+	private void Update()
     {
         graveT.text = "" + Grave.Count;
         deckT.text = "" + Deck.Count;
     }
     private void Start()
     {
-        deckText[0] = "기본";
+		//raetic 여기 부분 스크립터블 오브젝트로 수정하자.
+		deckText[0] = "기본";
         deckText[1] = "Q";
         deckText[2] = "스파키";
         deckText[3] = "반가라";
@@ -62,21 +64,28 @@ public class CardManager : SingletonMonobehaviour<MonoBehaviour>
             CD = JsonConvert.DeserializeObject<CardData>(cardData);
 
         }
-        for (int i = 0; i < CD.cardCode.Count; i++)
+		CD.SetSO(cardList);
+
+		for (int i = 0; i < CD.cardDetails.Count; i++)
         {
+			//카드 데이터에 있는 카드들로 내 덱을 꾸려준다.
             GameObject newCard = Instantiate(CardPrefebs, CardCanvas.transform);
-            newCard.GetComponent<Card>().cardImage.sprite = CardInfo.Instance.CardSpr[CD.cardCode[i]];
-            newCard.GetComponent<Card>().NoT.text = "NO." + CardInfo.Instance.cd[CD.cardCode[i]].No.ToString("D3");//넘버
-            newCard.GetComponent<Card>().cardNo = CardInfo.Instance.cd[CD.cardCode[i]].No;
-            newCard.GetComponent<Card>().DeckNo = CardInfo.Instance.cd[CD.cardCode[i]].Deck;
-            newCard.GetComponent<Card>().DeckT.text = deckText[CardInfo.Instance.cd[CD.cardCode[i]].Deck];
-            newCard.GetComponent<Card>().Content.text = CardInfo.Instance.cd[CD.cardCode[i]].Content;
-            newCard.GetComponent<Card>().Name.text = CardInfo.Instance.cd[CD.cardCode[i]].Name;
-            newCard.GetComponent<Card>().cardcost = CD.cardCost[i];
-            newCard.GetComponent<Card>().realCost = CD.cardCost[i];
-            newCard.GetComponent<Card>().selectType = CardInfo.Instance.cd[CD.cardCode[i]].select;
-            //addComponent(newCard, CD.cardNo[i]);                    
-            Deck.Add(newCard);
+			int cardNo = CD.cardDetails[i].no;
+			string ClassName = "Card"+ cardNo;
+			var type = System.Type.GetType(ClassName);
+			if (type != null)
+			{
+				newCard.AddComponent(type);
+			}
+			else
+			{
+				newCard.AddComponent<RenewalCard>();
+			}
+
+			RenewalCard newCardComponent = newCard.GetComponent<RenewalCard>();
+			newCardComponent.SetInfo(cardNo, CD.cardDetails[i].cost, CD.cardDetails[i].values);
+
+			Deck.Add(newCard);
         }
         //내 카드 데이터를 가지고 카드들을 생성하여 모든 카드들을 덱에 넣는다.
         for (int i = 0; i < Deck.Count; i++)
@@ -104,16 +113,16 @@ public class CardManager : SingletonMonobehaviour<MonoBehaviour>
         for (int i = 0; i < Deck.Count; i++)
         {
             Deck[i].SetActive(true);
-            Deck[i].GetComponent<Card>().cardcost = Deck[i].GetComponent<Card>().realCost;
-            Deck[i].GetComponent<Card>().costTextSet();
+            Deck[i].GetComponent<RenewalCard>().cardcost = Deck[i].GetComponent<RenewalCard>().realCost;
+            Deck[i].GetComponent<RenewalCard>().costTextSet(Deck[i].GetComponent<RenewalCard>().cardcost);
             Deck[i].SetActive(false);
 
         }
         for (int i = 0; i < Grave.Count; i++)
         {
             Grave[i].SetActive(true);
-            Grave[i].GetComponent<Card>().cardcost = Grave[i].GetComponent<Card>().realCost;
-            Grave[i].GetComponent<Card>().costTextSet();
+            Grave[i].GetComponent<RenewalCard>().cardcost = Grave[i].GetComponent<RenewalCard>().realCost;
+            Grave[i].GetComponent<RenewalCard>().costTextSet(Grave[i].GetComponent<RenewalCard>().cardcost);
             Grave[i].SetActive(false);
         }
         StartCoroutine("turnStartDrow");
@@ -141,28 +150,28 @@ public class CardManager : SingletonMonobehaviour<MonoBehaviour>
     }
     public void PlusCard(int i)//i번 카드를 덱에 넣는 함수(현재는 큐의 백옥의 왕에서 적용)
     {
-        GameObject newCard = Instantiate(CardPrefebs, CardCanvas.transform);
+        //GameObject newCard = Instantiate(CardPrefebs, CardCanvas.transform);
 
-        newCard.GetComponent<Card>().NoT.text = "NO." + CardInfo.Instance.cd[i].No.ToString("D3");//넘버
-        newCard.GetComponent<Card>().cardNo = CardInfo.Instance.cd[i].No;
-        newCard.GetComponent<Card>().DeckT.text = deckText[CardInfo.Instance.cd[i].Deck];
-        newCard.GetComponent<Card>().Content.text = CardInfo.Instance.cd[i].Content;
-        newCard.GetComponent<Card>().Name.text = CardInfo.Instance.cd[i].Name;
-        newCard.GetComponent<Card>().cardcost = CardInfo.Instance.cd[i].Cost;
-        newCard.GetComponent<Card>().realCost = CardInfo.Instance.cd[i].Cost;
-        newCard.GetComponent<Card>().selectType = CardInfo.Instance.cd[CD.cardCode[i]].select;
+        //newCard.GetComponent<RenewalCard>().NoT.text = "NO." + CardInfo.Instance.cd[i].No.ToString("D3");//넘버
+        //newCard.GetComponent<RenewalCard>().cardNo = CardInfo.Instance.cd[i].No;
+        //newCard.GetComponent<RenewalCard>().DeckT.text = deckText[CardInfo.Instance.cd[i].Deck];
+        //newCard.GetComponent<RenewalCard>().Content.text = CardInfo.Instance.cd[i].Content;
+        //newCard.GetComponent<RenewalCard>().Name.text = CardInfo.Instance.cd[i].Name;
+        //newCard.GetComponent<RenewalCard>().cardcost = CardInfo.Instance.cd[i].Cost;
+        //newCard.GetComponent<RenewalCard>().realCost = CardInfo.Instance.cd[i].Cost;
+        //newCard.GetComponent<RenewalCard>().selectType = CardInfo.Instance.cd[CD.cardCode[i]].select;
 
-        Deck.Add(newCard);
-        newCard.SetActive(false);
+        //Deck.Add(newCard);
+        //newCard.SetActive(false);
     }
     public void UseCard(GameObject usingCard)//사용된 카드를 무덤에 넣는 과정
     {
-        if (usingCard.GetComponent<Card>().isRemove)
+        if (usingCard.GetComponent<RenewalCard>().isRemove)
         {
 
-            usingCard.GetComponent<Card>().RemoveThisCardInField();
+            usingCard.GetComponent<RenewalCard>().RemoveThisCardInField();
             usingCard.transform.parent = RemoveContent.transform;
-            usingCard.GetComponent<Card>().isGrave = true;
+            usingCard.GetComponent<RenewalCard>().isGrave = true;
             usingCard.SetActive(false);
         }
         else
@@ -187,33 +196,33 @@ public class CardManager : SingletonMonobehaviour<MonoBehaviour>
 
             if (!InGrave) Grave.Add(usingCard);
             usingCard.transform.parent = GraveContent.transform;
-            usingCard.GetComponent<Card>().isGrave = true;
+            usingCard.GetComponent<RenewalCard>().isGrave = true;
             usingCard.SetActive(false);
         }
       
         BM.previousCharacter = null;
         BM.previousEnemy = null;
-        if (usingCard.GetComponent<Card>().selectType == 1)
+        if (usingCard.GetComponent<RenewalCard>().selectType == 1)
         {
             BM.previousEnemy = BM.selectedEnemy;
         }
-        if (usingCard.GetComponent<Card>().selectType == 5)
+        if (usingCard.GetComponent<RenewalCard>().selectType == 5)
         {
             BM.previousCharacter = BM.selectedCharacter;
         }
-        HandManager.Instance.CancelToUse();
+        HandManager.Instance.CancelToUse(false);
         TM.BM.previousSelectedCard = usingCard; //스케치 반복을 위해 이전 카드를 기록함
 
         BM.actCharacter.SelectBox.SetActive(false);
         Character curC = BM.actCharacter;
-        curC.myPassive.CardUse(usingCard.GetComponent<Card>());
+        curC.myPassive.CardUse(usingCard.GetComponent<RenewalCard>());
         curC.GetComponent<CharacterPassive>().myAct();
         for (int i = 0; i < BM.ChD.size; i++)
         {
             BM.characters[i].myPassive.CardUseInTeam();
         }
 
-        if (usingCard.GetComponent<Card>().Name.text != "스케치 반복")
+        if (usingCard.GetComponent<RenewalCard>().Name.text != "스케치 반복")
         {
             BM.cancleCard();
             TM.turnCardPlus();
@@ -235,7 +244,7 @@ public class CardManager : SingletonMonobehaviour<MonoBehaviour>
         }
         Grave.Add(c);
         c.transform.parent = GraveContent.transform;
-        c.GetComponent<Card>().isGrave = true;
+        c.GetComponent<RenewalCard>().isGrave = true;
         c.SetActive(false);
     }
 
@@ -252,7 +261,7 @@ public class CardManager : SingletonMonobehaviour<MonoBehaviour>
     {
         for (int i = 0; i < Deck.Count; i++)
         {
-            Deck[i].GetComponent<Card>().isDeck = true;
+            Deck[i].GetComponent<RenewalCard>().isDeck = true;
             Deck[i].transform.parent = go_Content_Deck.transform;
             Deck[i].SetActive(true);//덱에 있는 카드들을 활성화
             Deck[i].transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
@@ -275,7 +284,7 @@ public class CardManager : SingletonMonobehaviour<MonoBehaviour>
         {
             Deck[i].GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0.5f);
             Deck[i].GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0.5f);
-            Deck[i].GetComponent<Card>().isDeck = false;
+            Deck[i].GetComponent<RenewalCard>().isDeck = false;
             Deck[i].transform.parent = CardCanvas.transform;
             Deck[i].SetActive(false);
         }
@@ -296,7 +305,7 @@ public class CardManager : SingletonMonobehaviour<MonoBehaviour>
 
     public void GraveToField(GameObject Gcard) //선택된 카드를 무덤에서 필드로 부활시키는 함수
     {
-        TM.BM.log.logContent.text += "\n" + Gcard.GetComponent<Card>().Name.text + "이(가) 묘지에서 패로 이동합니다.";
+        TM.BM.log.logContent.text += "\n" + Gcard.GetComponent<RenewalCard>().Name.text + "이(가) 묘지에서 패로 이동합니다.";
         for (int i = 0; i < Grave.Count; i++)
         {
             if (Gcard == Grave[i])
@@ -310,11 +319,11 @@ public class CardManager : SingletonMonobehaviour<MonoBehaviour>
                 Grave[i].GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0.5f);
 
 
-                Grave[i].GetComponent<Card>().isGrave = false;
+                Grave[i].GetComponent<RenewalCard>().isGrave = false;
                 Grave[i].GetComponent<Transform>().localScale = new Vector2(1, 1);
-                if (BM.curSelectedCardInRevive!=null&&BM.curSelectedCardInRevive.cardNo == 13)
+                if (BM.curSelectedCardInSelectOthers!=null&&BM.curSelectedCardInSelectOthers.cardNo == 13)
                 {
-                    Grave[i].GetComponent<Card>().decreaseCost(-2);
+                    Grave[i].GetComponent<RenewalCard>().changeCardCost(-2);
                 }
                 Grave.RemoveAt(i);
 
@@ -325,36 +334,50 @@ public class CardManager : SingletonMonobehaviour<MonoBehaviour>
 
 
     }
-    public void FieldToDeck(GameObject FieldCard) //선택된 카드를 필드에서 덱으로 보내는 함수
+    public void FieldToDeck(GameObject FieldCard) //선택된 카드를 필드에서 덱으로 보내는 함수, 필드 배열에서는 밖에서 처리해줘야 함.
     {
         for (int i = 0; i < field.Count; i++)
         {
             if (field[i] == FieldCard)
             {
                 Deck.Add(FieldCard);
-                FieldCard.transform.parent = GameObject.Find("CardCanvas").transform;
+                FieldCard.transform.parent = DeckCanvas.transform;
                 field[i].SetActive(false);
-                field.RemoveAt(i);
+                //field.RemoveAt(i);
                 break;
             }
         }
 
         HandManager.Instance.ArrangeCard();
     }
-    public void Revive() //부활시키는 애니메이션 용
+    public bool Revive() //부활시키는 애니메이션 용
     {
+		if(ReviveCard.Count != BM.reviveCount)
+		{
+			BM.WarnOn("부활시킬 카드의 숫자가 맞지 않습니다.");
+			return false;
+		}
+
         StartCoroutine("ReviveC");
+		return true;
     }
     IEnumerator ReviveC()
     {
+		//락걸자.
+		HandManager.Instance.isAnimationDoing = true;
         for (int i = ReviveCard.Count - 1; i >= 0; i--)
         {
+			RenewalCard card = BM.selectedCard.GetComponent<RenewalCard>();
+			if (card.cardNo==13)
+			{
+				ReviveCard[i].GetComponent<RenewalCard>().changeTurnCardCost(-(int)card.values[1]);
+			}
             GraveToField(ReviveCard[i]);
             ReviveCard.RemoveAt(i);
             yield return new WaitForSeconds(0.5f);
         }
-
-    }
+		HandManager.Instance.isAnimationDoing = false;
+	}
     public void ReviveCountOver() //무덤에서 너무 많이 고를 때
     {
         graveWarn.SetActive(true);
@@ -438,14 +461,14 @@ public class CardManager : SingletonMonobehaviour<MonoBehaviour>
     {
         for (int j = 0; j < SelectedCard.Count; j++)
         {
-            TM.BM.log.logContent.text += "\n" + SelectedCard[j].GetComponent<Card>().Name.text + "이(가) 덱에서 패로 이동합니다.";
+            TM.BM.log.logContent.text += "\n" + SelectedCard[j].GetComponent<RenewalCard>().Name.text + "이(가) 덱에서 패로 이동합니다.";
             for (int i = 0; i < Deck.Count; i++)
             {
                 if (SelectedCard[j] == Deck[i])
                 {
                     field.Add(SelectedCard[j]);
                     HM.AddCard(SelectedCard[j]);
-                    SelectedCard[j].GetComponent<Card>().isDeck = false;
+                    SelectedCard[j].GetComponent<RenewalCard>().isDeck = false;
                     SelectedCard[j].GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0.5f);
                     SelectedCard[j].GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0.5f);
                     SelectedCard[j].SetActive(true);
@@ -460,19 +483,19 @@ public class CardManager : SingletonMonobehaviour<MonoBehaviour>
     }
     public void GraveToDeck(GameObject c) //무덤에서 덱으로 부활시키는 함수
     {
-        TM.BM.log.logContent.text += "\n" + c.GetComponent<Card>().Name.text + "이(가) 무덤에서 덱으로 이동합니다.";
+        TM.BM.log.logContent.text += "\n" + c.GetComponent<RenewalCard>().Name.text + "이(가) 무덤에서 덱으로 이동합니다.";
         for (int i = 0; i < Grave.Count; i++)
         {
             if (c == Grave[i])
             {               
                 Deck.Add(c);
-                c.GetComponent<Card>().isDeck = true;
+                c.GetComponent<RenewalCard>().isDeck = true;
                 c.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0.5f);
                 c.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0.5f);
 				c.transform.parent =deckContentTrans;
-				c.GetComponent<Card>().isGrave = false;
+				c.GetComponent<RenewalCard>().isGrave = false;
                 c.SetActive(false);
-                c.GetComponent<Card>().isSelected = false;
+                c.GetComponent<RenewalCard>().isSelected = false;
                 Grave.RemoveAt(i);
                 break;
             }
@@ -481,17 +504,17 @@ public class CardManager : SingletonMonobehaviour<MonoBehaviour>
     }
     public void DeckToGrave(GameObject c) //덱에서 무덤으로 선택된 카드를 보내는 함수
     {
-        TM.BM.log.logContent.text += "\n" + c.GetComponent<Card>().Name.text + "이(가) 덱에서 무덤으로 이동합니다.";
+        TM.BM.log.logContent.text += "\n" + c.GetComponent<RenewalCard>().Name.text + "이(가) 덱에서 무덤으로 이동합니다.";
         for (int i = 0; i < Deck.Count; i++)
         {
             if (c == Deck[i])
             {
                 Grave.Add(c);
-                c.GetComponent<Card>().isDeck = false;
+                c.GetComponent<RenewalCard>().isDeck = false;
                 c.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0.5f);
                 c.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0.5f);
                 c.transform.parent = GraveContent.transform;
-                c.GetComponent<Card>().isGrave = true;
+                c.GetComponent<RenewalCard>().isGrave = true;
                 c.SetActive(false);
                 Deck.RemoveAt(i);
                 break;
@@ -519,16 +542,16 @@ public class CardManager : SingletonMonobehaviour<MonoBehaviour>
     {
         for (int i = 0; i < field.Count; i++)
         {
-            if (field[i].GetComponent<Card>().isRemove)
+            if (field[i].GetComponent<RenewalCard>().isRemove)
             {
-                field[i].GetComponent<Card>().RemoveThisCardInField();
+                field[i].GetComponent<RenewalCard>().RemoveThisCardInField();
             }
         }
         for (int i = 0; i < Deck.Count; i++)
         {
-            if (Deck[i].GetComponent<Card>().isRemove)
+            if (Deck[i].GetComponent<RenewalCard>().isRemove)
             {
-                Deck[i].GetComponent<Card>().RemoveThisCardInDeck();
+                Deck[i].GetComponent<RenewalCard>().RemoveThisCardInDeck();
             }
         }
     }

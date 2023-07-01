@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class BlackWhite : MonoBehaviour
 {
     public int BlackWhiteStack=1;
-    [SerializeField]Card myCard;
+    [SerializeField]RenewalCard myCard;
     GameObject[] enemys;
     public Enemy[] enemyScript;
     public Text newText;
@@ -21,7 +21,7 @@ public class BlackWhite : MonoBehaviour
         {
             enemyScript[i] = enemys[i].GetComponent<Enemy>();
         }
-        myCard = GetComponent<Card>();
+        myCard = GetComponent<RenewalCard>();
         myCard.Content.text += "\n-모든 적에게 1의 데미지 부여:(" + 1 + ")";
     }
     public string content;

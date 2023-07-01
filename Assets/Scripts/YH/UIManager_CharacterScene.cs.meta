@@ -3,7 +3,49 @@ guid: c2b05105dcd3c264bbed457a0f0890fc
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - so_CharacterList: {fileID: 11400000, guid: 820b631334807bd4d8ae955231de49ac, type: 2}
+  - so_CardList: {fileID: 11400000, guid: 43a3f366bacc26f46a82dca83e183786, type: 2}
+  - go_Characters: {instanceID: 0}
+  - go_SelectedCharacter: {instanceID: 0}
+  - go_Window_SelectRevivor: {instanceID: 0}
+  - go_Window_SelectContractor: {instanceID: 0}
+  - go_Window_SelectCard: {instanceID: 0}
+  - text_Name_SelectedCharacter: {instanceID: 0}
+  - text_Aka_SelectedCharacter: {instanceID: 0}
+  - text_Hp: {instanceID: 0}
+  - text_AttackPower: {instanceID: 0}
+  - text_Cost: {instanceID: 0}
+  - text_Endurance: {instanceID: 0}
+  - text_InventorySize: {instanceID: 0}
+  - text_Speed: {instanceID: 0}
+  - text_CardCount_EnableSelect: {instanceID: 0}
+  - text_Name_Passive0: {instanceID: 0}
+  - text_Name_Passive1: {instanceID: 0}
+  - text_Name_Passive2: {instanceID: 0}
+  - text_Name_Passive3: {instanceID: 0}
+  - go_SubWindow_Passive: {instanceID: 0}
+  - text_Name_SubWindow_Passive: {instanceID: 0}
+  - text_Description_SubWindow_Passive: {instanceID: 0}
+  - rect_Image_Line_Charcter: {instanceID: 0}
+  - rect_Image_Line_Card: {instanceID: 0}
+  - line_Forward: {instanceID: 0}
+  - line_Backward: {instanceID: 0}
+  - image_Face_Party_ForDrag: {instanceID: 0}
+  - rect_Cards_Basic: {instanceID: 0}
+  - rect_Cards_Standard: {instanceID: 0}
+  - go_Text_Title_Width_Cards_Basic: {instanceID: 0}
+  - go_Text_Title_Height_Cards_Basic: {instanceID: 0}
+  - go_Text_Title_Width_Cards_Standard: {instanceID: 0}
+  - go_Text_Title_Height_Cards_Standard: {instanceID: 0}
+  - go_ScrollView_Basic: {instanceID: 0}
+  - go_ScrollView_Standard: {instanceID: 0}
+  - text_Count_Card: {instanceID: 0}
+  - go_SubWindow_Passive_Card: {instanceID: 0}
+  - text_Name_SubWindow_Passive_Card: {instanceID: 0}
+  - text_Description_SubWindow_Passive_Card: {instanceID: 0}
+  - go_Window_SlotName: {instanceID: 0}
+  - text_SlotName: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

@@ -298,7 +298,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 9053282550429952277}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -432,7 +432,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 9053282550429952277}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -889,7 +889,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9053282550429952277}
-  - component: {fileID: 9053282550429952278}
   - component: {fileID: -8729179083978840914}
   m_Layer: 5
   m_Name: Card
@@ -914,8 +913,8 @@ RectTransform:
   - {fileID: 9053282549731821766}
   - {fileID: 9053282549130076251}
   - {fileID: 4155874202110741951}
-  - {fileID: 6369470414551751647}
   - {fileID: 9053282548992789884}
+  - {fileID: 6369470414551751647}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -924,40 +923,6 @@ RectTransform:
   m_AnchoredPosition: {x: -80, y: -400}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &9053282550429952278
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9053282550429952276}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f71fb66b7b0fe546a62998699afd6c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CM: {fileID: 0}
-  cardImage: {fileID: 9053282549368549450}
-  Content: {fileID: 9053282548992789885}
-  BM: {fileID: 0}
-  cardcost: 0
-  costT: {fileID: 2712768081491094840}
-  DeckT: {fileID: 8428111931073128625}
-  NoT: {fileID: 9053282549731821767}
-  Name: {fileID: 9053282549130077092}
-  isGrave: 0
-  realCost: 0
-  isDeck: 0
-  isIngame: 0
-  DeckNo: 0
-  type: 0
-  cardNo: 0
-  selectType: 0
-  iscard20Mode: 0
-  isRemove: 0
-  so_CardList: {fileID: 11400000, guid: 43a3f366bacc26f46a82dca83e183786, type: 2}
-  isSelected: 0
-  origin_Position: {x: 0, y: 0, z: 0}
 --- !u!61 &-8729179083978840914
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -27,8 +27,8 @@ public enum Owner // YH : owner character of card
     sparky,
     vangara,
     porte,
-    reong,
-    tiger
+    ryeong,
+    hyuwnggwi
 }
 
 public enum Thema

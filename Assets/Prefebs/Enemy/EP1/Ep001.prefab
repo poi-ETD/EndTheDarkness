@@ -1032,13 +1032,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Hp: 50
   maxHp: 50
+  atk: 0
   Armor: 0
-  Atk: 0
   TM: {fileID: 0}
   BM: {fileID: 0}
-  HpT: {fileID: 0}
   Board: {fileID: 4966688518196338443}
-  ArmorT: {fileID: 0}
   hitStack: 0
   dmgStack: 0
   nextTurnArmor: 0
@@ -1050,10 +1048,14 @@ MonoBehaviour:
   Shadow: 0
   hpSlider: {fileID: 6115037154220575092}
   myImage: {fileID: 2627169537594741398}
-  myNo: 0
-  goingShadow: 0
-  speed: 6.3
+  curTurnActTime: 0
+  dieNotEnd: 0
+  status: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
+  speed: 9.75
+  curSpeed: 0
   face: {fileID: 21300000, guid: 9511e0a11b3d87a4fa76a2ba1a8253c0, type: 3}
+  isAct: 0
+  battleNo: 0
 --- !u!61 &4966688518645130814
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1109,6 +1111,7 @@ MonoBehaviour:
   t: {fileID: 0}
   plusname: 1
   anotherDagger: {fileID: 2725469051729694545}
+  pattern: 0
   image_character: {fileID: 2627169537594741398}
   sprite_idle: {fileID: 21300000, guid: 7b4b2a805c8aab34ab71b5eaae8f1c8e, type: 3}
   sprite_highlight: {fileID: 21300000, guid: 11758b8b1ee7df34d81f98670932853d, type: 3}
@@ -1304,13 +1307,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Hp: 50
   maxHp: 50
+  atk: 0
   Armor: 0
-  Atk: 0
   TM: {fileID: 0}
   BM: {fileID: 0}
-  HpT: {fileID: 0}
   Board: {fileID: 4966688518664365719}
-  ArmorT: {fileID: 0}
   hitStack: 0
   dmgStack: 0
   nextTurnArmor: 0
@@ -1322,10 +1323,14 @@ MonoBehaviour:
   Shadow: 0
   hpSlider: {fileID: 7271246811235159116}
   myImage: {fileID: 2627169537308309095}
-  myNo: 0
-  goingShadow: 0
-  speed: 6.3
+  curTurnActTime: 0
+  dieNotEnd: 0
+  status: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
+  speed: 10
+  curSpeed: 0
   face: {fileID: 21300000, guid: 9511e0a11b3d87a4fa76a2ba1a8253c0, type: 3}
+  isAct: 0
+  battleNo: 0
 --- !u!61 &4966688519113154466
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1381,6 +1386,7 @@ MonoBehaviour:
   t: {fileID: 0}
   plusname: 2
   anotherDagger: {fileID: 1832990781560244375}
+  pattern: 0
   image_character: {fileID: 2627169537308309095}
   sprite_idle: {fileID: 21300000, guid: 7b4b2a805c8aab34ab71b5eaae8f1c8e, type: 3}
   sprite_highlight: {fileID: 21300000, guid: 11758b8b1ee7df34d81f98670932853d, type: 3}

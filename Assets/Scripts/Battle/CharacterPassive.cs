@@ -433,7 +433,7 @@ public class CharacterPassive : MonoBehaviour
             }
         }     
     }
-    public void CardUse(Card card)
+    public void CardUse(RenewalCard card)
     {
         if (myNo == 4 && haveMyEquip && card.DeckNo == 4)
         {
@@ -493,8 +493,8 @@ public class CharacterPassive : MonoBehaviour
         if (CM.field.Count > 0)
         {
             int rand = Random.Range(0, CM.field.Count);
-            CM.field[rand].GetComponent<Card>().cardcost = 0;
-            CM.field[rand].GetComponent<Card>().costT.text = "" + 0;     
+            CM.field[rand].GetComponent<RenewalCard>().cardcost = 0;
+            CM.field[rand].GetComponent<RenewalCard>().costT.text = "" + 0;     
         }
     }
   
@@ -583,11 +583,11 @@ public class CharacterPassive : MonoBehaviour
             //Debug.Log(myNo);
             for(int i = 0; i < CM.field.Count; i++)
             {
-                if (CM.field[i].GetComponent<Card>().DeckNo == 4)
+                if (CM.field[i].GetComponent<RenewalCard>().DeckNo == 4)
                 {
                    // Debug.Log(i);
                    if(CM.field[i]!=null)
-                    CM.field[i].GetComponent<Card>().GetPercentDmgToAllTarget(5);
+                    CM.field[i].GetComponent<RenewalCard>().GetPercentDmgToAllTarget(5);
                 }
             }
         }
@@ -599,7 +599,7 @@ public class CharacterPassive : MonoBehaviour
         {
             int rand = Random.Range(0, CM.Grave.Count);
             GameObject newCard = CM.Grave[rand];
-            newCard.GetComponent<Card>().GetRemove();
+            newCard.GetComponent<RenewalCard>().GetRemove();
             CM.GraveToField(newCard);
         }
     }
