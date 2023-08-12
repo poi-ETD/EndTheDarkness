@@ -200,8 +200,8 @@ public class Character : MonoBehaviour
             }
         }
 
-        spdT.text = "" + speed;
-        defT.text = "" + def;
+        spdT.text = "" + curSpeed;
+        defT.text = "" + turnDef;
 
         if (Hp <= 0) die();
         if (Hp > maxHp) Hp = maxHp;
@@ -343,7 +343,7 @@ public class Character : MonoBehaviour
     }
     public void SpeedTextChange()
     {
-        spdT.text = "" + speed;
+        spdT.text = "" + curSpeed;
     }
     public void onDamage(int dmg)
     {

@@ -372,6 +372,10 @@ public class CardManager : SingletonMonobehaviour<MonoBehaviour>
 			{
 				ReviveCard[i].GetComponent<RenewalCard>().changeTurnCardCost(-(int)card.values[1]);
 			}
+			if(card.cardNo==21)
+			{
+				ReviveCard[i].GetComponent<RenewalCard>().changeCardCost(ReviveCard[i].GetComponent<RenewalCard>().cardcost);
+			}
             GraveToField(ReviveCard[i]);
             ReviveCard.RemoveAt(i);
             yield return new WaitForSeconds(0.5f);

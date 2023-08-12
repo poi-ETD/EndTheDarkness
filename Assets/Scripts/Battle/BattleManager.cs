@@ -557,7 +557,7 @@ public class BattleManager : MonoBehaviour
 
             selectedCard = c;
 
-            Debug.Log("Set Card b" + selectedCard.GetComponent<RenewalCard>().selectType.ToString());
+            Debug.Log("Set Card b" + selectedCard.GetComponent<RenewalCard>().selectType.ToString()); 
         }
     }
 	public void cancleCard(bool makeNull = true) //카드를 두번 누르거나, 다른 카드를 눌렀을때 이미 눌러진 카드에게 적용되는 함수
@@ -955,17 +955,21 @@ public class BattleManager : MonoBehaviour
 		reviveCount += r;
 	}
 
-	public void RandomReviveToField(int n) //랜덤으로 무덤에서 필드로 카드 가져오기
+	public void RandomReviveToField(int n,bool card21=false) //랜덤으로 무덤에서 필드로 카드 가져오기
     {
         if (n > CM.Grave.Count)
             n = CM.Grave.Count;
         for (int i = 0; i < n; i++)
         {
             int rand = Random.Range(0, CM.Grave.Count);
-            CM.GraveToField(CM.Grave[rand]);
-
-
-        }
+			if (card21)
+			{
+				CM.Grave[rand].GetComponent<RenewalCard>().changeCardCost(-999);
+			}
+			CM.GraveToField(CM.Grave[rand]);
+	
+		}
+	
     }
     public void ActUpCharacter(int c) //특정 캐릭터(no가 c인)의 행동력을 증가시킴
     {
@@ -1323,7 +1327,7 @@ public class BattleManager : MonoBehaviour
     {
         AM.MakeEnemyAct(8, mount, null, actEnemy, targetEnemy);
     }
-    public void card22()  //결의
+    public void card22(int val1,int val2)  //결의
     {
         List<int> minArmorList = new List<int>();
         int minArmor = int.MaxValue;
@@ -1331,7 +1335,7 @@ public class BattleManager : MonoBehaviour
         {
             if (!characters[i].isDie)
             {
-                characters[i].getArmor(4 + characters[i].turnDef);
+                characters[i].getArmor(val1 + characters[i].turnDef);
                 if (characters[i].armor < minArmor)
                 {
                     minArmor = characters[i].armor;
@@ -1344,7 +1348,7 @@ public class BattleManager : MonoBehaviour
                 }
             }
         }
-        getArmor(6, characters[minArmorList[Random.Range(0, minArmorList.Count)]]);
+        getArmor(val2, characters[minArmorList[Random.Range(0, minArmorList.Count)]]);
     }      
 
     public void card24() //사이코키네시스
